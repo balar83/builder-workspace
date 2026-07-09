@@ -1,0 +1,25 @@
+# Workspace cache
+.vite/
+
+# Node
+node_modules/
+
+# Build outputs
+dist/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
