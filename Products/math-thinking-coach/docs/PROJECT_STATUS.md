@@ -20,11 +20,13 @@ Milestone 2 – Coaching Engine
 
 ✓ Separate Evaluation and Coaching Responsibilities (Feature 012)
 
+✓ Local AI Evaluation Spike (Feature 014, experimental — see below)
+
 ---
 
 ## Current Feature
 
-None in progress. Feature 012 reached a stable, verified checkpoint.
+None in progress. Feature 014 (spike) reached a stable checkpoint. Production behavior is unaffected — the spike lives entirely in `backend/experiments/ai_evaluation/`, isolated from `app/*`.
 
 ---
 
@@ -32,7 +34,7 @@ None in progress. Feature 012 reached a stable, verified checkpoint.
 
 Not yet scoped.
 
-(See docs/Backlog.md for candidates and a recommendation — AI-based answer evaluation is the natural next step, with `evaluation_service.evaluate()` now the concrete extension point after Feature 012, but it still needs product-direction approval (model choice, prompt design) before implementation.)
+(See docs/Backlog.md for candidates and a recommendation — Feature 015, Shadow Mode, is the recommended next step per the Feature 014 spike's results, but it still needs product-direction approval before implementation.)
 
 ---
 
@@ -70,18 +72,18 @@ main
 
 ## Uncommitted Work
 
-Features 007–011 are committed (through commit `c762d59`). Feature 012's code (`backend/app/services/answer_service.py`, new `evaluation_service.py` and `coaching_service.py`, new `tests/test_evaluation_service.py` and `tests/test_coaching_service.py`) and this documentation update are uncommitted as of this checkpoint. Run `git status` before starting new work.
+Features 007–012 are committed (through commit `90e547b`). Feature 014's spike (new `backend/experiments/ai_evaluation/` — client, prompt, schema, dataset, harness, README, and a captured results run) and this documentation update are uncommitted as of this checkpoint. Run `git status` before starting new work.
 
 ---
 
 ## Last Verified
 
-Backend ✔ (29/29 pytest — original 20 unmodified plus 9 new unit tests for the extracted evaluation/coaching modules; `uvicorn` starts cleanly; live smoke test confirmed the `POST /api/v1/questions/{questionId}/answer` response is byte-identical to pre-refactor behavior)
+Backend ✔ (29/29 pytest, unchanged — Feature 014 touches nothing under `app/*`)
 
-Frontend ✔ (build + lint clean, 18/18 vitest — untouched by Feature 012)
+Frontend ✔ (untouched by Feature 014)
 
 Tests ✔
 
 Build ✔
 
-Manual browser walkthrough ✔ (chapter list, hints, solution reveal, full answer-evaluation flow incl. attempts 1/2/3, plus Feature 011: hint-suggested nudge on 2nd wrong attempt confirmed via DOM class, correct-answer "Next Question" button confirmed advancing state cleanly, manual hint-through-to-solution path regression-checked unchanged). Feature 012 is a backend-only internal refactor with no UI-observable change, verified via pytest and a live HTTP smoke test rather than a browser walkthrough.
+Feature 014 (spike, not production) verified on its own terms: harness ran all 30 dataset samples against `qwen2.5:7b-instruct` via local Ollama — 100% valid JSON, 100% schema-valid, 93% correctness agreement with hand-labeled ground truth, mean latency 39.3s on CPU-only hardware. See `backend/experiments/ai_evaluation/README.md` for full results and limitations. No browser walkthrough applicable — no UI or API surface changed.

@@ -1,5 +1,26 @@
 # Development Journal
 
+## 2026-07-22 (Feature 014 — Local AI Evaluation Spike)
+
+### Features completed
+- Built an isolated AI evaluation playground at `backend/experiments/ai_evaluation/`, following an architecture review (Feature 013, design-only, not committed to the repo) that recommended a shadow-mode-first path toward AI-based answer evaluation. Nothing in this directory is imported by `app/*`; `evaluation_service.py`, `coaching_service.py`, `answer_service.py`, the API contract, and the frontend were not touched.
+- Components: `ollama_client.py` (a ~20-line `httpx`-based wrapper around Ollama's `/api/generate`, deterministic settings — `temperature=0`, fixed seed; `httpx` was already a project dependency, so no new dependency was added), `schema.py` (an experimental `AIEvaluation` Pydantic model — correctness, confidence, reasoning_quality, misconception_tags, explanation — separate from `app/schemas/answer.py`), `prompt.py` (a first-cut, unoptimized evaluation prompt), `dataset.json` (30 hand-labeled student-answer samples built from the real 25 questions in `app/data/questions.json`, spanning five categories), and `run_harness.py` (a standalone script — not a web API, not part of FastAPI — that loads the real question/answer-key data read-only, calls the model once per sample, validates the response, and writes results to `results/`).
+- Ran the full 30-sample harness against `qwen2.5:7b-instruct` via local Ollama (version 0.9.0) on CPU-only hardware. Full results and analysis in `backend/experiments/ai_evaluation/README.md`.
+
+### Major engineering decisions
+- Chose `qwen2.5:7b-instruct` as the single model to spike on, per Feature 013's recommendation (stronger math-reasoning benchmarks at this size than general-purpose peers) — no multi-model comparison was attempted in this feature, by design.
+- Ground-truth labels (`expectedLabel` in `dataset.json`) were deliberately set as a human judgment of actual correctness, not as "does it exact-match `answer_keys.json`" — several samples exist specifically because they diverge (e.g. "Trapezoid" vs. the stored "Trapezium"; "4/8" left unsimplified for a question that asks to simplify). This makes the dataset a meaningful test of whether AI evaluation improves on rule-based matching, not just a restatement of it.
+- Used `httpx` (already a dependency, used elsewhere for `TestClient`) for the Ollama HTTP call instead of adding a new HTTP library or an Ollama SDK — kept the client to a single function, no retry/abstraction layer, per the constraint to keep this replaceable and simple rather than build infrastructure for a spike.
+
+### Verification summary
+- Production suite unaffected: 29/29 backend pytest still passing, confirmed after the spike's files were added (`git status` shows only new files under `backend/experiments/`, nothing modified under `app/` or `tests/`).
+- Harness run: 30/30 samples completed without error. **100% JSON parse success, 100% schema validation success** against the experimental `AIEvaluation` model. **93% correctness agreement (28/30)** with hand-labeled ground truth. Mean latency 39.3s, median 38.7s, min 34.2s, max 57.7s (first call, likely cold-start) — CPU-only inference on a laptop with no dedicated GPU (Intel i3-1215U, 16GB RAM).
+
+### Implementation notes
+- Both disagreements were read individually rather than just counted: one (`s22`, "what makes a square different from a rectangle") is arguably a case where the model's stricter reading is more defensible than the ground-truth label used here, not a clear model error. The other (`s26`, objecting to using a ruler to set a compass width) looks like a genuine model overreach — a real finding about the risk of the AI penalizing a valid method.
+- Reported confidence clustered at three values (0.85, 0.95, 1.00) across all 30 samples, and both disagreements were reported at 0.95 — statistically indistinguishable from many correct judgments at the same value. This means Feature 013's confidence-gated fallback design, as specified, would not have caught either error in this run. Flagged as a concrete open problem for Feature 015 rather than something this spike could resolve with only 30 samples.
+- Misconception tags came back as free-form strings with inconsistent formatting even within this one run (`incorrect_solution` vs. `incorrect solution`, `incorrect_addition_of_fractions`, `confusion_with_symbol`, etc.) — confirms Feature 013's design note that a controlled vocabulary must be enforced by the system, not left to emerge from the model.
+
 ## 2026-07-22
 
 ### Features completed

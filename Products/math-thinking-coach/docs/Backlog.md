@@ -20,6 +20,9 @@ Wired `coach.nextAction` from the existing Feature 010 response into `QuestionPa
 ### Feature 012 — Separate Evaluation and Coaching Responsibilities
 Internal backend refactor, no API or frontend changes. Split `answer_service.evaluate_answer` into three collaborators: `evaluation_service.evaluate(question, submission)` (the exact-match correctness check, moved unchanged, now the seam a future AI evaluator can replace without touching coaching logic), `coaching_service.decide(is_correct, attempt_number)` (the attempt-based `NextAction`/`Coach`/`UiState` derivation, moved unchanged), and `answer_service.evaluate_answer` itself, now a thin orchestrator. `POST /api/v1/questions/{questionId}/answer`'s request/response contract is byte-for-byte unchanged, verified by the pre-existing `test_answers.py` suite passing with no assertion changes plus a live smoke test.
 
+### Feature 014 — Local AI Evaluation Spike (experimental, not production)
+Isolated playground at `backend/experiments/ai_evaluation/` — not imported by `app/*`, no route/schema/frontend changes. A standalone harness called local Ollama (`qwen2.5:7b-instruct`) against a 30-sample hand-labeled dataset covering correct answers, arithmetic mistakes, conceptual mistakes, incomplete reasoning, and free-form explanations. Results: 100% valid JSON, 100% schema-valid against an experimental structured-output model, 93% agreement (28/30) with ground truth, mean latency 39.3s on CPU-only hardware. Two key findings beyond raw accuracy: reported confidence did not distinguish the two disagreements from correct judgments (undermines the Feature 013 confidence-gated-fallback design as currently specified), and misconception tags came back as free-form, inconsistently-formatted strings (confirms Feature 013's call for a controlled vocabulary is required, not optional). Full detail in `backend/experiments/ai_evaluation/README.md`.
+
 *Note: this numbering reflects what was actually built. An earlier draft of this backlog had different titles under 008/009 — this file is the corrected, authoritative history.*
 
 ---
@@ -32,7 +35,10 @@ None currently scoped. See "Recommended Next" below.
 
 ## Future (unscoped / unprioritized)
 
-- AI-based answer evaluation (LLM) — replace the exact-match comparison in `answer_service.py` behind the existing API contract; covers the free-text questions where exact-match is weakest.
+- Shadow Mode AI evaluation (Feature 015) — run the AI evaluator from Feature 014 alongside the rule-based one on real traffic, log/compare, change no live behavior yet.
+- Confidence-gated live AI evaluation — needs the confidence-calibration gap found in Feature 014 addressed first.
+- Personalized hint generation
+- Misconception-informed coaching content
 - Adaptive Hint Engine
 - Student Progress History
 - Statistics Dashboard
@@ -42,6 +48,6 @@ None currently scoped. See "Recommended Next" below.
 
 ---
 
-## Recommended Next: AI-Based Answer Evaluation (unscoped)
+## Recommended Next: Feature 015 — Shadow Mode AI Evaluation (unscoped)
 
-Replace the exact-match comparison in `evaluation_service.py` with an LLM-based evaluator, behind the same `POST /api/v1/questions/{questionId}/answer` contract that Features 010/011/012 established — `evaluation_service.evaluate(question, submission)` is now the concrete extension point, isolated from coaching logic by Feature 012. It directly addresses the known Phase-1 limitation where free-text questions (e.g. quadrilateral properties) only accept one exact phrasing. Not yet scoped: model choice (local/private first, per product direction), prompt design, and latency/cost trade-offs need product-direction approval before implementation starts.
+Feature 014's spike showed `qwen2.5:7b-instruct` is directionally promising (93% agreement, 100% valid structured output) but surfaced two problems worth investigating with more data before any live behavior change: reported confidence didn't separate correct from incorrect judgments in this run, and misconception tags need an enforced controlled vocabulary. Feature 015 would implement the real AI evaluator behind the seam Feature 012 built, run it alongside the rule-based evaluator on real traffic, and log/compare — without ever returning the AI result to coaching. Zero behavior change, all risk contained to logging; the safe way to gather the larger sample needed to resolve the confidence-calibration question before a confidence-gated live feature is attempted. Not yet scoped: where comparison data is stored (the product has no persistence today), and exact confidence thresholds — both need product-direction input.
