@@ -69,6 +69,9 @@ export default function QuestionPage() {
   const percent = Math.round((currentHintIndex / totalHints) * 100);
   const isAllHintsRevealed = currentHintIndex >= totalHints;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+  const isCorrectAnswer = evaluation?.coach.nextAction === 'NEXT_QUESTION';
+  const isHintSuggested = evaluation?.coach.nextAction === 'SHOW_HINT';
+  const questionEnded = isCorrectAnswer || showSolution;
 
   const handleHint = () => {
     setCurrentHintIndex((previous) => Math.min(totalHints, previous + 1));
@@ -134,7 +137,7 @@ export default function QuestionPage() {
         )}
 
         <div className="hint-row">
-          {showSolution ? (
+          {questionEnded ? (
             isLastQuestion ? (
               <div>
                 <p className="question-text">Chapter Complete!</p>
@@ -144,7 +147,7 @@ export default function QuestionPage() {
               </div>
             ) : (
               <button className="hint-button" type="button" onClick={handleQuestionComplete}>
-                Mark Question Complete
+                {isCorrectAnswer ? 'Next Question' : 'Mark Question Complete'}
               </button>
             )
           ) : isAllHintsRevealed ? (
@@ -152,7 +155,11 @@ export default function QuestionPage() {
               Reveal Solution
             </button>
           ) : (
-            <button className="hint-button" type="button" onClick={handleHint}>
+            <button
+              className={isHintSuggested ? 'hint-button hint-button-suggested' : 'hint-button'}
+              type="button"
+              onClick={handleHint}
+            >
               {buttonLabel}
             </button>
           )}

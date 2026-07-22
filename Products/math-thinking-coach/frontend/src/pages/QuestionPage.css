@@ -49,6 +49,20 @@
   cursor: pointer;
 }
 
+.hint-button-suggested {
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.35);
+  animation: hint-suggested-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes hint-suggested-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.15);
+  }
+}
+
 .hint-box {
   margin-top: 12px;
   background: #f8fafc;
