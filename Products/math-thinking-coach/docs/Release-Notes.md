@@ -1,5 +1,11 @@
 # Release Notes
 
+## 2026-07-22
+
+### New in this release
+- The app now runs on a real backend: chapters and questions are served from a FastAPI API instead of local static data.
+- No visible change for learners — chapter selection, hints, and solution reveal all behave exactly as before, now backed by a live API.
+
 ## 2026-07-09
 
 ### New in this release

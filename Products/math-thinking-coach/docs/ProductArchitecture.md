@@ -94,8 +94,9 @@ BuilderWorkspace/
 │       │   ├── src/
 │       │   │   ├── assets/
 │       │   │   ├── components/
-│       │   │   ├── data/
+│       │   │   ├── config/
 │       │   │   ├── pages/
+│       │   │   ├── services/
 │       │   │   ├── types/
 │       │   │   ├── App.tsx
 │       │   │   ├── main.tsx
@@ -107,11 +108,11 @@ BuilderWorkspace/
 │       │
 │       ├── backend/
 │       │   ├── app/
-│       │   │   ├── ai/
 │       │   │   ├── api/
+│       │   │   ├── core/
+│       │   │   ├── data/
 │       │   │   ├── main.py
 │       │   │   ├── models/
-│       │   │   ├── repositories/
 │       │   │   ├── schemas/
 │       │   │   └── services/
 │       │   └── tests/
@@ -154,15 +155,29 @@ Next Question / Chapter Complete
 
 ---
 
-# 7. Planned Backend API Endpoints
+# 7. Backend API Endpoints
 
-## Chapters
+## Implemented
+
+### Chapters
 
 GET /api/v1/chapters
 
+GET /api/v1/chapters/{chapterId}
+
+### Questions
+
+GET /api/v1/chapters/{chapterId}/questions
+
+GET /api/v1/chapters/{chapterId}/questions/{questionId}
+
+Chapter and question data is served from `backend/app/data/chapters.json` and `questions.json`, the single source of truth for both the API and (indirectly, via HTTP) the frontend.
+
 ---
 
-## Topics
+## Planned
+
+### Topics
 
 GET /api/v1/chapters/{chapterId}/topics
 

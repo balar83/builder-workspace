@@ -1,28 +1,57 @@
-import chapters from '../data/chapters';
-import questions from '../data/questions';
+import { API_BASE_URL } from '../config/api';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
 
-// TODO: Replace with GET /api/v1/chapters
-function getChapters(): Chapter[] {
-  return chapters;
+async function getChapters(): Promise<Chapter[]> {
+  const response = await fetch(`${API_BASE_URL}/chapters`);
+  if (!response.ok) {
+    throw new Error('Failed to load chapters');
+  }
+  return response.json();
 }
 
-// TODO: Replace with GET /api/v1/chapters/{chapterId}
-function getChapter(chapterId: string | undefined): Chapter | undefined {
-  return chapters.find((chapter) => chapter.id === chapterId);
+async function getChapter(chapterId: string | undefined): Promise<Chapter | undefined> {
+  if (!chapterId) {
+    return undefined;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/chapters/${chapterId}`);
+  if (response.status === 404) {
+    return undefined;
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load chapter');
+  }
+  return response.json();
 }
 
-// TODO: Replace with GET /api/v1/chapters/{chapterId}/questions
-function getQuestions(chapterId: string | undefined): Question[] {
-  return questions.filter((question) => question.chapterId === chapterId);
+async function getQuestions(chapterId: string | undefined): Promise<Question[]> {
+  if (!chapterId) {
+    return [];
+  }
+
+  const response = await fetch(`${API_BASE_URL}/chapters/${chapterId}/questions`);
+  if (response.status === 404) {
+    return [];
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load questions');
+  }
+  return response.json();
 }
 
-// TODO: Replace with GET /api/v1/chapters/{chapterId}/questions/{questionId}
-function getQuestion(chapterId: string, questionId: string): Question | undefined {
-  return questions.find(
-    (question) => question.chapterId === chapterId && question.id === questionId,
-  );
+async function getQuestion(
+  chapterId: string,
+  questionId: string,
+): Promise<Question | undefined> {
+  const response = await fetch(`${API_BASE_URL}/chapters/${chapterId}/questions/${questionId}`);
+  if (response.status === 404) {
+    return undefined;
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load question');
+  }
+  return response.json();
 }
 
 export const questionService = {

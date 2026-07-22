@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { questionService } from '../services/questionService';
+import type { Chapter } from '../types/chapter';
+import type { Question } from '../types/question';
 import AnswerInput from '../components/AnswerInput';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
@@ -12,22 +14,39 @@ import './QuestionPage.css';
 export default function QuestionPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
+  const [chapter, setChapter] = useState<Chapter | undefined>(undefined);
+  const [chapterQuestions, setChapterQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const chapter = questionService.getChapter(chapterId);
-  const chapterQuestions = questionService.getQuestions(chapterId);
   const currentQuestion = chapterQuestions[currentQuestionIndex];
 
   useEffect(() => {
+    let cancelled = false;
+
+    setChapter(undefined);
+    setChapterQuestions([]);
     setCurrentQuestionIndex(0);
     setCurrentHintIndex(0);
     setShowSolution(false);
     setAnswer('');
     setSubmitted(false);
+
+    Promise.all([questionService.getChapter(chapterId), questionService.getQuestions(chapterId)]).then(
+      ([chapterResult, questionsResult]) => {
+        if (!cancelled) {
+          setChapter(chapterResult);
+          setChapterQuestions(questionsResult);
+        }
+      },
+    );
+
+    return () => {
+      cancelled = true;
+    };
   }, [chapterId]);
 
   if (!chapter || !chapterQuestions.length || !currentQuestion) {
