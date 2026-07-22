@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { questionService } from '../services/questionService';
+import type { AnswerEvaluationResponse } from '../types/answer';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
 import AnswerInput from '../components/AnswerInput';
@@ -21,6 +22,8 @@ export default function QuestionPage() {
   const [showSolution, setShowSolution] = useState(false);
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [attemptNumber, setAttemptNumber] = useState(1);
+  const [evaluation, setEvaluation] = useState<AnswerEvaluationResponse | null>(null);
 
   const currentQuestion = chapterQuestions[currentQuestionIndex];
 
@@ -34,6 +37,8 @@ export default function QuestionPage() {
     setShowSolution(false);
     setAnswer('');
     setSubmitted(false);
+    setAttemptNumber(1);
+    setEvaluation(null);
 
     Promise.all([questionService.getChapter(chapterId), questionService.getQuestions(chapterId)]).then(
       ([chapterResult, questionsResult]) => {
@@ -91,10 +96,16 @@ export default function QuestionPage() {
     setShowSolution(false);
     setAnswer('');
     setSubmitted(false);
+    setAttemptNumber(1);
+    setEvaluation(null);
   };
 
   const handleAnswerSubmit = () => {
     setSubmitted(true);
+    questionService.submitAnswer(currentQuestion.id, { answer, attemptNumber }).then((result) => {
+      setEvaluation(result);
+      setAttemptNumber((previous) => previous + 1);
+    });
   };
 
   return (
@@ -115,7 +126,11 @@ export default function QuestionPage() {
 
         <AnswerInput value={answer} onChange={setAnswer} onSubmit={handleAnswerSubmit} />
         {submitted && (
-          <p className="question-text">Answer evaluation will be available after backend integration.</p>
+          <p className="question-text">
+            {evaluation
+              ? evaluation.coach.message
+              : 'Answer evaluation will be available after backend integration.'}
+          </p>
         )}
 
         <div className="hint-row">

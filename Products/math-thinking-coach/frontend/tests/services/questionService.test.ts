@@ -89,4 +89,31 @@ describe('questionService', () => {
 
     expect(result).toBeUndefined();
   });
+
+  it('submitAnswer posts the submission and returns the typed evaluation', async () => {
+    const evaluation = {
+      evaluation: { isCorrect: true, score: 1.0 },
+      coach: { message: 'Excellent! You solved it correctly.', nextAction: 'NEXT_QUESTION' },
+      ui: { canTryAgain: false, canRevealSolution: false, hintLevel: 0 },
+    };
+    mockFetchOnce(200, evaluation);
+
+    const result = await questionService.submitAnswer('q1', { answer: '1/2', attemptNumber: 1 });
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/questions/q1/answer'),
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submission: { answer: '1/2', attemptNumber: 1 } }),
+      }),
+    );
+    expect(result).toEqual(evaluation);
+  });
+
+  it('submitAnswer throws when the request fails', async () => {
+    mockFetchOnce(500);
+
+    await expect(questionService.submitAnswer('q1', { answer: '1/2', attemptNumber: 1 })).rejects.toThrow();
+  });
 });

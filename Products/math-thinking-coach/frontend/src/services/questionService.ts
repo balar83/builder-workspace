@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../config/api';
+import type { AnswerEvaluationResponse, AnswerSubmission } from '../types/answer';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
 
@@ -54,9 +55,25 @@ async function getQuestion(
   return response.json();
 }
 
+async function submitAnswer(
+  questionId: string,
+  submission: AnswerSubmission,
+): Promise<AnswerEvaluationResponse> {
+  const response = await fetch(`${API_BASE_URL}/questions/${questionId}/answer`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ submission }),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to submit answer');
+  }
+  return response.json();
+}
+
 export const questionService = {
   getChapters,
   getChapter,
   getQuestions,
   getQuestion,
+  submitAnswer,
 };

@@ -173,6 +173,33 @@ GET /api/v1/chapters/{chapterId}/questions/{questionId}
 
 Chapter and question data is served from `backend/app/data/chapters.json` and `questions.json`, the single source of truth for both the API and (indirectly, via HTTP) the frontend.
 
+### Answer Evaluation (Rule-Based)
+
+POST /api/v1/questions/{questionId}/answer
+
+Request
+
+```json
+{
+  "submission": {
+    "answer": "36",
+    "attemptNumber": 2
+  }
+}
+```
+
+Response
+
+```json
+{
+  "evaluation": { "isCorrect": true, "score": 1.0 },
+  "coach": { "message": "...", "nextAction": "NEXT_QUESTION" },
+  "ui": { "canTryAgain": true, "canRevealSolution": false, "hintLevel": 0 }
+}
+```
+
+Phase 1 evaluation is rule-based exact-match (trimmed) against a per-question expected answer stored in `backend/app/data/answer_keys.json`. This file is private to the backend and is never returned by the chapter/question endpoints above — it is the extension point for future AI-based evaluation, which would replace the exact-match comparison in `app/services/answer_service.py` without changing the API contract.
+
 ---
 
 ## Planned

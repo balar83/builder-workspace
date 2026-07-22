@@ -35,3 +35,7 @@ def get_question(chapter_id: str, question_id: str) -> Question | None:
         ),
         None,
     )
+
+
+def get_question_by_id(question_id: str) -> Question | None:
+    return next((question for question in _questions if question.id == question_id), None)
