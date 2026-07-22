@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import chapters from '../data/chapters';
+import { questionService } from '../services/questionService';
 
 export default function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
 
-  const chapter = chapters.find((c) => c.id === chapterId);
+  const chapter = questionService.getChapter(chapterId);
 
   return (
     <main className="container">

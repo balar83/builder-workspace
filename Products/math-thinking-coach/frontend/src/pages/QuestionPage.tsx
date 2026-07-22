@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import chapters from '../data/chapters';
-import questions from '../data/questions';
+import { questionService } from '../services/questionService';
 import AnswerInput from '../components/AnswerInput';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
@@ -19,8 +18,8 @@ export default function QuestionPage() {
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const chapter = chapters.find((c) => c.id === chapterId);
-  const chapterQuestions = questions.filter((q) => q.chapterId === chapterId);
+  const chapter = questionService.getChapter(chapterId);
+  const chapterQuestions = questionService.getQuestions(chapterId);
   const currentQuestion = chapterQuestions[currentQuestionIndex];
 
   useEffect(() => {

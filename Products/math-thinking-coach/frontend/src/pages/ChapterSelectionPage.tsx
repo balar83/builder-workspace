@@ -1,8 +1,10 @@
 import ChapterCard from '../components/ChapterCard';
-import chapters from '../data/chapters';
+import { questionService } from '../services/questionService';
 import './ChapterSelectionPage.css';
 
 export default function ChapterSelectionPage() {
+  const chapters = questionService.getChapters();
+
   return (
     <main className="container">
       <h1>Select Chapter</h1>
