@@ -159,3 +159,16 @@ This journey is about becoming someone who can confidently say:
 Opportunity eventually follows capability."
 
 End of Day 001
+
+---
+
+# Day 002
+**Date:** 09-Jul-2026
+
+## Engineering Learnings
+
+- Bundle related work into one feature prompt when several connected UI and data changes are required.
+- Keep implementation focused on one feature at a time to reduce rework and preserve clarity.
+- Review AI-generated code before accepting it, especially around state flow and component boundaries.
+- Reusable components reduce future effort and keep feature work more maintainable.
+- Verify every feature using Build + Lint + Tests before considering it complete.

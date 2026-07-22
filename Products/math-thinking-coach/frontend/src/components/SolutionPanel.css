@@ -1,0 +1,20 @@
+.solution-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.06);
+  margin-top: 12px;
+}
+
+.solution-panel-title {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.solution-panel-text {
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
+}

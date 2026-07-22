@@ -34,17 +34,17 @@ The objective is to improve conceptual understanding, confidence, and independen
 - TypeScript
 - Vite
 - React Router
-- Tailwind CSS (to be added later)
+- Local CSS styles
 
 ## Backend
 
-- FastAPI
+- FastAPI (planned)
 - Python 3.13
 
 ## AI Layer
 
-Initially:
-- OpenAI / Claude API
+Planned:
+- OpenAI / Claude API through backend orchestration
 
 Future:
 - Gemini
@@ -63,7 +63,7 @@ Future:
 ```
                 React Frontend
                        │
-                       │ REST API
+                       │ Planned REST API
                        ▼
                  FastAPI Backend
                        │
@@ -76,9 +76,9 @@ Future:
    Claude/OpenAI               Future AI Models
 ```
 
-The frontend never communicates directly with AI models.
+The frontend does not currently communicate directly with AI models.
 
-All AI requests go through the backend.
+AI integration is planned through the backend.
 
 ---
 
@@ -92,30 +92,28 @@ BuilderWorkspace/
 │       │
 │       ├── frontend/
 │       │   ├── src/
-│       │   │   ├── app/
+│       │   │   ├── assets/
 │       │   │   ├── components/
-│       │   │   ├── features/
-│       │   │   │   ├── chapters/
-│       │   │   │   ├── questions/
-│       │   │   │   ├── hints/
-│       │   │   │   ├── solutions/
-│       │   │   │   └── history/
-│       │   │   ├── services/
-│       │   │   ├── hooks/
+│       │   │   ├── data/
+│       │   │   ├── pages/
 │       │   │   ├── types/
-│       │   │   ├── utils/
-│       │   │   └── assets/
-│       │   └── tests/
+│       │   │   ├── App.tsx
+│       │   │   ├── main.tsx
+│       │   │   ├── index.css
+│       │   │   └── App.css
+│       │   ├── tests/
+│       │   ├── package.json
+│       │   └── vitest.config.ts
 │       │
 │       ├── backend/
 │       │   ├── app/
-│       │   │   ├── api/
-│       │   │   ├── services/
 │       │   │   ├── ai/
+│       │   │   ├── api/
+│       │   │   ├── main.py
 │       │   │   ├── models/
-│       │   │   ├── schemas/
 │       │   │   ├── repositories/
-│       │   │   └── main.py
+│       │   │   ├── schemas/
+│       │   │   └── services/
 │       │   └── tests/
 │       │
 │       ├── docs/
@@ -136,35 +134,27 @@ BuilderWorkspace/
 Home
    │
    ▼
-Select Chapter
+Chapter Selection
    │
    ▼
-Select Topic
+Chapter Detail
    │
    ▼
-Ask Question
+Question Page
    │
    ▼
-Thinking Mode
+Hint Guidance
    │
- ┌─┴───────────────┐
- │                 │
- ▼                 ▼
-Next Hint     Explain Again
- │
- ▼
-Show Solution
- │
- ▼
-Try Similar Question
- │
- ▼
-History
+   ▼
+Solution Reveal
+   │
+   ▼
+Next Question / Chapter Complete
 ```
 
 ---
 
-# 7. API Endpoints
+# 7. Planned Backend API Endpoints
 
 ## Chapters
 
@@ -187,7 +177,6 @@ Example Request
 ```json
 {
   "chapterId": 1,
-  "topicId": 3,
   "question": "Solve 2x + 5 = 17"
 }
 ```
@@ -226,18 +215,18 @@ GET /api/v1/history
 
 # 8. Core React Components
 
-- AppLayout
-- Header
+- App
 - HomePage
+- ChapterSelectionPage
+- ChapterPage
+- QuestionPage
 - ChapterCard
-- TopicCard
-- QuestionInput
-- HintCard
-- HintStepper
-- SolutionCard
-- ProgressIndicator
-- HistoryCard
-- LoadingSpinner
+- DifficultyBadge
+- AnswerInput
+- HintPanel
+- QuestionProgress
+- ProgressBar
+- SolutionPanel
 
 ---
 
@@ -245,19 +234,21 @@ GET /api/v1/history
 
 Included
 
-- Chapter Selection
-- Topic Selection
-- Enter Question
-- Progressive AI Hints
-- Explain Hint
-- Reveal Solution
-- Question History
+- Chapter selection
+- Chapter detail and navigation
+- Multi-question chapter flow
+- Student answer entry before hints
+- Progressive hint guidance
+- Solution reveal after hints
+- Question progress indicator
 
 Not Included
 
+- Topic selection
+- Question history
 - Login
-- Parent Dashboard
-- Teacher Dashboard
+- Parent dashboard
+- Teacher dashboard
 - OCR
 - Voice
 - Gamification

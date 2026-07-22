@@ -53,3 +53,42 @@ Confidence Level:
 Next Capability Target:
 
 Build reusable UI components, introduce automated testing, and establish engineering standards that can be reused across multiple products.
+
+---
+
+## Capability 002 - Build Multi-Step Learning Experiences in React
+
+Status: Achieved
+
+Date Achieved: 09-Jul-2026
+
+Project:
+Math Thinking Coach
+
+Evidence:
+- Implemented multi-question chapter flows with question-by-question navigation.
+- Added state-driven UI for hints, solutions, answer capture, and question progress.
+- Built reusable components for answer entry and question progress.
+- Kept the experience consistent with the existing architecture and routing.
+
+Knowledge Demonstrated:
+- React component composition
+- State management for multi-step flows
+- Reusable UI design
+- Feature decomposition into maintainable steps
+- Product-oriented interaction design
+
+Business Value:
+I can now design and implement more sophisticated learner-facing flows in React without overcomplicating the architecture.
+
+Interview Statement:
+"I have hands-on experience building multi-step educational experiences in React, including question navigation, answer capture, and progress indicators."
+
+Reusable Across Future Products:
+- Yes
+
+Confidence Level:
+8 / 10
+
+Next Capability Target:
+Strengthen backend integration and answer evaluation workflows so the learning experience can become more adaptive and intelligent.

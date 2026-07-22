@@ -1,0 +1,31 @@
+.question-progress {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+
+.question-progress-step {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #6b7280;
+  background: #ffffff;
+}
+
+.question-progress-step.current {
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.question-progress-step.completed {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #166534;
+}

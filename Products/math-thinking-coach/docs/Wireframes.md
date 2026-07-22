@@ -49,51 +49,47 @@ Purpose
 
 ---
 
-# Screen 2 - Topics
+# Screen 2 - Chapter Selection
 
 ```
 ----------------------------------------
 
-Linear Equations
+Select a chapter
 
-○ Introduction
+○ Algebra
 
-○ Solving Equations
+○ Linear Equations
 
-○ Word Problems
+○ Comparing Quantities
 
-○ Practice
+○ Data Handling
 
 ----------------------------------------
 ```
 
 Purpose
 
-Allow students to focus on one concept.
+Allow students to choose a chapter and begin the question flow.
 
 ---
 
-# Screen 3 - Ask Question
+# Screen 3 - Chapter Detail
 
 ```
 ----------------------------------------
 
-Question
+Chapter Title
 
-+----------------------------------+
+Description and learning goals for the selected chapter.
 
-| Type your maths question here... |
-
-+----------------------------------+
-
-[ Ask AI Coach ]
+[ Start Questions ]
 
 ----------------------------------------
 ```
 
 Purpose
 
-Student enters a maths problem.
+Introduce the chapter context before starting the question sequence.
 
 ---
 
@@ -161,7 +157,7 @@ Reveal the complete reasoning only after hints.
 
 ---
 
-# Screen 6 - History
+# Planned Screen 6 - History (Future)
 
 ```
 ----------------------------------------
@@ -190,23 +186,15 @@ Home
 
 ↓
 
-Topics
+Chapter Selection
 
 ↓
 
-Ask Question
+Chapter Detail
 
 ↓
 
-Thinking Mode
-
-↓
-
-Solution
-
-↓
-
-History
+Question Flow
 ```
 
 ---
@@ -216,16 +204,15 @@ History
 | Screen | Included |
 |---------|----------|
 | Home | ✅ |
-| Topics | ✅ |
-| Ask Question | ✅ |
-| Thinking Mode | ✅ |
-| Solution | ✅ |
-| History | ✅ |
+| Chapter Selection | ✅ |
+| Chapter Detail | ✅ |
+| Question Flow | ✅ |
 
 ---
 
 # Future Screens
 
+- History
 - Login
 - Parent Dashboard
 - Teacher Dashboard
