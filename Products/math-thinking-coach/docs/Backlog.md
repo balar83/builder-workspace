@@ -17,6 +17,9 @@ Introduced `questionService` so components stop importing static data directly (
 ### Feature 011 — Wire Coaching UI State
 Wired `coach.nextAction` from the existing Feature 010 response into `QuestionPage`, no backend changes. Scope was narrowed via clarifying questions before implementation: a correct answer (`NEXT_QUESTION`) now shows an explicit "Next Question" button instead of requiring hints/solution to be revealed to advance; a second wrong attempt (`SHOW_HINT`) adds a visual nudge (`hint-button-suggested`) to the existing hint button. Hint reveal stays fully self-service (nudge only, not a hard gate) and solution reveal is untouched (still gated by all hints revealed, not by `ui.canRevealSolution`).
 
+### Feature 012 — Separate Evaluation and Coaching Responsibilities
+Internal backend refactor, no API or frontend changes. Split `answer_service.evaluate_answer` into three collaborators: `evaluation_service.evaluate(question, submission)` (the exact-match correctness check, moved unchanged, now the seam a future AI evaluator can replace without touching coaching logic), `coaching_service.decide(is_correct, attempt_number)` (the attempt-based `NextAction`/`Coach`/`UiState` derivation, moved unchanged), and `answer_service.evaluate_answer` itself, now a thin orchestrator. `POST /api/v1/questions/{questionId}/answer`'s request/response contract is byte-for-byte unchanged, verified by the pre-existing `test_answers.py` suite passing with no assertion changes plus a live smoke test.
+
 *Note: this numbering reflects what was actually built. An earlier draft of this backlog had different titles under 008/009 — this file is the corrected, authoritative history.*
 
 ---
@@ -41,4 +44,4 @@ None currently scoped. See "Recommended Next" below.
 
 ## Recommended Next: AI-Based Answer Evaluation (unscoped)
 
-Replace the exact-match comparison in `answer_service.py` with an LLM-based evaluator, behind the same `POST /api/v1/questions/{questionId}/answer` contract that Features 010/011 established — the extension point the rule-based evaluator was deliberately built for (see ProductArchitecture.md §7). It directly addresses the known Phase-1 limitation where free-text questions (e.g. quadrilateral properties) only accept one exact phrasing. Not yet scoped: model choice, prompt design, and latency/cost trade-offs need product-direction approval before implementation starts.
+Replace the exact-match comparison in `evaluation_service.py` with an LLM-based evaluator, behind the same `POST /api/v1/questions/{questionId}/answer` contract that Features 010/011/012 established — `evaluation_service.evaluate(question, submission)` is now the concrete extension point, isolated from coaching logic by Feature 012. It directly addresses the known Phase-1 limitation where free-text questions (e.g. quadrilateral properties) only accept one exact phrasing. Not yet scoped: model choice (local/private first, per product direction), prompt design, and latency/cost trade-offs need product-direction approval before implementation starts.
