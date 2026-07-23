@@ -192,6 +192,36 @@ Include:
 
 Remove completed work promptly.
 
+Only approved work belongs here — unapproved or unscoped items belong in Roadmap.md (if thematic) or Idea-Inbox.md (if raw/undecided), not here.
+
+---
+
+## Roadmap.md
+
+Purpose:
+
+Hold capability themes that have graduated past a raw idea but aren't yet approved, scoped work.
+
+Include:
+
+- Phased or thematic sequencing
+- Known dependencies between items
+- Success criteria where known
+
+This file is intentionally forward-looking and exempt from "documentation reflects reality" — see `CLAUDE.md`'s "Engineering Documentation vs. Product Documentation."
+
+---
+
+## Idea-Inbox.md
+
+Purpose:
+
+Append-only, timestamped, unfiltered capture of every idea raised for a specific product — no prioritization, no judgment.
+
+This is the **product-level** counterpart to the workspace-level `Learning/4_Idea_Parking_Lot.md` (see below): Idea-Inbox.md captures ideas about *this product*, in raw form, as they occur; `Idea_Parking_Lot.md` is a curated, status-tracked list spanning *all* products, reviewed periodically. An idea can start in a product's Idea-Inbox.md and later be promoted into that product's Roadmap.md/Backlog.md, or — if it's really a builder-capability idea rather than a feature for that product — into `Idea_Parking_Lot.md` instead. Don't maintain the same idea in both places at once.
+
+This file is intentionally forward-looking and exempt from "documentation reflects reality."
+
 ---
 
 # Learning Documentation
@@ -241,11 +271,13 @@ Only record genuine new capabilities.
 
 Purpose:
 
-Store ideas intentionally deferred.
+Store ideas intentionally deferred, curated across all products in the Builder Workspace.
 
 Ideas are not commitments.
 
 Move ideas into the backlog only after they are approved.
+
+Distinct from a product's own `Idea-Inbox.md` (see "Repository Documentation Structure" above): that file is the raw, per-product, append-only capture stream. This file is the curated, cross-product, status-tracked destination some of those ideas graduate to.
 
 ---
 

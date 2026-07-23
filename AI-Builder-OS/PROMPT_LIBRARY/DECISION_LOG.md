@@ -143,18 +143,18 @@ Example:
 
 # Current Decisions
 
-No Architecture Decision Records have been created yet.
+This log is a cross-product index. Full ADRs are written and kept inside each product's own `docs/ADR/` folder, using `PROMPT_LIBRARY/ARCHITECTURE_DECISION_TEMPLATE.md`; entries below point to them rather than duplicating their content.
 
-The first decision should be recorded when a significant architectural or product decision is made.
+## Math Thinking Coach
 
-Examples include:
+- **ADR-001 — Separate Evaluation from Coaching Behind a Service-Layer Seam** (2026-07-15, Accepted). See `Products/math-thinking-coach/docs/ADR/ADR-001-evaluation-coaching-separation.md`.
 
-- Choosing React + FastAPI
-- Establishing the AI Builder Operating System
-- Selecting the AI collaboration workflow
+The next decision should be recorded here (as a pointer) whenever a product accepts a new ADR. Examples of what belongs in this log going forward:
+
 - Introducing a new architecture pattern
 - Choosing a persistence strategy
 - Introducing authentication
+- Any decision that's significant, long-lived, and difficult to reverse (see Guiding Principles above)
 
 ---
 

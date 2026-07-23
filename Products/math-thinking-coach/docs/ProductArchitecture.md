@@ -6,27 +6,13 @@
 
 ---
 
-# 1. Vision
+# 1. Vision & Principles
 
-Build an AI-powered **Math Thinking Coach** for Class 8 CBSE students that helps them think through mathematical problems instead of immediately providing answers.
-
-The objective is to improve conceptual understanding, confidence, and independent problem-solving.
+See [`Product-Vision.md`](Product-Vision.md) — the single source of truth for mission, target audience, long-term vision, product principles, coaching-vs-assessment philosophy, curriculum integrity, and extensibility principles. This file (`ProductArchitecture.md`) covers *how* the system is built; `Product-Vision.md` covers *why* it exists and what it optimizes for. Do not duplicate principles here — if it belongs in both, it's drifted.
 
 ---
 
-# 2. Product Principles
-
-1. Problems before technology.
-2. Guide thinking instead of giving answers.
-3. Keep the MVP simple.
-4. Mobile-first experience.
-5. AI should assist learning, not replace it.
-6. Every feature must solve a real user problem.
-7. Build for long-term scalability.
-
----
-
-# 3. Technology Stack
+# 2. Technology Stack
 
 ## Frontend
 
@@ -38,18 +24,20 @@ The objective is to improve conceptual understanding, confidence, and independen
 
 ## Backend
 
-- FastAPI (planned)
+- FastAPI
 - Python 3.13
 
 ## AI Layer
 
-Planned:
-- OpenAI / Claude API through backend orchestration
+Current: none in production. Answer evaluation is deterministic rule-based logic (`app/services/evaluation_service.py`).
 
-Future:
+Experimental, isolated from production (Feature 014 spike — see `backend/experiments/ai_evaluation/README.md` and [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md)):
+- Local Ollama, `qwen2.5:7b-instruct`
+
+Future, unvalidated:
+- OpenAI / Claude API through backend orchestration
 - Gemini
 - Azure OpenAI
-- Ollama (Local Models)
 
 ## Version Control
 
@@ -58,31 +46,26 @@ Future:
 
 ---
 
-# 4. High Level Architecture
+# 3. High Level Architecture
 
 ```
                 React Frontend
                        │
-                       │ Planned REST API
+                       │ REST API (/api/v1)
                        ▼
                  FastAPI Backend
                        │
-              Business Logic Layer
-                       │
-                AI Service Layer
-                       │
         ┌──────────────┴──────────────┐
         │                             │
-   Claude/OpenAI               Future AI Models
+  evaluation_service            coaching_service
+   (rule-based today)          (attempt-based logic)
 ```
 
-The frontend does not currently communicate directly with AI models.
-
-AI integration is planned through the backend.
+The frontend does not communicate directly with AI models, and no AI model is in the production request path today. If AI-based evaluation is adopted, it enters through `evaluation_service`'s seam (see [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md)) — validated in isolation by the Feature 014 spike, not yet wired into this diagram.
 
 ---
 
-# 5. Folder Structure
+# 4. Folder Structure
 
 ```
 BuilderWorkspace/
@@ -129,7 +112,7 @@ BuilderWorkspace/
 
 ---
 
-# 6. Screen Flow
+# 5. Screen Flow
 
 ```
 Home
@@ -152,6 +135,27 @@ Solution Reveal
    ▼
 Next Question / Chapter Complete
 ```
+
+---
+
+# 6. Content Architecture
+
+## Current model (actual, as implemented)
+
+```
+Chapter (id, title, description)
+   └── Question (id, chapterId, question, text, difficulty, hints[], solution)
+```
+
+That's it — two levels. There is no Board, Class, Subject, or Topic entity anywhere in the data model or the code. "Class 8 CBSE Math" is not a data dimension the system reasons about; it's an implicit, hardcoded assumption baked into the content itself (`backend/app/data/chapters.json`/`questions.json`). `Topic` appears only as a **planned, not implemented** API (§7) — there is no `Topic` schema or data today.
+
+There is likewise no "Quiz" construct — no timed or graded assessment session distinct from the linear, self-paced chapter → question flow described in §5. None has been requested. If one is ever needed, it should be designed against a real requirement, not spec'd speculatively here.
+
+## Future extensibility (not decided — do not build against this)
+
+A **Board → Class → Subject → Chapter → Topic → Question** hierarchy was raised as a candidate during the 2026-07-23 Product Foundation Sprint, as a way this could generalize beyond Class 8 CBSE Math. It is explicitly **not a commitment**: nothing today requires it, and building it now would be exactly the kind of speculative architecture `Product-Vision.md`'s "Extend on evidence, not speculation" principle warns against.
+
+If a second class, subject, or board ever becomes an approved product requirement, that decision should get its own ADR before implementation — see `Roadmap.md`'s "Open architecture question" for the current state of this thinking, kept there so a future session doesn't have to rediscover it from scratch.
 
 ---
 
@@ -300,44 +304,29 @@ Not Included
 
 # 10. Future Roadmap
 
-## Phase 2
+Everything built to date (frontend MVP through the Feature 014 AI evaluation spike) is retroactively **Phase 1 — Core Coaching Loop**, now complete. Phases 2–5 below are unchanged in name and content from the original version of this document; see [`Roadmap.md`](Roadmap.md) for the authoritative, actively-maintained version — with dependencies, sequencing rationale, and near/medium-term items — so this table doesn't drift out of sync with it.
 
-- OCR Question Scanner
-- Voice Input
-- Voice Explanation
-- Formula Revision
-
-## Phase 3
-
-- Parent Dashboard
-- Teacher Dashboard
-- Analytics
-
-## Phase 4
-
-- Adaptive Learning
-- Personalized Practice
-- Weak Topic Detection
-
-## Phase 5
-
-- Offline Mode
-- Multi-language
-- Play Store Release
-- Subscription Model
+| Phase | Theme |
+|---|---|
+| 2 | Input Modalities — OCR Question Scanner, Voice Input/Explanation, Formula Revision |
+| 3 | Oversight Surfaces — Parent Dashboard, Teacher Dashboard, Analytics |
+| 4 | Adaptivity — Adaptive Learning, Personalized Practice, Weak Topic Detection |
+| 5 | Distribution — Offline Mode, Multi-language, Play Store Release, Subscription Model |
 
 ---
 
-# 11. Architecture Decisions
+# 11. Key Decisions (informal, pre-ADR)
+
+The table below predates this project's formal ADR process (established 2026-07-23) and was never written up as real Architecture Decision Records — no corresponding documents exist for any row. It's kept for historical continuity, relabeled so it's no longer mistaken for `docs/ADR/`. The first real ADR is [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) (Evaluation/Coaching separation) — new formal ADRs continue numbering from there, independent of this table's IDs.
 
 | ID | Decision |
 |----|----------|
-| ADR-001 | React + TypeScript Frontend |
-| ADR-002 | FastAPI Backend |
-| ADR-003 | AI isolated behind Service Layer |
-| ADR-004 | Mobile-first Responsive UI |
-| ADR-005 | Feature-based Folder Structure |
-| ADR-006 | Progressive Hinting instead of Direct Answers |
+| KD-1 | React + TypeScript Frontend |
+| KD-2 | FastAPI Backend |
+| KD-3 | AI isolated behind Service Layer |
+| KD-4 | Mobile-first Responsive UI |
+| KD-5 | Feature-based Folder Structure |
+| KD-6 | Progressive Hinting instead of Direct Answers |
 
 ---
 

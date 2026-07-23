@@ -104,6 +104,12 @@ Do NOT document:
 - Assumptions
 - Speculation
 
+**Exception — Engineering Documentation vs. Product Documentation.** The rule above governs *engineering* documentation: `Development-Journal.md`, `Release-Notes.md`, `PROJECT_STATUS.md`'s engineering-milestone content, and any accepted ADR — these must always describe only completed, verified reality.
+
+A separate category, *product* documentation, is intentionally forward-looking and is exempt from this rule: `Product-Vision.md`, a product's `Roadmap.md`, and a product's `Idea-Inbox.md`. These exist specifically to hold mission/vision framing, phased future capability themes, and raw unfiltered ideas — none of that is "speculation accidentally left in engineering docs," it's the documented purpose of these specific files. `Backlog.md` sits in between: it must contain only *approved* future work (not speculative), so it's reality-adjacent, not reality-only.
+
+When in doubt which category a document falls into, check whether it's named above. If it isn't, default to the reality-only rule.
+
 ---
 
 # Code Quality
@@ -152,6 +158,16 @@ The repository will contain multiple AI products.
 Engineering practices should be reusable across projects.
 
 Favor consistency over project-specific optimizations.
+
+## Documentation Responsibility
+
+For every completed feature:
+
+1. Determine which documentation is impacted.
+2. Update only those documents.
+3. Do not update unrelated documents.
+4. Keep documentation concise and accurate.
+5. Treat documentation as part of the Definition of Done.
 
 ---
 

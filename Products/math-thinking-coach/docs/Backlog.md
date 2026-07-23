@@ -29,25 +29,22 @@ Isolated playground at `backend/experiments/ai_evaluation/` — not imported by 
 
 ## Ready
 
-None currently scoped. See "Recommended Next" below.
+None currently scoped and approved. See "Recommended Next" below — once a candidate is approved for scoping, it moves here.
+
+*Note on item typing: this backlog doesn't split into separate Engineering/Product sections. Every item shipped so far (007–014) is product-feature-shaped — there's no standing engineering-only queue (tech debt, infra) yet to justify the split. If/when a pure-engineering item appears (e.g. a dependency upgrade with no user-facing effect), tag it inline (`Type: Engineering`) rather than forking this file.*
 
 ---
 
-## Future (unscoped / unprioritized)
+## Backlog scope note
 
-- Shadow Mode AI evaluation (Feature 015) — run the AI evaluator from Feature 014 alongside the rule-based one on real traffic, log/compare, change no live behavior yet.
-- Confidence-gated live AI evaluation — needs the confidence-calibration gap found in Feature 014 addressed first.
-- Personalized hint generation
-- Misconception-informed coaching content
-- Adaptive Hint Engine
-- Student Progress History
-- Statistics Dashboard
-- Teacher Portal
-- OCR Question Scanner (Phase 2, per ProductArchitecture.md)
-- Voice Input / Voice Explanation (Phase 2)
+Per `AI-Builder-OS/DOCUMENTATION_STANDARDS.md`, this file tracks **approved future work only**. It previously carried a "Future (unscoped / unprioritized)" section that, by definition, didn't belong here — none of those items were approved. As of the 2026-07-23 Product Foundation Sprint, that content has moved:
+
+- Thematic, sequenceable items (personalized hints, misconception-informed coaching, adaptive hint engine, student progress history, statistics dashboard, teacher portal, OCR, voice) → [`Roadmap.md`](Roadmap.md), medium/long-term sections.
+- Confidence-gated live AI evaluation → `Roadmap.md`, medium-term (still blocked on the Feature 014 calibration gap).
+- Anything genuinely undecided → [`Idea-Inbox.md`](Idea-Inbox.md).
 
 ---
 
 ## Recommended Next: Feature 015 — Shadow Mode AI Evaluation (unscoped)
 
-Feature 014's spike showed `qwen2.5:7b-instruct` is directionally promising (93% agreement, 100% valid structured output) but surfaced two problems worth investigating with more data before any live behavior change: reported confidence didn't separate correct from incorrect judgments in this run, and misconception tags need an enforced controlled vocabulary. Feature 015 would implement the real AI evaluator behind the seam Feature 012 built, run it alongside the rule-based evaluator on real traffic, and log/compare — without ever returning the AI result to coaching. Zero behavior change, all risk contained to logging; the safe way to gather the larger sample needed to resolve the confidence-calibration question before a confidence-gated live feature is attempted. Not yet scoped: where comparison data is stored (the product has no persistence today), and exact confidence thresholds — both need product-direction input.
+Feature 014's spike showed `qwen2.5:7b-instruct` is directionally promising (93% agreement, 100% valid structured output) but surfaced two problems worth investigating with more data before any live behavior change: reported confidence didn't separate correct from incorrect judgments in this run, and misconception tags need an enforced controlled vocabulary. Feature 015 would implement the real AI evaluator behind the seam Feature 012 built (see [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md)), run it alongside the rule-based evaluator on real traffic, and log/compare — without ever returning the AI result to coaching. Zero behavior change, all risk contained to logging; the safe way to gather the larger sample needed to resolve the confidence-calibration question before a confidence-gated live feature is attempted. Not yet scoped: where comparison data is stored (the product has no persistence today), and exact confidence thresholds — both need product-direction input. Also tracked in `Roadmap.md`'s near-term section.
