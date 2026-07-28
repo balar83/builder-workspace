@@ -4,7 +4,7 @@ This file tracks two separate tracks that move at different speeds — don't con
 
 ## Engineering Milestone
 
-Milestone 2 – Coaching Engine, extended by Release 0.2's first slice (Content Pipeline & Topic Delivery)
+Milestone 2 – Coaching Engine, extended by Release 0.2's first slice (Content Pipeline & Topic Delivery), now joined by Milestone A of the Scalable Assessment System (Student/Teacher Identity)
 
 ## Documentation Milestone
 
@@ -14,9 +14,11 @@ Release 0.1 documentation closeout (2026-07-27) — added `docs/LearningExperien
 
 Content Pipeline reconciliation (2026-07-28) — Features 018–021 (Topic data model/API, Template Engine v1, content authoring pipeline, Stage 10 Export Pipeline) had been implemented and verified on 2026-07-27 but left undocumented and uncommitted. Backfilled: [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md), `Development-Journal.md`, `Backlog.md`, `Roadmap.md`, `ProductArchitecture.md` §7/§8, `LearningExperienceArchitecture.md` §7, `HANDOFF_PROMPT.md`, and this file — all now match the actual repository state, verified by reading the code and running the test suites, not by asserting design intent.
 
+Scalable Assessment System design review + Milestone A (2026-07-28) — before any code, reviewed the requested "Assessment Engine/teacher-ready assessments" milestone against `Product-Vision.md`'s Coaching vs. Assessment Philosophy (resolved: teacher-facing surface, student experience unchanged) and identified auth as an unstated prerequisite, sequenced as its own Milestone A. Implemented, tested, and live-verified same day; documented in [ADR-004](ADR/ADR-004-student-teacher-identity.md) and `Development-Journal.md`'s 2026-07-28 entry.
+
 ## Engineering Health
 
-65/65 backend tests passing (60 → 65 with Feature 018's `test_topics.py`), 40/40 frontend tests passing (36 → 40). Three architecture decisions on record are implemented, not just designed — [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) (evaluation/coaching separation), [ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md) (Shadow Mode execution and logging), and [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) (content authoring and export pipeline) all match the shipped code, verified by diff/by reading the code, not asserted from design intent. Shadow Mode is active: the AI evaluator runs out-of-band on real traffic, and production behavior (the API response, coaching) is unchanged, proven by adversarial tests that force the shadow path to fail or be disabled. Confidence-gated live evaluation (not yet scoped or numbered) isn't blocked by anything technical or architectural — only by operational validation: Shadow Mode hasn't yet accumulated a large enough sample to answer the confidence-calibration and misconception-vocabulary questions Feature 014 left open. No known technical-debt blockers to that path; the known limitations that do exist (the `BackgroundTasks` execution model's ceiling under real concurrent traffic, JSONL's lack of query capability, and an undecided log-retention policy) are already tracked in ADR-002's Trade-offs section and aren't blocking anything today. The content pipeline (ADR-003) has its own known gap: no automated test suite for the pipeline tooling itself, and a hard runtime coupling to a co-located backend Python venv for schema validation — both named in ADR-003's Trade-offs, neither blocking today's single-machine workflow.
+79/79 backend tests passing (65 → 79 with Milestone A's `test_auth.py`), 49/49 frontend tests passing (40 → 49). Four architecture decisions on record are implemented, not just designed — [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) (evaluation/coaching separation), [ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md) (Shadow Mode execution and logging), [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) (content authoring and export pipeline), and [ADR-004](ADR/ADR-004-student-teacher-identity.md) (student/teacher identity) all match the shipped code, verified by diff/by reading the code, not asserted from design intent. Shadow Mode is active: the AI evaluator runs out-of-band on real traffic, and production behavior (the API response, coaching) is unchanged, proven by adversarial tests that force the shadow path to fail or be disabled. Confidence-gated live evaluation (not yet scoped or numbered) isn't blocked by anything technical or architectural — only by operational validation: Shadow Mode hasn't yet accumulated a large enough sample to answer the confidence-calibration and misconception-vocabulary questions Feature 014 left open. No known technical-debt blockers to that path; the known limitations that do exist (the `BackgroundTasks` execution model's ceiling under real concurrent traffic, JSONL's lack of query capability, and an undecided log-retention policy) are already tracked in ADR-002's Trade-offs section and aren't blocking anything today. The content pipeline (ADR-003) has its own known gap: no automated test suite for the pipeline tooling itself, and a hard runtime coupling to a co-located backend Python venv for schema validation. Milestone A (ADR-004) has its own named gaps: JSON-file account persistence won't scale past classroom volume (the database decision is deliberately deferred to Milestone B), and session security (`session_secret_key`, `https_only`) is dev-only pending a real deployment target — none of these block today's single-machine workflow.
 
 ---
 
@@ -48,6 +50,8 @@ Content Pipeline reconciliation (2026-07-28) — Features 018–021 (Topic data 
 
 ✓ Stage 10 Export Pipeline (Feature 021)
 
+✓ Student/Teacher Identity (Milestone A, Scalable Assessment System — see below)
+
 ---
 
 ## Completed Releases
@@ -68,7 +72,7 @@ Content Pipeline reconciliation (2026-07-28) — Features 018–021 (Topic data 
 
 ## Next Engineering Objective
 
-See `Backlog.md`'s "Recommended Next": operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); export Data Handling's already-authored 42 questions (nearest next content step); and get the current checkpoint committed (nothing since `ae27076` is in git — see "Uncommitted Work" below). See `Roadmap.md` for the fuller sequencing, and `ADR/ADR-001-evaluation-coaching-separation.md` / `ADR/ADR-002-shadow-mode-execution-and-logging.md` / `ADR/ADR-003-content-authoring-and-export-pipeline.md` for the seams any future engineering builds on.
+See `Backlog.md`'s "Recommended Next": Milestone B (server-side attempt history, next in the Scalable Assessment System sequence, needs its own design review); operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); export Data Handling's already-authored 42 questions (nearest next content step). See `Roadmap.md`'s "Scalable Assessment System" section for the fuller Milestone A–F sequencing, and `ADR/ADR-001-evaluation-coaching-separation.md` / `ADR/ADR-002-shadow-mode-execution-and-logging.md` / `ADR/ADR-003-content-authoring-and-export-pipeline.md` / `ADR/ADR-004-student-teacher-identity.md` for the seams any future engineering builds on.
 
 ## Recommended Next Milestone (Documentation)
 
@@ -90,6 +94,7 @@ Backend
 
 FastAPI
 Topic data model & retrieval API (`GET /chapters/{chapterId}/topics`, `GET /topics/{topicId}`)
+Student/teacher identity: session-cookie auth, class join codes — dormant, not yet consumed by any other route (see ADR-004)
 
 Communication
 
@@ -121,12 +126,7 @@ main
 
 ## Uncommitted Work
 
-Features 007–012 are committed (through commit `90e547b`); Feature 014's spike (`backend/experiments/ai_evaluation/`) is committed separately (`e98d744`); the Product Foundation Sprint documentation (2026-07-23) is committed (`ae27076`). As of this checkpoint, everything below is uncommitted — nothing has been committed since `ae27076`:
-
-- **Feature 015 (Shadow Mode), backend-only**: new `app/services/{ai_evaluation_client,ai_evaluation_prompt,ai_evaluation_service,shadow_evaluation_service,shadow_log_writer}.py`, `app/schemas/ai_evaluation.py`, matching test files; modified `app/services/evaluation_service.py`, `app/api/routes/answers.py`, `app/core/config.py`, `.gitignore`, `tests/test_answers.py`, `tests/test_evaluation_service.py`.
-- **Release 0.1 (Feature 016 + Feature 017), frontend-only**: new `frontend/src/services/{progressService,progressStore}.ts`, `frontend/src/types/progress.ts`, matching test files; modified `frontend/src/pages/{QuestionPage,ChapterPage,HomePage}.tsx`, `frontend/src/components/ChapterCard.{tsx,css}`, `frontend/tests/components/ChapterCard.test.tsx`.
-- **Features 018–021 (Content Pipeline & Topic Delivery)**: new `app/schemas/topic.py`, `app/services/topic_service.py`, `app/api/routes/topics.py`, matching test file; `frontend/src/pages/TopicPage.{tsx,css}`, `frontend/src/types/topic.ts`; new `docs/content-pipeline/{template-engine,export}/*` and `docs/content-source/{linear-equations,data-handling}/*`; modified `app/schemas/question.py` (`topicId`), `app/api/router.py`, `backend/app/data/{questions,answer_keys}.json` (Linear Equations re-exported), `frontend/src/App.tsx`, `frontend/src/pages/ChapterPage.tsx`, `frontend/src/services/questionService.ts`.
-- **Documentation**: new `docs/ADR/{ADR-002-shadow-mode-execution-and-logging,ADR-003-content-authoring-and-export-pipeline}.md`, `docs/LearningExperienceArchitecture.md`; modified `docs/{Development-Journal,Backlog,Roadmap,PROJECT_STATUS,Product-Vision,ProductArchitecture,Release-Notes,Wireframes,HANDOFF_PROMPT,README,ADR/ADR-001-evaluation-coaching-separation}.md`.
+Features 007–012 (`90e547b`), Feature 014's spike (`e98d744`), the Product Foundation Sprint docs (`ae27076`), Feature 015/Shadow Mode (`e0e276e`), Release 0.1 (`a1df08d`), Features 018–021/Content Pipeline (`b313d4d`), and their documentation reconciliation (`c4dc58f`) are all committed as of 2026-07-28. **Milestone A (Student/Teacher Identity) is implemented, tested, and live-verified but not yet committed** — new `app/schemas/user.py`, `app/services/auth_service.py`, `app/api/routes/auth.py`, `backend/tests/test_auth.py`, `frontend/src/types/auth.ts`, `frontend/src/services/authService.ts`, `frontend/src/pages/{TeacherAuthPage,StudentJoinPage}.{tsx,css}`, `frontend/tests/services/authService.test.ts`, `docs/ADR/ADR-004-student-teacher-identity.md`; modified `backend/{requirements.txt,.gitignore}`, `app/main.py`, `app/core/config.py`, `app/api/router.py`, `frontend/src/{App.tsx,App.css}`, `frontend/src/pages/HomePage.tsx`, and this documentation reconciliation pass.
 
 Run `git status` before starting new work. Ask the user how/whether to commit this checkpoint before beginning any new engineering.
 
@@ -134,9 +134,11 @@ Run `git status` before starting new work. Ask the user how/whether to commit th
 
 ## Last Verified
 
-Backend ✔ (65/65 pytest — 60 pre-Feature-018, up from 47 pre-Feature-015 — see below)
+Backend ✔ (79/79 pytest — 65 pre-Milestone-A, 60 pre-Feature-018, up from 47 pre-Feature-015 — see below)
 
-Frontend ✔ (40/40 vitest, `tsc -b`, `oxlint`, `vite build` all clean — 36 pre-Feature-018, up from 18 pre-Release-0.1)
+Frontend ✔ (49/49 vitest, `tsc -b`, `oxlint`, `vite build` all clean — 40 pre-Milestone-A, 36 pre-Feature-018, up from 18 pre-Release-0.1)
+
+Milestone A ✔ (live, 2026-07-28: teacher register → create class → join code; student join with that code → success; student re-login with correct PIN → success; wrong PIN → rejected with no session granted; pre-existing anonymous Home → Select Chapter flow re-verified working identically with and without a session cookie present)
 
 Content pipeline ✔ (re-verified 2026-07-28: `node docs/content-pipeline/export/run.js --chapter=linear-equations --dry-run` reports 44 questions/1 topic/44 answer keys, zero validation errors, against the current `backend/.venv` Pydantic schemas)
 

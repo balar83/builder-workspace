@@ -1,5 +1,33 @@
 # Development Journal
 
+## 2026-07-28 (Milestone A — Student/Teacher Identity)
+
+*First engineering slice of the "scalable assessment system" milestone, scoped down from the original request during design review: reading the Coaching-vs-Assessment tension in `Product-Vision.md` against the milestone's "Assessment Engine"/"teacher-ready assessments" language surfaced a real product-direction question that needed resolving before any code — confirmed as a teacher-facing surface only, student coaching experience unchanged. Auth was then identified as an invisible prerequisite for attempt history, adaptive selection, and teacher assessment generation alike, and pulled out as its own smaller milestone (Milestone A) rather than bundled into a much larger first slice.*
+
+### Features completed
+- Teacher accounts: `POST /auth/teacher/register` (email, bcrypt-hashed password, name), `POST /auth/teacher/login`, `POST /auth/teacher/classes` (session-gated, generates a 6-character join code).
+- Student identity, no email/password collected: `POST /auth/student/join` (class code + display name + bcrypt-hashed 4+-digit PIN, unique display name per class), `POST /auth/student/login`.
+- `POST /auth/logout`, `GET /auth/me`. Session via Starlette's `SessionMiddleware` (signed, HTTP-only cookie).
+- `app/schemas/user.py` (Teacher, ClassGroup, Student, request/response schemas), `app/services/auth_service.py` (JSON-file stores under `backend/app/data/`, atomic tmp-then-rename writes, single lock, never-throws reads mirroring `progressStore.ts`'s philosophy).
+- Frontend: `authService.ts` (all calls `credentials: 'include'`), `TeacherAuthPage.tsx` (login/register toggle, then create-class form showing the join code), `StudentJoinPage.tsx` (join/login toggle), both reachable from `HomePage` via two small new links. Neither page is wired to anything else yet — see Implementation notes.
+
+### Major engineering decisions
+- Students never provide an email or password — only a teacher-issued class code, a display name, and a short PIN. A deliberate minor-privacy decision, not just a UX one; see [ADR-004](ADR/ADR-004-student-teacher-identity.md).
+- Account persistence stayed JSON-file-based (mirroring `chapters.json`/`topics.json`), deliberately deferring the real database decision to the next milestone (server-side attempt history), where actual volume will force it rather than this identity layer pre-deciding it.
+- Existing content routes (`/chapters`, `/questions`, `/topics`, answer evaluation) were left completely open — auth only gates the new `/auth/*` routes. Confirmed by a dedicated regression test plus every pre-existing test passing unmodified.
+- This milestone ships as dormant/additive: login/join work end-to-end, but nothing consumes identity yet — `progressService`/`progressStore` and the anonymous chapter/question flow are untouched, verified live with a session cookie present and absent.
+
+### Verification summary
+- Backend: 79/79 pytest passing (65 → 79; +14 for `test_auth.py`, including duplicate-email rejection, wrong-password/PIN rejection, session persistence across requests via `TestClient`'s cookie jar, and the existing-routes-unauthenticated regression check).
+- Frontend: 49/49 vitest passing (40 → 49; +9 for `authService.test.ts`). `tsc -b`, `oxlint`, `vite build` all clean.
+- Live, both servers running: teacher register → create class → join code shown; student join with that code → success; student re-login with correct PIN → success; wrong PIN → visible error, no session granted; the pre-existing anonymous Home → Select Chapter flow re-verified working identically throughout.
+- One process note: a `get_page_text` read during the walkthrough appeared to show a stale, pre-transition render immediately after a successful join — a screenshot taken moments later confirmed the actual UI had updated correctly. Investigated via network-request inspection (the POST had already returned 200 with the correct body) before concluding it was a tooling timing artifact, not a real defect.
+
+### Implementation notes
+- `coaching_service.py`, `answer_service.py`, `evaluation_service.py`, and the answer-evaluation API contract are untouched by this milestone.
+- New dependencies (`itsdangerous`, `bcrypt`) were named, justified, and approved before being installed, per `AI_Coding_Standards.md` §10 — neither was assumed or added silently.
+- Full detail, options considered, and named trade-offs (PIN as a weak secret by adult standards, insecure dev session key, no password-reset or rate-limiting yet) in [ADR-004](ADR/ADR-004-student-teacher-identity.md).
+
 ## 2026-07-27 (Features 018–021 — Content Pipeline & Topic Delivery, Release 0.2 first slice)
 
 *Ran in parallel with Feature 016/017 (Release 0.1) the same day — a separate, non-blocking track, per `Backlog.md`'s "Recommended Next" (content authoring doesn't depend on remaining engineering).*

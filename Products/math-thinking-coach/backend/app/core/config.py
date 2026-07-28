@@ -14,6 +14,7 @@ class Settings:
     shadow_model_name: str = os.getenv("SHADOW_MODEL_NAME", "qwen2.5:7b-instruct")
     shadow_log_path: str = os.getenv("SHADOW_LOG_PATH", "app/data/shadow_log/shadow_eval_log.jsonl")
     shadow_mode_enabled: bool = os.getenv("SHADOW_MODE_ENABLED", "true").lower() == "true"
+    session_secret_key: str = os.getenv("SESSION_SECRET_KEY", "dev-only-insecure-secret-change-me")
 
 
 settings = Settings()

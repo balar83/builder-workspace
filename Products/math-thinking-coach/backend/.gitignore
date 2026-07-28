@@ -5,3 +5,6 @@ venv/
 .env
 .pytest_cache/
 app/data/shadow_log/
+app/data/teachers.json
+app/data/classes.json
+app/data/students.json

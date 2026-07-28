@@ -43,7 +43,22 @@ Client-side progress persistence (Feature 016) and the UI that makes it visible:
 **Release 0.2 — first slice: Content Pipeline & Topic Delivery — ✓ Implemented (2026-07-27), Linear Equations only.**
 Delivered, in parallel with Release 0.1 the same day: a `Topic` data model and retrieval API (Feature 018), a seeded/validated procedural question generator ("Template Engine v1," Feature 019), a 5-stage content-authoring trail with an approval gate (Feature 020), and a Stage 10 Export Pipeline that atomically merges approved content into runtime data against the real backend Pydantic schemas (Feature 021). Linear Equations migrated end-to-end (5 → 44 questions, 1 Topic, live and tested); Data Handling authored through stage 6 (42 questions) but not yet exported. This is a first slice of Release 0.2's LXA mapping (Learn + Worked Examples), not the whole release — see `LearningExperienceArchitecture.md` §7. Full detail in `Development-Journal.md`'s 2026-07-27 entries and [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md).
 
-**Now active, in parallel — neither blocking the other:** Shadow Mode continues accumulating real evaluations past Feature 014's 30-sample baseline (unchanged); exporting Data Handling's already-authored 42 questions is the nearest next content step. See `Backlog.md`'s "Recommended Next." **Nothing since `ae27076` is committed to git** — see `PROJECT_STATUS.md`.
+**Now active, in parallel — neither blocking the other:** Shadow Mode continues accumulating real evaluations past Feature 014's 30-sample baseline (unchanged); exporting Data Handling's already-authored 42 questions is the nearest next content step. See `Backlog.md`'s "Recommended Next."
+
+---
+
+## Scalable Assessment System (new milestone, sequenced 2026-07-28)
+
+Design-reviewed before any code, per the project's workflow. Two decisions shaped the sequencing: (1) `Product-Vision.md`'s Coaching vs. Assessment Philosophy is preserved — assessments/marks are a **teacher-facing surface**, the student coaching experience stays formative and unscored, not a product pivot; (2) auth was identified as an invisible prerequisite for attempt history, adaptive selection, and teacher features alike, and pulled out as its own milestone rather than assumed away.
+
+- **Milestone A — Student/Teacher Identity — ✓ Implemented (2026-07-28).** Minimal auth: teacher accounts, class join codes, student identity with no email/PII collected from minors. Ships dormant — see [ADR-004](ADR/ADR-004-student-teacher-identity.md) and `Development-Journal.md`'s 2026-07-28 entry.
+- **Milestone B — Server-side attempt history.** Not started. Replaces/extends Release 0.1's `localStorage`-only progress tracking. Needs its own ADR — the persistence-technology decision (JSON files vs. a real database) that Milestone A deliberately deferred.
+- **Milestone C — Question Repository → real store.** Extends ADR-003's pipeline rather than replacing it; the file→database question grows more pressing as more chapters are migrated (§"Open architecture question" scale, not hierarchy).
+- **Milestone D — Deterministic adaptive selection.** Per `LearningExperienceArchitecture.md`'s already-designed Revision/Mastery rules — not a new ML model. Consistent with this project's "extend on evidence, not speculation" principle and the existing note that adaptivity built on unvalidated evaluation data (Shadow Mode) would be premature.
+- **Milestone E — Assessment Engine, teacher-facing.** Marks, patterns, configurable tests. Depends on B (attribute attempts to a student) and C (a real question pool to draw from).
+- **Milestone F — Professional UI/UX redesign.** Orthogonal to A–E; parallel-trackable once the data model (B/C) stabilizes.
+
+None of B–F are scoped or approved yet — each needs its own design review before implementation, per this project's workflow.
 
 ---
 

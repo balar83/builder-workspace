@@ -4,6 +4,8 @@ import ChapterSelectionPage from "./pages/ChapterSelectionPage";
 import ChapterPage from "./pages/ChapterPage";
 import TopicPage from "./pages/TopicPage";
 import QuestionPage from "./pages/QuestionPage";
+import TeacherAuthPage from "./pages/TeacherAuthPage";
+import StudentJoinPage from "./pages/StudentJoinPage";
 import "./App.css";
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/chapter/:chapterId" element={<ChapterPage />} />
         <Route path="/topic/:topicId" element={<TopicPage />} />
         <Route path="/question/:chapterId" element={<QuestionPage />} />
+        <Route path="/teacher" element={<TeacherAuthPage />} />
+        <Route path="/student/join" element={<StudentJoinPage />} />
       </Routes>
     </BrowserRouter>
   );

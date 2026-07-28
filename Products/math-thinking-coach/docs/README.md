@@ -4,7 +4,7 @@ This folder contains project-specific documentation for the Math Thinking Coach 
 
 ## Current focus
 - Frontend: React + TypeScript + Vite application with chapter selection, chapter detail, multi-question flow, progressive hint guidance, answer capture, and question progress indicators — backed by the live backend API.
-- Backend: FastAPI service layer live since Feature 007. Answer evaluation is rule-based and drives coaching (Feature 010, seam established by ADR-001). An experimental AI evaluator now runs alongside it in production, out-of-band and logging-only (Shadow Mode, Feature 015, ADR-002). A Topic data model and retrieval API (Feature 018) is fed by a content authoring and Stage 10 export pipeline (Features 019–021, ADR-003) — see `HANDOFF_PROMPT.md` for current status.
+- Backend: FastAPI service layer live since Feature 007. Answer evaluation is rule-based and drives coaching (Feature 010, seam established by ADR-001). An experimental AI evaluator now runs alongside it in production, out-of-band and logging-only (Shadow Mode, Feature 015, ADR-002). A Topic data model and retrieval API (Feature 018) is fed by a content authoring and Stage 10 export pipeline (Features 019–021, ADR-003). Minimal student/teacher identity (Milestone A, ADR-004) exists but is dormant — no route or page consumes it yet. See `HANDOFF_PROMPT.md` for current status.
 
 ## Documents
 - Product-Vision.md — why the product exists (living: mission, audience, principles, roadmap-adjacent philosophy)

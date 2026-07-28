@@ -1,0 +1,15 @@
+.teacher-auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.teacher-auth-error {
+  color: #b00020;
+}
+
+.teacher-auth-code {
+  font-size: 1.1rem;
+}

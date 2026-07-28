@@ -247,6 +247,12 @@ GET /api/v1/topics/{topicId} → 404 if unknown
 
 Served from `backend/app/data/topics.json` via `app/services/topic_service.py`, same load-once-module-level pattern as `question_service.py`. See §7 for which chapters currently have a Topic and §14 for how one gets there.
 
+### Identity (Milestone A)
+
+POST /api/v1/auth/teacher/register, POST /api/v1/auth/teacher/login, POST /api/v1/auth/teacher/classes (session-gated), POST /api/v1/auth/student/join, POST /api/v1/auth/student/login, POST /api/v1/auth/logout, GET /api/v1/auth/me
+
+Session-cookie based (see §15). Does not gate any endpoint above — every chapter/question/topic/answer route stays open with no session required.
+
 ---
 
 ## Planned
@@ -406,3 +412,21 @@ backend/app/data/{topics,questions,answer_keys}.json     the single runtime sour
 Both `content-pipeline/` directories are build-time authoring tooling — plain Node.js, no npm dependency, never imported by `app/*` or `frontend/src/*`. They live under `docs/` rather than a new top-level folder, per `AI_Coding_Standards.md` §1's no-new-top-level-folders-without-approval rule (see ADR-003's Trade-offs for why that's an imperfect fit, worth revisiting).
 
 **Not every chapter has been migrated onto this pipeline.** See §7 for the current per-chapter state.
+
+---
+
+# 15. Identity (Milestone A)
+
+Introduced in Milestone A (2026-07-28), the first slice of the Scalable Assessment System (see `Roadmap.md`); full rationale and options considered in [ADR-004](ADR/ADR-004-student-teacher-identity.md) — this section stays the technical record.
+
+```
+Teacher (id, email, name, passwordHash)
+   └── ClassGroup (id, teacherId, name, code)
+          └── Student (id, classId, displayName, pinHash)
+```
+
+Students never provide an email or password — only a teacher-issued 6-character class code, a display name (unique per class, not globally), and a 4+-digit PIN. Both password and PIN are bcrypt-hashed; neither is ever returned by any endpoint's response model. Session state is an HTTP-only, signed cookie (Starlette `SessionMiddleware`, `itsdangerous`-backed) holding only `{role, id}` — never a name, email, or PIN.
+
+Accounts persist in `backend/app/data/{teachers,classes,students}.json`, gitignored, read/written by `app/services/auth_service.py` under a single lock with atomic tmp-then-rename writes — the same pattern §14's export pipeline established for content. This is a deliberate, temporary choice: it defers the real database decision to the next milestone (server-side attempt history), where actual volume will force it.
+
+**This milestone is dormant.** No existing route or page checks a session; `/chapters`, `/questions`, `/topics`, and answer evaluation are completely unauthenticated, unchanged. Nothing in the product currently consumes identity — a logged-in session has no visible effect beyond existing. It exists as a foundation the next milestones (server-side attempt history, adaptive selection, teacher-facing assessments) will build on.

@@ -1,0 +1,11 @@
+.student-join-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.student-join-error {
+  color: #b00020;
+}

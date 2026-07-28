@@ -24,6 +24,16 @@ export default function HomePage() {
           Select Chapter
         </button>
       </div>
+
+      <p className="home-auth-links">
+        <button className="link-button" onClick={() => navigate('/student/join')}>
+          Join a class
+        </button>
+        {' · '}
+        <button className="link-button" onClick={() => navigate('/teacher')}>
+          Teacher login
+        </button>
+      </p>
     </main>
   );
 }
