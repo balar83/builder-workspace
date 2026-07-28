@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { progressService } from "../services/progressService";
 
 export default function HomePage() {
   const navigate = useNavigate();
+
+  const handleContinueLearning = () => {
+    const lastActiveChapterId = progressService.getLastActiveChapter();
+    navigate(lastActiveChapterId ? `/chapter/${lastActiveChapterId}` : "/chapters");
+  };
 
   return (
     <main className="container">
@@ -12,7 +18,7 @@ export default function HomePage() {
       </p>
 
       <div className="button-group">
-        <button>Continue Learning</button>
+        <button onClick={handleContinueLearning}>Continue Learning</button>
 
         <button onClick={() => navigate("/chapters")}>
           Select Chapter

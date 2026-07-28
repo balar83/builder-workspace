@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { progressService } from '../services/progressService';
 import { questionService } from '../services/questionService';
 import type { AnswerEvaluationResponse } from '../types/answer';
 import type { Chapter } from '../types/chapter';
@@ -45,6 +46,12 @@ export default function QuestionPage() {
         if (!cancelled) {
           setChapter(chapterResult);
           setChapterQuestions(questionsResult);
+
+          if (chapterId && questionsResult.length > 0) {
+            const savedIndex = progressService.getChapterProgress(chapterId)?.currentQuestionIndex ?? 0;
+            const resumeIndex = Math.min(Math.max(savedIndex, 0), questionsResult.length - 1);
+            setCurrentQuestionIndex(resumeIndex);
+          }
         }
       },
     );
@@ -89,18 +96,27 @@ export default function QuestionPage() {
   };
 
   const handleQuestionComplete = () => {
+    if (chapterId) {
+      progressService.recordQuestionCompleted(chapterId, currentQuestion.id);
+    }
+
     if (isLastQuestion) {
       navigate('/chapters');
       return;
     }
 
-    setCurrentQuestionIndex((previous) => previous + 1);
+    const nextIndex = currentQuestionIndex + 1;
+    setCurrentQuestionIndex(nextIndex);
     setCurrentHintIndex(0);
     setShowSolution(false);
     setAnswer('');
     setSubmitted(false);
     setAttemptNumber(1);
     setEvaluation(null);
+
+    if (chapterId) {
+      progressService.updateCurrentQuestion(chapterId, nextIndex);
+    }
   };
 
   const handleAnswerSubmit = () => {
@@ -108,6 +124,10 @@ export default function QuestionPage() {
     questionService.submitAnswer(currentQuestion.id, { answer, attemptNumber }).then((result) => {
       setEvaluation(result);
       setAttemptNumber((previous) => previous + 1);
+
+      if (chapterId) {
+        progressService.recordQuestionAttempt(chapterId, currentQuestion.id);
+      }
     });
   };
 
@@ -132,7 +152,7 @@ export default function QuestionPage() {
           <p className="question-text">
             {evaluation
               ? evaluation.coach.message
-              : 'Answer evaluation will be available after backend integration.'}
+              : 'Checking your answer…'}
           </p>
         )}
 
@@ -141,7 +161,7 @@ export default function QuestionPage() {
             isLastQuestion ? (
               <div>
                 <p className="question-text">Chapter Complete!</p>
-                <button className="hint-button" type="button" onClick={() => navigate('/chapters')}>
+                <button className="hint-button" type="button" onClick={handleQuestionComplete}>
                   Return to Chapters
                 </button>
               </div>
