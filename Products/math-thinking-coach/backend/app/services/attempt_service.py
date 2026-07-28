@@ -169,3 +169,27 @@ def get_performance(student_id: str) -> list[dict]:
         )
 
     return results
+
+
+def get_recent_question_ids(student_id: str, chapter_id: str, limit: int = 10) -> list[str]:
+    """
+    Read-only, most-recent-first. Used by StudentLearningContext to seed
+    exclusion so a student isn't immediately re-served a question they just
+    answered - not a general history/reporting feature.
+    """
+    with _lock:
+        conn = _get_connection()
+        try:
+            rows = conn.execute(
+                """
+                SELECT question_id FROM attempts
+                WHERE student_id = ? AND chapter_id = ?
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (student_id, chapter_id, limit),
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [row[0] for row in rows]

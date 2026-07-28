@@ -1,5 +1,34 @@
 # Development Journal
 
+## 2026-07-28 (Milestone C1 — Learning Session Engine, Stateless Planning Layer)
+
+*Follows three design-review iterations (blueprint, refinement review, final domain-model validation) that together specified this milestone in full before any code was written. Implemented faithfully against that specification — no architectural redesign during implementation. No ADR written, per instruction: ADRs record shipped decisions, and this subsystem's ADR-006/007 pair is scoped but deliberately deferred until the stateful half (C2) also ships.*
+
+### Features completed
+- `app/schemas/session.py`: `AssessmentRequest`, `StudentLearningContext`, `SessionPlan`, `SelectionConstraints`, `QuestionCandidate`, `SelectedQuestion`, `SelectionOutcome` — the domain model validated across all three design reviews, implemented unchanged.
+- `app/services/learning_context_service.py`: `build_learning_context()` — read-only, built fresh from `attempt_service.get_performance` (ADR-005) and a new `attempt_service.get_recent_question_ids()` read query. Safe for first-time students (`hasHistory=False`, every other field present but empty, never absent).
+- `app/services/session_planner.py`: `create_plan()` — one component, three internal mode strategies (practice/test/revision), never imports content-access modules (enforced by a dedicated test that parses the module's own AST).
+- `app/services/constraint_resolver.py`: `resolve_constraints()` — deterministic feasibility check and tier-backfill degradation (Medium → Easy → Hard priority), never selects an actual question.
+- `app/services/content_repository.py`: `get_candidates()` — wraps `question_service` unchanged, documents the retrieval → normalization convention inline since only one source exists today.
+- `app/services/question_selector.py`: `select()` — seeded deterministic shuffle per difficulty tier, Easy → Medium → Hard ordering, returns `SelectionOutcome` (never a bare list).
+- `app/services/session_planning_pipeline.py`: `plan_session()` — thin composition of the five services above, explicitly documented as C1 scaffolding that C2's Session Builder will call, not a permanent sixth architectural component.
+
+### Major engineering decisions materially affecting Milestone C2
+- **Backfill applies uniformly, including to an explicitly single-tier request.** If a plan requests `difficulty="Hard"` and the chapter has zero Hard questions, Constraint Resolver backfills from Medium/Easy rather than returning a real shortfall — the same rule as a "Mixed" request, no special-casing by request shape. Discovered during implementation (a test's own expectation was wrong, not the code) — deliberately not changed to special-case single-tier requests, since that would add complexity for a distinction the accepted design never called for. Named explicitly because Test mode may want the opposite (a student who asked for Hard-only may not want an Easy question silently substituted) — the fix is isolated to `constraint_resolver._degrade()` if C2's design decides differently.
+- **`questionTypes` filtering is a documented no-op today.** `QuestionCandidate.type` is always `None` — no question-type field exists on the runtime `Question` schema yet (P2, deferred pending Shadow Mode's confidence-calibration gap). `AssessmentRequest.questionTypes` and the resulting `SelectionConstraints.questionTypes` are accepted and threaded through for forward compatibility, but nothing filters on them yet. Not a bug — a named limitation to close when P2 adds the field.
+- **`WEAK_ACCURACY_THRESHOLD = 0.6`** (in `learning_context_service.py`): a new, simple, explicitly-named heuristic for "weak topic" (attempted, not mastered, accuracy below 60%) — not derived from any prior design document, since none specified one. Flagged as a candidate for a real pedagogy review later, not a tuned value.
+- **`get_recent_question_ids()`** added to `attempt_service.py` (ADR-005) — one new read-only query (`ORDER BY id DESC`, not `created_at`, to avoid timestamp-tie nondeterminism on fast sequential writes), no schema change, no new writer.
+- **Default target count (10) and default Mixed-difficulty split (30/40/30, Medium absorbing the rounding remainder)** are new, simple, named constants in `session_planner.py` — not pulled from any existing spec, chosen for determinism and to roughly match the content pipeline's own documented difficulty balance.
+
+### Verification summary
+- Backend: 151/151 pytest passing (94 → 151; +57 across the seven new/extended modules). Frontend unaffected (49/49), no frontend files touched.
+- Explicit edge-case coverage per the milestone's own requirements: insufficient supply (single-tier and total), degraded distributions (backfill math hand-verified against real Linear Equations/Rational Numbers content, not just synthetic fixtures), exclusion collisions (all candidates in a tier excluded), empty attempt history (first-time student, every context field safe), deterministic ordering (same seed → identical output; different seeds → can differ), `SelectionOutcome.shortfall` correctness (including a synthetic Selector-level shortfall distinct from a Resolver-level one, validating the wrapper's honesty in both cases).
+- `session_planner.py`'s "never accesses content" invariant is enforced by a test, not just a docstring — it parses the module's own AST and asserts `content_repository`/`question_service` never appear in its imports.
+
+### Implementation notes
+- No API routes, no session persistence, no database writes beyond the one new read query — confirmed by `git status` on `app/api/` showing no changes, and by grep for `LearningSession`/`SessionState`/`CREATE TABLE` finding nothing beyond an explanatory docstring reference and the pre-existing, unmodified `attempts` table schema.
+- `evaluation_service.py`, `coaching_service.py`, `answer_service.py`, `auth_service.py`, and every existing route are untouched.
+
 ## 2026-07-28 (Milestone B — Server-Side Attempt History)
 
 *Followed a design review for the "scalable assessment system" milestone's P1-P4 (UX proposal, Assessment Engine, Question Selection Engine, Student Performance Model) that surfaced and resolved a real tension between the requested student-configurable "Test mode" (with visible marks) and `Product-Vision.md`'s Coaching vs. Assessment Philosophy — resolved as a distinct, opt-in, self-feedback-framed surface rather than a change to the default coaching experience. Milestone B (this entry) was identified as the actual prerequisite: P3's weak-concept/difficulty logic and P2's Test-mode summary both need real attempt data before they can do anything.*

@@ -119,6 +119,43 @@ def test_mastery_streak_resets_when_hints_were_used() -> None:
     assert performance["mastered"] is False
 
 
+def test_get_recent_question_ids_returns_most_recent_first() -> None:
+    for question_id in ["q1", "q2", "q3"]:
+        attempt_service.record_attempt(
+            student_id="student-1", question_id=question_id, chapter_id="c1", topic_id="topic-a",
+            difficulty="Easy", is_correct=True, attempt_number=1,
+        )
+
+    assert attempt_service.get_recent_question_ids("student-1", "c1") == ["q3", "q2", "q1"]
+
+
+def test_get_recent_question_ids_respects_limit() -> None:
+    for question_id in ["q1", "q2", "q3"]:
+        attempt_service.record_attempt(
+            student_id="student-1", question_id=question_id, chapter_id="c1", topic_id="topic-a",
+            difficulty="Easy", is_correct=True, attempt_number=1,
+        )
+
+    assert attempt_service.get_recent_question_ids("student-1", "c1", limit=2) == ["q3", "q2"]
+
+
+def test_get_recent_question_ids_is_scoped_to_chapter() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q2", chapter_id="c2", topic_id="topic-b",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert attempt_service.get_recent_question_ids("student-1", "c1") == ["q1"]
+
+
+def test_get_recent_question_ids_is_empty_for_a_student_with_no_attempts() -> None:
+    assert attempt_service.get_recent_question_ids("student-1", "c1") == []
+
+
 def test_record_attempt_for_answer_never_raises_even_if_recording_fails(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

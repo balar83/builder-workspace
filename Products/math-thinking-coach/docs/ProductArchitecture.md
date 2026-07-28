@@ -456,3 +456,30 @@ backend/app/data/attempts.db          SQLite (stdlib sqlite3, zero new dependenc
 `GET /performance/me` (session-gated, 401 if not a student) reads back deterministic per-topic aggregates — accuracy, current streak, and mastery via `LearningExperienceArchitecture.md`'s existing rule (3 consecutive correct, no hints, most-recent-first). No model, arithmetic only.
 
 Anonymous use is completely unaffected — no session means no write, no error, and Release 0.1's `localStorage` progress tracking (§6) remains the path for it, permanently, not just during a transition. No frontend page consumes `GET /performance/me` yet; that begins with the Assessment Engine (`Roadmap.md`'s Milestone E).
+
+---
+
+# 17. Learning Session Engine — Stateless Planning Layer (Milestone C1)
+
+Introduced in Milestone C1 (2026-07-28), after three design-review iterations (blueprint, refinement review, final domain-model validation) elevated the originally-scoped Question Selection Engine into a full session-planning architecture, then split it along the one property that mattered — which half needs a persistence decision. This section covers only the stateless half. No ADR yet: ADR-006 is scoped but deliberately deferred until C2 (the stateful half) also ships, per this project's convention that ADRs record shipped decisions.
+
+```
+AssessmentRequest ──┐
+                     ▼
+  attempt_service ─→ StudentLearningContext ─→ SessionPlanner ─→ SessionPlan
+                                                                       │
+                             ┌─────────────────────────────────────────┘
+                             ▼
+  question_service ─→ ContentRepository ─→ QuestionCandidate[] ──┐
+                                                                   ▼
+                                              ConstraintResolver ─→ SelectionConstraints
+                                                                        │
+                                                                        ▼
+                                              QuestionSelector ─→ SelectionOutcome
+```
+
+Six plain-function modules under `app/services/`, one per box above, composed by `session_planning_pipeline.plan_session()` — deliberately not a seventh architectural component, just the glue Milestone C2's Session Builder will call when it persists a real session. Every step is deterministic: `question_selector.py` uses `random.Random(seed)`, never wall-clock time; `constraint_resolver.py` degrades under-supplied difficulty tiers via a fixed backfill priority (Medium → Easy → Hard), documented in its own module docstring as applying uniformly even to an explicitly single-tier request — a decision made during implementation, not pinned down by any prior review, and flagged as something Milestone C2 (particularly Test mode) may want to revisit.
+
+`SelectionOutcome` — never a bare list — is the domain-model finding from the final validation review: `SelectionConstraints.resolvedCount` reflects pool-level feasibility, but the Selector's own exclusion pass can still under-deliver relative to it, so the outcome always reports `actualCount`/`shortfall` honestly rather than leaving the caller to infer a possible mismatch.
+
+**No API surface, no persistence.** This layer has no route, is never called from `app/api/*`, and writes nothing except through `attempt_service`'s pre-existing (ADR-005) `get_recent_question_ids` read query, added here as the one small extension to that module. `Question`'s `topicId`-optional shape (§7) and `Question` itself having no `type` field yet (P2, deferred) both flow through as-is — `QuestionCandidate.type` is always `None` today, a documented no-op, not a bug.
