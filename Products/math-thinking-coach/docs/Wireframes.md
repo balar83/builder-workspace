@@ -73,23 +73,25 @@ Allow students to choose a chapter and begin the question flow.
 
 ---
 
-# Screen 3 - Chapter Detail
+# Screen 3 - Chapter Overview
 
 ```
 ----------------------------------------
 
 Chapter Title
 
-Description and learning goals for the selected chapter.
+Chapter description.
 
-[ Start Questions ]
+2 of 5 completed
+
+[ Continue Learning ]
 
 ----------------------------------------
 ```
 
 Purpose
 
-Introduce the chapter context before starting the question sequence.
+Show chapter context and progress before entering the question sequence. The button reads "Start Learning" if nothing has been attempted yet, or "Continue Learning" once some progress exists — either way it proceeds into the question flow, resuming at the last question reached if applicable.
 
 ---
 
@@ -190,7 +192,7 @@ Chapter Selection
 
 ↓
 
-Chapter Detail
+Chapter Overview
 
 ↓
 
@@ -205,7 +207,7 @@ Question Flow
 |---------|----------|
 | Home | ✅ |
 | Chapter Selection | ✅ |
-| Chapter Detail | ✅ |
+| Chapter Overview | ✅ |
 | Question Flow | ✅ |
 
 ---

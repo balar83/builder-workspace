@@ -7,7 +7,7 @@
 
 ## Problem
 
-`answer_service.evaluate_answer` originally did two structurally different jobs in one function: deciding whether a submitted answer is *correct* (a factual check against `answer_keys.json`), and deciding what to *do* about it — which coaching message to show, whether to nudge a hint, when to suggest the solution, based on attempt number. Rule-based exact-match was known from the start to be a temporary Phase-1 answer for correctness-checking; an AI-based evaluator was always the intended eventual replacement (see `ProductArchitecture.md` §7, "the extension point for future AI-based evaluation"). Leaving both jobs in one function meant that extension point didn't actually exist — replacing correctness-checking would have meant touching the same code that decides coaching behavior.
+`answer_service.evaluate_answer` originally did two structurally different jobs in one function: deciding whether a submitted answer is *correct* (a factual check against `answer_keys.json`), and deciding what to *do* about it — which coaching message to show, whether to nudge a hint, when to suggest the solution, based on attempt number. Rule-based exact-match was known from the start to be a temporary Phase-1 answer for correctness-checking; an AI-based evaluator was always the intended eventual replacement (see `ProductArchitecture.md` §8, "the extension point for future AI-based evaluation"). Leaving both jobs in one function meant that extension point didn't actually exist — replacing correctness-checking would have meant touching the same code that decides coaching behavior.
 
 ---
 
@@ -49,7 +49,7 @@ Option 3 was explicitly rejected at design time: exactly one evaluation strategy
 
 This seam is built to let `evaluation_service.evaluate` be replaced or supplemented without changing `coaching_service.py`, the API contract, or the frontend:
 
-- **Feature 015 (Shadow Mode, near-term, see `Roadmap.md`)**: would call an AI evaluator alongside `evaluation_service.evaluate` and log both, without either touching `coaching_service.py` or changing what's returned to the client.
+- **Feature 015 (Shadow Mode — ✓ implemented 2026-07-23, see [ADR-002](ADR-002-shadow-mode-execution-and-logging.md))**: calls an AI evaluator alongside `evaluation_service.evaluate` and logs both, without touching `coaching_service.py` or changing what's returned to the client — built exactly as anticipated here.
 - **A live AI-based evaluator (medium-term)**: would replace or gate the call inside `answer_service.evaluate_answer`, not restructure it. Coaching logic is unaffected either way, since it only ever sees an `is_correct` boolean and an attempt number, never how correctness was determined.
 - If a second evaluation strategy is ever needed *concurrently* (not just as a staged replacement), option 3's strategy-selection question becomes real and should get its own ADR then — not before.
 
@@ -65,14 +65,15 @@ This seam is built to let `evaluation_service.evaluate` be replaced or supplemen
 
 **Tests** — `test_answers.py` (11 tests) passing unmodified is the regression proof the refactor is behavior-preserving. 9 new focused unit tests added: `test_evaluation_service.py` (correct, incorrect, whitespace-trimmed, empty) and `test_coaching_service.py` (correct → `NEXT_QUESTION`; attempts 1/2/3+ → `TRY_AGAIN`/`SHOW_HINT`/`SHOW_SOLUTION`).
 
-**Documentation** — `Development-Journal.md` (2026-07-22 entry), `Backlog.md` (Feature 012 entry), `ProductArchitecture.md` §7 (extension-point note). This ADR backfills the formal record that was missing until this sprint.
+**Documentation** — `Development-Journal.md` (2026-07-22 entry), `Backlog.md` (Feature 012 entry), `ProductArchitecture.md` §8 (extension-point note). This ADR backfills the formal record that was missing until this sprint.
 
 ---
 
 ## Related Documents
 
 - `Products/math-thinking-coach/docs/Development-Journal.md` (2026-07-22 entries)
-- `Products/math-thinking-coach/docs/Backlog.md` (Feature 012, Feature 014, Feature 015 recommendation)
-- `Products/math-thinking-coach/docs/ProductArchitecture.md` §7, §11
+- `Products/math-thinking-coach/docs/Backlog.md` (Feature 012, Feature 014, Feature 015)
+- `Products/math-thinking-coach/docs/ProductArchitecture.md` §8, §12
 - `Products/math-thinking-coach/backend/experiments/ai_evaluation/README.md` (Feature 014 — the validation of this seam)
 - `Products/math-thinking-coach/docs/Roadmap.md` (near/medium-term items that depend on this seam)
+- [`ADR-002-shadow-mode-execution-and-logging.md`](ADR-002-shadow-mode-execution-and-logging.md) — the first real use of this seam

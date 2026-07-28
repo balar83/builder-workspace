@@ -1,188 +1,145 @@
 # Handoff Prompt — Math Thinking Coach
 
-*Paste this entire document as the first message of a new Claude Code chat to resume work with zero loss of context. This file is itself part of the repository — the repository is the source of truth; where anything below conflicts with what you observe in the code, trust the code and treat this document as stale.*
+*Paste this document as the first message of a new chat to resume work with minimal re-explanation. This file is part of the repository — the repository is the source of truth; where anything below conflicts with what you observe in the code, trust the code and treat this document as stale. Regenerate it at the next stable checkpoint rather than letting it drift.*
 
 ---
 
 ## 1. Who you are on this project
 
-You are acting as the Senior Software Engineer inside the **AI Builder Operating System**, a multi-product workspace at `C:\Users\rbala\BuilderWorkspace`. Read these governing documents in full before doing anything else — they are short and this handoff does not replace them:
+You are the Senior Software Engineer inside the **AI Builder Operating System**, a multi-product workspace at `C:\Users\rbala\BuilderWorkspace`. Read these first — short, and this handoff doesn't replace them:
 
-1. [`AI-Builder-OS/CLAUDE.md`](../../../AI-Builder-OS/CLAUDE.md) — your role, workflow, and hard rules. Key ones: **do not redefine architecture or product direction unless explicitly asked**; implement only agreed scope; verify build/lint/tests before considering anything done; commit only after verification; documentation reflects completed reality only, never plans.
-2. [`AI-Builder-OS/ENGINEERING_PRINCIPLES.md`](../../../AI-Builder-OS/ENGINEERING_PRINCIPLES.md) — simplicity over cleverness, reuse through need (not premature abstraction), small incremental commits, fix root causes.
-3. [`AI-Builder-OS/DOCUMENTATION_STANDARDS.md`](../../../AI-Builder-OS/DOCUMENTATION_STANDARDS.md) — what each doc file is for (see §8 below) and when to update them.
-4. [`Products/math-thinking-coach/prompts/AI_Coding_Standards.md`](../prompts/AI_Coding_Standards.md) — project-specific rules: no new top-level folders without approval, no dependencies without approval, mirror source structure in tests, never move/delete files unless explicitly instructed.
+1. [`AI-Builder-OS/CLAUDE.md`](../../../AI-Builder-OS/CLAUDE.md) — role, workflow, hard rules. Key ones: don't redefine architecture or product direction unless asked; implement only agreed scope; verify build/lint/tests before calling anything done; commit only after verification. Also defines the **Engineering vs. Product documentation** split: `Development-Journal.md`, `Release-Notes.md`, and accepted ADRs describe only completed reality; `Product-Vision.md`, `Roadmap.md`, and `Idea-Inbox.md` are intentionally forward-looking and exempt from that rule; `Backlog.md` holds approved-but-unscheduled work only.
+2. [`AI-Builder-OS/ENGINEERING_PRINCIPLES.md`](../../../AI-Builder-OS/ENGINEERING_PRINCIPLES.md) — simplicity over cleverness, reuse through need, small commits, fix root causes.
+3. [`AI-Builder-OS/DOCUMENTATION_STANDARDS.md`](../../../AI-Builder-OS/DOCUMENTATION_STANDARDS.md) — what each doc file is for (§10 below) and when to update it.
+4. [`Products/math-thinking-coach/prompts/AI_Coding_Standards.md`](../prompts/AI_Coding_Standards.md) — no new top-level folders or dependencies without approval, mirror source structure in tests, never move/delete files unless instructed.
 
-This project (`Products/math-thinking-coach/`) is one product inside that workspace. There is a separate `AI-Builder-OS/CHATGPT_PLAYBOOK.md` describing a ChatGPT-does-planning / Claude-does-implementation workflow — you may be handed feature specs that originated that way; treat them as the user's request, not as something you generated.
-
----
-
-## 2. Product vision (from `docs/Product-Vision.md` and `docs/ProductArchitecture.md`)
-
-An AI-powered **Math Thinking Coach** for Class 8 CBSE students. The point is to guide students to *think through* problems rather than hand them answers: student attempts first, hints are progressive and optional, the full solution is the last resort, and any AI involved acts as a coach, not an answer machine. Mobile-first, minimal UI, one primary action per screen.
+This project (`Products/math-thinking-coach/`) is one product in that workspace. `AI-Builder-OS/CHATGPT_PLAYBOOK.md` describes a ChatGPT-plans / Claude-implements workflow you may see feature specs arrive from — treat them as the user's request, not something to originate yourself.
 
 ---
 
-## 3. Current architecture (verified against the actual filesystem, not just docs)
+## 2. Product vision and pedagogy
 
-### Tech stack
-- **Frontend**: React 19 + TypeScript + Vite 8, React Router, Vitest + Testing Library, oxlint. No CSS framework — local `.css` files per component/page.
-- **Backend**: Python 3.13, FastAPI, Uvicorn, Pydantic, python-dotenv, pytest + httpx (via `TestClient`).
-- **Communication**: REST over HTTP, JSON, versioned under `/api/v1`. No auth yet.
-- **AI**: none integrated yet. Answer evaluation is currently deterministic rule-based logic; LLM integration is an explicit future phase (see §11).
+An AI-powered **Math Thinking Coach** for Class 8 CBSE students, evolving toward an **AI Learning Companion**: guide students to *think through* problems, and — as of the direction set alongside Release 0.1 — teach them, not just quiz them. Full detail in two documents with distinct, non-overlapping jobs:
 
-### Folder structure (actual, current)
+- [`Product-Vision.md`](Product-Vision.md) — why the product exists: mission, target audience, coaching-vs-assessment philosophy, curriculum integrity, extensibility principles.
+- [`LearningExperienceArchitecture.md`](LearningExperienceArchitecture.md) — **how students learn**, the pedagogical counterpart to this document. Defines the full learning journey (Learn → Understand → Worked Examples → Guided Practice → Independent Practice → Homework → Revision → Mastery), the `Topic` model, what's AI-authored (always offline, human-reviewed) vs. deterministic, and which Release delivers which stage. Read this before proposing any Release 0.2+ feature — find its stage there first.
 
+---
+
+## 3. Architectural decisions (read before touching evaluation, AI, or persistence code)
+
+**[ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) — Evaluation/Coaching separation (Accepted).** `answer_service.evaluate_answer` is a thin orchestrator over two independent collaborators: `evaluation_service.evaluate()` (correctness only) and `coaching_service.decide()` (attempt-based coaching only). This seam is *the* extension point for any future evaluation strategy.
+
+**[ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md) — Shadow Mode execution and logging (Accepted).** An experimental AI evaluator runs out-of-band (FastAPI `BackgroundTasks`) alongside the rule-based evaluator on every real answer submission, logging one JSONL record per submission. Zero production behavior change — enforced and verified, not just intended. Feature-flagged via `SHADOW_MODE_ENABLED` (default on).
+
+**[ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) — Content authoring and export pipeline (Accepted).** New content is authored in `docs/content-source/<chapter>/` (a 5-stage trail, `reviewStatus`-gated) and, once approved, merged into runtime `backend/app/data/*.json` by a 7-phase Stage 10 Export Pipeline (`docs/content-pipeline/export/`) that validates against the real backend Pydantic schemas and writes atomically, per-chapter, never a whole-file overwrite. A companion "Template Engine v1" (`docs/content-pipeline/template-engine/`) generates and independently verifies question candidates at volume. This is how Linear Equations grew from 5 to 44 questions and gained its Topic.
+
+**Release 0.1's frontend persistence pattern (not yet its own ADR — see §11).** `progressService.ts` is the only interface any component uses; `progressStore.ts` is the only file that touches `localStorage`. Mirrors ADR-001's service-in-front-of-private-accessor shape, applied to the frontend for the first time. See `ProductArchitecture.md` §6.
+
+All three accepted ADRs record real, implemented decisions, verified against shipped code — not proposals. Before touching evaluation, Shadow Mode, the progress-persistence layer, or content authoring/export, read the relevant section in full first.
+
+---
+
+## 4. Current architecture
+
+**Stack** — Frontend: React 19 + TypeScript + Vite, React Router, Vitest + Testing Library, oxlint. Backend: Python 3.13, FastAPI, Pydantic, pytest + httpx. REST/JSON under `/api/v1`, no auth. AI: rule-based evaluation drives coaching (unchanged since Feature 010); an AI evaluator also runs in production, out-of-band, logging-only (Feature 015). No AI is in the response path. No backend persistence exists — Release 0.1's progress tracking is entirely client-side. Content authoring/export tooling (Node.js, `docs/content-pipeline/`) is build-time only, never imported by `app/*` or `frontend/src/*` — see ADR-003.
+
+**Backend** (`backend/app/`)
 ```
-Products/math-thinking-coach/
-├── backend/
-│   ├── app/
-│   │   ├── main.py                  FastAPI app, CORS, mounts api_router at /api/v1
-│   │   ├── api/
-│   │   │   ├── router.py            central api_router, includes all route modules
-│   │   │   └── routes/
-│   │   │       ├── health.py        GET /health
-│   │   │       ├── chapters.py      GET /chapters, GET /chapters/{id}
-│   │   │       ├── questions.py     GET /chapters/{id}/questions[/{id}]
-│   │   │       └── answers.py       POST /questions/{id}/answer
-│   │   ├── core/
-│   │   │   ├── config.py            Settings (APP_NAME, APP_VERSION, API_PREFIX) via .env
-│   │   │   └── logging.py           basic logging config
-│   │   ├── data/
-│   │   │   ├── chapters.json        5 chapters — PUBLIC data, served as-is
-│   │   │   ├── questions.json       25 questions — PUBLIC data, served as-is
-│   │   │   └── answer_keys.json     questionId → expected answer — PRIVATE, never served
-│   │   ├── schemas/                 Pydantic models: chapter.py, question.py, answer.py
-│   │   ├── services/                business logic: question_service.py, answer_service.py
-│   │   └── models/                  empty placeholder (no ORM/DB yet)
-│   ├── tests/                       pytest, one file per route module, TestClient-based
-│   ├── requirements.txt, pytest.ini, .env.example, README.md
-│   └── .venv/                       local virtualenv (gitignored)
-│
-├── frontend/
-│   ├── src/
-│   │   ├── pages/                   HomePage, ChapterSelectionPage, ChapterPage, QuestionPage
-│   │   ├── components/              ChapterCard, AnswerInput, HintPanel, SolutionPanel, DifficultyBadge, ProgressBar, QuestionProgress (+ matching .css)
-│   │   ├── services/questionService.ts   the ONLY place components may reach data — all methods are async and call the backend over fetch
-│   │   ├── config/api.ts            API_BASE_URL, from VITE_API_BASE_URL env var
-│   │   ├── types/                   chapter.ts, question.ts, answer.ts — kept in exact field-for-field sync with backend Pydantic schemas
-│   │   ├── App.tsx, main.tsx, vite-env.d.ts
-│   ├── tests/                       Vitest; components/ mirrors src/components/, services/ mirrors src/services/
-│   └── .env.example
-│
-└── docs/                            see §8
+main.py                        FastAPI app, CORS (localhost:5173 only), mounts api_router at /api/v1
+api/router.py, api/routes/     health, chapters, questions, topics, answers — routes stay thin, delegate to services
+core/config.py                 Settings: app + api_prefix + five shadow_* settings (env-driven)
+core/logging.py                basic logging config
+data/                          chapters.json, questions.json (public, topicId optional), topics.json (public),
+                                answer_keys.json (private, one reader)
+schemas/                       Pydantic models: chapter, question, topic, answer, ai_evaluation
+services/
+  question_service.py          content lookup
+  topic_service.py             Topic lookup (Feature 018) — same load-once-module-level pattern as question_service
+  evaluation_service.py        rule-based correctness + get_expected_answer() accessor (ADR-001/002)
+  coaching_service.py          attempt-based coaching logic — untouched by Shadow Mode, Release 0.1, Features 018–021
+  answer_service.py            thin orchestrator — untouched by Shadow Mode, Release 0.1, Features 018–021
+  ai_evaluation_{client,prompt,service}.py   Shadow Mode's AI evaluator (promoted from the Feature 014 spike)
+  shadow_evaluation_service.py Shadow Mode's out-of-band orchestrator, dispatched via BackgroundTasks
+  shadow_log_writer.py         thread-safe JSONL append
+experiments/ai_evaluation/     Feature 014's original harness — untouched, not imported by app/*
+tests/                         pytest, one file per module — 65/65 passing
 ```
 
-**Important drift to know about:** `prompts/AI_Coding_Standards.md` describes an aspirational structure with `frontend/src/features/{chapters,questions,hints,solutions,history}/`, `hooks/`, `utils/`. **This does not exist yet.** The actual structure is flatter: `pages/` + `components/` + `services/` + `types/` + `config/`. Don't be surprised by the mismatch, and don't unilaterally restructure to match the aspirational doc — that would be exactly the kind of unrequested architectural change `CLAUDE.md` says not to make.
+**Content pipeline** (`docs/`, build-time only — see [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md))
+```
+content-source/<chapter>/      Authoring trail: stage2 (topic detection) .. stage6 (questions), canonical-topic.json.
+                                reviewStatus-gated ("ai-generated" default, "approved" required to export).
+content-pipeline/
+  template-engine/             Feature 019 — seeded, validated procedural question generation (node run.js ...)
+  export/                      Feature 021 — Stage 10 Export: 7-phase gated merge into backend/app/data/*.json
+                                (node run.js --chapter=<slug> [--dry-run]); shells out to backend/.venv for real
+                                Pydantic validation. No automated test suite for this tooling itself.
+```
 
-### Data flow / key design pattern
+**Frontend** (`frontend/src/`)
+```
+pages/         Home, ChapterSelection, Chapter (repurposed as Chapter Overview — Release 0.1; now also routes into
+                Topic when one exists — Feature 018), Question, Topic (Feature 018 — explanation, worked example,
+                learning objectives, "Start Practice")
+components/    ChapterCard (progress badge — Release 0.1), AnswerInput, HintPanel, SolutionPanel,
+               DifficultyBadge, ProgressBar, QuestionProgress
+services/
+  questionService.ts   the only place components fetch content — async, fetch-based; now also getTopics/getTopic
+  progressService.ts   Release 0.1 — the only interface for progress (localStorage-backed)
+  progressStore.ts     Release 0.1 — the only file that touches localStorage; never imported outside progressService
+types/         chapter, question, answer, progress (Release 0.1), topic (Feature 018) — hand-kept in parity with
+               backend schemas where applicable
+config/api.ts
+tests/         mirrors src/ 1:1 for components and services; no page-level tests (verified via live walkthrough instead)
+```
 
-`backend/app/data/*.json` is the **single source of truth** for chapter and question content — the frontend has no local copy of anything (its old `src/data/chapters.ts`/`questions.ts` were deleted once the API existed). All frontend data access goes through `questionService.ts`, which is a thin async wrapper over `fetch` calls to the backend; components never call `fetch` directly and never import data files.
-
-`answer_keys.json` is architecturally separate from `chapters.json`/`questions.json`: it is read only by `answer_service.py` and is never merged into any Pydantic response model, so there is no route through which a client can read the expected answer for a question. This was a deliberate security-conscious decision (see §11).
-
----
-
-## 4. Completed milestones
-
-All four backend/API features to date, in order:
-
-| # | Feature | What it delivered |
-|---|---------|--------------------|
-| 007 | Backend Foundation | FastAPI skeleton: `main.py`, `/api/v1` prefix, CORS for `localhost:5173`, `.env`-driven config, logging, `GET /api/v1/health`. |
-| 008 | Frontend Service Layer | Introduced `questionService.ts` so components stop importing `src/data/*.ts` directly. At this point the service still wrapped **local static data** — no backend calls yet. |
-| 009 | Question Retrieval API | `GET /api/v1/chapters`, `GET /api/v1/chapters/{chapterId}`, `GET /api/v1/chapters/{chapterId}/questions`, `GET /api/v1/chapters/{chapterId}/questions/{questionId}`. `questionService` switched from local data to real `fetch` calls; `src/data/chapters.ts`/`questions.ts` deleted. Pages (`ChapterSelectionPage`, `ChapterPage`, `QuestionPage`) converted from synchronous render-time data access to `useEffect`/`useState` async loading — this was a deliberate, user-approved exception to "don't touch components," confirmed via clarifying question before implementing, because a real HTTP-backed service cannot be synchronous. |
-| 010 | Answer Evaluation API (Rule-Based) | `POST /api/v1/questions/{questionId}/answer`. Deterministic exact-match (whitespace-trimmed) comparison against a private answer key; attempt-number-driven coaching messages and `nextAction`/`ui` state. Frontend `submitAnswer` wired into the existing "Check Answer" button; only `coach.message` is rendered (in the same slot that used to show a static placeholder) — the rest of the response (`isCorrect`, `score`, `nextAction`, `ui.*`) is captured in state but intentionally not yet acted on in the UI. |
-
-Before Feature 007, there was already a working **Frontend MVP**: chapter selection → chapter detail → multi-question flow with progressive hints → solution reveal → chapter-complete, all against local static data.
-
-Full narrative detail for every feature (including the back-and-forth on design decisions) is in [`Development-Journal.md`](Development-Journal.md) — read the `2026-07-22` entries for 007–010.
-
----
-
-## 5. Current project status — read this before doing anything
-
-Run these yourself to confirm; do not trust stale numbers.
-
-- **Branch**: `main`.
-- **Feature 010 is committed.** Latest relevant commit: `42371e0 feat(api): add rule-based answer evaluation endpoint`. Features 007–010 are all committed. What remains uncommitted is only this handoff/status documentation itself (`docs/Backlog.md`, `docs/PROJECT_STATUS.md`, `docs/HANDOFF_PROMPT.md`) — run `git status` first to confirm, and ask the user whether to commit those too.
-- **Backend**: 20/20 pytest passing (`health`, `chapters`, `questions`, `answers` test modules). `uvicorn app.main:app` starts cleanly. Python 3.13.5 via a project-local `.venv` (see §10 for the exact path quirk on this machine).
-- **Frontend**: `tsc -b && vite build` passes, `oxlint` clean, 18/18 vitest passing (`components/*` + `services/questionService.test.ts`).
-- Full manual browser walkthrough completed for Feature 010: correct-answer flow, incorrect attempts 1/2/3 (each producing the right coaching message), hint reveal and solution reveal confirmed still working exactly as before (regression-checked), 404 handling for unknown chapter/question, and confirmed via `curl` that `GET /chapters/{id}/questions/{id}` never leaks the answer key.
+**Data flow** — `backend/app/data/*.json` is the single source of truth for content; frontend has no local copies. `answer_keys.json` is private, read only through `evaluation_service.get_expected_answer()`. New content originates in `docs/content-source/`, not by hand-editing `backend/app/data/*.json` directly, once a chapter has been migrated onto the pipeline (Linear Equations only, so far — Data Handling, Practical Geometry, Understanding Quadrilaterals, and Rational Numbers still carry their original hand-seeded questions). Progress lives entirely in the browser (`localStorage`, key `mtc.progress.v1`, schema-versioned) — no server-side record, no accounts, no multi-device sync.
 
 ---
 
-## 6. Repository conventions you must follow
+## 5. Development workflow on this project
 
-- **Ask before assuming** when a new feature spec conflicts with what's already built or with stated architecture — this happened twice already in this project's history (see §11) and both times the right move was to pause and ask rather than silently pick a side.
-- **Minimal, focused diffs.** Don't refactor unrelated code while implementing a feature. Don't rename or move files unless explicitly asked.
-- **No new dependencies without justification and approval.** `AI_Coding_Standards.md` §10 is explicit about this.
-- **No new top-level folders without approval.**
-- **Routes stay thin; business logic lives in services** (`app/services/*.py` on the backend). This has been followed consistently: `answers.py` (route) does only a 404 existence check and delegates to `answer_service.evaluate_answer`.
-- **Commit messages**: this repo uses Conventional Commits style (`feat(scope): ...`, `refactor(scope): ...`, `chore(scope): ...`, `docs: ...`) — follow the existing log (`git log --oneline`) for the pattern.
-- **Only commit when the user asks**, and only after build/lint/tests are verified green.
+1. **Design** — grounded in the actual current repo, not assumptions. No code.
+2. **Review** — the user challenges the recommendation, asks for specific confirmations, sometimes redirects mid-review.
+3. **Approval** — explicit, before any code is written.
+4. **Small implementation slices** — each independently testable, not one large diff.
+5. **Tests** — every slice ships with tests; adversarial tests (force a failure, force a disabled state) matter as much as happy-path ones for anything touching a response contract.
+6. **Documentation** — updated after implementation and verification, describing what was actually built, plus a new ADR if the decision is significant and hard to reverse.
+7. **Final verification** — a real end-to-end review before calling a Feature or Release complete: re-run tests fresh (don't trust earlier slices' results), check for dead code/stale comments/duplication, live-verify UI-observable changes.
 
----
-
-## 7. Coding standards
-
-- TypeScript: strongly typed, `noUnusedLocals`/`noUnusedParameters` enabled — keep it that way. Frontend types (`src/types/*.ts`) are hand-kept in exact field-for-field parity with backend Pydantic schemas (same field names, including camelCase like `chapterId`/`attemptNumber` — no snake_case aliasing on the backend) so `response.json()` can be returned directly with zero mapping layer. If you change one side, change the other and verify parity (this was explicitly checked and confirmed once already — see Development-Journal).
-- React: functional components + hooks only, no class components. Async data loading uses local `useEffect`/`useState` with a `cancelled` flag pattern to avoid race conditions/setting state after unmount — see any of the three page components for the pattern to copy.
-- Python: Pydantic models for all request/response shapes, `response_model=` declared explicitly on every route (this is also what keeps `answer_keys.json` safely private — see §11). Plain module-level functions for services, not classes (`question_service.py`, `answer_service.py` — both are function modules, not `AnswerEvaluationService`-style classes). No FastAPI `Depends()`-based dependency injection has been introduced yet; services are imported and called directly.
-- No comments explaining *what* code does; only where a non-obvious constraint or workaround needs explaining (rare so far — the codebase has almost none).
+Don't skip steps 1–3 by jumping to implementation on a request that reads like a spec.
 
 ---
 
-## 8. Documentation map — what's where and what it's for
+## 6. Current project status
 
-Per `DOCUMENTATION_STANDARDS.md`, only update the docs actually impacted by a change; keep documentation describing *completed* reality, never plans.
+- **Release 0.1 ("It Remembers You") is complete** — Feature 016 (Progress Persistence Layer) + Feature 017 (Chapter Overview & Continue Learning).
+- **Release 0.2, first slice implemented (not complete)** — Features 018–021 (Topic data model & API, Template Engine v1, content authoring pipeline, Stage 10 Export Pipeline — see [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md)), shipped in parallel with Release 0.1 the same day. Linear Equations migrated end-to-end (5 → 44 questions, 1 Topic, live). Data Handling authored through stage 6 (42 questions) but not exported. Release 0.2's Understand stage not yet built.
+- **65/65 backend tests, 40/40 frontend tests passing.**
+- **Feature 015 (Shadow Mode)** shipped 2026-07-23, still operable, still hasn't accumulated a meaningful sample.
+- **Next engineering objective**: none formally queued. Active, non-blocking tracks: operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); export Data Handling's already-authored questions (nearest content win); get this checkpoint committed. Don't assume further Release 0.2 engineering (Understand stage, more chapters) is approved to start — see §11.
+- **Branch**: `main`, ahead of `origin/main`, nothing pushed. **Committed**: Features 007–012 (`90e547b`), Feature 014 spike (`e98d744`), Product Foundation Sprint docs (`ae27076`). **Uncommitted**: everything since — Feature 015 (backend), Release 0.1 (frontend), Features 018–021 (backend + frontend + `docs/content-pipeline/` + `docs/content-source/`), and all documentation through this checkpoint (2026-07-28). Run `git status` to confirm before doing anything; ask the user whether/how to commit.
 
-| File | Purpose | Current state |
-|---|---|---|
-| `docs/Product-Vision.md` | Why the product exists | Stable, unlikely to need changes |
-| `docs/ProductArchitecture.md` | How the system is built — stack, folder structure, **API endpoint reference (Implemented vs Planned)**, ADR table | Kept current through Feature 010 |
-| `docs/Development-Journal.md` | Append-only chronological engineering diary | Current through Feature 010 (`2026-07-22` entry) — **append, never rewrite** |
-| `docs/Release-Notes.md` | User-visible changes only, no implementation detail | Current through Feature 010 |
-| `docs/Backlog.md` | Approved future work, prioritized | Just corrected as part of this handoff — previously stale/mis-numbered, see §11 |
-| `docs/PROJECT_STATUS.md` | Compact at-a-glance dashboard (milestone, completed features, current branch, last-verified checklist) | Just updated as part of this handoff |
-| `docs/HANDOFF_PROMPT.md` | This file | Regenerate or update at the next stable checkpoint |
-| `docs/Wireframes.md` | Screen-level UI reference | Stable |
-| `docs/README.md` | Index of the docs folder | Stable |
-| `backend/README.md`, `frontend/README.md` | Setup/run instructions per app | Stable |
+Run `pytest` and `vitest run` yourself and re-check `git status`/`git log` before trusting any number above. This checkpoint's own history is a cautionary example: Features 018–021 were implemented and verified on 2026-07-27 but left undocumented and uncommitted until a 2026-07-28 reconciliation pass caught the gap — don't let engineering outrun documentation the same way again.
 
 ---
 
-## 9. Testing approach
+## 7. Repository conventions and coding standards
 
-- **Backend**: pytest + FastAPI `TestClient`, one test file per route module (`test_health.py`, `test_chapters.py`, `test_questions.py`, `test_answers.py`), all under `backend/tests/`. Pattern: instantiate `TestClient(app)` at module scope, one test function per scenario, assert on `status_code` and `response.json()` (often full-dict equality for response-shape tests). `test_answers.py` is the most complete example — covers correct/incorrect/whitespace/attempt-progression/404/empty-answer/422-validation.
-- **Frontend**: Vitest + Testing Library. `tests/components/*` mirrors `src/components/*` one-to-one. `tests/services/questionService.test.ts` mocks `global.fetch` via `vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok, status, json}))` — copy this pattern for any new service methods. No page-level tests exist yet (page behavior has instead been verified via live browser walkthroughs each feature — see Development-Journal "Verification summary" entries).
-- **Before calling anything done**: backend `pytest`, frontend `tsc -b && vite build` + `oxlint` + `vitest run`, and — per this session's established practice — a live browser walkthrough with both servers actually running whenever the change is observable in the UI (chapter list → question → hints → solution, or whatever the feature touches). Screenshots/network-request checks were used throughout; don't skip this for UI-observable changes just because unit tests pass.
-
----
-
-## 10. Environment / tooling notes specific to this machine
-
-- **Platform**: Windows, PowerShell primary shell, Bash tool also available (Git Bash / POSIX).
-- **Python**: not on the default `PATH` cleanly (Windows Store alias shadows it). Use the real interpreter directly: `/c/Users/rbala/AppData/Local/Programs/Python/Python313/python.exe` (or the Windows path form) to create/use `.venv`. The backend's own `.venv` already exists at `Products/math-thinking-coach/backend/.venv` — activate or invoke it directly (`./.venv/Scripts/python.exe -m pytest`) rather than recreating it.
-- **Frontend dev server / browser preview**: this environment has a Browser pane tool. `.claude/launch.json` at the workspace root (gitignored, machine-local — see `.gitignore` entry `# AI tooling (local/session-specific)` / `.claude/`) is configured with a `math-thinking-coach-frontend` entry (`npm run dev --prefix Products/math-thinking-coach/frontend`, port 5173). If it's missing in a fresh session, recreate it before trying to preview — `preview_start` needs it.
-- Always start the backend (`uvicorn app.main:app --port 8000`) in the background before browser-verifying any frontend change that hits the API — CORS is configured for `http://localhost:5173` only.
-- Clean up `__pycache__`/`.pytest_cache` after backend test runs if you want a tidy `git status` (they're gitignored but still clutter local exploration).
+- Ask before assuming when a spec conflicts with existing architecture — stop and clarify.
+- Minimal, focused diffs. Don't refactor unrelated code. Don't rename/move files unless asked.
+- No new dependencies or top-level folders without justification and approval.
+- Routes/components stay thin; business logic lives in services (backend `app/services/*.py`, frontend `src/services/*.ts`) — followed with zero exceptions so far, on both sides.
+- Python: Pydantic models for every request/response shape, `response_model=` on every route. Plain function modules for services, not classes.
+- TypeScript: strongly typed; plain function modules exported as one object literal (`export const xService = {...}`), not classes — same convention on both `questionService.ts` and `progressService.ts`.
+- No comments explaining *what* code does — only genuinely non-obvious constraints.
+- Commit messages: Conventional Commits (`feat(scope): ...`, `refactor(scope): ...`, `docs: ...`). Only commit when the user asks, only after tests are green, and per Release 0.1's practice: code and the documentation describing it belong in the same commit (`CLAUDE.md`'s Documentation Responsibility treats docs as part of Definition of Done).
+- **Releases vs. Features**: Releases (`Roadmap.md`, `Backlog.md`, `PROJECT_STATUS.md`) describe what students receive; Features (`Development-Journal.md`, one entry per Feature) describe what engineers build, tracked *inside* a Release (e.g. Release 0.1 = Feature 016 + Feature 017). Features 007–015 predate this convention and are never renumbered.
 
 ---
 
-## 11. Key design decisions and their reasoning (condensed ADR-style)
-
-1. **Data ownership flips from frontend to backend (Feature 009).** Chapter/question JSON moved to `backend/app/data/`, frontend's local copies deleted. Rationale: avoid manually duplicating the same content in two places; backend becomes the single source of truth once it exists.
-2. **Async service required breaking "don't touch components" (Feature 009).** A synchronous `questionService` cannot wrap real `fetch` calls. Flagged as a genuine conflict via a clarifying question rather than assumed; user approved minimal `useEffect`/`useState` edits to the three page components. **Precedent**: when a new requirement is structurally incompatible with another stated constraint, stop and ask — don't silently pick one.
-3. **Domain model parity is intentional and was explicitly verified.** Frontend TS types and backend Pydantic schemas are field-for-field identical (including camelCase `chapterId`), by design, so the service layer needs zero mapping code. If you add/change a field on one side, mirror it exactly on the other.
-4. **Private answer-key store, not a public data-model field (Feature 010).** The spec required comparing against "the expected answer," but `Question` only has a full-sentence `solution`, not a short comparable answer. Rather than add `expectedAnswer` to the public `Question` schema (risking leakage through the existing GET endpoints), a separate `answer_keys.json` was added, read only inside `answer_service.py`, never merged into any response model. Verified live via `curl` that the public question endpoint doesn't expose it.
-5. **Canonical answers for free-text questions are a known Phase-1 limitation.** ~5 of the 25 questions (quadrilateral properties, etc.) have descriptive rather than numeric/single-word answers; the exact-match rule means only one phrasing is accepted. This is explicitly the reason a future AI-based evaluator is on the roadmap.
-6. **A later, differently-shaped spec for the same feature (`POST /api/v1/evaluate`, exposing `expectedAnswer` directly, adding a `misconception` field) was presented and explicitly declined by the user** in favor of keeping the Feature 010 contract as canonical. If you encounter any planning material describing that alternate `/evaluate` shape, it does **not** reflect the implementation — treat the `POST /api/v1/questions/{questionId}/answer` contract in §12 below as authoritative. This is the second precedent for "when specs conflict, ask — don't assume the newest one wins."
-7. **Frontend surfaces only `coach.message`, nothing else, from the evaluation response (Feature 010).** `isCorrect`, `score`, `nextAction`, and all of `ui` are captured in component state but not yet used to drive any UI behavior (no auto-advance, no gated hint/solution reveal — those remain fully manual, exactly as before). This was a deliberate minimal-scope choice, not an oversight, and is the basis for the recommended Feature 011 in §13.
-
----
-
-## 12. Current REST API surface (authoritative — verify against `backend/app/api/routes/*.py` if in doubt)
+## 8. Current REST API surface
 
 ```
 GET  /api/v1/health
@@ -190,6 +147,8 @@ GET  /api/v1/chapters
 GET  /api/v1/chapters/{chapterId}                          → 404 if unknown
 GET  /api/v1/chapters/{chapterId}/questions                → 404 if chapter unknown
 GET  /api/v1/chapters/{chapterId}/questions/{questionId}   → 404 if chapter or question unknown
+GET  /api/v1/chapters/{chapterId}/topics                   → 404 if chapter unknown, [] if chapter has no topics
+GET  /api/v1/topics/{topicId}                               → 404 if unknown
 
 POST /api/v1/questions/{questionId}/answer                 → 404 if question unknown, 422 on invalid body
   Request:  { "submission": { "answer": string, "attemptNumber": number } }
@@ -199,27 +158,51 @@ POST /api/v1/questions/{questionId}/answer                 → 404 if question u
     "ui": { "canTryAgain": boolean, "canRevealSolution": boolean, "hintLevel": 0 | 1 | 2 }
   }
 ```
-
-Coaching rule: correct → `NEXT_QUESTION`. Incorrect attempt 1 → `TRY_AGAIN`. Incorrect attempt 2 → `SHOW_HINT`. Incorrect attempt 3+ → `SHOW_SOLUTION`.
-
-`Chapter` shape: `{ id, title, description }`. `Question` shape: `{ id, chapterId, question, text, difficulty: "Easy"|"Medium"|"Hard", hints: string[], solution }`. Neither ever includes an expected/short answer field.
+The answer-evaluation contract is unchanged by Feature 015, Release 0.1, or Features 018–021 — all additive and/or out-of-band. `Chapter`: `{id, title, description}`. `Question`: `{id, chapterId, question, text, difficulty, hints[], solution, topicId}` — `topicId` (Feature 018) is optional and never includes an expected/short answer. `Topic`: `{id, chapterId, title, explanation, workedExampleContent, learningObjectives[]}`. Progress tracking has no backend endpoint at all — it's entirely client-side (§4).
 
 ---
 
-## 13. Backlog and recommended next feature
+## 9. Testing approach
 
-See [`Backlog.md`](Backlog.md) for the full list (just corrected as part of this handoff — it previously had stale/mis-numbered entries from before implementation; the corrected file is now authoritative).
-
-**Recommended Feature 011: Wire coaching UI state.** Feature 010 already returns `coach.nextAction` and `ui.{canTryAgain,canRevealSolution,hintLevel}`, but `QuestionPage.tsx` only renders `coach.message` today — hint reveal and solution reveal are still fully manual, unrelated to what the API just told the client to do. Wiring the existing response into the UI (e.g., gating/suggesting the hint or solution button based on `nextAction`) is low-risk (no backend changes needed), completes what Feature 010 intentionally deferred, and should happen before investing in LLM-based evaluation — validate the rule-based contract end-to-end in the UI first.
-
-Other candidates, unscoped, roughly in plausible order: AI-based answer evaluation (replaces exact-match inside `answer_service.py` without changing the API contract — the extension point Feature 010 was explicitly built for), Adaptive Hint Engine, Student Progress History, Statistics Dashboard, Teacher Portal, then Phase 2+ items from `ProductArchitecture.md` (OCR scanner, voice input).
-
-**Do not start implementing any of these without the user explicitly approving scope first** — per `CLAUDE.md`, architecture and product direction decisions happen before implementation, and this handoff is not that approval.
+Backend: pytest + `TestClient`, one file per module, 65/65 passing. Frontend: Vitest + Testing Library, `tests/` mirrors `src/` for components and services 1:1 — **no page-level tests exist anywhere in this repo**, by established convention; page behavior (`HomePage`, `ChapterPage`, `QuestionPage`, `TopicPage`) is verified via live browser walkthrough instead, every time. Before calling anything done: backend `pytest`; frontend `tsc -b` + `oxlint` + `vitest run`; a live walkthrough with both servers running for anything UI-observable, including a fresh-profile *and* an existing-state path when persistence is involved (Release 0.1 established this pattern — see `Development-Journal.md`'s 2026-07-27 entries for exactly what that looked like). Re-run the full suite fresh at a Feature/Release boundary — don't trust results from earlier slices. **The content pipeline (`docs/content-pipeline/`) has no automated test suite of its own** (ADR-003) — verify it with `node docs/content-pipeline/export/run.js --chapter=<slug> --dry-run` before trusting its output.
 
 ---
 
-## 14. Immediate next steps for a new session
+## 10. Documentation map
 
-1. Run `git status` and `git log --oneline -5` yourself — confirm §5 is still accurate (it may not be, if the user committed or changed things between sessions).
-2. Ask the user what they'd like to work on next — do not assume Feature 011 (§13) is approved just because it's recommended here.
-3. Re-run backend `pytest` and frontend `vitest run` once to confirm the checkpoint in §5 still holds before building on top of it.
+| File | Purpose | State |
+|---|---|---|
+| `Product-Vision.md` | Why the product exists — living | Current |
+| `ProductArchitecture.md` | How it's built — stack, folders, API, Progress Persistence, Content Architecture | Current through Features 018–021 (14 numbered sections) |
+| `LearningExperienceArchitecture.md` | How students learn — pedagogical counterpart to ProductArchitecture.md | Current |
+| `Roadmap.md` | Phased capability themes — living | Current |
+| `Idea-Inbox.md` | Raw, unfiltered, append-only ideas — living | Current |
+| `Backlog.md` | Approved future work only | Current |
+| `Development-Journal.md` | Append-only engineering diary | Current through 2026-07-27 (Features 016–021) |
+| `Release-Notes.md` | User-visible changes only | Current through Release 0.1 — Features 018–021 have no student-visible surface yet worth a release note beyond the Topic page itself (small, optional "Learn" button); add one if/when Release 0.2 is called done |
+| `PROJECT_STATUS.md` | At-a-glance dashboard | Current |
+| `ADR/` | Accepted architecture decisions | ADR-001, ADR-002, ADR-003 |
+| `HANDOFF_PROMPT.md` | This file | Regenerated 2026-07-28 (reconciliation checkpoint) |
+| `Wireframes.md` | Screen-level UI reference | Current through Release 0.1 — **not yet updated for TopicPage**, a real gap |
+| `README.md` | Docs index | Stable |
+
+---
+
+## 11. Release 0.2 readiness
+
+Features 018–021 delivered Release 0.2's Learn + Worked Examples stages for one chapter (Linear Equations) — this is real engineering progress, not just readiness-checking. What's still true from the original readiness assessment, and what's changed:
+
+- **Schema**: `progressStore.ts`'s `schemaVersion` mechanism still hasn't needed a bump — Topic content is served from the backend, not stored in progress state. No change needed here.
+- **Service boundaries / navigation / folder organization**: validated in practice, not just in theory — `ChapterPage` was in fact the natural insertion point for the Learn step, exactly as predicted.
+- **What's left for Release 0.2 to be "complete," not just started**: export Data Handling (content is ready); the Understand stage (comprehension check) isn't built for any chapter yet; Practical Geometry, Understanding Quadrilaterals, and Rational Numbers haven't been through the pipeline at all — Rational Numbers has only a hand-seeded placeholder Topic.
+- **Not yet decided**: whether Release 0.2 ships chapter-by-chapter as each is migrated, or waits for all five. Raise this with the user before assuming either.
+
+Do not begin further Release 0.2 engineering (or a next milestone) without a fresh design/review/approval pass, per §5.
+
+---
+
+## 12. Immediate next steps for a new session
+
+1. Run `git status` and `git log --oneline -6` yourself — §6 may be stale by the time you read it.
+2. Re-run backend `pytest` and frontend `vitest run` to confirm 65/65 and 40/40 still hold.
+3. Ask the user what they want to work on — do not assume further Release 0.2 engineering is approved to start just because it's the named "next" theme. Per §6, confirm whether the priority is committing this checkpoint, exporting Data Handling, operating Shadow Mode, or new engineering, before proceeding.

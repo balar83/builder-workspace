@@ -51,9 +51,9 @@ This isn't just a UI choice — it has architectural teeth. Evaluation and coach
 
 Math content — chapters, questions, hints, solutions, expected answers — is human-authored and treated as ground truth. AI is not permitted to silently override it.
 
-This is grounded in a real finding, not a hypothetical: the Feature 014 AI evaluation spike found a case (sample `s26`) where the model incorrectly penalized a mathematically valid method. That's the concrete reason AI evaluation must be validated against human judgment (via Shadow Mode — see `Roadmap.md`, near-term) before it can influence what a learner is told, rather than being trusted on deployment.
+This is grounded in a real finding, not a hypothetical: the Feature 014 AI evaluation spike found a case (sample `s26`) where the model incorrectly penalized a mathematically valid method. That's the concrete reason AI evaluation must be validated against human judgment before it can influence what a learner is told, rather than being trusted on deployment. Shadow Mode (Feature 015, shipped 2026-07-23) is that validation mechanism — it runs the AI evaluator against real submissions and logs the comparison, but by design cannot yet influence what a learner is told; see `Roadmap.md` for what has to be true before that changes.
 
-Valid regional or curriculum variation in terminology (e.g. "Trapezoid" vs. "Trapezium" — both valid depending on source) must be accommodated, not marked wrong by default. This is a known limitation of the current exact-match evaluation (see `ProductArchitecture.md` §7) that any future evaluator must actually fix, not just replicate with more confidence.
+Valid regional or curriculum variation in terminology (e.g. "Trapezoid" vs. "Trapezium" — both valid depending on source) must be accommodated, not marked wrong by default. This is a known limitation of the current exact-match evaluation (see `ProductArchitecture.md` §8) that any future evaluator must actually fix, not just replicate with more confidence.
 
 ---
 
@@ -67,4 +67,4 @@ Valid regional or curriculum variation in terminology (e.g. "Trapezoid" vs. "Tra
 
 ## Success Criteria
 
-The product succeeds if a student can think through a problem independently — arriving at understanding, not just an accepted final answer. See `ProductArchitecture.md` §12 for the current, MVP-specific checklist this translates to in the shipped product.
+The product succeeds if a student can think through a problem independently — arriving at understanding, not just an accepted final answer. See `ProductArchitecture.md` §13 for the current, MVP-specific checklist this translates to in the shipped product.

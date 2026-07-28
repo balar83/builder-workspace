@@ -1,5 +1,103 @@
 # Development Journal
 
+## 2026-07-27 (Features 018–021 — Content Pipeline & Topic Delivery, Release 0.2 first slice)
+
+*Ran in parallel with Feature 016/017 (Release 0.1) the same day — a separate, non-blocking track, per `Backlog.md`'s "Recommended Next" (content authoring doesn't depend on remaining engineering).*
+
+### Features completed
+- **Feature 018 — Topic data model & retrieval API.** `app/schemas/topic.py` (`Topic`: id, chapterId, title, explanation, workedExampleContent, learningObjectives), `app/services/topic_service.py` (`get_topics(chapterId)`, `get_topic(topicId)`, loaded once from `backend/app/data/topics.json`, same load-once-module-level pattern as `question_service.py`), `app/api/routes/topics.py` (`GET /api/v1/chapters/{chapterId}/topics` — 404 if chapter unknown, empty list if chapter has no topics; `GET /api/v1/topics/{topicId}` — 404 if unknown), mounted in `api/router.py`. `Question` gained `topicId: str | None = None` so a question can optionally belong to a Topic without breaking chapters that don't have one yet. Frontend: `TopicPage.tsx`/`.css` (explanation, worked example, learning objectives, "Start Practice" into the existing question flow), `types/topic.ts`, `questionService.getTopics`/`getTopic`, `App.tsx`'s new `/topic/:topicId` route, and `ChapterPage.tsx` now fetches topics alongside chapter/questions and shows a "Learn" button into the Topic when one exists (falling back to the existing "Start/Continue Learning" straight into questions when it doesn't).
+- **Feature 019 — Template Engine v1.** `docs/content-pipeline/template-engine/`: a seeded procedural question generator. A template JSON describes a parametrized problem family; `generator.js` produces candidate parameter sets from a seeded RNG (`prng.js`); `validator.js` independently solves and constraint-checks each candidate (not templated-text substitution passed through unchecked); `duplicateDetector.js` dedupes against the existing bank and the current batch (exact-id, normalized-prompt-text); `canonicalFormatter.js` writes the canonical authoring shape; `batchExporter.js` writes the batch with generation metadata (template id/version, seed — always recorded, so a batch is reproducible). `run.js` is thin CLI glue (`node run.js --template=<path> --difficulty=<d> --count=<n> [--seed=<s>]`).
+- **Feature 020 — Content authoring pipeline (stages 2–6).** `docs/content-source/<chapter>/`: stage2 (topic detection) → stage3 (concept extraction) → stage4 (learning objectives) → stage5 (worked examples) → stage6 (questions, hand-authored and/or Template-Engine-generated), plus a `canonical-topic.json` consolidating stages 2–5 into one candidate `Topic` record. Every exportable file carries `reviewStatus` (default `"ai-generated"`; only `"approved"` is export-eligible). Run for two chapters: **Linear Equations** (complete, approved, exported — see Feature 021) and **Data Handling** (complete through stage 6 — 42 questions, coverage-reviewed in `stage6-expansion-coverage-report.md` — but explicitly not yet approved/exported).
+- **Feature 021 — Stage 10 Export Pipeline.** `docs/content-pipeline/export/`, invoked `node run.js --chapter=<slug> [--dry-run]`. Seven phases: load canonical content → approval gate (`reviewStatus === "approved"` only, question-level overrides file-level) → referential validation (chapterId/topicId resolve against `chapters.json` and, independently for topics vs. questions, against runtime `topics.json`) + duplicate detection → whitelist transform to the runtime shape → real Pydantic validation (shells out to `backend/.venv/Scripts/python.exe`, imports the actual `app.schemas.*` models — no JS reimplementation) → merge-by-chapter-partition atomic write (untouched chapters preserved byte-for-byte; write-to-`.tmp`-then-rename) → post-write re-validation from disk. Full detail and the options considered in [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md).
+
+### Major engineering decisions
+- A mid-build discovery, not anticipated in the original pipeline design: the first export attempt shipped 44 Linear Equations questions that all returned 500 on submission, because `evaluation_service` reads expected answers from the private `answer_keys.json` (ADR-001), never from `Question.solution`, and the export pipeline hadn't accounted for that second file. Fixed by adding an answer-keys co-requisite to phase [3] (an approved question cannot export without a matching, approved `answer_keys.json` entry) and authoring the 44 corresponding entries — documented with full honesty about the exact-match limitation this creates for free-text-style answers in `answer-keys.json`'s own note.
+- Chose per-chapter-partition merge over whole-file overwrite specifically so a chapter with no canonical authoring trail at all (`rational-numbers`, hand-seeded before this pipeline existed) can never be silently wiped by an unrelated chapter's export run.
+- Chose to shell out to the real backend Python venv for schema validation rather than reimplement the `Question`/`Topic` shape in JS — deliberately accepting the resulting hard coupling to a co-located `backend/.venv` (see ADR-003's Trade-offs) in exchange for zero risk of the pipeline's validation drifting out of sync with the actual Pydantic models.
+- No automated test suite was written for `template-engine/` or `export/` themselves — correctness is enforced operationally by the pipeline's own runtime gates rather than by unit tests for the pipeline code. Named explicitly in ADR-003 as a real gap against this project's own testing convention, not treated as equivalent to test coverage.
+
+### Verification summary
+- Backend: 65/65 pytest passing (60 → 65; +5 for `test_topics.py`).
+- Frontend: 40/40 vitest passing (36 → 40; +4). `tsc -b`, `oxlint`, `vite build` clean.
+- Content: `stage6-expansion-coverage-report.md` — zero exact-duplicate `prompt`/`expectedAnswer` text across Linear Equations' 44 and Data Handling's 42 questions (automated check); every learning objective in both chapters has ≥2 questions; every question authored around exactly one target misconception.
+- Live: `/topic/topic-linear-equations-one-variable` renders explanation, worked examples, and objectives; "Start Practice" proceeds into the existing, unmodified question flow; a Linear Equations question answer submission round-trips correctly post-fix (the answer-keys co-requisite fix above).
+
+### Implementation notes
+- `coaching_service.py`, `answer_service.py`, and the `POST /api/v1/questions/{questionId}/answer` contract are untouched by this work.
+- Data Handling's 42 authored-and-reviewed questions are a ready, not-yet-shipped asset — one Stage 10 export run away from live, pending your review per `stage6-expansion-coverage-report.md`'s closing note.
+- This is the first engineering delivered against `LearningExperienceArchitecture.md`'s Release 0.2 mapping (Learn + Worked Examples) — see `Roadmap.md` for the updated status.
+
+## 2026-07-27 (Feature 016 — Progress Persistence Layer, Release 0.1)
+
+### Features completed
+- Implemented client-side progress persistence: `progressStore.ts` (localStorage read/write/clear, schema-versioned, corruption-safe — malformed or missing data always falls back to an empty default, never throws) and `progressService.ts` (the only interface any component uses — `getLastActiveChapter`, `setLastActiveChapter`, `getChapterProgress`, `getCompletedCount`, `recordQuestionAttempt`, `recordQuestionCompleted`, `updateCurrentQuestion`).
+- Integrated into `QuestionPage`: resumes from the saved question index on load (clamped to a valid range), records an attempt on every answer submission (right or wrong), and records completion plus the new index when advancing — reusing the exact state transitions that already existed, with zero changes to evaluation, coaching, hint, or navigation logic.
+- Added `src/types/progress.ts` (`QuestionStatus`, `ChapterProgress`, `StoredProgress`), following the existing one-file-per-domain convention.
+
+### Major engineering decisions
+- Store/Service split mirrors the backend's own pattern of a service function in front of a private data accessor (`evaluation_service.py`): `progressStore` is never imported outside `progressService.ts` — verified by grep, not assumed. Chosen specifically so a future backend-persistence swap (`Roadmap.md`'s medium-term "Student Progress History") can happen without changing any component.
+- `recordQuestionAttempt` never downgrades a `'completed'` question back to `'attempted'` — completing always wins, an explicit business rule rather than an accident of write order.
+- A real bug was caught during integration, not after: the "Chapter Complete! → Return to Chapters" button (shown only for the last question) called `navigate('/chapters')` directly, a separate code path from the handler used everywhere else for progress recording — meaning completing a chapter's final question would never have been recorded. Found by rereading the full file before testing rather than trusting the diff in isolation. Fixed by routing that button through the same handler, which simplified the code (one fewer inline function) as well as fixing the gap.
+- Accepted, not fixed: `progressService`'s API is synchronous. A future backend-persistence swap will need it to become `Promise`-returning, a real migration cost for every caller — named explicitly rather than implied away.
+
+### Verification summary
+- 32/32 frontend tests passing (24 pre-existing + 8 new across `progressStore.test.ts` and `progressService.test.ts`); `tsc -b`, `oxlint`, `vite build` all clean.
+- Backend re-run fresh, not assumed unaffected: 60/60 pytest, unchanged — zero backend files touched.
+- Live browser walkthrough with both servers running: fresh visit → answer correctly → advance → hard page reload → resumed at the correct question, not reset to the first. Separately verified the last-question completion fix by jumping state to the final question and confirming both correct navigation and the previously-missing completion record.
+
+### Implementation notes
+- `answer_service.py`, `coaching_service.py`, and Shadow Mode are untouched — confirmed via diff, not just design intent. The only production files this feature touches are `QuestionPage.tsx` (for dispatch) and the two new service files.
+
+## 2026-07-27 (Feature 017 — Chapter Overview & Continue Learning, Release 0.1)
+
+### Features completed
+- Repurposed the previously dead `/chapter/:chapterId` route: `ChapterPage.tsx` (unreachable from normal navigation before this feature, and still containing a literal `"(Placeholder)"` string) now renders a real Chapter Overview — chapter title, description, a completed-count summary, and a "Start Learning" / "Continue Learning" button (label conditional on whether any progress is recorded) that proceeds into the existing, unmodified question flow.
+- `ChapterCard.tsx` now navigates to the Chapter Overview instead of straight into the question flow, and shows a lightweight "N completed" badge when a chapter has any recorded progress.
+- `HomePage.tsx`'s "Continue Learning" button — previously present in the markup with no `onClick` handler at all — now navigates to the last-active chapter's Overview, or falls back to Chapter Selection if nothing has been recorded yet. One rule, no special cases.
+- Added `progressService.getCompletedCount(chapterId)`, consolidating completed-question counting logic that had been duplicated identically in `ChapterCard.tsx` and `ChapterPage.tsx` — found during design review, fixed as a small, low-risk, in-scope cleanup rather than left to accumulate.
+
+### Major engineering decisions
+- Viewing the Chapter Overview marks that chapter as "last active," independent of whether any question has been attempted — a deliberate choice so simply browsing into a chapter, not just answering questions in it, makes Home's "Continue Learning" point there.
+- The navigation chain is now uniform regardless of entry point: Chapter Selection and Home's "Continue Learning" both always land on the Chapter Overview first, which then proceeds into the question flow — one canonical entry point into a chapter, not two.
+- `ChapterCard` reading `progressService` directly at render time, rather than receiving progress via props, was named explicitly as an accepted tradeoff, not an oversight: it turns a previously pure, prop-only component into one with a side-channel dependency on ambient state, acceptable at this scale (5 chapters) but worth remembering if this component is ever reused somewhere more state-sensitive.
+
+### Verification summary
+- 36/36 frontend tests passing (34 prior + 2 new for `getCompletedCount`); full suite re-run fresh rather than trusted from prior work. `tsc -b`, whole-project `oxlint` (not just touched files), `vite build` all clean.
+- Backend pytest re-run fresh: 60/60, confirmed unaffected — this feature touches no backend file.
+- Live verification of both required paths: an existing-progress profile (real accumulated data — "2 of 5 completed," "Continue Learning") and a freshly cleared profile (falls back correctly to Chapter Selection, no progress badges). A mobile-viewport check (375px) confirmed the new progress badge renders without overflow, consistent with this product's mobile-first principle.
+- One process note, not a code defect: an early check of the existing-progress path appeared to fail ("Chapter not found") because it queried page state immediately after a click, before the async data fetch resolved — a race in the test's own timing, confirmed by rerunning with an explicit wait. Investigated rather than dismissed.
+
+### Implementation notes
+- Release 0.1 ("It Remembers You") is complete as of this feature — Feature 016 (persistence) and Feature 017 (the UI that makes it visible) together deliver the full scope approved in the Release 0.1 design. See `Roadmap.md` and `Backlog.md` for the release-level record, and `docs/ADR/` for the two architecture decisions (ADR-001, ADR-002) this release built on without modifying either.
+
+## 2026-07-23 (Feature 015 — Shadow Mode AI Evaluation)
+
+### Features completed
+- Implemented Shadow Mode: the Feature 014 AI evaluator now runs against real answer submissions, out-of-band, alongside the production rule-based evaluator, with zero effect on the API response.
+- Promoted the minimum of Feature 014's spike code into production-callable modules: `app/services/ai_evaluation_client.py`, `ai_evaluation_prompt.py`, `app/schemas/ai_evaluation.py`, `app/services/ai_evaluation_service.py` — each adding explicit timeout handling (90s default) and error classification (`timeout` / `connection_error` / `json_parse_failed` / `schema_invalid`) that the original spike didn't need. `backend/experiments/ai_evaluation/` itself is untouched and remains the offline harness.
+- Added `app/services/shadow_log_writer.py` — thread-safe JSONL append to a gitignored path (`SHADOW_LOG_PATH`, default `app/data/shadow_log/shadow_eval_log.jsonl`).
+- Added `app/services/shadow_evaluation_service.run_shadow_evaluation` — the out-of-band orchestrator: resolves the question, sources the canonical expected answer, calls the AI evaluator, computes agreement against the rule-based result, and logs one record. Wrapped in a broad exception handler so a failure here can never propagate into the request/response cycle.
+- Wired the dispatch into `app/api/routes/answers.py` via FastAPI's `BackgroundTasks`, scheduled after the existing response is built — never blocking it, never altering it.
+- Added `settings.shadow_mode_enabled` (env `SHADOW_MODE_ENABLED`, default `True`) as an operational kill switch guarding the dispatch.
+- Refactored `evaluation_service.evaluate()` to call a new `get_expected_answer(question_id)` accessor internally instead of indexing the private `_answer_keys` dict directly, so both rule-based and AI evaluation source the canonical expected answer through one path.
+
+### Major engineering decisions
+- Chose in-process `BackgroundTasks` over an external task queue (Celery/RQ) — zero new infrastructure, and nothing in this codebase established an async-worker precedent to build on. Deliberately deferred, not rejected forever: revisit only if real traffic volume demands it.
+- Chose JSONL over SQLite for the shadow log — no reporting UI or analytics exists yet, and the only consumer today is a human manually reviewing results, the same pattern Feature 014's harness already established.
+- `answer_keys.json` sourcing was resolved as an explicit design decision, not left implicit: rejected both a second file reader (would duplicate the load Feature 012 already centralized in `evaluation_service.py`) and substituting `Question.solution` (would silently break comparability with Feature 014's dataset, which used the same short canonical answers, not the full-sentence solution text). Landed on one new accessor on `evaluation_service.py`, the module that already owns the private `_answer_keys` dict.
+- The `shadow_mode_enabled` kill switch was not part of the original implementation pass — it was added after review explicitly raised that the route had no way to disable Shadow Mode short of a code change. Smallest possible fix: one new `Settings` field, one `if` around the existing dispatch call.
+- The test suite required one deliberate addition beyond the original design: an `autouse` fixture in `test_answers.py` stubbing the AI evaluator's network call for every test in that file by default. Without it, the full suite's behavior would depend on whether a local Ollama server happened to be running on the machine executing the tests — non-deterministic at best, and up to several minutes slower at worst, since `BackgroundTasks` execute synchronously inside `TestClient` calls.
+
+### Verification summary
+- Backend: 60/60 pytest passing (47 immediately before this feature; +13 new tests across `test_evaluation_service.py`, `test_answers.py`, `test_ai_evaluation_client.py`, `test_ai_evaluation_prompt.py`, `test_ai_evaluation_schema.py`, `test_ai_evaluation_service.py`, `test_shadow_evaluation_service.py`, `test_shadow_log_writer.py`).
+- The regression proof that matters most for this feature: every pre-existing exact-response-body assertion in `test_answers.py` (e.g. `test_correct_answer_returns_next_question`) passes completely unmodified, plus two adversarial tests that force the shadow path to fail (`RuntimeError`) and to be disabled (`shadow_mode_enabled=False`) and assert the response is unaffected either way.
+- No frontend changes; no API contract changes.
+
+### Implementation notes
+- `coaching_service.py` and `answer_service.py` are untouched by this feature, confirmed via diff, not just design intent. The only production code this feature touches beyond its own new files is the route (`answers.py`, for dispatch) and `evaluation_service.py` (for the new accessor).
+- Documented in [ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md), which also records the expected-answer accessor decision as part of the same architectural record rather than a separate ADR, since it's a small decision made in direct service of Shadow Mode's invocation path.
+- This feature makes Shadow Mode *operable* — it does not by itself constitute the larger-sample evidence Feature 014's README called for gathering. No meaningful data volume has been collected yet. See `Roadmap.md` and `Backlog.md` for what happens next.
+
 ## 2026-07-22 (Feature 014 — Local AI Evaluation Spike)
 
 ### Features completed

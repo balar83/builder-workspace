@@ -1,5 +1,12 @@
 # Release Notes
 
+## 2026-07-27
+
+### New in this release
+- The app now remembers where you left off. Close it and come back later, and "Continue Learning" picks up exactly where you were — same chapter, same question.
+- Opening a chapter now shows a short overview first — the chapter title, description, and how much you've completed — with a "Start Learning" or "Continue Learning" button, instead of jumping straight into a question.
+- Chapters you've made progress in now show how many questions you've completed right on the chapter list, so you can see where you stand at a glance.
+
 ## 2026-07-22
 
 ### New in this release
