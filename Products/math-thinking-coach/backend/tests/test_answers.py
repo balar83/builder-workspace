@@ -1,11 +1,40 @@
+import json
+from pathlib import Path
+
+import pytest
 from fastapi.testclient import TestClient
 
+from app.core.config import settings
 from app.main import app
+from app.services import ai_evaluation_client
 
 client = TestClient(app)
 
 QUESTION_ID = "q1-rational-numbers"
 QUESTION_URL = f"/api/v1/questions/{QUESTION_ID}/answer"
+
+
+@pytest.fixture(autouse=True)
+def _isolate_shadow_evaluation_from_the_network(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """
+    Shadow Mode dispatches a real evaluator call on every /answer request
+    (see app/api/routes/answers.py). Every test in this file must stay fast
+    and deterministic regardless of whether a local Ollama server happens to
+    be running on the machine running the tests — so the network call is
+    stubbed out by default. Tests that specifically exercise shadow-mode
+    integration override this within the test itself.
+    """
+    monkeypatch.setattr(settings, "shadow_log_path", str(tmp_path / "shadow_eval_log.jsonl"))
+    monkeypatch.setattr(
+        ai_evaluation_client,
+        "generate",
+        lambda model, prompt: {
+            "response": (
+                '{"correctness": true, "confidence": 0.9, "reasoning_quality": "SOUND", '
+                '"misconception_tags": [], "explanation": "stubbed for test isolation"}'
+            )
+        },
+    )
 
 
 def submit(answer: str, attempt_number: int):
@@ -121,3 +150,62 @@ def test_missing_answer_field_returns_422() -> None:
     response = client.post(QUESTION_URL, json={"submission": {"attemptNumber": 1}})
 
     assert response.status_code == 422
+
+
+def test_response_is_unaffected_when_shadow_evaluation_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def explode(model: str, prompt: str) -> dict:
+        raise RuntimeError("shadow evaluator is down")
+
+    monkeypatch.setattr(ai_evaluation_client, "generate", explode)
+
+    response = submit("1/2", 1)
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "evaluation": {"isCorrect": True, "score": 1.0},
+        "coach": {
+            "message": "Excellent! You solved it correctly.",
+            "nextAction": "NEXT_QUESTION",
+        },
+        "ui": {"canTryAgain": False, "canRevealSolution": False, "hintLevel": 0},
+    }
+
+
+def test_shadow_evaluation_writes_a_log_entry_alongside_the_response(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    log_path = tmp_path / "shadow_eval_log.jsonl"
+    monkeypatch.setattr(settings, "shadow_log_path", str(log_path))
+
+    response = submit("1/2", 1)
+
+    assert response.status_code == 200
+    records = [json.loads(line) for line in log_path.read_text(encoding="utf-8").splitlines()]
+    assert len(records) == 1
+    assert records[0]["questionId"] == QUESTION_ID
+    assert records[0]["agreement"] is True
+
+
+def test_shadow_mode_enabled_defaults_to_true() -> None:
+    assert settings.shadow_mode_enabled is True
+
+
+def test_disabling_shadow_mode_skips_the_background_task_entirely(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    log_path = tmp_path / "shadow_eval_log.jsonl"
+    monkeypatch.setattr(settings, "shadow_log_path", str(log_path))
+    monkeypatch.setattr(settings, "shadow_mode_enabled", False)
+
+    def fail_if_called(model: str, prompt: str) -> dict:
+        raise AssertionError("shadow evaluator should not be invoked when shadow mode is disabled")
+
+    monkeypatch.setattr(ai_evaluation_client, "generate", fail_if_called)
+
+    response = submit("1/2", 1)
+
+    assert response.status_code == 200
+    assert response.json()["coach"]["nextAction"] == "NEXT_QUESTION"
+    assert not log_path.exists()

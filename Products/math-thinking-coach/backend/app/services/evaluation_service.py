@@ -11,8 +11,18 @@ _answer_keys: dict[str, str] = json.loads(
 )
 
 
+def get_expected_answer(question_id: str) -> str:
+    """
+    Returns the canonical expected answer for a question, used by both
+    rule-based evaluation and Shadow Mode AI evaluation.
+
+    Raises KeyError if the question does not exist.
+    """
+    return _answer_keys[question_id]
+
+
 def evaluate(question: Question, submission: AnswerSubmission) -> Evaluation:
-    expected_answer = _answer_keys[question.id]
+    expected_answer = get_expected_answer(question.id)
     is_correct = submission.answer.strip() == expected_answer.strip()
 
     return Evaluation(isCorrect=is_correct, score=1.0 if is_correct else 0.0)

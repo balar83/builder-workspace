@@ -1,3 +1,5 @@
+import pytest
+
 from app.schemas.answer import AnswerSubmission
 from app.schemas.question import Question
 from app.services import evaluation_service
@@ -38,3 +40,12 @@ def test_empty_answer_is_marked_incorrect() -> None:
 
     assert result.isCorrect is False
     assert result.score == 0.0
+
+
+def test_get_expected_answer_returns_the_canonical_answer() -> None:
+    assert evaluation_service.get_expected_answer(QUESTION.id) == "1/2"
+
+
+def test_get_expected_answer_raises_key_error_for_unknown_question() -> None:
+    with pytest.raises(KeyError):
+        evaluation_service.get_expected_answer("unknown-question")
