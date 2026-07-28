@@ -1,0 +1,194 @@
+{
+  "topicId": "topic-linear-equations-one-variable",
+  "templateId": "tpl-transposition-both-sides",
+  "generatorVersion": "1.0.0",
+  "generatedAt": "2026-07-27T13:34:01.611Z",
+  "reviewStatus": "ai-generated",
+  "questions": [
+    {
+      "id": "le-gen-0c688d7e",
+      "sourceRef": {
+        "generated": true,
+        "templateId": "tpl-transposition-both-sides"
+      },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Solve for x and check your result: 9x - 13 = 3x + 21",
+      "expectedAnswer": "x = 17/3 (= 5.667). Check: LHS = 9(17/3) - 13 = 38, RHS = 3(17/3) + 21 = 38. LHS = RHS.",
+      "hints": [
+        "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+        "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+      ],
+      "difficulty": "Medium",
+      "tags": [
+        "transposition",
+        "variable-both-sides",
+        "template-generated"
+      ],
+      "misconception": {
+        "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+        "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+        "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+      },
+      "reviewStatus": "ai-generated",
+      "templateId": "tpl-transposition-both-sides",
+      "generatorVersion": "1.0.0",
+      "generatedParams": {
+        "a": 9,
+        "b": -13,
+        "c": 3,
+        "d": 21,
+        "varLabel": "x"
+      },
+      "generationSeed": "le-batch1-medium-v1"
+    },
+    {
+      "id": "le-gen-7a900f34",
+      "sourceRef": {
+        "generated": true,
+        "templateId": "tpl-transposition-both-sides"
+      },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Solve for x and check your result: 13x - 23 = 11x + 7",
+      "expectedAnswer": "x = 15. Check: LHS = 13(15) - 23 = 172, RHS = 11(15) + 7 = 172. LHS = RHS.",
+      "hints": [
+        "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+        "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+      ],
+      "difficulty": "Medium",
+      "tags": [
+        "transposition",
+        "variable-both-sides",
+        "template-generated"
+      ],
+      "misconception": {
+        "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+        "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+        "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+      },
+      "reviewStatus": "ai-generated",
+      "templateId": "tpl-transposition-both-sides",
+      "generatorVersion": "1.0.0",
+      "generatedParams": {
+        "a": 13,
+        "b": -23,
+        "c": 11,
+        "d": 7,
+        "varLabel": "x"
+      },
+      "generationSeed": "le-batch1-medium-v1"
+    },
+    {
+      "id": "le-gen-16c72ecd",
+      "sourceRef": {
+        "generated": true,
+        "templateId": "tpl-transposition-both-sides"
+      },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Solve for x and check your result: 13x - 20 = 10x - 9",
+      "expectedAnswer": "x = 11/3 (= 3.667). Check: LHS = 13(11/3) - 20 = 83/3, RHS = 10(11/3) - 9 = 83/3. LHS = RHS.",
+      "hints": [
+        "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+        "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+      ],
+      "difficulty": "Medium",
+      "tags": [
+        "transposition",
+        "variable-both-sides",
+        "template-generated"
+      ],
+      "misconception": {
+        "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+        "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+        "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+      },
+      "reviewStatus": "ai-generated",
+      "templateId": "tpl-transposition-both-sides",
+      "generatorVersion": "1.0.0",
+      "generatedParams": {
+        "a": 13,
+        "b": -20,
+        "c": 10,
+        "d": -9,
+        "varLabel": "x"
+      },
+      "generationSeed": "le-batch1-medium-v1"
+    },
+    {
+      "id": "le-gen-9e883dcf",
+      "sourceRef": {
+        "generated": true,
+        "templateId": "tpl-transposition-both-sides"
+      },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Solve for x and check your result: 4x + 12 = 5x + 22",
+      "expectedAnswer": "x = -10. Check: LHS = 4(-10) + 12 = -28, RHS = 5(-10) + 22 = -28. LHS = RHS.",
+      "hints": [
+        "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+        "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+      ],
+      "difficulty": "Medium",
+      "tags": [
+        "transposition",
+        "variable-both-sides",
+        "template-generated"
+      ],
+      "misconception": {
+        "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+        "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+        "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+      },
+      "reviewStatus": "ai-generated",
+      "templateId": "tpl-transposition-both-sides",
+      "generatorVersion": "1.0.0",
+      "generatedParams": {
+        "a": 4,
+        "b": 12,
+        "c": 5,
+        "d": 22,
+        "varLabel": "x"
+      },
+      "generationSeed": "le-batch1-medium-v1"
+    },
+    {
+      "id": "le-gen-6dfd67a4",
+      "sourceRef": {
+        "generated": true,
+        "templateId": "tpl-transposition-both-sides"
+      },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Solve for x and check your result: 5x + 12 = 8x - 21",
+      "expectedAnswer": "x = 11. Check: LHS = 5(11) + 12 = 67, RHS = 8(11) - 21 = 67. LHS = RHS.",
+      "hints": [
+        "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+        "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+      ],
+      "difficulty": "Medium",
+      "tags": [
+        "transposition",
+        "variable-both-sides",
+        "template-generated"
+      ],
+      "misconception": {
+        "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+        "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+        "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+      },
+      "reviewStatus": "ai-generated",
+      "templateId": "tpl-transposition-both-sides",
+      "generatorVersion": "1.0.0",
+      "generatedParams": {
+        "a": 5,
+        "b": 12,
+        "c": 8,
+        "d": -21,
+        "varLabel": "x"
+      },
+      "generationSeed": "le-batch1-medium-v1"
+    }
+  ]
+}

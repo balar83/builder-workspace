@@ -1,263 +1,575 @@
 [
   {
-    "id": "q1-rational-numbers",
-    "chapterId": "rational-numbers",
-    "question": "What is the result of adding 1/3 and 1/6?",
-    "text": "What is the result of adding 1/3 and 1/6?",
-    "difficulty": "Easy",
-    "hints": [
-      "Find a common denominator for 1/3 and 1/6.",
-      "Rewrite 1/3 as 2/6 so the denominators match.",
-      "Add the numerators and keep the denominator 6."
-    ],
-    "solution": "1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2."
-  },
-  {
-    "id": "q2-rational-numbers",
-    "chapterId": "rational-numbers",
-    "question": "Which of these is a rational number: 1/2, √2, or π?",
-    "text": "Which of these is a rational number: 1/2, √2, or π?",
-    "difficulty": "Easy",
-    "hints": [
-      "A rational number can be written as a fraction of two integers.",
-      "Check whether the number can be expressed as a ratio.",
-      "1/2 fits that definition."
-    ],
-    "solution": "1/2 is a rational number because it can be written as a fraction."
-  },
-  {
-    "id": "q3-rational-numbers",
-    "chapterId": "rational-numbers",
-    "question": "Simplify 4/8 to its lowest terms.",
-    "text": "Simplify 4/8 to its lowest terms.",
-    "difficulty": "Easy",
-    "hints": [
-      "Look for a common factor of the numerator and denominator.",
-      "Both 4 and 8 can be divided by 4.",
-      "Divide both by 4 to get the simplest form."
-    ],
-    "solution": "4/8 simplifies to 1/2."
-  },
-  {
-    "id": "q4-rational-numbers",
-    "chapterId": "rational-numbers",
-    "question": "What is 3/4 ÷ 1/2?",
-    "text": "What is 3/4 ÷ 1/2?",
-    "difficulty": "Medium",
-    "hints": [
-      "Divide by a fraction by multiplying by its reciprocal.",
-      "The reciprocal of 1/2 is 2.",
-      "3/4 × 2 = 3/2."
-    ],
-    "solution": "3/4 ÷ 1/2 = 3/2."
-  },
-  {
-    "id": "q5-rational-numbers",
-    "chapterId": "rational-numbers",
-    "question": "Which is greater: 2/3 or 3/5?",
-    "text": "Which is greater: 2/3 or 3/5?",
-    "difficulty": "Medium",
-    "hints": [
-      "Compare the fractions using a common denominator.",
-      "A common denominator is 15.",
-      "2/3 = 10/15 and 3/5 = 9/15, so 2/3 is greater."
-    ],
-    "solution": "2/3 is greater than 3/5."
-  },
-  {
-    "id": "q1-linear-equations",
+    "id": "le-q01",
     "chapterId": "linear-equations",
-    "question": "Solve for x: 2x + 3 = 11.",
-    "text": "Solve for x: 2x + 3 = 11.",
+    "question": "Solve for x and check your result: 3x = 2x + 18",
+    "text": "Solve for x and check your result: 3x = 2x + 18",
     "difficulty": "Easy",
     "hints": [
-      "Subtract 3 from both sides to isolate the term with x.",
-      "You will then have 2x = 8.",
-      "Divide both sides by 2 to solve for x."
+      "Transpose the 2x term to the left side of the equation.",
+      "Simplify the left side, then x is already isolated."
     ],
-    "solution": "2x + 3 = 11, so 2x = 8, and x = 4."
+    "solution": "x = 18. Check: LHS = 3(18) = 54, RHS = 2(18) + 18 = 54. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q2-linear-equations",
+    "id": "le-q02",
     "chapterId": "linear-equations",
-    "question": "Solve for x: 3x - 5 = 10.",
-    "text": "Solve for x: 3x - 5 = 10.",
+    "question": "Solve for t and check your result: 5t - 3 = 3t - 5",
+    "text": "Solve for t and check your result: 5t - 3 = 3t - 5",
     "difficulty": "Easy",
     "hints": [
-      "Add 5 to both sides first.",
-      "You will get 3x = 15.",
-      "Divide by 3 to find x."
+      "Transpose the 3t term to the left and the -3 to the right.",
+      "Combine like terms on each side before dividing."
     ],
-    "solution": "3x - 5 = 10, so 3x = 15, and x = 5."
+    "solution": "t = -1. Check: LHS = 5(-1) - 3 = -8, RHS = 3(-1) - 5 = -8. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q3-linear-equations",
+    "id": "le-q03",
     "chapterId": "linear-equations",
-    "question": "If 4x + 7 = 23, what is x?",
-    "text": "If 4x + 7 = 23, what is x?",
+    "question": "Solve for x and check your result: 5x + 9 = 5 + 3x",
+    "text": "Solve for x and check your result: 5x + 9 = 5 + 3x",
     "difficulty": "Easy",
     "hints": [
-      "Subtract 7 from both sides.",
-      "You will have 4x = 16.",
-      "Divide by 4 to solve for x."
+      "Transpose 3x to the left and 9 to the right.",
+      "2x = -4, so divide both sides by 2."
     ],
-    "solution": "4x + 7 = 23, so 4x = 16, and x = 4."
+    "solution": "x = -2. Check: LHS = 5(-2) + 9 = -1, RHS = 5 + 3(-2) = -1. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q4-linear-equations",
+    "id": "le-q04",
     "chapterId": "linear-equations",
-    "question": "Solve 5(x - 2) = 15.",
-    "text": "Solve 5(x - 2) = 15.",
-    "difficulty": "Medium",
+    "question": "Solve for z and check your result: 4z + 3 = 6 + 2z",
+    "text": "Solve for z and check your result: 4z + 3 = 6 + 2z",
+    "difficulty": "Easy",
     "hints": [
-      "Divide both sides by 5 first.",
-      "You get x - 2 = 3.",
-      "Add 2 to both sides to solve for x."
+      "Transpose 2z to the left and 3 to the right.",
+      "2z = 3, so z = 3/2 — it's fine for the solution to be a fraction."
     ],
-    "solution": "x = 5."
+    "solution": "z = 3/2 (= 1.5). Check: LHS = 4(1.5) + 3 = 9, RHS = 6 + 2(1.5) = 9. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q5-linear-equations",
+    "id": "le-q05",
     "chapterId": "linear-equations",
-    "question": "Find x if 2(x + 3) = 14.",
-    "text": "Find x if 2(x + 3) = 14.",
-    "difficulty": "Medium",
-    "hints": [
-      "Divide both sides by 2.",
-      "You have x + 3 = 7.",
-      "Subtract 3 from both sides."
-    ],
-    "solution": "x = 4."
-  },
-  {
-    "id": "q1-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What is a property of a parallelogram?",
-    "text": "What is a property of a parallelogram?",
-    "difficulty": "Medium",
-    "hints": [
-      "Think about both pairs of opposite sides.",
-      "A parallelogram has opposite sides that are equal in length.",
-      "It also has opposite sides that are parallel."
-    ],
-    "solution": "A parallelogram has both pairs of opposite sides parallel and equal in length."
-  },
-  {
-    "id": "q2-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What is the sum of the interior angles of a quadrilateral?",
-    "text": "What is the sum of the interior angles of a quadrilateral?",
+    "question": "Solve for x and check your result: 2x - 1 = 14 - x",
+    "text": "Solve for x and check your result: 2x - 1 = 14 - x",
     "difficulty": "Easy",
     "hints": [
-      "Use the rule for polygons with four sides.",
-      "A quadrilateral can be split into two triangles.",
-      "Each triangle has 180 degrees."
+      "Transpose -x to the left (it becomes +x) and -1 to the right (it becomes +1).",
+      "3x = 15, so divide both sides by 3."
     ],
-    "solution": "The sum of the interior angles of a quadrilateral is 360°."
+    "solution": "x = 5. Check: LHS = 2(5) - 1 = 9, RHS = 14 - 5 = 9. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q3-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "A rectangle is a parallelogram. True or false?",
-    "text": "A rectangle is a parallelogram. True or false?",
-    "difficulty": "Easy",
-    "hints": [
-      "Think about the properties of both shapes.",
-      "A rectangle has two pairs of parallel sides.",
-      "That means it also fits the definition of a parallelogram."
-    ],
-    "solution": "True. A rectangle is a parallelogram."
-  },
-  {
-    "id": "q4-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What do you call a quadrilateral with one pair of parallel sides?",
-    "text": "What do you call a quadrilateral with one pair of parallel sides?",
+    "id": "le-q06",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 8x + 4 = 3(x - 1) + 7",
+    "text": "Solve for x and check your result: 8x + 4 = 3(x - 1) + 7",
     "difficulty": "Medium",
     "hints": [
-      "Think of a shape that has exactly one pair of parallel sides.",
-      "It is often introduced as a shape with a single pair of bases.",
-      "The name is trapezium or trapezoid depending on the region."
+      "Expand the bracket on the right first: 3(x - 1) = 3x - 3.",
+      "Simplify the right side to 3x + 4, then transpose."
     ],
-    "solution": "It is called a trapezium or trapezoid."
+    "solution": "x = 0. Check: LHS = 8(0) + 4 = 4, RHS = 3(0 - 1) + 7 = -3 + 7 = 4. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q5-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What makes a square different from a rectangle?",
-    "text": "What makes a square different from a rectangle?",
+    "id": "le-q07",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: x = (4/5)(x + 10)",
+    "text": "Solve for x and check your result: x = (4/5)(x + 10)",
     "difficulty": "Medium",
     "hints": [
-      "Compare their side lengths.",
-      "A rectangle needs opposite sides equal.",
-      "A square has all four sides equal."
+      "Multiply both sides by 5 first to clear the fraction: 5x = 4(x + 10).",
+      "Expand the right side, then transpose the x terms."
     ],
-    "solution": "A square has all four sides equal, while a rectangle only needs opposite sides equal."
+    "solution": "x = 40. Check: LHS = 40, RHS = (4/5)(40 + 10) = (4/5)(50) = 40. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q1-practical-geometry",
-    "chapterId": "practical-geometry",
-    "question": "Which instrument is used to draw arcs of circle?",
-    "text": "Which instrument is used to draw arcs of circle?",
-    "difficulty": "Easy",
-    "hints": [
-      "The instrument is used for drawing circles and arcs.",
-      "It has two pointed legs and a pencil arm.",
-      "It is commonly used in geometry constructions."
-    ],
-    "solution": "A compass is used to draw arcs and circles."
-  },
-  {
-    "id": "q2-practical-geometry",
-    "chapterId": "practical-geometry",
-    "question": "Which instrument is used to draw a line segment of a given length?",
-    "text": "Which instrument is used to draw a line segment of a given length?",
-    "difficulty": "Easy",
-    "hints": [
-      "The tool is used for measuring and drawing straight lines.",
-      "It often has markings in centimeters or inches.",
-      "A ruler or scale is used for this."
-    ],
-    "solution": "A ruler or scale is used to draw a line segment of a given length."
-  },
-  {
-    "id": "q3-practical-geometry",
-    "chapterId": "practical-geometry",
-    "question": "Which tool is used to measure angles?",
-    "text": "Which tool is used to measure angles?",
-    "difficulty": "Easy",
-    "hints": [
-      "The tool has a semicircular scale.",
-      "It is placed at the vertex of the angle.",
-      "A protractor measures angles."
-    ],
-    "solution": "A protractor is used to measure angles."
-  },
-  {
-    "id": "q4-practical-geometry",
-    "chapterId": "practical-geometry",
-    "question": "What do you call a line that divides an angle into two equal parts?",
-    "text": "What do you call a line that divides an angle into two equal parts?",
+    "id": "le-q08",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: (2x/3) + 1 = (7x/15) + 3",
+    "text": "Solve for x and check your result: (2x/3) + 1 = (7x/15) + 3",
     "difficulty": "Medium",
     "hints": [
-      "It is a special line inside an angle.",
-      "It creates two equal smaller angles.",
-      "It is called an angle bisector."
+      "Multiply every term by 15, the LCM of 3 and 15, to clear both fractions at once.",
+      "After clearing fractions you get 10x + 15 = 7x + 45 — transpose from there."
     ],
-    "solution": "It is called an angle bisector."
+    "solution": "x = 10. Check: LHS = 20/3 + 1 = 23/3, RHS = 70/15 + 3 = 14/3 + 3 = 23/3. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q5-practical-geometry",
-    "chapterId": "practical-geometry",
-    "question": "How do you start drawing a circle of radius 3 cm?",
-    "text": "How do you start drawing a circle of radius 3 cm?",
+    "id": "le-q09",
+    "chapterId": "linear-equations",
+    "question": "Solve for y and check your result: 2y + 5/3 = 26/3 - y",
+    "text": "Solve for y and check your result: 2y + 5/3 = 26/3 - y",
     "difficulty": "Medium",
     "hints": [
-      "Use a compass for drawing the circle.",
-      "Set the distance between the points to 3 cm.",
-      "Then place the compass point on the center and rotate."
+      "Multiply both sides by 3 to clear the denominators: 6y + 5 = 26 - 3y.",
+      "Transpose -3y to the left and 5 to the right, then divide."
     ],
-    "solution": "Set the compass to 3 cm and draw around a fixed center point."
+    "solution": "y = 7/3. Check: LHS = 14/3 + 5/3 = 19/3, RHS = 26/3 - 7/3 = 19/3. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q10",
+    "chapterId": "linear-equations",
+    "question": "Solve for m and check your result: 3m = 5m - 8/5",
+    "text": "Solve for m and check your result: 3m = 5m - 8/5",
+    "difficulty": "Medium",
+    "hints": [
+      "Transpose 5m to the left side: 3m - 5m = -8/5.",
+      "-2m = -8/5 — divide both sides by -2, keeping track of the sign."
+    ],
+    "solution": "m = 4/5. Check: LHS = 3(4/5) = 12/5, RHS = 5(4/5) - 8/5 = 20/5 - 8/5 = 12/5. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q11",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: x/2 - 1/5 = x/3 + 1/4",
+    "text": "Solve for x and check your result: x/2 - 1/5 = x/3 + 1/4",
+    "difficulty": "Hard",
+    "hints": [
+      "Find the LCM of all four denominators (2, 5, 3, 4) — it's 60. Multiply every term by 60.",
+      "After clearing fractions: 30x - 12 = 20x + 15. Transpose from there."
+    ],
+    "solution": "x = 27/10 (= 2.7). Check: LHS = 27/20 - 1/5 = 23/20, RHS = 27/30 + 1/4 = 23/20. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q12",
+    "chapterId": "linear-equations",
+    "question": "Solve for n and check your result: n/2 - 3n/4 + 5n/6 = 21",
+    "text": "Solve for n and check your result: n/2 - 3n/4 + 5n/6 = 21",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply every term by 12, the LCM of 2, 4 and 6.",
+      "After clearing fractions: 6n - 9n + 10n = 252, which simplifies to 7n = 252."
+    ],
+    "solution": "n = 36. Check: 36/2 - 3(36)/4 + 5(36)/6 = 18 - 27 + 30 = 21.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q13",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: x + 7 - 8x/3 = 17/6 - 5x/2",
+    "text": "Solve for x and check your result: x + 7 - 8x/3 = 17/6 - 5x/2",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 6, the LCM of 3, 6 and 2.",
+      "After clearing fractions: 6x + 42 - 16x = 17 - 15x. Combine like terms on the left first."
+    ],
+    "solution": "x = -5. Check: LHS = -5 + 7 - 8(-5)/3 = 2 + 40/3 = 46/3, RHS = 17/6 - 5(-5)/2 = 17/6 + 25/2 = 46/3. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q14",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: (x-5)/3 = (x-3)/5",
+    "text": "Solve for x and check your result: (x-5)/3 = (x-3)/5",
+    "difficulty": "Medium",
+    "hints": [
+      "Cross-multiply: 5(x - 5) = 3(x - 3).",
+      "Expand both sides, then transpose the x terms to one side."
+    ],
+    "solution": "x = 8. Check: LHS = (8-5)/3 = 1, RHS = (8-3)/5 = 1. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q15",
+    "chapterId": "linear-equations",
+    "question": "Solve for t and check your result: (3t-2)/4 - (2t+3)/3 = 2/3 - t",
+    "text": "Solve for t and check your result: (3t-2)/4 - (2t+3)/3 = 2/3 - t",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 12, the LCM of 4 and 3.",
+      "After clearing fractions: 3(3t-2) - 4(2t+3) = 8 - 12t. Expand both brackets carefully, watching the signs."
+    ],
+    "solution": "t = 2. Check: LHS = (6-2)/4 - (4+3)/3 = 1 - 7/3 = -4/3, RHS = 2/3 - 2 = -4/3. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q16",
+    "chapterId": "linear-equations",
+    "question": "Solve for m and check your result: m - (m-1)/2 = 1 - (m-2)/3",
+    "text": "Solve for m and check your result: m - (m-1)/2 = 1 - (m-2)/3",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 6, the LCM of 2 and 3.",
+      "After clearing fractions: 6m - 3(m-1) = 6 - 2(m-2). Expand both brackets before transposing."
+    ],
+    "solution": "m = 7/5 (= 1.4). Check: LHS = 7/5 - (2/5)/2 = 7/5 - 1/5 = 6/5, RHS = 1 - (-3/5)/3 = 1 + 1/5 = 6/5. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q17",
+    "chapterId": "linear-equations",
+    "question": "Simplify and solve for t: 3(t - 3) = 5(2t + 1)",
+    "text": "Simplify and solve for t: 3(t - 3) = 5(2t + 1)",
+    "difficulty": "Medium",
+    "hints": [
+      "Expand both brackets first: 3t - 9 = 10t + 5.",
+      "Transpose 10t to the left and -9 to the right."
+    ],
+    "solution": "t = -2. Check: LHS = 3(-2-3) = -15, RHS = 5(2(-2)+1) = -15. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q18",
+    "chapterId": "linear-equations",
+    "question": "Simplify and solve for y: 15(y - 4) - 2(y - 9) + 5(y + 6) = 0",
+    "text": "Simplify and solve for y: 15(y - 4) - 2(y - 9) + 5(y + 6) = 0",
+    "difficulty": "Hard",
+    "hints": [
+      "Expand all three brackets first, watching the sign in front of each: -2(y-9) = -2y + 18, not -2y - 18.",
+      "Combine all the y-terms and all the constant terms separately, then solve."
+    ],
+    "solution": "y = 2/3. Check: 15(2/3-4) - 2(2/3-9) + 5(2/3+6) = -50 + 50/3 + 100/3 = -50 + 50 = 0.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q19",
+    "chapterId": "linear-equations",
+    "question": "Simplify and solve for z: 3(5z - 7) - 2(9z - 11) = 4(8z - 13) - 17",
+    "text": "Simplify and solve for z: 3(5z - 7) - 2(9z - 11) = 4(8z - 13) - 17",
+    "difficulty": "Hard",
+    "hints": [
+      "Expand all three brackets, being careful with the -2(9z - 11) term.",
+      "Combine like terms on each side fully before transposing anything."
+    ],
+    "solution": "z = 2. Check: LHS = 3(3) - 2(7) = -5, RHS = 4(3) - 17 = -5. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q20",
+    "chapterId": "linear-equations",
+    "question": "Simplify and solve for f: 0.25(4f - 3) = 0.05(10f - 9)",
+    "text": "Simplify and solve for f: 0.25(4f - 3) = 0.05(10f - 9)",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply both sides by 100 to remove the decimals entirely: 25(4f-3) = 5(10f-9).",
+      "Expand both brackets, then transpose to solve for f."
+    ],
+    "solution": "f = 3/5 (= 0.6). Check: LHS = 0.25(-0.6) = -0.15, RHS = 0.05(-3) = -0.15. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q21",
+    "chapterId": "linear-equations",
+    "question": "Which of the following is a linear equation in one variable? (a) x² + 3 = 7  (b) 2x + 5 = 11  (c) xy + 1 = 0",
+    "text": "Which of the following is a linear equation in one variable? (a) x² + 3 = 7  (b) 2x + 5 = 11  (c) xy + 1 = 0",
+    "difficulty": "Easy",
+    "hints": [
+      "Check each option for how many variables it has, and the highest power any variable is raised to.",
+      "A linear equation in one variable has exactly one variable, and its highest power must be exactly 1."
+    ],
+    "solution": "(b) 2x + 5 = 11. It has exactly one variable and the highest power of that variable is 1. (a) is not linear because x has power 2. (c) is not linear in one variable because it has two variables, x and y.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q22",
+    "chapterId": "linear-equations",
+    "question": "In the equation 5x - 2 = 3x + 8, identify the LHS and the RHS.",
+    "text": "In the equation 5x - 2 = 3x + 8, identify the LHS and the RHS.",
+    "difficulty": "Easy",
+    "hints": [
+      "LHS means the expression written to the left of the equals sign.",
+      "RHS means the expression written to the right of the equals sign."
+    ],
+    "solution": "LHS (Left Hand Side) = 5x - 2. RHS (Right Hand Side) = 3x + 8.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q23",
+    "chapterId": "linear-equations",
+    "question": "State whether each of the following is an expression or an equation: (a) 5x - 2  (b) 5x - 2 = 13",
+    "text": "State whether each of the following is an expression or an equation: (a) 5x - 2  (b) 5x - 2 = 13",
+    "difficulty": "Easy",
+    "hints": [
+      "An equation always contains an equality (=) sign; an expression never does.",
+      "Check each item for the presence of an '=' sign."
+    ],
+    "solution": "(a) 5x - 2 is an expression (no equality sign). (b) 5x - 2 = 13 is an equation (it has an equality sign).",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q24",
+    "chapterId": "linear-equations",
+    "question": "Which of the following are linear equations in one variable? (a) 7 = 2x - 3  (b) x + y = 10  (c) x³ - 1 = 0",
+    "text": "Which of the following are linear equations in one variable? (a) 7 = 2x - 3  (b) x + y = 10  (c) x³ - 1 = 0",
+    "difficulty": "Easy",
+    "hints": [
+      "Check how many different variables appear in each equation.",
+      "Then check the highest power of the variable in the ones with only one variable."
+    ],
+    "solution": "Only (a) 7 = 2x - 3 is a linear equation in one variable. (b) has two variables (x and y). (c) has only one variable but its highest power is 3.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q25",
+    "chapterId": "linear-equations",
+    "question": "Identify the LHS and RHS of the equation 9 - 2x = 5x + 2.",
+    "text": "Identify the LHS and RHS of the equation 9 - 2x = 5x + 2.",
+    "difficulty": "Easy",
+    "hints": [
+      "LHS is everything written before the equals sign.",
+      "RHS is everything written after the equals sign."
+    ],
+    "solution": "LHS = 9 - 2x. RHS = 5x + 2.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q26",
+    "chapterId": "linear-equations",
+    "question": "Translate 'thrice a number increased by 5 equals 26' into an equation, then state its LHS and RHS.",
+    "text": "Translate 'thrice a number increased by 5 equals 26' into an equation, then state its LHS and RHS.",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the unknown number be x. 'Thrice a number' means 3x; 'increased by 5' means add 5.",
+      "Write the full equation first, then split it at the equals sign to get LHS and RHS."
+    ],
+    "solution": "Equation: 3x + 5 = 26. LHS = 3x + 5, RHS = 26.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q27",
+    "chapterId": "linear-equations",
+    "question": "Is x = 3 a solution of the equation 4x - 5 = 7?",
+    "text": "Is x = 3 a solution of the equation 4x - 5 = 7?",
+    "difficulty": "Easy",
+    "hints": [
+      "Substitute x = 3 into the LHS and simplify.",
+      "Compare the simplified LHS with the RHS."
+    ],
+    "solution": "Yes. LHS = 4(3) - 5 = 7 = RHS, so x = 3 is a solution.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q28",
+    "chapterId": "linear-equations",
+    "question": "Is y = -2 a solution of the equation 3y + 8 = 2?",
+    "text": "Is y = -2 a solution of the equation 3y + 8 = 2?",
+    "difficulty": "Easy",
+    "hints": [
+      "Substitute y = -2 into the LHS, being careful with the negative sign.",
+      "Compare the result with the RHS."
+    ],
+    "solution": "Yes. LHS = 3(-2) + 8 = -6 + 8 = 2 = RHS, so y = -2 is a solution.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q29",
+    "chapterId": "linear-equations",
+    "question": "A student solved 2x + 3 = 15 and got x = 5. Check this solution. If it is wrong, find the correct value of x.",
+    "text": "A student solved 2x + 3 = 15 and got x = 5. Check this solution. If it is wrong, find the correct value of x.",
+    "difficulty": "Medium",
+    "hints": [
+      "Substitute the student's answer, x = 5, into the original equation and see if both sides match.",
+      "If they don't match, redo the solving steps yourself: transpose 3, then divide."
+    ],
+    "solution": "The student's answer is wrong. Checking x = 5: LHS = 2(5) + 3 = 13, RHS = 15 — they don't match. Correct solution: 2x = 15 - 3 = 12, so x = 6. Check: LHS = 2(6) + 3 = 15 = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q30",
+    "chapterId": "linear-equations",
+    "question": "A student solved 5(x - 2) = 3x + 4 as follows: 'Step 1: 5x - 2 = 3x + 4. Step 2: 2x = 6. Step 3: x = 3.' Identify the student's mistake, and find the correct solution.",
+    "text": "A student solved 5(x - 2) = 3x + 4 as follows: 'Step 1: 5x - 2 = 3x + 4. Step 2: 2x = 6. Step 3: x = 3.' Identify the student's mistake, and find the correct solution.",
+    "difficulty": "Hard",
+    "hints": [
+      "Check Step 1 carefully — did the student multiply the 5 by both terms inside the bracket?",
+      "Redo the bracket expansion correctly, then transpose and solve again."
+    ],
+    "solution": "The mistake is in Step 1: the student expanded 5(x - 2) as 5x - 2, but it should be 5x - 10. Correct solution: 5x - 10 = 3x + 4, so 2x = 14, x = 7. Check: LHS = 5(7-2) = 25, RHS = 3(7) + 4 = 25.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q31",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 6x - 7 = 3x + 11",
+    "text": "Solve for x and check your result: 6x - 7 = 3x + 11",
+    "difficulty": "Easy",
+    "hints": [
+      "Transpose 3x to the left side.",
+      "Then transpose -7 to the right side and simplify."
+    ],
+    "solution": "x = 6. Check: LHS = 6(6) - 7 = 29, RHS = 3(6) + 11 = 29.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q32",
+    "chapterId": "linear-equations",
+    "question": "Solve for y and check your result: 9y + 2 = 5y + 22",
+    "text": "Solve for y and check your result: 9y + 2 = 5y + 22",
+    "difficulty": "Easy",
+    "hints": [
+      "Transpose 5y to the left side.",
+      "Then transpose 2 to the right side and simplify."
+    ],
+    "solution": "y = 5. Check: LHS = 9(5) + 2 = 47, RHS = 5(5) + 22 = 47.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q33",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: (3x/4) - 2 = (x/2) + 3",
+    "text": "Solve for x and check your result: (3x/4) - 2 = (x/2) + 3",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply every term by 4, the LCM of the denominators 4 and 2.",
+      "After clearing fractions: 3x - 8 = 2x + 12. Transpose from there."
+    ],
+    "solution": "x = 20. Check: LHS = 15 - 2 = 13, RHS = 10 + 3 = 13.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q34",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 4(x - 2) = 2(x + 6)",
+    "text": "Solve for x and check your result: 4(x - 2) = 2(x + 6)",
+    "difficulty": "Medium",
+    "hints": [
+      "Expand both brackets first.",
+      "Then transpose the variable terms to one side and the constants to the other."
+    ],
+    "solution": "x = 10. Check: LHS = 4(10-2) = 32, RHS = 2(10+6) = 32.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q35",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: (2x+5)/3 - (x-1)/6 = 3",
+    "text": "Solve for x and check your result: (2x+5)/3 - (x-1)/6 = 3",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 6, the LCM of 3 and 6.",
+      "After clearing fractions: 2(2x+5) - (x-1) = 18. Expand carefully, watching the sign in front of the second bracket."
+    ],
+    "solution": "x = 7/3. Check: LHS = 29/9 - 2/9 = 27/9 = 3 = RHS.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q36",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 0.5(3x - 4) = 0.25(2x + 10) + 1",
+    "text": "Solve for x and check your result: 0.5(3x - 4) = 0.25(2x + 10) + 1",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 4 (or 100, then simplify) to clear the decimals.",
+      "Expand both brackets before transposing."
+    ],
+    "solution": "x = 5.5 (= 11/2). Check: LHS = 0.5(12.5) = 6.25, RHS = 0.25(21) + 1 = 6.25.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q37",
+    "chapterId": "linear-equations",
+    "question": "A number is 5 more than another number, and their sum is 37. Find the two numbers.",
+    "text": "A number is 5 more than another number, and their sum is 37. Find the two numbers.",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the smaller number be x, so the larger number is x + 5.",
+      "Write their sum as an equation: x + (x + 5) = 37, then solve for x."
+    ],
+    "solution": "The numbers are 16 and 21. (x + (x+5) = 37 → 2x = 32 → x = 16, and x+5 = 21.)",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q38",
+    "chapterId": "linear-equations",
+    "question": "Five times a number, decreased by 4, gives 26. Find the number.",
+    "text": "Five times a number, decreased by 4, gives 26. Find the number.",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the number be x. 'Five times a number decreased by 4' means 5x - 4.",
+      "Set 5x - 4 equal to 26 and solve."
+    ],
+    "solution": "x = 6. (5x - 4 = 26 → 5x = 30 → x = 6.)",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q39",
+    "chapterId": "linear-equations",
+    "question": "The sum of three consecutive integers is 51. Find the integers.",
+    "text": "The sum of three consecutive integers is 51. Find the integers.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the smallest integer be x. The next two are x+1 and x+2.",
+      "Add all three expressions and set the sum equal to 51."
+    ],
+    "solution": "The integers are 16, 17, and 18. (x + (x+1) + (x+2) = 51 → 3x + 3 = 51 → x = 16.)",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q40",
+    "chapterId": "linear-equations",
+    "question": "The perimeter of a rectangle is 40 cm. Its length is 4 cm more than its breadth. Find the length and breadth.",
+    "text": "The perimeter of a rectangle is 40 cm. Its length is 4 cm more than its breadth. Find the length and breadth.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the breadth be x, so the length is x + 4. Recall perimeter = 2 × (length + breadth).",
+      "Set up 2(x + 4 + x) = 40 and solve for x."
+    ],
+    "solution": "Breadth = 8 cm, Length = 12 cm. (2(2x+4) = 40 → 4x = 32 → x = 8.)",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q41",
+    "chapterId": "linear-equations",
+    "question": "Raju's father is 4 times as old as Raju. Five years from now, the father will be 3 times as old as Raju will be then. Find their present ages.",
+    "text": "Raju's father is 4 times as old as Raju. Five years from now, the father will be 3 times as old as Raju will be then. Find their present ages.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let Raju's present age be x, so his father's present age is 4x.",
+      "In 5 years, Raju will be x+5 and his father will be 4x+5 — set up the '3 times as old' relationship using these."
+    ],
+    "solution": "Raju is 10 years old and his father is 40. (4x+5 = 3(x+5) → x = 10.) Check: in 5 years Raju is 15, father is 45 = 3×15.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q42",
+    "chapterId": "linear-equations",
+    "question": "A total of 25 currency notes, consisting of ₹10 and ₹20 notes, amount to ₹380. How many of each note are there?",
+    "text": "A total of 25 currency notes, consisting of ₹10 and ₹20 notes, amount to ₹380. How many of each note are there?",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the number of ₹10 notes be x, so the number of ₹20 notes is (25 - x).",
+      "Write the total value as an equation: 10x + 20(25 - x) = 380."
+    ],
+    "solution": "12 notes of ₹10 and 13 notes of ₹20. (10x + 20(25-x) = 380 → -10x = -120 → x = 12.)",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q43",
+    "chapterId": "linear-equations",
+    "question": "One-fourth of a number is 3 more than one-sixth of the same number. Find the number.",
+    "text": "One-fourth of a number is 3 more than one-sixth of the same number. Find the number.",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the number be x. Translate: x/4 = x/6 + 3.",
+      "Multiply every term by 12 (the LCM of 4 and 6) to clear the fractions."
+    ],
+    "solution": "x = 36. (x/4 = x/6 + 3 → 3x = 2x + 36 → x = 36.) Check: 36/4 = 9, and 36/6 + 3 = 9.",
+    "topicId": "topic-linear-equations-one-variable"
+  },
+  {
+    "id": "le-q44",
+    "chapterId": "linear-equations",
+    "question": "The width of a rectangle is two-thirds its length. If the perimeter is 60 cm, find the length and width.",
+    "text": "The width of a rectangle is two-thirds its length. If the perimeter is 60 cm, find the length and width.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the length be x, so the width is (2/3)x. Recall perimeter = 2 × (length + width).",
+      "Set up 2(x + (2/3)x) = 60 and solve for x."
+    ],
+    "solution": "Length = 18 cm, Width = 12 cm. (2(x + (2/3)x) = 60 → (10/3)x = 60 → x = 18.)",
+    "topicId": "topic-linear-equations-one-variable"
   },
   {
     "id": "q1-data-handling",
@@ -273,6 +585,46 @@
     "solution": "The mean is (2 + 4 + 6 + 8) / 4 = 20 / 4 = 5."
   },
   {
+    "id": "q1-practical-geometry",
+    "chapterId": "practical-geometry",
+    "question": "Which instrument is used to draw arcs of circle?",
+    "text": "Which instrument is used to draw arcs of circle?",
+    "difficulty": "Easy",
+    "hints": [
+      "The instrument is used for drawing circles and arcs.",
+      "It has two pointed legs and a pencil arm.",
+      "It is commonly used in geometry constructions."
+    ],
+    "solution": "A compass is used to draw arcs and circles."
+  },
+  {
+    "id": "q1-rational-numbers",
+    "chapterId": "rational-numbers",
+    "topicId": "topic-rational-numbers-basics",
+    "question": "What is the result of adding 1/3 and 1/6?",
+    "text": "What is the result of adding 1/3 and 1/6?",
+    "difficulty": "Easy",
+    "hints": [
+      "Find a common denominator for 1/3 and 1/6.",
+      "Rewrite 1/3 as 2/6 so the denominators match.",
+      "Add the numerators and keep the denominator 6."
+    ],
+    "solution": "1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2."
+  },
+  {
+    "id": "q1-understanding-quadrilaterals",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is a property of a parallelogram?",
+    "text": "What is a property of a parallelogram?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about both pairs of opposite sides.",
+      "A parallelogram has opposite sides that are equal in length.",
+      "It also has opposite sides that are parallel."
+    ],
+    "solution": "A parallelogram has both pairs of opposite sides parallel and equal in length."
+  },
+  {
     "id": "q2-data-handling",
     "chapterId": "data-handling",
     "question": "What is the mode of 2, 3, 3, 5, 7?",
@@ -284,6 +636,46 @@
       "The mode is 3."
     ],
     "solution": "The mode is 3."
+  },
+  {
+    "id": "q2-practical-geometry",
+    "chapterId": "practical-geometry",
+    "question": "Which instrument is used to draw a line segment of a given length?",
+    "text": "Which instrument is used to draw a line segment of a given length?",
+    "difficulty": "Easy",
+    "hints": [
+      "The tool is used for measuring and drawing straight lines.",
+      "It often has markings in centimeters or inches.",
+      "A ruler or scale is used for this."
+    ],
+    "solution": "A ruler or scale is used to draw a line segment of a given length."
+  },
+  {
+    "id": "q2-rational-numbers",
+    "chapterId": "rational-numbers",
+    "topicId": "topic-rational-numbers-basics",
+    "question": "Which of these is a rational number: 1/2, √2, or π?",
+    "text": "Which of these is a rational number: 1/2, √2, or π?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rational number can be written as a fraction of two integers.",
+      "Check whether the number can be expressed as a ratio.",
+      "1/2 fits that definition."
+    ],
+    "solution": "1/2 is a rational number because it can be written as a fraction."
+  },
+  {
+    "id": "q2-understanding-quadrilaterals",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the interior angles of a quadrilateral?",
+    "text": "What is the sum of the interior angles of a quadrilateral?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use the rule for polygons with four sides.",
+      "A quadrilateral can be split into two triangles.",
+      "Each triangle has 180 degrees."
+    ],
+    "solution": "The sum of the interior angles of a quadrilateral is 360°."
   },
   {
     "id": "q3-data-handling",
@@ -299,6 +691,46 @@
     "solution": "The median is 4."
   },
   {
+    "id": "q3-practical-geometry",
+    "chapterId": "practical-geometry",
+    "question": "Which tool is used to measure angles?",
+    "text": "Which tool is used to measure angles?",
+    "difficulty": "Easy",
+    "hints": [
+      "The tool has a semicircular scale.",
+      "It is placed at the vertex of the angle.",
+      "A protractor measures angles."
+    ],
+    "solution": "A protractor is used to measure angles."
+  },
+  {
+    "id": "q3-rational-numbers",
+    "chapterId": "rational-numbers",
+    "topicId": "topic-rational-numbers-basics",
+    "question": "Simplify 4/8 to its lowest terms.",
+    "text": "Simplify 4/8 to its lowest terms.",
+    "difficulty": "Easy",
+    "hints": [
+      "Look for a common factor of the numerator and denominator.",
+      "Both 4 and 8 can be divided by 4.",
+      "Divide both by 4 to get the simplest form."
+    ],
+    "solution": "4/8 simplifies to 1/2."
+  },
+  {
+    "id": "q3-understanding-quadrilaterals",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A rectangle is a parallelogram. True or false?",
+    "text": "A rectangle is a parallelogram. True or false?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about the properties of both shapes.",
+      "A rectangle has two pairs of parallel sides.",
+      "That means it also fits the definition of a parallelogram."
+    ],
+    "solution": "True. A rectangle is a parallelogram."
+  },
+  {
     "id": "q4-data-handling",
     "chapterId": "data-handling",
     "question": "If the values are 10, 20, 30, and 40, what is the range?",
@@ -312,6 +744,46 @@
     "solution": "The range is 40 - 10 = 30."
   },
   {
+    "id": "q4-practical-geometry",
+    "chapterId": "practical-geometry",
+    "question": "What do you call a line that divides an angle into two equal parts?",
+    "text": "What do you call a line that divides an angle into two equal parts?",
+    "difficulty": "Medium",
+    "hints": [
+      "It is a special line inside an angle.",
+      "It creates two equal smaller angles.",
+      "It is called an angle bisector."
+    ],
+    "solution": "It is called an angle bisector."
+  },
+  {
+    "id": "q4-rational-numbers",
+    "chapterId": "rational-numbers",
+    "topicId": "topic-rational-numbers-basics",
+    "question": "What is 3/4 ÷ 1/2?",
+    "text": "What is 3/4 ÷ 1/2?",
+    "difficulty": "Medium",
+    "hints": [
+      "Divide by a fraction by multiplying by its reciprocal.",
+      "The reciprocal of 1/2 is 2.",
+      "3/4 × 2 = 3/2."
+    ],
+    "solution": "3/4 ÷ 1/2 = 3/2."
+  },
+  {
+    "id": "q4-understanding-quadrilaterals",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What do you call a quadrilateral with one pair of parallel sides?",
+    "text": "What do you call a quadrilateral with one pair of parallel sides?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think of a shape that has exactly one pair of parallel sides.",
+      "It is often introduced as a shape with a single pair of bases.",
+      "The name is trapezium or trapezoid depending on the region."
+    ],
+    "solution": "It is called a trapezium or trapezoid."
+  },
+  {
     "id": "q5-data-handling",
     "chapterId": "data-handling",
     "question": "A bag contains 2 red, 3 blue, and 5 green balls. What is the probability of picking a blue ball?",
@@ -323,5 +795,45 @@
       "The probability is favorable outcomes over total outcomes."
     ],
     "solution": "The probability of picking a blue ball is 3/10."
+  },
+  {
+    "id": "q5-practical-geometry",
+    "chapterId": "practical-geometry",
+    "question": "How do you start drawing a circle of radius 3 cm?",
+    "text": "How do you start drawing a circle of radius 3 cm?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use a compass for drawing the circle.",
+      "Set the distance between the points to 3 cm.",
+      "Then place the compass point on the center and rotate."
+    ],
+    "solution": "Set the compass to 3 cm and draw around a fixed center point."
+  },
+  {
+    "id": "q5-rational-numbers",
+    "chapterId": "rational-numbers",
+    "topicId": "topic-rational-numbers-basics",
+    "question": "Which is greater: 2/3 or 3/5?",
+    "text": "Which is greater: 2/3 or 3/5?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare the fractions using a common denominator.",
+      "A common denominator is 15.",
+      "2/3 = 10/15 and 3/5 = 9/15, so 2/3 is greater."
+    ],
+    "solution": "2/3 is greater than 3/5."
+  },
+  {
+    "id": "q5-understanding-quadrilaterals",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What makes a square different from a rectangle?",
+    "text": "What makes a square different from a rectangle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare their side lengths.",
+      "A rectangle needs opposite sides equal.",
+      "A square has all four sides equal."
+    ],
+    "solution": "A square has all four sides equal, while a rectangle only needs opposite sides equal."
   }
 ]

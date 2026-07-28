@@ -1,0 +1,16 @@
+{
+  "document": "DOC-20260727-WA0007_ (EduSheet worksheet)",
+  "documentTitle": "Linear Equations in One Variable — Very Short Answer Questions",
+  "sourceType": "supplementary",
+  "provenanceNote": "Independent third-party (school-provided, CBSE-aligned but not NCERT) worksheet, unrelated to the hemh102 NCERT source. Per design doc §3, question-bank/worksheet sources are question-shaped and route directly to the Question Generation stage, not Topic Detection.",
+  "reviewStatus": "draft",
+  "chapterId": "linear-equations",
+  "blocks": [
+    {
+      "id": "le-raw-ws-01",
+      "section": "Very Short Answer Questions",
+      "sourceType": "question-shaped",
+      "text": "Solve and check result:\n1. 3x = 2x + 18\n2. 5t - 3 = 3t - 5\n3. 5x + 9 = 5 + 3x\n4. 4z + 3 = 6 + 2z\n5. 2x - 1 = 14 - x\n6. 8x + 4 = 3(x - 1) + 7"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "topic-linear-equations-one-variable",
+  "chapterId": "linear-equations",
+  "title": "Solving Linear Equations in One Variable",
+  "reviewStatus": "approved",
+  "consolidationNote": "Consolidates stage2-topic-detection.md, stage3-concept-extraction.md, stage4-learning-objectives.md and stage5-worked-examples.json into one canonical Topic record, per the accepted Stage 10 export design. Explanation prose is newly authored here (stage2/stage3 only ever produced section titles and bullet-point concept lists, never flowing explanation text) — grounded in Stage 3's extracted concepts, not re-deriving them. Worked examples are carried over from stage5 unchanged. Learning objectives are carried over from stage4 unchanged, grouped by section as originally authored (export flattens this list, per the Stage 10 design's Topic mapping table). Approved 2026-07-27 for the Linear Equations end-to-end milestone.",
+  "sourceRefs": {
+    "stage2": "stage2-topic-detection.md",
+    "stage3": "stage3-concept-extraction.md",
+    "stage4": "stage4-learning-objectives.md",
+    "stage5": "stage5-worked-examples.json"
+  },
+  "explanation": {
+    "sections": [
+      {
+        "title": "What is a linear equation?",
+        "body": "An equation is a statement that says two expressions are equal, written with an '=' sign — for example, 2x + 1 = 7. An expression like 2x + 1 on its own, without an equals sign, is just an expression, not an equation. A linear equation in one variable is an equation where the variable appears only to the power 1 — no x², no x³. The expression on the left of the '=' sign is called the LHS (Left Hand Side), and the expression on the right is the RHS (Right Hand Side). A solution of the equation is the value of the variable that makes the LHS exactly equal to the RHS — not every value works, only specific ones. The reason we can solve equations at all is the balancing principle: if you do the same thing to both sides of an equation — add the same number, subtract the same number, multiply or divide both sides by the same non-zero number — the two sides stay equal. Every method used to solve an equation is really just this one idea, applied step by step."
+      },
+      {
+        "title": "Solving when the variable is on both sides",
+        "body": "Sometimes the variable appears on both sides of the equation, like 4x + 5 = 2x + 17. To solve this, we want all the x terms on one side and all the plain numbers on the other. The balancing principle says we can move a term from one side to the other, as long as we flip its sign when it crosses the '=' sign — this shortcut is called transposition. Moving +2x from the right side to the left turns it into -2x there, giving 4x - 2x + 5 = 17, which simplifies to 2x + 5 = 17. From there, transpose the +5 to the right (it becomes -5): 2x = 12, so x = 6. If the equation has a fractional coefficient, like x = (4/5)(x + 10), it helps to first multiply both sides by the denominator to clear the fraction, turning it into a plain integer equation before transposing."
+      },
+      {
+        "title": "Reducing equations to simpler form",
+        "body": "Some equations look more complicated because they contain brackets or several different denominators, like 2(x + 1) = (3x - 1)/2 + 3. Two steps make these manageable. First, if there are denominators, multiply every single term on both sides by their LCM (lowest common multiple) — this clears all the fractions at once, turning the equation into one with only whole numbers. Second, if there are brackets, expand them first: multiply the number outside the bracket by every term inside it, not just the first one. Once fractions are cleared and brackets are expanded, combine like terms and solve using transposition, exactly as before. However an equation was solved, always finish by checking the answer: substitute the value back into the original LHS and the original RHS separately, and confirm the two sides come out equal. This check is what actually proves the answer is correct — it's not an optional extra step."
+      }
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "le-we-01",
+      "section": "What is a linear equation?",
+      "conceptRef": "Verifying a solution (le-raw-01)",
+      "problem": "Is x = 4 a solution of the equation 3x - 5 = 7?",
+      "steps": [
+        "Substitute x = 4 into the LHS: 3(4) - 5 = 12 - 5 = 7.",
+        "The RHS is 7.",
+        "Compare: LHS = 7 and RHS = 7, so LHS = RHS."
+      ],
+      "finalAnswer": "Yes — x = 4 is a solution of 3x - 5 = 7, since both sides equal 7."
+    },
+    {
+      "id": "le-we-02",
+      "section": "Solving when the variable is on both sides",
+      "conceptRef": "Transposition (le-raw-02)",
+      "problem": "Solve for x: 4x + 5 = 2x + 17.",
+      "steps": [
+        "Transpose 2x from the RHS to the LHS: 4x - 2x + 5 = 17.",
+        "Simplify the LHS: 2x + 5 = 17.",
+        "Transpose 5 from the LHS to the RHS: 2x = 17 - 5 = 12.",
+        "Divide both sides by 2: x = 6.",
+        "Check: LHS = 4(6) + 5 = 29. RHS = 2(6) + 17 = 29. LHS = RHS, as required."
+      ],
+      "finalAnswer": "x = 6."
+    },
+    {
+      "id": "le-we-03",
+      "section": "Reducing equations to simpler form",
+      "conceptRef": "Clearing denominators via LCM + expanding brackets (le-raw-04)",
+      "problem": "Solve for x: 2(x + 1) = (3x - 1)/2 + 3.",
+      "steps": [
+        "Multiply both sides by 2 (the denominator on the RHS) to clear the fraction: 2 × 2(x+1) = 2 × [(3x-1)/2 + 3].",
+        "Simplify: 4(x + 1) = (3x - 1) + 6.",
+        "Expand the bracket on the LHS: 4x + 4 = 3x + 5.",
+        "Transpose 3x to the LHS and 4 to the RHS: 4x - 3x = 5 - 4.",
+        "Simplify: x = 1.",
+        "Check: LHS = 2(1 + 1) = 4. RHS = (3(1) - 1)/2 + 3 = 2/2 + 3 = 1 + 3 = 4. LHS = RHS, as required."
+      ],
+      "finalAnswer": "x = 1."
+    }
+  ],
+  "learningObjectives": [
+    {
+      "section": "What is a linear equation?",
+      "objectives": [
+        "Distinguish an algebraic expression from an equation by the presence of an equality sign.",
+        "Identify whether a given one-variable expression is linear (highest power = 1).",
+        "Identify the LHS and RHS of a given equation.",
+        "Verify whether a given value of the variable is a solution of a given linear equation."
+      ]
+    },
+    {
+      "section": "Solving when the variable is on both sides",
+      "objectives": [
+        "Solve a linear equation that has the variable on both sides using transposition.",
+        "Solve a linear equation with a fractional coefficient by first clearing the denominator."
+      ]
+    },
+    {
+      "section": "Reducing equations to simpler form",
+      "objectives": [
+        "Reduce a linear equation containing brackets and/or multiple denominators to a simpler linear form before solving.",
+        "Solve the simplified equation and check the result by substituting back into the original LHS and RHS."
+      ]
+    }
+  ]
+}

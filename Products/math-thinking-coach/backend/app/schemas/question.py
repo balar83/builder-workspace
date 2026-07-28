@@ -13,3 +13,4 @@ class Question(BaseModel):
     difficulty: Difficulty
     hints: list[str]
     solution: str
+    topicId: str | None = None

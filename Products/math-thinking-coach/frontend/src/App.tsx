@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ChapterSelectionPage from "./pages/ChapterSelectionPage";
 import ChapterPage from "./pages/ChapterPage";
+import TopicPage from "./pages/TopicPage";
 import QuestionPage from "./pages/QuestionPage";
 import "./App.css";
 
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/chapters" element={<ChapterSelectionPage />} />
         <Route path="/chapter/:chapterId" element={<ChapterPage />} />
+        <Route path="/topic/:topicId" element={<TopicPage />} />
         <Route path="/question/:chapterId" element={<QuestionPage />} />
       </Routes>
     </BrowserRouter>

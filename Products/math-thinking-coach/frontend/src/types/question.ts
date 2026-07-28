@@ -8,5 +8,6 @@ export interface Question {
   difficulty: Difficulty;
   hints: string[];
   solution: string;
+  topicId?: string | null;
 }
 

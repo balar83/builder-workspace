@@ -72,6 +72,42 @@ describe('questionService', () => {
     expect(result).toEqual([]);
   });
 
+  it('getTopics fetches topics for a chapter', async () => {
+    const topics = [{ id: 't1', chapterId: 'c1' }];
+    mockFetchOnce(200, topics);
+
+    const result = await questionService.getTopics('c1');
+
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/chapters/c1/topics'));
+    expect(result).toEqual(topics);
+  });
+
+  it('getTopics returns an empty array for a 404 response', async () => {
+    mockFetchOnce(404);
+
+    const result = await questionService.getTopics('missing');
+
+    expect(result).toEqual([]);
+  });
+
+  it('getTopic fetches a single topic by id', async () => {
+    const topic = { id: 't1', chapterId: 'c1' };
+    mockFetchOnce(200, topic);
+
+    const result = await questionService.getTopic('t1');
+
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/topics/t1'));
+    expect(result).toEqual(topic);
+  });
+
+  it('getTopic returns undefined for a 404 response', async () => {
+    mockFetchOnce(404);
+
+    const result = await questionService.getTopic('missing');
+
+    expect(result).toBeUndefined();
+  });
+
   it('getQuestion fetches a single question by id', async () => {
     const question = { id: 'q1', chapterId: 'c1' };
     mockFetchOnce(200, question);

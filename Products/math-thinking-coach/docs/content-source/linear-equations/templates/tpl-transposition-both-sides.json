@@ -1,0 +1,53 @@
+{
+  "templateId": "tpl-transposition-both-sides",
+  "generatorVersion": "1.0.0",
+  "description": "Linear equation with the variable on both sides, integer coefficients: {a}x + b = {c}x + d, solved by transposition. Matches the shape already authored by hand as le-q01 through le-q05.",
+  "chapterId": "linear-equations",
+  "topicId": "topic-linear-equations-one-variable",
+  "objective": 5,
+  "bloomLevel": "application",
+  "baseTags": ["transposition", "variable-both-sides", "template-generated"],
+  "variableLabel": "x",
+  "metadata": {
+    "templateVersion": "1.0.0",
+    "mathematicalFamily": "linear-equation-one-variable-both-sides",
+    "supportedDifficultyBands": ["Easy", "Medium"],
+    "supportedVariables": ["x", "y", "z", "m", "n", "t"],
+    "supportedObjectives": [5],
+    "supportedBloomLevels": ["application"]
+  },
+  "hardConstraints": [
+    "a !== c (otherwise the x term cancels entirely after transposition — division by zero)",
+    "x !== 0 (avoid a trivial zero solution)",
+    "a and c are both authored as positive in this version — negative leading coefficients (e.g. le-q05's '14 - x') are a real variant of this family but are out of scope for this first template; noted as future work"
+  ],
+  "difficultyBands": {
+    "Easy": {
+      "aRange": [2, 9],
+      "cRange": [2, 9],
+      "bRange": [-15, 15],
+      "dRange": [-15, 15],
+      "solutionType": "integer",
+      "maxDenominator": 1,
+      "maxAbsSolution": 20
+    },
+    "Medium": {
+      "aRange": [2, 15],
+      "cRange": [1, 15],
+      "bRange": [-25, 25],
+      "dRange": [-25, 25],
+      "solutionType": "integer-or-simple-fraction",
+      "maxDenominator": 6,
+      "maxAbsSolution": 30
+    }
+  },
+  "hintTemplate": [
+    "Move all the x terms to one side of the equation and all the constant terms to the other side.",
+    "Combine like terms, then divide both sides by the coefficient of x to isolate it."
+  ],
+  "misconception": {
+    "commonWrongAnswer": "Forgetting to flip the sign of a term when it is transposed across the equals sign.",
+    "why": "Treating transposition as copying a term to the other side rather than as a sign-flipping move — the shorthand for subtracting/adding that term on both sides.",
+    "remediationHint": "When a term crosses the equals sign, its sign flips: a term that was positive becomes negative, and vice versa."
+  }
+}

@@ -2,6 +2,7 @@ import { API_BASE_URL } from '../config/api';
 import type { AnswerEvaluationResponse, AnswerSubmission } from '../types/answer';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
+import type { Topic } from '../types/topic';
 
 async function getChapters(): Promise<Chapter[]> {
   const response = await fetch(`${API_BASE_URL}/chapters`);
@@ -70,10 +71,42 @@ async function submitAnswer(
   return response.json();
 }
 
+async function getTopics(chapterId: string | undefined): Promise<Topic[]> {
+  if (!chapterId) {
+    return [];
+  }
+
+  const response = await fetch(`${API_BASE_URL}/chapters/${chapterId}/topics`);
+  if (response.status === 404) {
+    return [];
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load topics');
+  }
+  return response.json();
+}
+
+async function getTopic(topicId: string | undefined): Promise<Topic | undefined> {
+  if (!topicId) {
+    return undefined;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/topics/${topicId}`);
+  if (response.status === 404) {
+    return undefined;
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load topic');
+  }
+  return response.json();
+}
+
 export const questionService = {
   getChapters,
   getChapter,
   getQuestions,
   getQuestion,
+  getTopics,
+  getTopic,
   submitAnswer,
 };

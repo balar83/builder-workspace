@@ -1,0 +1,47 @@
+{
+  "document": "hemh102.pdf",
+  "documentTitle": "NCERT Class 8 Mathematics — Chapter 2: Linear Equations in One Variable",
+  "sourceUrl": "https://ncert.nic.in/textbook/pdf/hemh102.pdf",
+  "sourceType": "primary",
+  "chapterId": "linear-equations",
+  "blocks": [
+    {
+      "id": "le-raw-01",
+      "section": "2.1 Introduction",
+      "pages": [1, 2],
+      "text": "In the earlier classes, you have come across several algebraic expressions and equations. Some examples of expressions we have so far worked with are: 5x, 2x - 3, 3x + y, 2xy + 5, xyz + x + y + z, x^2 + 1, y + y^2. Some examples of equations are: 5x = 25, 2x - 3 = 9, (2/3)y + 5 = 37/2, 6z + 10 = -2. Equations use the equality (=) sign; it is missing in expressions.\n\nOf these given expressions, many have more than one variable. For example, 2xy + 5 has two variables. We restrict to expressions with only one variable when we form equations. Moreover, the expressions we use to form equations are linear — the highest power of the variable appearing in the expression is 1.\n\nLinear expressions: 2x, 2x + 1, 3y - 7, 12 - 5z, (5(x-4)+10)/4.\nNot linear expressions: x^2 + 1, y + y^2, 1 + z + z^2 + z^3 (since highest power of variable > 1).\n\nEquations with linear expressions in one variable only are known as linear equations in one variable. The simple equations studied in earlier classes were all of this type.\n\nBrief revision:\n(a) An algebraic equation is an equality involving variables. It has an equality sign. The expression on the left of the equality sign is the Left Hand Side (LHS). The expression on the right is the Right Hand Side (RHS). Example: 2x - 3 = 7 → LHS = 2x - 3, RHS = 7.\n(b) In an equation, the values of the expressions on the LHS and RHS are equal only for certain values of the variable — these values are the solutions of the equation. For 2x - 3 = 7: x = 5 is a solution (LHS = 2×5-3 = 7 = RHS); x = 10 is not a solution (LHS = 2×10-3 = 17 ≠ RHS).\n(c) How to find the solution of an equation? We assume the two sides of the equation are balanced. We perform the same mathematical operations on both sides of the equation, so the balance is not disturbed. A few such steps give the solution."
+    },
+    {
+      "id": "le-raw-02",
+      "section": "2.2 Solving Equations having the Variable on both Sides",
+      "pages": [2, 3],
+      "text": "An equation is the equality of the values of two expressions. In most examples encountered so far, the RHS is just a number, but this need not always be so — both sides could have expressions with variables. For example, 2x - 3 = x + 2 has expressions with a variable on both sides: LHS = (2x-3), RHS = (x+2).\n\nExample 1: Solve 2x - 3 = x + 2.\nSolution: 2x = x + 2 + 3, or 2x = x + 5, or 2x - x = x + 5 - x (subtracting x from both sides), or x = 5 (solution). Here we subtracted a term involving the variable (not a constant) from both sides — this is valid because variables are also numbers. Subtracting x from both sides amounts to transposing x to the LHS.\n\nExample 2: Solve 5x + 7/2 = 3x - 14/2.\nSolution: Multiply both sides by 2: 2×(5x + 7/2) = 2×(3x - 14/2), giving 10x + 7 = 3x - 28. So 10x - 3x + 7 = -28 (transposing 3x to LHS), 7x + 7 = -28, 7x = -28 - 7 = -35, x = -35/7 = -5 (solution)."
+    },
+    {
+      "id": "le-raw-03",
+      "section": "Exercise 2.1",
+      "pages": [3],
+      "sourceType": "question-shaped",
+      "text": "Solve the following equations and check your results.\n1. 3x = 2x + 18\n2. 5t - 3 = 3t - 5\n3. 5x + 9 = 5 + 3x\n4. 4z + 3 = 6 + 2z\n5. 2x - 1 = 14 - x\n6. 8x + 4 = 3(x - 1) + 7\n7. x = (4/5)(x + 10)\n8. (2x/3) + 1 = (7x/15) + 3\n9. 2y + 5/3 = 26/3 - y\n10. 3m = 5m - 8/5"
+    },
+    {
+      "id": "le-raw-04",
+      "section": "2.3 Reducing Equations to Simpler Form",
+      "pages": [3, 4, 5],
+      "text": "Example 16: Solve (6x+1)/3 + 1 = (x-3)/6.\nSolution: Multiply both sides by 6 (the LCM of the denominators 3 and 6): 2(6x+1) + 6 = (x-3). Opening brackets: 12x + 2 + 6 = x - 3, so 12x - x + 8 = -3, 11x + 8 = -3, 11x = -11, x = -1.\nCheck: LHS = (6(-1)+1)/3 + 1 = (-5)/3 + 1 = -2/3. RHS = (-1-3)/6 = -4/6 = -2/3. LHS = RHS, as required.\n\nExample 17: Solve 5x - 2(2x - 7) = 2(3x - 1) + 7/2.\nSolution: Open the brackets. LHS = 5x - 4x + 14 = x + 14. RHS = 6x - 2 + 7/2 = 6x + 3/2. Equation: x + 14 = 6x + 3/2. So 14 - 3/2 = 6x - x = 5x, giving (28-3)/2 = 5x, 25/2 = 5x, x = 25/10 = 5/2.\nCheck: LHS = 5(5/2) - 2(2(5/2)-7) = 25/2 - 2(5-7) = 25/2 - 2(-2) = 25/2 + 4 = 33/2. RHS = 2(3(5/2)-1) + 7/2 = 2(15/2-1) + 7/2 = 2(13/2) + 7/2 = 13 + 7/2 = 33/2. LHS = RHS, as required.\nTeacher-note callouts in the source: 'Why 6? Because it is the smallest multiple (LCM) of the given denominators' and 'we brought the equation to a simpler form by opening brackets and combining like terms on both sides.'"
+    },
+    {
+      "id": "le-raw-05",
+      "section": "Exercise 2.2",
+      "pages": [5],
+      "sourceType": "question-shaped",
+      "text": "Solve the following linear equations.\n1. x/2 - 1/5 = x/3 + 1/4\n2. n/2 - (3n/4) + (5n/6) = 21\n3. x + 7 - (8x/3) = (17/6) - (5x/2)\n4. (x-5)/3 = (x-3)/5\n5. (3t-2)/4 - (2t+3)/3 = 2/3 - t\n6. m - (m-1)/2 = 1 - (m-2)/3\n\nSimplify and solve the following linear equations.\n7. 3(t-3) = 5(2t+1)\n8. 15(y-4) - 2(y-9) + 5(y+6) = 0\n9. 3(5z-7) - 2(9z-11) = 4(8z-13) - 17\n10. 0.25(4f-3) = 0.05(10f-9)"
+    },
+    {
+      "id": "le-raw-06",
+      "section": "What have we discussed? (Chapter Summary)",
+      "pages": [5],
+      "text": "1. An algebraic equation is an equality involving variables. It says that the value of the expression on one side of the equality sign is equal to the value of the expression on the other side.\n2. The equations we study in Classes VI, VII and VIII are linear equations in one variable. In such equations, the expressions which form the equation contain only one variable, and the highest power of the variable is 1.\n3. An equation may have linear expressions on both sides. Equations studied in Classes VI and VII had just a number on one side.\n4. Just as numbers, variables can also be transposed from one side of the equation to the other.\n5. Occasionally, the expressions forming equations have to be simplified before we can solve them by usual methods. Some equations may not even be linear to begin with, but they can be brought to a linear form by multiplying both sides by a suitable expression.\n6. The utility of linear equations is in their diverse applications; different problems on numbers, ages, perimeters, combination of currency notes, and so on can be solved using linear equations."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "topicId": "topic-linear-equations-one-variable",
+  "reviewStatus": "ai-generated",
+  "authoringNote": "Examples use original numbers, not the NCERT source's own examples verbatim — grounded in the same method/procedure extracted at Stage 3, not copied from the textbook. Canonical schema (design doc §2) allows a list here; app export later collapses to what actually ships (§5), so no cap of 1-2 was applied at this authoring layer.",
+  "workedExamples": [
+    {
+      "id": "le-we-01",
+      "section": "What is a linear equation?",
+      "conceptRef": "Verifying a solution (le-raw-01)",
+      "problem": "Is x = 4 a solution of the equation 3x - 5 = 7?",
+      "steps": [
+        "Substitute x = 4 into the LHS: 3(4) - 5 = 12 - 5 = 7.",
+        "The RHS is 7.",
+        "Compare: LHS = 7 and RHS = 7, so LHS = RHS."
+      ],
+      "finalAnswer": "Yes — x = 4 is a solution of 3x - 5 = 7, since both sides equal 7."
+    },
+    {
+      "id": "le-we-02",
+      "section": "Solving when the variable is on both sides",
+      "conceptRef": "Transposition (le-raw-02)",
+      "problem": "Solve for x: 4x + 5 = 2x + 17.",
+      "steps": [
+        "Transpose 2x from the RHS to the LHS: 4x - 2x + 5 = 17.",
+        "Simplify the LHS: 2x + 5 = 17.",
+        "Transpose 5 from the LHS to the RHS: 2x = 17 - 5 = 12.",
+        "Divide both sides by 2: x = 6.",
+        "Check: LHS = 4(6) + 5 = 29. RHS = 2(6) + 17 = 29. LHS = RHS, as required."
+      ],
+      "finalAnswer": "x = 6."
+    },
+    {
+      "id": "le-we-03",
+      "section": "Reducing equations to simpler form",
+      "conceptRef": "Clearing denominators via LCM + expanding brackets (le-raw-04)",
+      "problem": "Solve for x: 2(x + 1) = (3x - 1)/2 + 3.",
+      "steps": [
+        "Multiply both sides by 2 (the denominator on the RHS) to clear the fraction: 2 × 2(x+1) = 2 × [(3x-1)/2 + 3].",
+        "Simplify: 4(x + 1) = (3x - 1) + 6.",
+        "Expand the bracket on the LHS: 4x + 4 = 3x + 5.",
+        "Transpose 3x to the LHS and 4 to the RHS: 4x - 3x = 5 - 4.",
+        "Simplify: x = 1.",
+        "Check: LHS = 2(1 + 1) = 4. RHS = (3(1) - 1)/2 + 3 = 2/2 + 3 = 1 + 3 = 4. LHS = RHS, as required."
+      ],
+      "finalAnswer": "x = 1."
+    }
+  ]
+}

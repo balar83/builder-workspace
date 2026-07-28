@@ -1,0 +1,32 @@
+{
+  "topicId": "topic-data-handling-representation-and-probability",
+  "reviewStatus": "ai-generated",
+  "authoringNote": "Section 1 ('Reading graphs you already know') is a recap of pictograph/bar-graph reading with no multi-step procedure in the source to demonstrate — no worked example was authored for it, by design, not by oversight. Sections 2 and 3 each get one original-numbers worked example grounded in the Stage 3 concepts.",
+  "workedExamples": [
+    {
+      "id": "dh-we-01",
+      "section": "Pie charts: showing parts of a whole",
+      "conceptRef": "Central angle formula + multi-category table (dh-raw-03)",
+      "problem": "A student's weekly pocket money of ₹120 is spent as: Snacks ₹60, Books ₹30, Savings ₹30. Find the central angle of each sector in a pie chart of this data.",
+      "steps": [
+        "Find each category's fraction of the total: Snacks = 60/120 = 1/2. Books = 30/120 = 1/4. Savings = 30/120 = 1/4.",
+        "Multiply each fraction by 360° to get its central angle: Snacks = 1/2 × 360° = 180°. Books = 1/4 × 360° = 90°. Savings = 1/4 × 360° = 90°.",
+        "Check that the angles add up to 360°: 180° + 90° + 90° = 360°."
+      ],
+      "finalAnswer": "Snacks: 180°, Books: 90°, Savings: 90°."
+    },
+    {
+      "id": "dh-we-02",
+      "section": "Chance and probability",
+      "conceptRef": "Probability formula (dh-raw-06)",
+      "problem": "A box has 3 red pens, 2 blue pens and 5 black pens, identical except for colour. One pen is drawn without looking. What is the probability of drawing a blue pen?",
+      "steps": [
+        "Find the total number of equally likely outcomes: 3 + 2 + 5 = 10 pens.",
+        "Count the outcomes that make the event 'drawing a blue pen': 2.",
+        "Apply the probability formula: P(blue) = (favourable outcomes) / (total outcomes) = 2/10.",
+        "Simplify the fraction: 2/10 = 1/5."
+      ],
+      "finalAnswer": "P(blue pen) = 1/5."
+    }
+  ]
+}
