@@ -46,3 +46,16 @@ def test_get_candidates_includes_topicless_questions_with_topic_id_none() -> Non
 
     assert len(candidates) == 5
     assert all(candidate.topicId is None for candidate in candidates)
+
+
+def test_get_question_content_returns_the_full_question() -> None:
+    question = content_repository.get_question_content("q1-rational-numbers")
+
+    assert question is not None
+    assert question.id == "q1-rational-numbers"
+    assert question.solution
+    assert isinstance(question.hints, list)
+
+
+def test_get_question_content_returns_none_for_unknown_id() -> None:
+    assert content_repository.get_question_content("no-such-question") is None

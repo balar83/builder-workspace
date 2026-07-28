@@ -1,7 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from app.schemas.answer import Coach, Evaluation, UiState
 from app.schemas.question import Difficulty
 
 Mode = Literal["practice", "test", "revision"]
@@ -21,8 +22,8 @@ class AssessmentRequest(BaseModel):
     mode: Mode
     difficulty: RequestedDifficulty | None = None
     questionTypes: list[str] | None = None
-    questionCount: int | None = None
-    timeLimitMinutes: int | None = None
+    questionCount: int | None = Field(default=None, gt=0)
+    timeLimitMinutes: int | None = Field(default=None, gt=0)
 
 
 class StudentLearningContext(BaseModel):
@@ -117,3 +118,114 @@ class SelectionOutcome(BaseModel):
     selectedQuestions: list[SelectedQuestion]
     actualCount: int
     shortfall: bool
+
+
+# --- Milestone C2: the stateful runtime aggregate ---------------------------
+
+SessionStatus = Literal["not_started", "in_progress", "completed", "expired", "abandoned"]
+
+
+class SessionState(BaseModel):
+    """
+    The only mutable slice of a LearningSession. Runtime Session Manager is
+    the sole writer, for the session's entire remaining life after creation.
+    completedAt is set whenever the session becomes terminal for any reason
+    (completed, expired, or abandoned), not just on a successful finish -
+    status is what distinguishes why.
+    """
+
+    status: SessionStatus
+    currentPosition: int
+    attemptsOnCurrentQuestion: int
+    correctCount: int
+    hintsUsedTotal: int
+    startedAt: str | None
+    lastActivityAt: str
+    completedAt: str | None
+
+
+class LearningSession(BaseModel):
+    """
+    The central runtime aggregate. sessionId is plan.planId, adopted
+    directly rather than minting a second UUID for the same thing. plan and
+    selectedQuestions are immutable from the moment Session Builder inserts
+    this row - written exactly once, never updated by anyone, including
+    Runtime Session Manager.
+    """
+
+    sessionId: str
+    studentId: str
+    chapterId: str
+    plan: SessionPlan
+    selectedQuestions: list[SelectedQuestion]
+    state: SessionState
+    createdAt: str
+
+
+# --- API-facing request/response shapes -------------------------------------
+
+
+class CreateSessionRequest(BaseModel):
+    """studentId is not accepted here - it comes from the authenticated session."""
+
+    chapterId: str
+    mode: Mode
+    difficulty: RequestedDifficulty | None = None
+    questionTypes: list[str] | None = None
+    questionCount: int | None = Field(default=None, gt=0)
+    timeLimitMinutes: int | None = Field(default=None, gt=0)
+
+
+class CreateSessionResponse(BaseModel):
+    sessionId: str
+    targetCount: int
+    actualCount: int
+    shortfall: bool
+
+
+class QuestionContent(BaseModel):
+    id: str
+    question: str
+    text: str
+    difficulty: Difficulty
+    hints: list[str]
+    solution: str
+
+
+class CurrentQuestionResponse(BaseModel):
+    position: int
+    totalCount: int
+    question: QuestionContent
+
+
+class SessionTerminalResponse(BaseModel):
+    sessionId: str
+    status: SessionStatus
+    position: int
+    totalCount: int
+    correctCount: int
+
+
+class SubmitSessionAnswerRequest(BaseModel):
+    position: int
+    answer: str
+
+
+class SubmitSessionAnswerResponse(BaseModel):
+    evaluation: Evaluation
+    coach: Coach
+    ui: UiState
+    position: int
+    totalCount: int
+    sessionStatus: SessionStatus
+
+
+class SessionSummaryResponse(BaseModel):
+    sessionId: str
+    mode: Mode
+    status: SessionStatus
+    position: int
+    totalCount: int
+    correctCount: int
+    startedAt: str | None
+    completedAt: str | None

@@ -1,0 +1,191 @@
+from pathlib import Path
+
+import pytest
+from fastapi.testclient import TestClient
+
+from app.main import app
+from app.services import attempt_service, auth_service, session_store
+
+client = TestClient(app)
+
+ANSWERS = {
+    "q1-rational-numbers": "1/2",
+    "q2-rational-numbers": "1/2",
+    "q3-rational-numbers": "1/2",
+    "q4-rational-numbers": "3/2",
+    "q5-rational-numbers": "2/3",
+}
+
+
+@pytest.fixture(autouse=True)
+def _isolate_stores(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(attempt_service, "DB_PATH", tmp_path / "runtime.db")
+    monkeypatch.setattr(session_store, "DB_PATH", tmp_path / "runtime.db")
+    monkeypatch.setattr(auth_service, "TEACHERS_PATH", tmp_path / "teachers.json")
+    monkeypatch.setattr(auth_service, "CLASSES_PATH", tmp_path / "classes.json")
+    monkeypatch.setattr(auth_service, "STUDENTS_PATH", tmp_path / "students.json")
+    client.cookies.clear()
+
+
+def _student_client(name="Asha") -> TestClient:
+    with TestClient(app) as teacher_client:
+        teacher_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": f"t-{id(teacher_client)}@example.com", "password": "correct-horse", "name": "T"},
+        )
+        code = teacher_client.post("/api/v1/auth/teacher/classes", json={"name": "Section A"}).json()["code"]
+
+    student_client = TestClient(app)
+    student_client.post(
+        "/api/v1/auth/student/join",
+        json={"classCode": code, "displayName": name, "pin": "1234"},
+    )
+    return student_client
+
+
+def test_create_session_requires_a_student_session() -> None:
+    response = client.post("/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice"})
+
+    assert response.status_code == 401
+
+
+def test_teacher_session_cannot_create_a_session() -> None:
+    with TestClient(app) as teacher_client:
+        teacher_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher@example.com", "password": "correct-horse", "name": "T"},
+        )
+        response = teacher_client.post(
+            "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice"}
+        )
+
+        assert response.status_code == 401
+
+
+def test_create_session_returns_only_summary_fields_no_question_content() -> None:
+    student = _student_client()
+
+    response = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 5}
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert set(body.keys()) == {"sessionId", "targetCount", "actualCount", "shortfall"}
+    assert body["actualCount"] == 5
+    assert body["shortfall"] is False
+
+
+def test_create_session_rejects_a_configuration_yielding_zero_questions() -> None:
+    student = _student_client()
+
+    response = student.post(
+        "/api/v1/sessions", json={"chapterId": "no-such-chapter", "mode": "practice"}
+    )
+
+    assert response.status_code == 400
+
+
+def test_create_session_rejects_non_positive_time_limit() -> None:
+    student = _student_client()
+
+    response = student.post(
+        "/api/v1/sessions",
+        json={"chapterId": "rational-numbers", "mode": "test", "timeLimitMinutes": 0},
+    )
+
+    assert response.status_code == 422
+
+
+def test_question_1_and_question_5_use_the_same_endpoint() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 5}
+    ).json()["sessionId"]
+
+    # Walk through all 5 questions via the exact same GET, answering correctly each time.
+    for expected_position in range(5):
+        current = student.get(f"/api/v1/sessions/{session_id}/current-question")
+        assert current.status_code == 200
+        body = current.json()
+        assert body["position"] == expected_position
+        assert body["totalCount"] == 5
+        assert "solution" in body["question"]
+
+        answer = ANSWERS[body["question"]["id"]]
+        submit = student.post(
+            f"/api/v1/sessions/{session_id}/answer",
+            json={"position": expected_position, "answer": answer},
+        )
+        assert submit.status_code == 200
+
+    summary = student.get(f"/api/v1/sessions/{session_id}")
+    assert summary.status_code == 200
+    assert summary.json()["status"] == "completed"
+    assert summary.json()["correctCount"] == 5
+
+
+def test_current_question_on_a_completed_session_returns_409() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 1}
+    ).json()["sessionId"]
+
+    question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+    student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": ANSWERS[question["id"]]})
+
+    response = student.get(f"/api/v1/sessions/{session_id}/current-question")
+
+    assert response.status_code == 409
+    assert response.json()["detail"]["status"] == "completed"
+
+
+def test_stale_position_returns_409() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 5}
+    ).json()["sessionId"]
+    question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+    student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": ANSWERS[question["id"]]})
+
+    response = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": "anything"})
+
+    assert response.status_code == 409
+
+
+def test_unknown_session_returns_404() -> None:
+    student = _student_client()
+
+    response = student.get("/api/v1/sessions/no-such-session/current-question")
+
+    assert response.status_code == 404
+
+
+def test_a_different_students_session_is_not_accessible() -> None:
+    student_a = _student_client("Asha")
+    session_id = student_a.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice"}
+    ).json()["sessionId"]
+
+    student_b = _student_client("Ravi")
+    response = student_b.get(f"/api/v1/sessions/{session_id}/current-question")
+
+    assert response.status_code == 404
+
+
+def test_submit_answer_request_has_no_attempt_number_field() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice"}
+    ).json()["sessionId"]
+    question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+
+    # Only position and answer are accepted - an attemptNumber, if sent, is
+    # simply ignored by the schema (extra fields are dropped by default).
+    response = student.post(
+        f"/api/v1/sessions/{session_id}/answer",
+        json={"position": 0, "answer": ANSWERS[question["id"]], "attemptNumber": 99},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["ui"]["hintLevel"] == 0  # correct-answer response, unaffected by the extra field

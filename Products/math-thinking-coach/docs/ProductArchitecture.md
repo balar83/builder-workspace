@@ -257,7 +257,11 @@ Session-cookie based (see §15). Does not gate any endpoint above — every chap
 
 GET /api/v1/performance/me → 401 if not a student session
 
-Returns per-topic `{questionsAttempted, questionsCorrect, accuracy, currentStreak, mastered}`, computed from `backend/app/data/attempts.db`. See §16.
+Returns per-topic `{questionsAttempted, questionsCorrect, accuracy, currentStreak, mastered}`, computed from `backend/app/data/runtime.db`. See §16.
+
+### Learning Session Runtime (Milestone C2)
+
+POST /api/v1/sessions, GET /api/v1/sessions/{sessionId}/current-question, POST /api/v1/sessions/{sessionId}/answer, GET /api/v1/sessions/{sessionId} — all session-gated, 401 if not a student. See §18.
 
 ---
 
@@ -450,7 +454,9 @@ POST /questions/{id}/answer          (unchanged response contract, ADR-001)
 attempt_service.record_attempt_for_answer   only dispatched when request.session.get("role") == "student"
         │
         ▼
-backend/app/data/attempts.db          SQLite (stdlib sqlite3, zero new dependency), one attempts table
+backend/app/data/runtime.db           SQLite (stdlib sqlite3, zero new dependency), attempts table
+                                       (renamed from attempts.db in Milestone C2, which added a sessions
+                                       table to the same file — see §18)
 ```
 
 `GET /performance/me` (session-gated, 401 if not a student) reads back deterministic per-topic aggregates — accuracy, current streak, and mastery via `LearningExperienceArchitecture.md`'s existing rule (3 consecutive correct, no hints, most-recent-first). No model, arithmetic only.
@@ -461,7 +467,7 @@ Anonymous use is completely unaffected — no session means no write, no error, 
 
 # 17. Learning Session Engine — Stateless Planning Layer (Milestone C1)
 
-Introduced in Milestone C1 (2026-07-28), after three design-review iterations (blueprint, refinement review, final domain-model validation) elevated the originally-scoped Question Selection Engine into a full session-planning architecture, then split it along the one property that mattered — which half needs a persistence decision. This section covers only the stateless half. No ADR yet: ADR-006 is scoped but deliberately deferred until C2 (the stateful half) also ships, per this project's convention that ADRs record shipped decisions.
+Introduced in Milestone C1 (2026-07-28), after three design-review iterations (blueprint, refinement review, final domain-model validation) elevated the originally-scoped Question Selection Engine into a full session-planning architecture, then split it along the one property that mattered — which half needs a persistence decision. This section covers only the stateless half; §18 covers the stateful half (Milestone C2), now also complete. No ADR yet for either half: ADR-006/007 are scoped and now writable, per this project's convention that ADRs record shipped decisions, but haven't been requested.
 
 ```
 AssessmentRequest ──┐
@@ -483,3 +489,44 @@ Six plain-function modules under `app/services/`, one per box above, composed by
 `SelectionOutcome` — never a bare list — is the domain-model finding from the final validation review: `SelectionConstraints.resolvedCount` reflects pool-level feasibility, but the Selector's own exclusion pass can still under-deliver relative to it, so the outcome always reports `actualCount`/`shortfall` honestly rather than leaving the caller to infer a possible mismatch.
 
 **No API surface, no persistence.** This layer has no route, is never called from `app/api/*`, and writes nothing except through `attempt_service`'s pre-existing (ADR-005) `get_recent_question_ids` read query, added here as the one small extension to that module. `Question`'s `topicId`-optional shape (§7) and `Question` itself having no `type` field yet (P2, deferred) both flow through as-is — `QuestionCandidate.type` is always `None` today, a documented no-op, not a bug.
+
+---
+
+# 18. Learning Session Engine — Stateful Runtime (Milestone C2)
+
+Introduced in Milestone C2 (2026-07-28), the stateful half of the architecture §17 introduced — its own three-round design review (blueprint, critical review of six named questions, final consolidation) before any code. This is what turns a `SelectionOutcome` into something a student can actually work through one question at a time, without ever exposing the full question bank to the client. No ADR yet — see §17's note.
+
+```
+POST /sessions ──────────────────────────────────────────────┐
+                                                                ▼
+                                          session_planning_pipeline.plan_session()   (§17, unchanged)
+                                                                │
+                                                                ▼
+                                          session_builder.create_session()
+                                                    │  sessionId = plan.planId (no second UUID)
+                                                    ▼
+                                          session_store.insert_session()  ──→  runtime.db (sessions table)
+
+
+GET  /sessions/{id}/current-question  ─┐
+POST /sessions/{id}/answer            ─┼──→  runtime_session_manager  ──→  session_store.get_session /
+GET  /sessions/{id}                   ─┘        │                          update_session_state()
+                                                  │
+                                                  ├──→ content_repository.get_question_content()  (full content,
+                                                  │      one question at a time — never question_service directly)
+                                                  ├──→ answer_service.evaluate_answer()  (unchanged, ADR-001)
+                                                  └──→ attempt_service.record_attempt()  (best-effort, session_id
+                                                         and session_mode now populated)
+```
+
+**Persistence.** `session_store.py` is the only module that touches the `sessions` table — one `threading.Lock()`, the same pattern `attempt_service.py`/`auth_service.py` already established. `attempts.db` was renamed to `runtime.db` in this change, since the file now holds both tables; `attempts` itself is untouched. Two columns (`plan_extra_json`, `selected_questions_json`) hold the plan's immutable nested data as JSON — `update_session_state()`'s `SET` clause only ever names `SessionState`-mapped columns, so it is structurally incapable of mutating the plan or the selected-question list, not just disciplined about it.
+
+**Content access stays two-tier**, per §17's Content Repository: `get_candidates()` (lean, pool-wide, selection-time — unchanged) and the new `get_question_content()` (one question, full content, serving-time). Runtime Session Manager depends only on the latter — it never imports `question_service` directly, preserving Content Repository as the single content-access abstraction.
+
+**Concurrency and trust boundary.** The client echoes back `position` on every `POST /answer`; the server rejects a mismatch with a 409 before evaluating anything — this catches a stale second tab without a generic optimistic-concurrency version field. The attempt number is always server-derived (`SessionState.attemptsOnCurrentQuestion + 1`), never taken from the request, closing the gap a naive client-supplied `attemptNumber` would have left open across tabs. The actual state write is serialized through `session_store`'s single `threading.Lock()`.
+
+**Lifecycle**, checked lazily on every access, no scheduler: `not_started → in_progress → {completed | expired | abandoned}`. `expired` (Test mode only, requires `timeLimitMinutes` and a `startedAt`) is checked before `abandoned` (inactivity past `SESSION_INACTIVITY_HOURS`), so a timed-out test reads as expired even if it's also gone stale. A session advances past a question on `NEXT_QUESTION` *or* `SHOW_SOLUTION` — a deliberate extension beyond `QuestionPage.tsx`'s current manual "Mark Complete" click, since no equivalent acknowledge step exists in this API surface; documented here as a flagged deviation, not a silent one.
+
+**Ownership.** Loading a session for the wrong student raises the identical error as loading one that doesn't exist at all (404 either way) — deliberately not distinguishing the two, so a prober can't use the response to confirm a session ID is valid.
+
+**Deliberately not built in this milestone**: the `degradationPolicy`/`substituted` refinement accepted during design review but never in this milestone's explicit implementation scope — flagged for Milestone E. `hintsUsedTotal` is reserved but always 0 — no hint-usage reporting mechanism exists anywhere in this codebase yet. No frontend consumes any of these four routes.

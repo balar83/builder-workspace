@@ -33,3 +33,20 @@ def _normalize_canonical(question: Question) -> QuestionCandidate:
         # anything reaches runtime data; there is no second check to make.
         reviewStatus="approved",
     )
+
+
+def get_question_content(question_id: str) -> Question | None:
+    """
+    The second, narrow entry point (Milestone C2): full display content for
+    exactly one already-selected question, distinct from get_candidates'
+    lean, pool-wide, selection-time records. Reuses the existing Question
+    model unchanged - no new schema. This is the only path Runtime Session
+    Manager may use to read question content; it never imports
+    question_service directly.
+
+    Any field considered for QuestionCandidate in the future should answer
+    "does Question Selector need this to choose among candidates?" - if the
+    honest answer is "no, only to display the one that's chosen," it
+    belongs here, not there.
+    """
+    return question_service.get_question_by_id(question_id)

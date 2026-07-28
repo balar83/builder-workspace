@@ -8,4 +8,4 @@ app/data/shadow_log/
 app/data/teachers.json
 app/data/classes.json
 app/data/students.json
-app/data/attempts.db
+app/data/runtime.db

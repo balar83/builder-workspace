@@ -10,7 +10,9 @@ from app.schemas.question import Question
 logger = logging.getLogger(__name__)
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-DB_PATH = DATA_DIR / "attempts.db"
+# Renamed from attempts.db in the same change that introduced the sessions
+# table (session_store.py, Milestone C2) - the file now holds both tables.
+DB_PATH = DATA_DIR / "runtime.db"
 
 _lock = threading.Lock()
 
