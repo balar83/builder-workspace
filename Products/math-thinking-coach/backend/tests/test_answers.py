@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.main import app
-from app.services import ai_evaluation_client
+from app.services import ai_evaluation_client, attempt_service, auth_service
 
 client = TestClient(app)
 
@@ -35,6 +35,11 @@ def _isolate_shadow_evaluation_from_the_network(tmp_path: Path, monkeypatch: pyt
             )
         },
     )
+    monkeypatch.setattr(attempt_service, "DB_PATH", tmp_path / "attempts.db")
+    monkeypatch.setattr(auth_service, "TEACHERS_PATH", tmp_path / "teachers.json")
+    monkeypatch.setattr(auth_service, "CLASSES_PATH", tmp_path / "classes.json")
+    monkeypatch.setattr(auth_service, "STUDENTS_PATH", tmp_path / "students.json")
+    client.cookies.clear()
 
 
 def submit(answer: str, attempt_number: int):
@@ -209,3 +214,59 @@ def test_disabling_shadow_mode_skips_the_background_task_entirely(
     assert response.status_code == 200
     assert response.json()["coach"]["nextAction"] == "NEXT_QUESTION"
     assert not log_path.exists()
+
+
+def _join_as_student() -> TestClient:
+    session_client = TestClient(app)
+    session_client.post(
+        "/api/v1/auth/teacher/register",
+        json={"email": f"t-{id(session_client)}@example.com", "password": "correct-horse", "name": "T"},
+    )
+    class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section A"}).json()["code"]
+
+    student_client = TestClient(app)
+    student_client.post(
+        "/api/v1/auth/student/join",
+        json={"classCode": class_code, "displayName": "Asha", "pin": "1234"},
+    )
+    return student_client
+
+
+def test_answer_is_not_recorded_without_a_student_session() -> None:
+    response = submit("1/2", 1)
+
+    assert response.status_code == 200
+    assert attempt_service.get_performance("anyone") == []
+
+
+def test_answer_is_recorded_when_a_student_is_logged_in() -> None:
+    student_client = _join_as_student()
+    student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+    response = student_client.post(
+        QUESTION_URL,
+        json={"submission": {"answer": "1/2", "attemptNumber": 1}},
+    )
+
+    assert response.status_code == 200
+    performance = attempt_service.get_performance(student_id)
+    assert len(performance) == 1
+    assert performance[0]["topicId"] == "topic-rational-numbers-basics"
+    assert performance[0]["questionsAttempted"] == 1
+    assert performance[0]["questionsCorrect"] == 1
+
+
+def test_response_is_unaffected_when_attempt_recording_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    def explode(*args, **kwargs) -> None:
+        raise RuntimeError("attempt recording is down")
+
+    monkeypatch.setattr(attempt_service, "record_attempt", explode)
+    student_client = _join_as_student()
+
+    response = student_client.post(
+        QUESTION_URL,
+        json={"submission": {"answer": "1/2", "attemptNumber": 1}},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["evaluation"]["isCorrect"] is True

@@ -253,6 +253,12 @@ POST /api/v1/auth/teacher/register, POST /api/v1/auth/teacher/login, POST /api/v
 
 Session-cookie based (see §15). Does not gate any endpoint above — every chapter/question/topic/answer route stays open with no session required.
 
+### Attempt History (Milestone B)
+
+GET /api/v1/performance/me → 401 if not a student session
+
+Returns per-topic `{questionsAttempted, questionsCorrect, accuracy, currentStreak, mastered}`, computed from `backend/app/data/attempts.db`. See §16.
+
 ---
 
 ## Planned
@@ -427,6 +433,26 @@ Teacher (id, email, name, passwordHash)
 
 Students never provide an email or password — only a teacher-issued 6-character class code, a display name (unique per class, not globally), and a 4+-digit PIN. Both password and PIN are bcrypt-hashed; neither is ever returned by any endpoint's response model. Session state is an HTTP-only, signed cookie (Starlette `SessionMiddleware`, `itsdangerous`-backed) holding only `{role, id}` — never a name, email, or PIN.
 
-Accounts persist in `backend/app/data/{teachers,classes,students}.json`, gitignored, read/written by `app/services/auth_service.py` under a single lock with atomic tmp-then-rename writes — the same pattern §14's export pipeline established for content. This is a deliberate, temporary choice: it defers the real database decision to the next milestone (server-side attempt history), where actual volume will force it.
+Accounts persist in `backend/app/data/{teachers,classes,students}.json`, gitignored, read/written by `app/services/auth_service.py` under a single lock with atomic tmp-then-rename writes — the same pattern §14's export pipeline established for content. This was a deliberate, temporary choice: it deferred the real database decision to §16, where actual volume forced it, exactly as anticipated here.
 
-**This milestone is dormant.** No existing route or page checks a session; `/chapters`, `/questions`, `/topics`, and answer evaluation are completely unauthenticated, unchanged. Nothing in the product currently consumes identity — a logged-in session has no visible effect beyond existing. It exists as a foundation the next milestones (server-side attempt history, adaptive selection, teacher-facing assessments) will build on.
+**No longer dormant as of §16.** `/chapters`, `/questions`, `/topics`, and answer evaluation remain completely unauthenticated, unchanged. But a logged-in student session is now consumed — see §16.
+
+---
+
+# 16. Server-Side Attempt History (Milestone B)
+
+Introduced in Milestone B (2026-07-28), resolving §15's deferred persistence decision; full rationale, options considered, and a real background-task ordering bug found during verification are in [ADR-005](ADR/ADR-005-server-side-attempt-history.md) — this section stays the technical record.
+
+```
+POST /questions/{id}/answer          (unchanged response contract, ADR-001)
+        │
+        ▼ (BackgroundTasks, registered before Shadow Mode's task — see ADR-005)
+attempt_service.record_attempt_for_answer   only dispatched when request.session.get("role") == "student"
+        │
+        ▼
+backend/app/data/attempts.db          SQLite (stdlib sqlite3, zero new dependency), one attempts table
+```
+
+`GET /performance/me` (session-gated, 401 if not a student) reads back deterministic per-topic aggregates — accuracy, current streak, and mastery via `LearningExperienceArchitecture.md`'s existing rule (3 consecutive correct, no hints, most-recent-first). No model, arithmetic only.
+
+Anonymous use is completely unaffected — no session means no write, no error, and Release 0.1's `localStorage` progress tracking (§6) remains the path for it, permanently, not just during a transition. No frontend page consumes `GET /performance/me` yet; that begins with the Assessment Engine (`Roadmap.md`'s Milestone E).

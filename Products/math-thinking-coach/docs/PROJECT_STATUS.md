@@ -4,7 +4,7 @@ This file tracks two separate tracks that move at different speeds — don't con
 
 ## Engineering Milestone
 
-Milestone 2 – Coaching Engine, extended by Release 0.2's first slice (Content Pipeline & Topic Delivery), now joined by Milestone A of the Scalable Assessment System (Student/Teacher Identity)
+Milestone 2 – Coaching Engine, extended by Release 0.2's first slice (Content Pipeline & Topic Delivery), now joined by Milestones A and B of the Scalable Assessment System (Student/Teacher Identity, Server-Side Attempt History)
 
 ## Documentation Milestone
 
@@ -16,9 +16,11 @@ Content Pipeline reconciliation (2026-07-28) — Features 018–021 (Topic data 
 
 Scalable Assessment System design review + Milestone A (2026-07-28) — before any code, reviewed the requested "Assessment Engine/teacher-ready assessments" milestone against `Product-Vision.md`'s Coaching vs. Assessment Philosophy (resolved: teacher-facing surface, student experience unchanged) and identified auth as an unstated prerequisite, sequenced as its own Milestone A. Implemented, tested, and live-verified same day; documented in [ADR-004](ADR/ADR-004-student-teacher-identity.md) and `Development-Journal.md`'s 2026-07-28 entry.
 
+Scalable Assessment System P1–P4 design review + Milestone B (2026-07-28) — a follow-up design pass covering Chapter/Question UX (P1), the Assessment Engine (P2), the Question Selection Engine (P3), and a deterministic Student Performance Model (P4). Surfaced and resolved a real conflict between P2's student-configurable "Test mode" and `Product-Vision.md`'s Coaching vs. Assessment Philosophy (resolved via an explicit addendum to that document — Test mode is opt-in and self-feedback-framed, default coaching stays score-free). Identified Milestone B as the actual next-buildable piece and implemented it same day: SQLite-backed attempt history, live-verified, with a real background-task ordering bug (attempt recording queuing behind Shadow Mode's slow AI call) caught and fixed during that verification. See [ADR-005](ADR/ADR-005-server-side-attempt-history.md) and `Development-Journal.md`'s 2026-07-28 (Milestone B) entry.
+
 ## Engineering Health
 
-79/79 backend tests passing (65 → 79 with Milestone A's `test_auth.py`), 49/49 frontend tests passing (40 → 49). Four architecture decisions on record are implemented, not just designed — [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) (evaluation/coaching separation), [ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md) (Shadow Mode execution and logging), [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) (content authoring and export pipeline), and [ADR-004](ADR/ADR-004-student-teacher-identity.md) (student/teacher identity) all match the shipped code, verified by diff/by reading the code, not asserted from design intent. Shadow Mode is active: the AI evaluator runs out-of-band on real traffic, and production behavior (the API response, coaching) is unchanged, proven by adversarial tests that force the shadow path to fail or be disabled. Confidence-gated live evaluation (not yet scoped or numbered) isn't blocked by anything technical or architectural — only by operational validation: Shadow Mode hasn't yet accumulated a large enough sample to answer the confidence-calibration and misconception-vocabulary questions Feature 014 left open. No known technical-debt blockers to that path; the known limitations that do exist (the `BackgroundTasks` execution model's ceiling under real concurrent traffic, JSONL's lack of query capability, and an undecided log-retention policy) are already tracked in ADR-002's Trade-offs section and aren't blocking anything today. The content pipeline (ADR-003) has its own known gap: no automated test suite for the pipeline tooling itself, and a hard runtime coupling to a co-located backend Python venv for schema validation. Milestone A (ADR-004) has its own named gaps: JSON-file account persistence won't scale past classroom volume (the database decision is deliberately deferred to Milestone B), and session security (`session_secret_key`, `https_only`) is dev-only pending a real deployment target — none of these block today's single-machine workflow.
+94/94 backend tests passing (65 → 79 with Milestone A's `test_auth.py`, 79 → 94 with Milestone B's attempt-history tests), 49/49 frontend tests passing (unchanged by Milestone B — no frontend work in this slice). Five architecture decisions on record are implemented, not just designed — [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md) (evaluation/coaching separation), [ADR-002](ADR/ADR-002-shadow-mode-execution-and-logging.md) (Shadow Mode execution and logging), [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) (content authoring and export pipeline), [ADR-004](ADR/ADR-004-student-teacher-identity.md) (student/teacher identity), and [ADR-005](ADR/ADR-005-server-side-attempt-history.md) (server-side attempt history) all match the shipped code, verified by diff/by reading the code, not asserted from design intent. Shadow Mode is active: the AI evaluator runs out-of-band on real traffic, and production behavior (the API response, coaching) is unchanged, proven by adversarial tests that force the shadow path to fail or be disabled. Confidence-gated live evaluation (not yet scoped or numbered) isn't blocked by anything technical or architectural — only by operational validation: Shadow Mode hasn't yet accumulated a large enough sample to answer the confidence-calibration and misconception-vocabulary questions Feature 014 left open. No known technical-debt blockers to that path; the known limitations that do exist (the `BackgroundTasks` execution model's ceiling under real concurrent traffic, JSONL's lack of query capability, and an undecided log-retention policy) are already tracked in ADR-002's Trade-offs section and aren't blocking anything today — and Milestone B's own live verification just demonstrated that ceiling concretely (a ~40-90s real Ollama call was blocking a same-request background task queued behind it, fixed by reordering, not by touching ADR-002 itself). The content pipeline (ADR-003) has its own known gap: no automated test suite for the pipeline tooling itself, and a hard runtime coupling to a co-located backend Python venv for schema validation. Milestone A (ADR-004) has its own named gaps: session security (`session_secret_key`, `https_only`) is dev-only pending a real deployment target. Milestone B (ADR-005) is single-file SQLite — fine at classroom scale, not designed for multi-server deployment; no retroactive migration of existing `localStorage` progress into server-side history.
 
 ---
 
@@ -52,6 +54,8 @@ Scalable Assessment System design review + Milestone A (2026-07-28) — before a
 
 ✓ Student/Teacher Identity (Milestone A, Scalable Assessment System — see below)
 
+✓ Server-Side Attempt History (Milestone B, Scalable Assessment System — see below)
+
 ---
 
 ## Completed Releases
@@ -72,7 +76,7 @@ Scalable Assessment System design review + Milestone A (2026-07-28) — before a
 
 ## Next Engineering Objective
 
-See `Backlog.md`'s "Recommended Next": Milestone B (server-side attempt history, next in the Scalable Assessment System sequence, needs its own design review); operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); export Data Handling's already-authored 42 questions (nearest next content step). See `Roadmap.md`'s "Scalable Assessment System" section for the fuller Milestone A–F sequencing, and `ADR/ADR-001-evaluation-coaching-separation.md` / `ADR/ADR-002-shadow-mode-execution-and-logging.md` / `ADR/ADR-003-content-authoring-and-export-pipeline.md` / `ADR/ADR-004-student-teacher-identity.md` for the seams any future engineering builds on.
+See `Backlog.md`'s "Recommended Next": Milestone C/D (Question Selection Engine, next in the Scalable Assessment System sequence, needs its own implementation-ready design review); P1's Question-page UX fixes (independent, addresses the measured 44-item progress-dot crowding); operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); export Data Handling's already-authored 42 questions (nearest next content step). See `Roadmap.md`'s "Scalable Assessment System" section for the fuller Milestone A–F sequencing, and `ADR/ADR-001-evaluation-coaching-separation.md` / `ADR/ADR-002-shadow-mode-execution-and-logging.md` / `ADR/ADR-003-content-authoring-and-export-pipeline.md` / `ADR/ADR-004-student-teacher-identity.md` / `ADR/ADR-005-server-side-attempt-history.md` for the seams any future engineering builds on.
 
 ## Recommended Next Milestone (Documentation)
 
@@ -94,7 +98,8 @@ Backend
 
 FastAPI
 Topic data model & retrieval API (`GET /chapters/{chapterId}/topics`, `GET /topics/{topicId}`)
-Student/teacher identity: session-cookie auth, class join codes — dormant, not yet consumed by any other route (see ADR-004)
+Student/teacher identity: session-cookie auth, class join codes (ADR-004)
+Server-side attempt history: SQLite-backed, session-gated `GET /performance/me` with per-topic accuracy/streak/mastery (ADR-005) — makes identity non-dormant for logged-in students
 
 Communication
 
@@ -126,7 +131,7 @@ main
 
 ## Uncommitted Work
 
-Features 007–012 (`90e547b`), Feature 014's spike (`e98d744`), the Product Foundation Sprint docs (`ae27076`), Feature 015/Shadow Mode (`e0e276e`), Release 0.1 (`a1df08d`), Features 018–021/Content Pipeline (`b313d4d`), and their documentation reconciliation (`c4dc58f`) are all committed as of 2026-07-28. **Milestone A (Student/Teacher Identity) is implemented, tested, and live-verified but not yet committed** — new `app/schemas/user.py`, `app/services/auth_service.py`, `app/api/routes/auth.py`, `backend/tests/test_auth.py`, `frontend/src/types/auth.ts`, `frontend/src/services/authService.ts`, `frontend/src/pages/{TeacherAuthPage,StudentJoinPage}.{tsx,css}`, `frontend/tests/services/authService.test.ts`, `docs/ADR/ADR-004-student-teacher-identity.md`; modified `backend/{requirements.txt,.gitignore}`, `app/main.py`, `app/core/config.py`, `app/api/router.py`, `frontend/src/{App.tsx,App.css}`, `frontend/src/pages/HomePage.tsx`, and this documentation reconciliation pass.
+Everything through Milestone A (`5012ad1`) is committed as of 2026-07-28. **Milestone B (Server-Side Attempt History) is implemented, tested, and live-verified but not yet committed** — new `app/services/attempt_service.py`, `app/schemas/performance.py`, `app/api/routes/performance.py`, `backend/tests/{test_attempt_service,test_performance}.py`, `docs/ADR/ADR-005-server-side-attempt-history.md`; modified `app/api/routes/answers.py`, `app/api/router.py`, `backend/.gitignore`, `backend/tests/test_answers.py`, `docs/Product-Vision.md` (Test mode addendum), and this documentation pass.
 
 Run `git status` before starting new work. Ask the user how/whether to commit this checkpoint before beginning any new engineering.
 
@@ -134,11 +139,13 @@ Run `git status` before starting new work. Ask the user how/whether to commit th
 
 ## Last Verified
 
-Backend ✔ (79/79 pytest — 65 pre-Milestone-A, 60 pre-Feature-018, up from 47 pre-Feature-015 — see below)
+Backend ✔ (94/94 pytest — 79 pre-Milestone-B, 65 pre-Milestone-A, 60 pre-Feature-018, up from 47 pre-Feature-015 — see below)
 
-Frontend ✔ (49/49 vitest, `tsc -b`, `oxlint`, `vite build` all clean — 40 pre-Milestone-A, 36 pre-Feature-018, up from 18 pre-Release-0.1)
+Frontend ✔ (49/49 vitest, `tsc -b`, `oxlint`, `vite build` all clean — unchanged by Milestone B, no frontend work in this slice)
 
 Milestone A ✔ (live, 2026-07-28: teacher register → create class → join code; student join with that code → success; student re-login with correct PIN → success; wrong PIN → rejected with no session granted; pre-existing anonymous Home → Select Chapter flow re-verified working identically with and without a session cookie present)
+
+Milestone B ✔ (live, 2026-07-28: student answers a real question → `GET /performance/me` reflects it correctly; anonymous submission confirmed not recorded; a real background-task ordering bug found live — attempt recording was queuing behind Shadow Mode's ~40-90s Ollama call — fixed by reordering, re-verified instant with Shadow Mode both disabled and enabled)
 
 Content pipeline ✔ (re-verified 2026-07-28: `node docs/content-pipeline/export/run.js --chapter=linear-equations --dry-run` reports 44 questions/1 topic/44 answer keys, zero validation errors, against the current `backend/.venv` Pydantic schemas)
 

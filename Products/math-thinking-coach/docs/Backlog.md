@@ -32,6 +32,9 @@ Client-side progress persistence, entirely frontend: a `progressService`/`progre
 ### Milestone A — Student/Teacher Identity
 Minimal auth, the first slice of the "scalable assessment system" milestone: teacher accounts (email/password) that can create a class and get a join code; student identity via that code + a display name + a short PIN, deliberately no student email/password (see [ADR-004](ADR/ADR-004-student-teacher-identity.md)). Ships dormant — login/join work end-to-end but nothing yet consumes identity; the existing anonymous coaching flow is untouched and independently reverified. Full detail in `Development-Journal.md`'s 2026-07-28 entry.
 
+### Milestone B — Server-Side Attempt History
+SQLite-backed attempt log (`app/services/attempt_service.py`) and a session-gated `GET /performance/me` returning deterministic per-topic accuracy/streak/mastery — resolves the persistence question ADR-004 deferred (see [ADR-005](ADR/ADR-005-server-side-attempt-history.md)). Recording is conditional on a student session existing; anonymous use is unaffected. Scoped to logging + aggregates only — session orchestration for the Assessment Engine is separate, future work. This is what makes Milestone A's identity layer non-dormant. Full detail in `Development-Journal.md`'s 2026-07-28 (Milestone B) entry, including a background-task ordering bug found and fixed during live verification.
+
 ### Features 018–021 — Content Pipeline & Topic Delivery (Release 0.2, first slice)
 Built the tooling `LearningExperienceArchitecture.md`'s Topic model needed to become real: a `Topic` data model and retrieval API plus `TopicPage` (Feature 018); a seeded, validated procedural question generator, "Template Engine v1" (Feature 019); a 5-stage content-authoring trail per chapter with an approval-status gate (Feature 020); and a 7-phase Stage 10 Export Pipeline that safely, atomically merges approved canonical content into runtime data, validated against the real backend Pydantic schemas (Feature 021). Used end-to-end to migrate Linear Equations live: 5 → 44 questions, 1 Topic. Data Handling is authored through stage 6 (42 questions) but not yet exported — see "Recommended Next" below. Full detail in `Development-Journal.md`'s 2026-07-27 entries and [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md).
 
@@ -57,10 +60,11 @@ Per `AI-Builder-OS/DOCUMENTATION_STANDARDS.md`, this file tracks **approved futu
 
 ---
 
-## Recommended Next: Milestone B (server-side attempt history), export Data Handling, operate Shadow Mode
+## Recommended Next: Milestone C/P3 (Question Selection Engine), P1's UX fixes, export Data Handling, operate Shadow Mode
 
-Milestone A (identity) is implemented and committed (2026-07-28). Per the "scalable assessment system" sequencing in `Roadmap.md`, three things can proceed, none blocking the others:
+Milestones A (identity) and B (server-side attempt history) are implemented and committed (2026-07-28). Per the "scalable assessment system" sequencing in `Roadmap.md`, several things can proceed, none blocking the others:
 
-- **Milestone B — server-side attempt history**: the next milestone in sequence, now unblocked by Milestone A's identity layer. Needs its own design review, including the JSON-file-vs-database persistence decision ADR-004 deliberately deferred.
+- **Milestone C/D (Question Selection Engine, P3)** — the next milestone in sequence, now unblocked by Milestone B's real attempt data. Needs its own implementation-ready design review before code, same as B got.
+- **P1's Question-page UX fixes** — independent of the data-model work, addresses the concrete, measured crowding problem (44-item progress-dot grid) directly.
 - **Shadow Mode** (unchanged since Feature 015): let it run and accumulate real evaluations in `shadow_eval_log.jsonl` past Feature 014's 30-sample baseline. Once a meaningful sample exists, review it the way Feature 014's two disagreements were reviewed individually (not just an aggregate agreement percentage), and answer the specific questions Feature 014 left open — does confidence actually separate trustworthy from untrustworthy judgments at scale, and what does the real misconception-tag vocabulary look like. That review is what scopes confidence-gated live evaluation (not yet numbered as a Feature — see the note above on Release/Feature numbering); confidence thresholds are part of that future decision, not something to pre-commit before the data exists.
 - **Export Data Handling**: 42 questions are authored and coverage-reviewed (`stage6-expansion-coverage-report.md`) but sitting at `reviewStatus: "ai-generated"`, one Stage 10 export run away from live once reviewed and approved — the nearest, lowest-effort next content win.

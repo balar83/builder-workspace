@@ -45,6 +45,8 @@ Concretely: the backend's evaluation logic produces a correctness signal (`isCor
 
 This isn't just a UI choice — it has architectural teeth. Evaluation and coaching are deliberately separate services (see [ADR-001](ADR/ADR-001-evaluation-coaching-separation.md)) precisely so a future, smarter evaluator can improve *correctness-checking* without this product drifting into a testing/scoring tool.
 
+**Addendum (2026-07-28, Scalable Assessment System design review).** The Assessment Engine's Test mode is a deliberate, narrow exception, not a reversal of the rule above: it is a distinct, explicitly opt-in surface — never the default coaching experience — where marks are shown to the student who requested them, framed as personal self-feedback ("you got 8 of 10"), not an institutional grade. Nothing from Test mode is sent to a teacher or parent automatically; a teacher only sees it if they separately view it through their own assessment surface. The default Practice/Guided/Independent coaching loop this section describes remains completely score-free, unchanged. See `Roadmap.md`'s Milestone E and [ADR-005](ADR/ADR-005-server-side-attempt-history.md)'s Related Documents for the fuller design context.
+
 ---
 
 ## Curriculum Integrity

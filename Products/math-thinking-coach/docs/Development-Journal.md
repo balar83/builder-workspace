@@ -1,5 +1,27 @@
 # Development Journal
 
+## 2026-07-28 (Milestone B — Server-Side Attempt History)
+
+*Followed a design review for the "scalable assessment system" milestone's P1-P4 (UX proposal, Assessment Engine, Question Selection Engine, Student Performance Model) that surfaced and resolved a real tension between the requested student-configurable "Test mode" (with visible marks) and `Product-Vision.md`'s Coaching vs. Assessment Philosophy — resolved as a distinct, opt-in, self-feedback-framed surface rather than a change to the default coaching experience. Milestone B (this entry) was identified as the actual prerequisite: P3's weak-concept/difficulty logic and P2's Test-mode summary both need real attempt data before they can do anything.*
+
+### Features completed
+- `app/services/attempt_service.py`: SQLite-backed (`backend/app/data/attempts.db`, gitignored) attempt log and deterministic per-topic aggregates. `record_attempt`/`record_attempt_for_answer` (the latter maps a `Question`/`AnswerSubmission`/`AnswerEvaluationResponse` triple into a row, wrapped in a try/except that logs and swallows — mirroring `shadow_evaluation_service.py`'s "never raise into the caller" discipline). `get_performance(student_id)` computes accuracy, current streak, and mastery (`LearningExperienceArchitecture.md`'s existing 3-consecutive-correct-no-hints rule) per topic, arithmetic only.
+- `app/api/routes/answers.py`: dispatches `attempt_service.record_attempt_for_answer` via `BackgroundTasks`, only when `request.session.get("role") == "student"` (ADR-004). No session → no write, no error, response identical.
+- `app/schemas/performance.py`, `app/api/routes/performance.py`: new `GET /performance/me`, session-gated (401 if not a student).
+
+### Major engineering decisions
+- Resolved ADR-004's deliberately-deferred persistence question: SQLite, not JSON files or a client/server database. `sqlite3` is stdlib — zero new dependency, no approval gate needed. Full reasoning in [ADR-005](ADR/ADR-005-server-side-attempt-history.md).
+- Scoped tightly to attempt logging + read aggregates — explicitly not session orchestration (Practice/Test/Revision mode config, one-question-at-a-time serving), which stays deferred to the Assessment Engine's own future implementation pass, per this project's small-slices discipline. The `attempts` table has `session_id`/`session_mode`/`question_type`/`misconception_tag` columns reserved for that and for a future content-pipeline extension, but they're `NULL` today — reserved, not fabricated.
+- **A real bug, caught by live verification, not by the test suite**: `answers.py` originally registered the attempt-recording background task *after* Shadow Mode's. Reading Starlette's `BackgroundTasks` source confirmed tasks run sequentially, `await`ed one at a time, not concurrently — so every attempt write was queuing behind Shadow Mode's AI evaluator call, measured in this environment at 40-90s (matching Feature 014's documented latency). Data was still recorded correctly, just delayed up to 90 seconds. Fixed by registering attempt recording first. This is exactly why the project's verification discipline requires a live walkthrough, not just green tests — the automated suite doesn't exercise real background-task timing under a slow, real Shadow Mode call, since `test_answers.py`'s fixture stubs the AI evaluator's network call to be instant.
+
+### Verification summary
+- Backend: 94/94 pytest passing (79 → 94; +15 across `test_attempt_service.py`, `test_performance.py`, and three new tests in `test_answers.py`). Adversarial test forces `attempt_service.record_attempt` to raise and confirms the response is unaffected, mirroring ADR-002's own convention.
+- Live, both servers running: teacher register → create class; student join → answer a real question → `GET /performance/me` reflects it correctly. Re-verified after the ordering fix with Shadow Mode both enabled (no longer blocked) and disabled (instant) via `SHADOW_MODE_ENABLED=false`. Confirmed an anonymous submission is never recorded, and that the answer-evaluation response body is identical with or without a student session present.
+
+### Implementation notes
+- `evaluation_service.py`, `coaching_service.py`, `answer_service.py`, and the answer-evaluation response contract are untouched.
+- Full detail, options considered, and named trade-offs (SQLite's single-file ceiling, no retroactive `localStorage` migration) in [ADR-005](ADR/ADR-005-server-side-attempt-history.md).
+
 ## 2026-07-28 (Milestone A — Student/Teacher Identity)
 
 *First engineering slice of the "scalable assessment system" milestone, scoped down from the original request during design review: reading the Coaching-vs-Assessment tension in `Product-Vision.md` against the milestone's "Assessment Engine"/"teacher-ready assessments" language surfaced a real product-direction question that needed resolving before any code — confirmed as a teacher-facing surface only, student coaching experience unchanged. Auth was then identified as an invisible prerequisite for attempt history, adaptive selection, and teacher assessment generation alike, and pulled out as its own smaller milestone (Milestone A) rather than bundled into a much larger first slice.*

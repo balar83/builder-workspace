@@ -34,31 +34,33 @@ An AI-powered **Math Thinking Coach** for Class 8 CBSE students, evolving toward
 
 **[ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md) — Content authoring and export pipeline (Accepted).** New content is authored in `docs/content-source/<chapter>/` (a 5-stage trail, `reviewStatus`-gated) and, once approved, merged into runtime `backend/app/data/*.json` by a 7-phase Stage 10 Export Pipeline (`docs/content-pipeline/export/`) that validates against the real backend Pydantic schemas and writes atomically, per-chapter, never a whole-file overwrite. A companion "Template Engine v1" (`docs/content-pipeline/template-engine/`) generates and independently verifies question candidates at volume. This is how Linear Equations grew from 5 to 44 questions and gained its Topic.
 
-**[ADR-004](ADR/ADR-004-student-teacher-identity.md) — Student/teacher identity (Accepted).** Minimal auth: teacher accounts (email/password), a class join-code system, and student identity via that code + display name + a short PIN — deliberately no student email/password collected, since students are minors. HTTP-only signed session cookie (Starlette `SessionMiddleware`), JSON-file persistence (mirrors `chapters.json`/`topics.json`), existing content routes left completely open. Ships dormant — nothing else in the app consumes identity yet. First milestone of the "Scalable Assessment System" — see `Roadmap.md`.
+**[ADR-004](ADR/ADR-004-student-teacher-identity.md) — Student/teacher identity (Accepted).** Minimal auth: teacher accounts (email/password), a class join-code system, and student identity via that code + display name + a short PIN — deliberately no student email/password collected, since students are minors. HTTP-only signed session cookie (Starlette `SessionMiddleware`), JSON-file persistence (mirrors `chapters.json`/`topics.json`), existing content routes left completely open. First milestone of the "Scalable Assessment System" — see `Roadmap.md`.
+
+**[ADR-005](ADR/ADR-005-server-side-attempt-history.md) — Server-side attempt history (Accepted).** Resolves ADR-004's deferred persistence question: SQLite (`sqlite3` stdlib, zero new dependency), one `attempts` table, recorded via `BackgroundTasks` only when a student session exists (ADR-004). This is what makes identity non-dormant. A real bug was caught during this ADR's own live verification: attempt recording was originally registered *after* Shadow Mode's background task, and `BackgroundTasks` runs sequentially — every write was queuing behind Shadow Mode's 40-90s local Ollama call. Fixed by reordering; read the ADR's Decision section before adding anything else to the `/answer` route's background dispatch.
 
 **Release 0.1's frontend persistence pattern (not yet its own ADR — see §11).** `progressService.ts` is the only interface any component uses; `progressStore.ts` is the only file that touches `localStorage`. Mirrors ADR-001's service-in-front-of-private-accessor shape, applied to the frontend for the first time. See `ProductArchitecture.md` §6.
 
-All four accepted ADRs record real, implemented decisions, verified against shipped code — not proposals. Before touching evaluation, Shadow Mode, the progress-persistence layer, content authoring/export, or auth, read the relevant section in full first.
+All five accepted ADRs record real, implemented decisions, verified against shipped code — not proposals. Before touching evaluation, Shadow Mode, the progress-persistence layer, content authoring/export, auth, or attempt history, read the relevant section in full first.
 
 ---
 
 ## 4. Current architecture
 
-**Stack** — Frontend: React 19 + TypeScript + Vite, React Router, Vitest + Testing Library, oxlint. Backend: Python 3.13, FastAPI, Pydantic, pytest + httpx. REST/JSON under `/api/v1`. AI: rule-based evaluation drives coaching (unchanged since Feature 010); an AI evaluator also runs in production, out-of-band, logging-only (Feature 015). No AI is in the response path. No backend persistence exists for content or progress — Release 0.1's progress tracking is entirely client-side; Milestone A's accounts are JSON-file-based (`backend/app/data/{teachers,classes,students}.json`, gitignored). Content authoring/export tooling (Node.js, `docs/content-pipeline/`) is build-time only, never imported by `app/*` or `frontend/src/*` — see ADR-003. Auth exists (session-cookie based, ADR-004) but gates only the new `/auth/*` routes — every content route is still open, and nothing else in the app checks a session yet.
+**Stack** — Frontend: React 19 + TypeScript + Vite, React Router, Vitest + Testing Library, oxlint. Backend: Python 3.13, FastAPI, Pydantic, `sqlite3` (stdlib), pytest + httpx. REST/JSON under `/api/v1`. AI: rule-based evaluation drives coaching (unchanged since Feature 010); an AI evaluator also runs in production, out-of-band, logging-only (Feature 015). No AI is in the response path. Content is still file-based (no DB); Milestone A's accounts are JSON-file-based (`backend/app/data/{teachers,classes,students}.json`, gitignored); Milestone B's attempt history is SQLite (`backend/app/data/attempts.db`, gitignored) — the first real database in this project. Release 0.1's client-side progress tracking (`localStorage`) is unaffected and remains the path for anonymous use. Content authoring/export tooling (Node.js, `docs/content-pipeline/`) is build-time only, never imported by `app/*` or `frontend/src/*` — see ADR-003. Auth (ADR-004) gates `/auth/*` and the new `/performance/me`; every content route and the answer-evaluation route are still open with no session required.
 
 **Backend** (`backend/app/`)
 ```
 main.py                        FastAPI app, CORS (localhost:5173 only), SessionMiddleware (ADR-004), mounts
                                 api_router at /api/v1
-api/router.py, api/routes/     health, chapters, questions, topics, answers, auth — routes stay thin, delegate
-                                to services
+api/router.py, api/routes/     health, chapters, questions, topics, answers, auth, performance — routes stay
+                                thin, delegate to services
 core/config.py                 Settings: app + api_prefix + five shadow_* settings + session_secret_key (all
                                 env-driven)
 core/logging.py                basic logging config
 data/                          chapters.json, questions.json (public, topicId optional), topics.json (public),
                                 answer_keys.json (private, one reader), {teachers,classes,students}.json
-                                (gitignored, ADR-004)
-schemas/                       Pydantic models: chapter, question, topic, answer, ai_evaluation, user
+                                (gitignored, ADR-004), attempts.db (gitignored, SQLite, ADR-005)
+schemas/                       Pydantic models: chapter, question, topic, answer, ai_evaluation, user, performance
 services/
   question_service.py          content lookup
   topic_service.py             Topic lookup (Feature 018) — same load-once-module-level pattern as question_service
@@ -69,8 +71,9 @@ services/
   shadow_evaluation_service.py Shadow Mode's out-of-band orchestrator, dispatched via BackgroundTasks
   shadow_log_writer.py         thread-safe JSONL append
   auth_service.py              Milestone A (ADR-004) — bcrypt hashing, atomic JSON-file read/write under a lock
+  attempt_service.py           Milestone B (ADR-005) — SQLite attempt log + deterministic per-topic aggregates
 experiments/ai_evaluation/     Feature 014's original harness — untouched, not imported by app/*
-tests/                         pytest, one file per module — 79/79 passing
+tests/                         pytest, one file per module — 94/94 passing
 ```
 
 **Content pipeline** (`docs/`, build-time only — see [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md))
@@ -125,13 +128,13 @@ Don't skip steps 1–3 by jumping to implementation on a request that reads like
 
 - **Release 0.1 ("It Remembers You") is complete** — Feature 016 (Progress Persistence Layer) + Feature 017 (Chapter Overview & Continue Learning).
 - **Release 0.2, first slice implemented (not complete)** — Features 018–021 (Topic data model & API, Template Engine v1, content authoring pipeline, Stage 10 Export Pipeline — see [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md)), shipped in parallel with Release 0.1 the same day. Linear Equations migrated end-to-end (5 → 44 questions, 1 Topic, live). Data Handling authored through stage 6 (42 questions) but not exported. Release 0.2's Understand stage not yet built.
-- **Scalable Assessment System, Milestone A implemented (2026-07-28)** — student/teacher identity (see [ADR-004](ADR/ADR-004-student-teacher-identity.md)). Design-reviewed first: the requested "Assessment Engine/teacher-ready assessments" language was checked against `Product-Vision.md`'s Coaching vs. Assessment Philosophy and resolved as a teacher-facing surface, not a product pivot; auth was identified as an unstated prerequisite and scoped as its own milestone. Ships dormant — no existing page or route is gated, nothing else consumes identity yet. Milestones B–F (attempt history, question repository at scale, deterministic adaptive selection, the assessment engine itself, UI redesign) are sequenced in `Roadmap.md` but **not scoped or approved** — each needs its own design review.
-- **79/79 backend tests, 49/49 frontend tests passing.**
+- **Scalable Assessment System, Milestones A and B implemented (2026-07-28)** — student/teacher identity ([ADR-004](ADR/ADR-004-student-teacher-identity.md)) and server-side attempt history ([ADR-005](ADR/ADR-005-server-side-attempt-history.md)). Both design-reviewed first: the requested "Assessment Engine/teacher-ready assessments" language was checked against `Product-Vision.md`'s Coaching vs. Assessment Philosophy — resolved via an explicit, narrow addendum (Test mode is opt-in and self-feedback-framed; default coaching stays score-free) rather than either silently violating or silently ignoring the existing philosophy. Milestone A no longer dormant — Milestone B records real attempts for logged-in students. Milestones C–F (Question Selection Engine, the Assessment Engine itself, UI redesign) are sequenced in `Roadmap.md` but **not implemented, not fully scoped** — each needs its own implementation-ready design review, same as A and B both got.
+- **94/94 backend tests, 49/49 frontend tests passing.**
 - **Feature 015 (Shadow Mode)** shipped 2026-07-23, still operable, still hasn't accumulated a meaningful sample.
-- **Next engineering objective**: none formally queued. Active, non-blocking tracks: Milestone B (server-side attempt history — needs a design review, including the persistence-technology decision ADR-004 deferred); operate Shadow Mode and gather data; export Data Handling's already-authored questions. Don't assume further Release 0.2 or Milestone B+ engineering is approved to start — see §11/§11.5.
-- **Branch**: `main`, ahead of `origin/main`, nothing pushed. **Committed** (through `c4dc58f`): everything up to and including the Content Pipeline reconciliation. **Uncommitted**: Milestone A (backend `auth_service.py`/`routes/auth.py`/`schemas/user.py`/tests, frontend `authService.ts`/auth pages/tests, `ADR-004`, this documentation pass). Run `git status` to confirm before doing anything; ask the user whether/how to commit.
+- **Next engineering objective**: none formally queued. Active, non-blocking tracks: Milestone C/D (Question Selection Engine — needs an implementation-ready design review); P1's Question-page UX fixes (independent, addresses a concrete measured crowding problem); operate Shadow Mode and gather data; export Data Handling's already-authored questions. Don't assume further engineering is approved to start — see §11/§11.6.
+- **Branch**: `main`, ahead of `origin/main`, nothing pushed. **Committed** (through `5012ad1`): everything up to and including Milestone A. **Uncommitted**: Milestone B (backend `attempt_service.py`/`routes/performance.py`/`schemas/performance.py`/tests, modified `routes/answers.py`, `ADR-005`, `Product-Vision.md`'s addendum, this documentation pass). Run `git status` to confirm before doing anything; ask the user whether/how to commit.
 
-Run `pytest` and `vitest run` yourself and re-check `git status`/`git log` before trusting any number above. This checkpoint's own history is a cautionary example: Features 018–021 were implemented and verified on 2026-07-27 but left undocumented and uncommitted until a 2026-07-28 reconciliation pass caught the gap — don't let engineering outrun documentation the same way again.
+Run `pytest` and `vitest run` yourself and re-check `git status`/`git log` before trusting any number above. This checkpoint's own history has two cautionary examples now: Features 018–021 were implemented and verified on 2026-07-27 but left undocumented and uncommitted until a 2026-07-28 reconciliation pass caught the gap; Milestone B's own live verification caught a real background-task ordering bug that the (green) test suite alone did not — the test fixture stubs Shadow Mode's network call to be instant, so it couldn't reveal a delay that only exists when the real call is slow. Don't trust a green suite alone for anything involving `BackgroundTasks` timing — verify live.
 
 ---
 
@@ -175,14 +178,18 @@ POST /api/v1/auth/student/join                               → 400 on unknown 
 POST /api/v1/auth/student/login                              → 401 on bad class code/name/PIN
 POST /api/v1/auth/logout
 GET  /api/v1/auth/me                                         → 401 if not logged in
+
+GET  /api/v1/performance/me                                  → 401 if not a student session
+  Response: [{ "topicId": string, "questionsAttempted": number, "questionsCorrect": number,
+                "accuracy": number, "currentStreak": number, "mastered": boolean }, ...]
 ```
-The answer-evaluation contract is unchanged by Feature 015, Release 0.1, or Features 018–021 — all additive and/or out-of-band. `Chapter`: `{id, title, description}`. `Question`: `{id, chapterId, question, text, difficulty, hints[], solution, topicId}` — `topicId` (Feature 018) is optional and never includes an expected/short answer. `Topic`: `{id, chapterId, title, explanation, workedExampleContent, learningObjectives[]}`. All `/auth/*` routes are new in Milestone A (ADR-004) and don't gate anything else — every route above them is still open with no session required. Progress tracking has no backend endpoint at all — it's entirely client-side (§4).
+The answer-evaluation contract is unchanged by Feature 015, Release 0.1, Features 018–021, or Milestone B — all additive and/or out-of-band. `Chapter`: `{id, title, description}`. `Question`: `{id, chapterId, question, text, difficulty, hints[], solution, topicId}` — `topicId` (Feature 018) is optional and never includes an expected/short answer. `Topic`: `{id, chapterId, title, explanation, workedExampleContent, learningObjectives[]}`. All `/auth/*` routes and `/performance/me` are session-gated (ADR-004/005) and don't gate anything else — every content route and the answer route above them is still open with no session required. Client-side `localStorage` progress tracking (§4) is unaffected and remains the path for anonymous use.
 
 ---
 
 ## 9. Testing approach
 
-Backend: pytest + `TestClient`, one file per module, 79/79 passing. `test_auth.py` uses a module-level `TestClient` shared across tests — the fixture clears its cookie jar before every test to avoid session state leaking across test-order (a real bug caught during this milestone's own implementation, not a hypothetical). Frontend: Vitest + Testing Library, `tests/` mirrors `src/` for components and services 1:1 — **no page-level tests exist anywhere in this repo**, by established convention; page behavior (`HomePage`, `ChapterPage`, `QuestionPage`, `TopicPage`, `TeacherAuthPage`, `StudentJoinPage`) is verified via live browser walkthrough instead, every time. Before calling anything done: backend `pytest`; frontend `tsc -b` + `oxlint` + `vitest run`; a live walkthrough with both servers running for anything UI-observable, including a fresh-profile *and* an existing-state path when persistence is involved (Release 0.1 established this pattern — see `Development-Journal.md`'s 2026-07-27 entries for exactly what that looked like). Re-run the full suite fresh at a Feature/Release boundary — don't trust results from earlier slices. **The content pipeline (`docs/content-pipeline/`) has no automated test suite of its own** (ADR-003) — verify it with `node docs/content-pipeline/export/run.js --chapter=<slug> --dry-run` before trusting its output.
+Backend: pytest + `TestClient`, one file per module, 94/94 passing. `test_auth.py`/`test_answers.py`/`test_performance.py` use a module-level `TestClient` shared across tests — the fixture clears its cookie jar before every test to avoid session state leaking across test-order (a real bug caught during Milestone A's own implementation, not a hypothetical). Frontend: Vitest + Testing Library, `tests/` mirrors `src/` for components and services 1:1 — **no page-level tests exist anywhere in this repo**, by established convention; page behavior (`HomePage`, `ChapterPage`, `QuestionPage`, `TopicPage`, `TeacherAuthPage`, `StudentJoinPage`) is verified via live browser walkthrough instead, every time. Before calling anything done: backend `pytest`; frontend `tsc -b` + `oxlint` + `vitest run`; a live walkthrough with both servers running for anything UI-observable, including a fresh-profile *and* an existing-state path when persistence is involved (Release 0.1 established this pattern — see `Development-Journal.md`'s 2026-07-27 entries for exactly what that looked like). Re-run the full suite fresh at a Feature/Release boundary — don't trust results from earlier slices. **The content pipeline (`docs/content-pipeline/`) has no automated test suite of its own** (ADR-003) — verify it with `node docs/content-pipeline/export/run.js --chapter=<slug> --dry-run` before trusting its output. **Anything involving `BackgroundTasks` needs a live check, not just green tests** — Milestone B's own test suite passed 94/94 while a real ordering bug (attempt recording queued behind Shadow Mode's slow AI call) went undetected, because the test fixture stubs that call to be instant. If you add a third background task to the `/answer` route, verify its timing live against a real (not stubbed) Shadow Mode call before trusting it.
 
 ---
 
@@ -190,17 +197,17 @@ Backend: pytest + `TestClient`, one file per module, 79/79 passing. `test_auth.p
 
 | File | Purpose | State |
 |---|---|---|
-| `Product-Vision.md` | Why the product exists — living | Current |
-| `ProductArchitecture.md` | How it's built — stack, folders, API, Progress Persistence, Content Architecture, Identity | Current through Milestone A (15 numbered sections) |
+| `Product-Vision.md` | Why the product exists — living | Current, includes 2026-07-28 Test-mode addendum |
+| `ProductArchitecture.md` | How it's built — stack, folders, API, Progress Persistence, Content Architecture, Identity, Attempt History | Current through Milestone B (16 numbered sections) |
 | `LearningExperienceArchitecture.md` | How students learn — pedagogical counterpart to ProductArchitecture.md | Current |
-| `Roadmap.md` | Phased capability themes — living | Current |
+| `Roadmap.md` | Phased capability themes — living | Current through the Scalable Assessment System's Milestone A/B |
 | `Idea-Inbox.md` | Raw, unfiltered, append-only ideas — living | Current |
 | `Backlog.md` | Approved future work only | Current |
-| `Development-Journal.md` | Append-only engineering diary | Current through 2026-07-28 (Features 016–021, Milestone A) |
-| `Release-Notes.md` | User-visible changes only | Current through Release 0.1 — Features 018–021 and Milestone A have no student-visible surface yet worth a release note (Milestone A is dormant; Topic page is a small, optional "Learn" button); add entries if/when Release 0.2 is called done |
+| `Development-Journal.md` | Append-only engineering diary | Current through 2026-07-28 (Features 016–021, Milestones A and B) |
+| `Release-Notes.md` | User-visible changes only | Current through Release 0.1 — Features 018–021 and Milestones A/B have no student-visible surface yet worth a release note; add entries if/when Release 0.2 is called done |
 | `PROJECT_STATUS.md` | At-a-glance dashboard | Current |
-| `ADR/` | Accepted architecture decisions | ADR-001, ADR-002, ADR-003, ADR-004 |
-| `HANDOFF_PROMPT.md` | This file | Regenerated 2026-07-28 (Milestone A checkpoint) |
+| `ADR/` | Accepted architecture decisions | ADR-001, ADR-002, ADR-003, ADR-004, ADR-005 |
+| `HANDOFF_PROMPT.md` | This file | Regenerated 2026-07-28 (Milestone B checkpoint) |
 | `Wireframes.md` | Screen-level UI reference | Current through Release 0.1 — **not yet updated for TopicPage**, a real gap |
 | `README.md` | Docs index | Stable |
 
@@ -219,18 +226,19 @@ Do not begin further Release 0.2 engineering (or a next milestone) without a fre
 
 ---
 
-## 11.5. Scalable Assessment System — Milestone B readiness
+## 11.5. Scalable Assessment System — Milestone C readiness
 
-Milestone A (identity, ADR-004) is implemented but the milestones after it are **not** scoped or approved — don't treat the `Roadmap.md` sequencing (A→F) as a green light to keep building down the list.
+Milestones A (identity, ADR-004) and B (attempt history, ADR-005) are implemented; the milestones after them are **not** implemented, and not fully scoped — don't treat the `Roadmap.md` sequencing (A→F) as a green light to keep building down the list without a design pass each time.
 
-- **Milestone B (server-side attempt history)** is next in sequence, but needs its own design review first — specifically the persistence-technology decision (JSON files, mirroring the pattern ADR-004 and ADR-003 both used, vs. a real database) that ADR-004 deliberately deferred rather than pre-decided.
-- **What Milestone A deliberately left undone, on purpose, not as an oversight**: no page in the app checks a session; `progressService`/`progressStore` are untouched; there's no "list my classes" endpoint for a teacher managing more than one class; no password-reset or login rate-limiting. None of these block Milestone B — naming them so a future session doesn't rediscover them as surprises.
-- Read [ADR-004](ADR/ADR-004-student-teacher-identity.md) in full before touching `auth_service.py`, `routes/auth.py`, or the session middleware in `main.py`.
+- **Milestone C/D (Question Selection Engine)** is next in sequence, sketched at architecture level in the 2026-07-28 P1–P4 design review (see `Roadmap.md`) but not given an implementation-ready pass the way B got — do that first, the same way B's design review preceded B's code.
+- **What Milestone B deliberately left undone, on purpose, not as an oversight**: no session orchestration (Practice/Test/Revision mode config, one-question-at-a-time serving) — `attempts.session_id`/`session_mode` columns exist but are always `NULL`; `question_type` and `misconception_tag` columns exist but are unpopulated (no question-type field on `Question` yet, no misconception data in the runtime schema yet); no frontend consumes `GET /performance/me` yet. None of these block Milestone C — naming them so a future session doesn't rediscover them as surprises.
+- **What Milestone A left undone, still true**: no "list my classes" endpoint for a teacher managing more than one class; no password-reset or login rate-limiting.
+- Read [ADR-004](ADR/ADR-004-student-teacher-identity.md) and [ADR-005](ADR/ADR-005-server-side-attempt-history.md) in full before touching `auth_service.py`, `attempt_service.py`, `routes/{auth,answers,performance}.py`, or the session middleware in `main.py`. Specifically re-read ADR-005's Decision section on `BackgroundTasks` ordering before adding a third background task to the `/answer` route.
 
 ---
 
 ## 12. Immediate next steps for a new session
 
 1. Run `git status` and `git log --oneline -6` yourself — §6 may be stale by the time you read it.
-2. Re-run backend `pytest` and frontend `vitest run` to confirm 79/79 and 49/49 still hold.
-3. Ask the user what they want to work on — do not assume Milestone B or further Release 0.2 engineering is approved to start just because it's the named "next" theme. Per §6, confirm whether the priority is committing this checkpoint, Milestone B's design review, exporting Data Handling, operating Shadow Mode, or something else, before proceeding.
+2. Re-run backend `pytest` and frontend `vitest run` to confirm 94/94 and 49/49 still hold.
+3. Ask the user what they want to work on — do not assume Milestone C or further Release 0.2 engineering is approved to start just because it's the named "next" theme. Per §6, confirm whether the priority is committing this checkpoint, Milestone C's design review, P1's UX fixes, exporting Data Handling, operating Shadow Mode, or something else, before proceeding.
