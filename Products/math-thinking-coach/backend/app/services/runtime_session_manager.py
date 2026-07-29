@@ -40,19 +40,36 @@ class SubmitAnswerResult:
 
 def get_current_question(session_id: str, student_id: str) -> CurrentQuestionResult:
     """
-    Pure read - the only state change possible here is a lazy lifecycle
-    transition (expired/abandoned), applied before responding. Question 1
-    and question 10 are served by this exact same call; there is no
-    separate "first question" path anywhere in this module.
+    A read with one lazy write, same class as the lifecycle transition
+    below: the first time a live question is actually served, startedAt is
+    recorded (RC1 polish - a timed session begins when the student
+    receives the first question, not after their first submitted answer).
+    Guarded by startedAt still being None, so this fires exactly once per
+    session, however many times the question is re-fetched (a reload, a
+    resume). Question 1 and question 10 are served by this exact same
+    call; there is no separate "first question" path anywhere in this
+    module.
     """
     session = _load_live_session(session_id, student_id)
 
     if session.state.status not in _LIVE_STATUSES:
         return CurrentQuestionResult(session=session, question=None)
 
+    if session.state.startedAt is None:
+        session = _mark_started(session)
+
     selected = session.selectedQuestions[session.state.currentPosition]
     question = content_repository.get_question_content(selected.questionId)
     return CurrentQuestionResult(session=session, question=question)
+
+
+def _mark_started(session: LearningSession) -> LearningSession:
+    # Only startedAt - lastActivityAt is deliberately untouched here, since
+    # it remains an attempt-only signal for the separate abandoned-session
+    # check; merely viewing a question is not "activity" for that purpose.
+    new_state = session.state.model_copy(update={"startedAt": datetime.now(UTC).isoformat()})
+    session_store.update_session_state(session.sessionId, new_state)
+    return session.model_copy(update={"state": new_state})
 
 
 def submit_answer(session_id: str, student_id: str, position: int, answer: str) -> SubmitAnswerResult:

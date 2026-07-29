@@ -30,11 +30,13 @@ type Phase =
   | { kind: 'terminal'; terminal: SessionTerminalResponse }
   | { kind: 'question'; question: CurrentQuestionResponse };
 
-// Test-mode-only metadata needed for the countdown - fetched once via the
+// Test-mode-only metadata needed for the countdown - fetched via the
 // existing GET /sessions/{id} (ADR-007's own summary endpoint), never a new
-// per-second server call. startedAt stays null until the student's first
-// submission (matches runtime_session_manager._advance_state exactly), so
-// this is refreshed once after that first submit to pick it up.
+// per-second server call. Re-fetched every time loadCurrentQuestion
+// resolves to a real question - the server now records startedAt the
+// first time a question is actually served (RC1 polish), so by the time
+// this fetch runs it already reflects the true start, with no separate
+// refresh needed after a submission.
 interface SessionMeta {
   mode: SessionMode;
   timeLimitMinutes: number | null;
@@ -86,6 +88,19 @@ export default function SessionQuestionPage() {
       .then((result) => {
         if (result.type === 'question') {
           setPhase({ kind: 'question', question: result.question });
+          // Fetched only now, after current-question has resolved - the
+          // server may have just recorded startedAt as a side effect of
+          // serving this question (RC1 polish), and this call must land
+          // after that, not race it, to reflect the true start.
+          sessionService.getSessionSummary(sessionId).then((summaryResult) => {
+            if (summaryResult.type === 'ok') {
+              setSessionMeta({
+                mode: summaryResult.summary.mode,
+                timeLimitMinutes: summaryResult.summary.timeLimitMinutes,
+                startedAt: summaryResult.summary.startedAt,
+              });
+            }
+          });
         } else if (result.type === 'terminal') {
           setPhase({ kind: 'terminal', terminal: result.terminal });
         } else {
@@ -100,31 +115,6 @@ export default function SessionQuestionPage() {
   useEffect(() => {
     loadCurrentQuestion();
   }, [loadCurrentQuestion]);
-
-  // Learns whether this is a Test-mode session at all, and its deadline
-  // inputs, via the one existing endpoint that carries `mode`
-  // (GET /sessions/{id} - current-question doesn't). Fetched once per
-  // session, not on a timer - the countdown itself ticks purely client-side.
-  useEffect(() => {
-    if (!sessionId) {
-      return;
-    }
-    let cancelled = false;
-
-    sessionService.getSessionSummary(sessionId).then((result) => {
-      if (!cancelled && result.type === 'ok') {
-        setSessionMeta({
-          mode: result.summary.mode,
-          timeLimitMinutes: result.summary.timeLimitMinutes,
-          startedAt: result.summary.startedAt,
-        });
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionId]);
 
   // Drives the visible countdown. Stops entirely once the session is
   // already terminal. Reaching zero never ends the session itself - it
@@ -223,17 +213,6 @@ export default function SessionQuestionPage() {
 
       if (result.type === 'ok') {
         setFeedback(result.response);
-        // startedAt is null until the very first submission of any kind
-        // (runtime_session_manager._advance_state sets it unconditionally,
-        // whether or not the answer advances the question) - refresh once
-        // to pick that up, so the countdown can actually start.
-        if (sessionMeta?.mode === 'test' && !sessionMeta.startedAt) {
-          sessionService.getSessionSummary(sessionId).then((refreshed) => {
-            if (refreshed.type === 'ok') {
-              setSessionMeta((previous) => (previous ? { ...previous, startedAt: refreshed.summary.startedAt } : previous));
-            }
-          });
-        }
       } else if (result.type === 'stale') {
         setSyncNotice('Synced to your latest progress.');
         loadCurrentQuestion();

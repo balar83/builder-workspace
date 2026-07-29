@@ -4,6 +4,48 @@
 
 ---
 
+## RC1 Final Polish — Context-Aware Completion Messaging & Timer Start Fix (2026-07-29)
+
+**Scope**: exactly the two named UX refinements, nothing else.
+
+### Fix 1 — Context-aware completion messaging
+
+`SessionCompleteSummary.tsx` previously combined a status-based heading (completed/expired/abandoned) with a mode-based detail line (test-vs-not) that didn't actually vary by status — so, e.g., a Test session's detail always read "You got X of Y" even when it had expired or been abandoned, and Practice's "You worked through N questions... Keep it up!" would have read oddly for an abandoned session. Rewritten around the four cases the milestone named explicitly, each with its own heading and detail, rather than a status-message + mode-detail combination:
+- **completed + Practice/Revision**: "Nicely done!" — friendly, no score (unchanged philosophy, warmer heading).
+- **completed + Test**: "Session complete!" — the existing test summary, verbatim.
+- **expired**: "Time's up!" + an explicit explanation that the time limit was reached, plus the score — expiry only ever happens to a Test-mode session (Practice/Revision have no time limit), so showing the score here is safe and consistent with Test mode's already-established self-feedback framing.
+- **abandoned**: "Session closed" + an inactivity explanation, deliberately mode-agnostic and score-free — abandonment can happen to *any* mode via the 4-hour inactivity check, so this message never shows a number, protecting Practice/Revision's "scores hidden by default" rule even in this shared terminal state.
+
+No backend change — `mode`/`status`/`correctCount`/`totalCount` were already exactly what the component needed.
+
+### Fix 2 — Start the timer when the first question is served
+
+**Real, confirmed bug this fixes**: `startedAt` was only ever set by `_advance_state` (on the first *submission*), so a Test-mode session nobody ever answered could never expire, no matter how long it sat open — the "timer" was really only running once the student had already interacted at least once.
+
+**Backend** (`runtime_session_manager.py`): `get_current_question` now records `startedAt` the first time it actually serves a live question (guarded by `startedAt` still being `None`, so it fires exactly once per session, however many times the question is re-fetched). This is the same class of change already established in this function - a lazy write during what's nominally a "read," exactly like the existing expired/abandoned lifecycle transitions. `lastActivityAt` is deliberately left untouched by this new path - it remains an attempt-only signal for the separate abandoned check, unaffected by merely viewing a question. `_advance_state`'s own `startedAt or now` fallback is untouched, still there as a defensive backstop for a submission that somehow bypassed the normal fetch-then-submit flow. Uniform across modes (harmless for Practice/Revision, since the expiry check separately requires `mode == "test"` and a real `timeLimitMinutes`) - no mode branching needed.
+
+**Frontend** (`SessionQuestionPage.tsx`): no new client-side timing logic, no polling - simplified, if anything. The session-meta fetch (`getSessionSummary`, for `mode`/`startedAt`/`timeLimitMinutes`) now runs *after* `getCurrentQuestion` resolves, inside the same `.then()`, instead of as a separate, independently-racing effect - this guarantees the meta fetch reflects the server's just-recorded `startedAt`, not a stale pre-serve snapshot. Removed the now-dead "refresh session meta after the first submission" block from `handleSubmit` entirely: since `startedAt` is now set well before any submission is possible, that fallback could never fire again.
+
+### Tests added
+- Backend: 4 new tests on `runtime_session_manager` - `get_current_question` sets `startedAt` on first serve; a second call doesn't reset it; **a session can now expire having never received a single answer** (the direct proof of the bug fix); Practice mode also gets `startedAt` set but it has no lifecycle effect. 200 → 204.
+- Frontend: 2 net new tests on `SessionCompleteSummary`, rewritten around the four distinct cases (including an explicit check that an abandoned Test-mode session still shows no score). 100 → 102.
+
+### Live verification (both servers running)
+- **The core fix, proven directly**: started a real 1-minute Test session, never submitted a single answer, and watched it expire on its own — landing on "Time's up! ... You got 0 of 5 in the time you had." Previously this exact scenario could never have transitioned out of `not_started`.
+- **Resume with the new timing**: loaded a 10-minute Test session's first question (timer visibly ticking immediately, before any answer), navigated away to the Dashboard and back via the real Resume banner, and confirmed the countdown continued from the true elapsed wall-clock time (~9:56 down to ~8:50 across the gap) rather than resetting.
+- **All four completion messages**, each triggered for real: completed+Practice ("Nicely done!", no score), completed+Test ("Session complete!", score shown), expired (explanation + score), abandoned (backdated `last_activity_at` directly in `runtime.db` to trigger it — "Session closed", no score, confirmed mode-agnostic).
+- Mobile (375px) confirmed via computed DOM geometry (`document.body.scrollWidth === window.innerWidth`, no horizontal overflow) on both the question screen (with the ticking timer) and the Completion screen — the Browser pane wasn't compositing screenshots in this session, so geometry checks stood in for a visual screenshot.
+- Regression: Practice, Revision, and Test sessions all created and loaded correctly; anonymous `/chapters` flow re-verified unaffected. Zero console errors across the entire walkthrough.
+
+### Definition of Done
+- [x] Both UX refinements implemented — smallest possible implementation in each case
+- [x] Backend tests passing — 204/204 (200 → 204)
+- [x] Frontend tests passing — 102/102 (100 → 102)
+- [x] `tsc -b` / `oxlint` clean
+- [x] Manual verification complete: timer starts on first load, expires correctly (including with zero submissions), Resume reconstructs it correctly, all four completion messages confirmed distinct, no regression in Practice/Revision/Test, mobile confirmed, zero console errors
+- [x] Documentation updated — this file only, per this milestone's explicit policy
+- [ ] Commit — see this repository's `git log` for the resulting hash, recorded after commit
+
 ## RC1 Polish — Test Mode Timer & Question Count UX (2026-07-29)
 
 **Scope**: exactly the two named RC1 polish fixes, nothing else — no redesign, no refactor, no unrelated UI changes.

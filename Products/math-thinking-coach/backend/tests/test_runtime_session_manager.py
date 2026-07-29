@@ -237,7 +237,50 @@ def test_test_mode_session_past_its_time_limit_becomes_expired() -> None:
     result = rsm.get_current_question(session.sessionId, "student-1")
 
     assert result.session.state.status == "expired"
+
+
+def test_get_current_question_starts_the_clock_on_first_serve_not_first_submission() -> None:
+    session = _create(mode="test", time_limit_minutes=10, question_count=5)
+    assert session.state.startedAt is None
+
+    result = rsm.get_current_question(session.sessionId, "student-1")
+
+    assert result.session.state.startedAt is not None
+
+
+def test_second_get_current_question_call_does_not_reset_started_at() -> None:
+    session = _create(mode="test", time_limit_minutes=10, question_count=5)
+    first = rsm.get_current_question(session.sessionId, "student-1")
+
+    second = rsm.get_current_question(session.sessionId, "student-1")
+
+    assert second.session.state.startedAt == first.session.state.startedAt
+
+
+def test_test_mode_session_can_expire_before_any_answer_is_submitted() -> None:
+    # The bug RC1 polish fixes: previously startedAt stayed null until the
+    # first submission, so a session nobody ever answered could never expire.
+    session = _create(mode="test", time_limit_minutes=10, question_count=5)
+    rsm.get_current_question(session.sessionId, "student-1")  # starts the clock, no submission yet
+    _backdate(session.sessionId, last_activity_hours_ago=0, started_hours_ago=1)
+
+    result = rsm.get_current_question(session.sessionId, "student-1")
+
+    assert result.session.state.status == "expired"
     assert result.question is None
+
+
+def test_practice_mode_get_current_question_also_sets_started_at_but_it_has_no_lifecycle_effect() -> None:
+    # Uniform behavior regardless of mode - harmless for Practice/Revision,
+    # since the expiry check requires mode == "test" and timeLimitMinutes
+    # besides startedAt.
+    session = _create(mode="practice", question_count=5)
+
+    result = rsm.get_current_question(session.sessionId, "student-1")
+
+    assert result.session.state.startedAt is not None
+    assert result.session.state.status == "not_started"
+    assert result.question is not None
 
 
 def test_expired_takes_precedence_over_abandoned_for_test_mode() -> None:
