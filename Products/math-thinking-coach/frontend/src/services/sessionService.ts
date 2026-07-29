@@ -4,6 +4,8 @@ import type {
   CreateSessionResponse,
   CurrentQuestionResult,
   SessionTerminalResponse,
+  SubmitAnswerResult,
+  SubmitSessionAnswerRequest,
 } from '../types/session';
 
 async function parseErrorMessage(response: Response, fallback: string): Promise<string> {
@@ -49,7 +51,34 @@ async function getCurrentQuestion(sessionId: string): Promise<CurrentQuestionRes
   return { type: 'question', question: await response.json() };
 }
 
+async function submitSessionAnswer(
+  sessionId: string,
+  request: SubmitSessionAnswerRequest,
+): Promise<SubmitAnswerResult> {
+  const response = await fetch(`${API_BASE_URL}/sessions/${sessionId}/answer`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+
+  // Covers both the stale-position and already-terminal cases (ADR-007) -
+  // the caller recovers from both identically, by re-fetching current-question.
+  if (response.status === 409) {
+    return { type: 'stale' };
+  }
+  if (response.status === 404) {
+    return { type: 'not-found' };
+  }
+  if (!response.ok) {
+    throw new Error('Failed to submit your answer');
+  }
+
+  return { type: 'ok', response: await response.json() };
+}
+
 export const sessionService = {
   createSession,
   getCurrentQuestion,
+  submitSessionAnswer,
 };

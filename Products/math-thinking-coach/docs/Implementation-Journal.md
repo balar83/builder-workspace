@@ -4,6 +4,54 @@
 
 ---
 
+## Sprint B — Complete the Core Learning Loop (2026-07-29)
+
+**Scope**: Question → Submit Answer → Evaluation → Coaching → Next Question, repeated to the final question. Covers the original plan's Slice 4 (question experience) and Slice 5 (coaching feedback) together, in one sprint. Session Completion, Resume, and polish are explicitly out of scope — the terminal state gets a deliberately minimal placeholder, not the real Completion screen.
+
+Per this sprint's documentation policy, only this file is updated.
+
+### Files modified
+- `frontend/src/types/session.ts` — added `SubmitSessionAnswerRequest`/`Response` (reusing the existing `AnswerEvaluation`/`AnswerCoach`/`AnswerUiState` types from `types/answer.ts` rather than redefining them) and a `SubmitAnswerResult` discriminated union (`ok` / `stale` / `not-found`).
+- `frontend/src/services/sessionService.ts` — added `submitSessionAnswer()`. Its `stale` case covers **both** of the backend's distinct 409 causes (stale position, already-terminal session) — `POST /answer`'s 409 body is a plain string message for either, unlike `GET current-question`'s structured `SessionTerminalResponse`, so both collapse into one client-side case whose recovery is identical either way: re-fetch `current-question` and let *that* response distinguish stale-but-live from truly terminal.
+- `frontend/src/pages/SessionQuestionPage.tsx` — rewritten around a `Phase` union (`loading`/`load-error`/`not-found`/`terminal`/`question`) plus per-question ephemeral state (answer text, submit-in-flight flag, last feedback, hint index, solution-revealed flag, sync notice). `AnswerInput` is now fully wired to `submitSessionAnswer`; hint reveal (`HintPanel`) and solution reveal (`SolutionPanel`) are both enabled, reusing the exact components Sprint A left disabled/unrendered.
+- `frontend/src/pages/SessionQuestionPage.css` — removed the now-dead `.session-answering-note` rule (Sprint A's "coming in the next update" placeholder, no longer rendered); added rules for the sync notice, submit error, and the two-button action row.
+- `frontend/tests/services/sessionService.test.ts` — 4 new tests for `submitSessionAnswer`, including one that asserts the request body is exactly `{position, answer}` with no `attemptNumber` key.
+
+### Tests added
+- 4 new frontend tests. Full suite: **75/75 passing** (71 → 75). `tsc -b` and `oxlint` both clean. Backend untouched: **198/198 pytest**, re-run fresh.
+- No new page-level test for `SessionQuestionPage` — same established convention as every prior slice; this page's behavior is verified live below, including states (mid-hint-reveal, post-solution-reveal, terminal) that would be expensive to fully cover any other way.
+
+### Notable implementation decisions
+- **The coaching state machine mirrors `coaching_service.decide()` exactly**, not the old standalone `QuestionPage.tsx`'s client-side gating: `ui.canRevealSolution` (server-derived from attempt count) is now the authoritative gate for the "Reveal Solution" button, not a local "all hints revealed" heuristic the old page used. The hint button and the solution button can appear together once eligible — a student who's reached attempt 3 can still peek at a remaining hint instead of jumping straight to the solution, both self-service, neither blocking the other.
+- **`SHOW_SOLUTION` already advanced the session server-side by the time it's shown** (ADR-007's deliberate deviation) — confirmed live, not just read from the ADR: clicking "Next Question" after a solution reveal landed on the *next* question on the first try, with no extra click needed and no stale-position error. The UI reflects this by disabling `AnswerInput` (`ui.canTryAgain === false`) the instant that response comes back, before the student ever clicks anything else.
+- **Duplicate-submission prevention has two independent layers**: an in-flight guard (`submitting` state, checked inside `handleSubmit` itself, not just via the button's `disabled` attribute) and the `ui.canTryAgain` lock once a question is server-side finished. Live-verified: a rapid double-click on "Check Answer" produced exactly one `POST /answer` request, confirmed via the network log, not just inferred from the code.
+- **The terminal placeholder deliberately shows no score**, even though `SessionTerminalResponse.correctCount` is available and it's "just a placeholder." `SessionTerminalResponse` doesn't carry the session's `mode`, and "scores hidden by default" is a product principle that applies regardless of mode — showing a number here without knowing whether this was a Practice/Revision/Test session would risk violating that principle in exactly the cases it matters most (Practice, the default). The real, mode-aware summary is explicit future scope, not an oversight here.
+- **Every advance — correct answer, solution-triggered, or "Finish" on the last question — goes through the identical `loadCurrentQuestion()` call**, never a client-computed next state. The final question's "Finish" button doesn't locally decide the session is over; it calls the same function as every other "Next Question" click, which then receives the real 409 from the server and renders the terminal branch from that. One advance mechanism, not two.
+
+### Live verification (both servers running)
+- **Full loop, real content** (Rational Numbers, exact-match answers read from `answer_keys.json` for a deterministic walkthrough): Q1 answered correctly on the first attempt → "Excellent!" + Next Question. Q2 walked through all three coaching stages on purpose — wrong attempt 1 → TRY_AGAIN (input stays enabled); wrong attempt 2 → SHOW_HINT (`hint-button-suggested` pulse class confirmed via DOM inspection, not just visually); revealed a hint (confirmed **no** network request fired for it); wrong attempt 3 → SHOW_SOLUTION (input immediately disabled, confirmed via DOM); revealed the solution (`SolutionPanel` rendered); clicked Next Question → **landed correctly on Q3**, confirming the session had already advanced server-side during the attempt-3 submission itself. Q3 and Q4 answered correctly and advanced normally.
+- **Final question**: correct answer on Q5 of 5 → button read **"Finish"**, not "Next Question" (confirms `sessionStatus` was read correctly off the submit response). Clicking it issued a `GET current-question` that came back `409`, rendering "Session Complete — You've completed this session." with no score shown, exactly as designed.
+- **409 terminal handling on direct navigation**: re-visited the now-finished session's URL directly → immediately showed the same terminal placeholder, no crash, no flash of stale question content.
+- **Duplicate-submission prevention**: double-clicked "Check Answer" on a real question → network log showed exactly one `POST /answer`, not two.
+- **Invalid session handling**: visited `/session/totally-invalid-id` while logged in → "This session isn't available." + Back to Dashboard, no crash.
+- **An unrelated, real finding, not a bug**: starting a second Rational Numbers session immediately after finishing the first one returned a genuine backend `400` ("No questions available... matching the requested configuration") — Rational Numbers has only 5 questions total, and `learning_context_service`'s `recentQuestionIds` exclusion (last 10 seen) had just excluded all 5. `StartPracticePage`'s existing Sprint A error handling surfaced the real backend message correctly, unprompted. Confirms that error path against genuine backend behavior, not just a mocked test case.
+- **Mobile viewport (375×812)**: checked at three points — initial question, mid-coaching-feedback (TRY_AGAIN message wrapped cleanly), and hint-revealed state (button label wraps to two lines, no overflow). No console errors anywhere in the entire walkthrough.
+- Regression check: the pre-existing anonymous `/chapters` flow re-verified working identically.
+- Test data (a third teacher/class/student and the sessions created above) removed from `backend/app/data/` afterward — all gitignored, none existed before this verification.
+
+### Definition of Done
+- [x] The complete learning loop functions end-to-end, live-verified through a full 5-question session including every coaching branch (correct, TRY_AGAIN, SHOW_HINT, SHOW_SOLUTION) and the terminal transition
+- [x] Existing tests remain green
+- [x] New tests pass — 75/75 frontend, 198/198 backend (unaffected, re-run fresh)
+- [x] `tsc -b` / `oxlint` clean
+- [x] No console errors (live-verified across every screen and edge case above)
+- [x] Mobile layout confirmed
+- [x] Duplicate-submission prevention verified live, not just logically reasoned
+- [x] Invalid session and 409 terminal handling both verified live
+- [x] All ADR-006/ADR-007 invariants maintained (server-derived attempt numbers, no client-side position tracking, SHOW_SOLUTION's server-side advance respected as-designed)
+- [x] Documentation updated — this file only, per Sprint B's explicit policy
+- [ ] Commit — see this repository's `git log` for the resulting hash, recorded after commit
+
 ## Sprint A — Complete the Learning Session Entry Flow (2026-07-29)
 
 **Scope**: the full Dashboard → Session Configuration → Session Creation → First Question Loading path in one sprint, superseding the plan's original Slice 2/Slice 3 split and the display-only portion of Slice 4 — explicitly *not* another single-slice increment, per this sprint's own instruction. Answer submission is deliberately not implemented; the question screen stops immediately before it.

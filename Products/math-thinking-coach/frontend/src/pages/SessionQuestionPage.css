@@ -9,8 +9,29 @@
   font-size: 0.9rem;
 }
 
-.session-answering-note {
+.session-sync-notice {
+  width: 100%;
+  max-width: 920px;
+  background: #e0f2fe;
+  color: #075985;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.session-submit-error {
+  color: #b00020;
   margin-top: 8px;
+}
+
+.session-question-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.session-placeholder-note {
   color: #6b7280;
   font-size: 0.85rem;
 }

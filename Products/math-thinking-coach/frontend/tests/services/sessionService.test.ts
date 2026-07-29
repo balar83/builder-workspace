@@ -74,4 +74,52 @@ describe('sessionService', () => {
 
     await expect(sessionService.getCurrentQuestion('s1')).rejects.toThrow('Failed to load the current question');
   });
+
+  it('submitSessionAnswer posts exactly {position, answer} - never an attemptNumber', async () => {
+    const response = {
+      evaluation: { isCorrect: true, score: 1 },
+      coach: { message: 'Excellent!', nextAction: 'NEXT_QUESTION' },
+      ui: { canTryAgain: false, canRevealSolution: false, hintLevel: 0 },
+      position: 1,
+      totalCount: 5,
+      sessionStatus: 'in_progress',
+    };
+    mockFetchOnce(200, response);
+
+    const result = await sessionService.submitSessionAnswer('s1', { position: 0, answer: '42' });
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/sessions/s1/answer'),
+      expect.objectContaining({
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ position: 0, answer: '42' }),
+      }),
+    );
+    expect(result).toEqual({ type: 'ok', response });
+  });
+
+  it('submitSessionAnswer returns a stale result on 409 (position mismatch or already terminal)', async () => {
+    mockFetchOnce(409, { detail: 'Position 0 does not match the session current position 1' });
+
+    const result = await sessionService.submitSessionAnswer('s1', { position: 0, answer: '42' });
+
+    expect(result).toEqual({ type: 'stale' });
+  });
+
+  it('submitSessionAnswer returns a not-found result on 404', async () => {
+    mockFetchOnce(404, { detail: 'Session s1 not found' });
+
+    const result = await sessionService.submitSessionAnswer('s1', { position: 0, answer: '42' });
+
+    expect(result).toEqual({ type: 'not-found' });
+  });
+
+  it('submitSessionAnswer throws on an unexpected failure', async () => {
+    mockFetchOnce(500);
+
+    await expect(sessionService.submitSessionAnswer('s1', { position: 0, answer: '42' })).rejects.toThrow(
+      'Failed to submit your answer',
+    );
+  });
 });

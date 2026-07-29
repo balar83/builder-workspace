@@ -1,3 +1,4 @@
+import type { AnswerCoach, AnswerEvaluation, AnswerUiState } from './answer';
 import type { Difficulty } from './question';
 
 export type SessionMode = 'practice' | 'test' | 'revision';
@@ -52,4 +53,31 @@ export interface SessionTerminalResponse {
 export type CurrentQuestionResult =
   | { type: 'question'; question: CurrentQuestionResponse }
   | { type: 'terminal'; terminal: SessionTerminalResponse }
+  | { type: 'not-found' };
+
+// No attemptNumber field, deliberately - ADR-007's invariant is that the
+// server always derives it (SessionState.attemptsOnCurrentQuestion + 1);
+// a client-supplied value is not part of this contract at all.
+export interface SubmitSessionAnswerRequest {
+  position: number;
+  answer: string;
+}
+
+export interface SubmitSessionAnswerResponse {
+  evaluation: AnswerEvaluation;
+  coach: AnswerCoach;
+  ui: AnswerUiState;
+  position: number;
+  totalCount: number;
+  sessionStatus: SessionStatus;
+}
+
+// POST /answer's 409 covers two distinct backend cases (stale position,
+// already-terminal session) with the same plain-string error body - both
+// recover identically on the client (re-fetch current-question and let
+// *that* response's own type distinguish stale-but-live from truly
+// terminal), so both collapse into one 'stale' case here.
+export type SubmitAnswerResult =
+  | { type: 'ok'; response: SubmitSessionAnswerResponse }
+  | { type: 'stale' }
   | { type: 'not-found' };
