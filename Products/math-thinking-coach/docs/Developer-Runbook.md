@@ -35,7 +35,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-The defaults in `.env.example` are correct for local development as-is — no values need to change to run locally.
+The defaults in `.env.example` are correct for local development as-is — no values need to change to run locally. The one exception is deploying to a platform with a mounted persistent disk (e.g. Render): set `DATA_DIR` to the mount path (e.g. `DATA_DIR=/var/data`) so app data survives a restart or redeploy — see `Deployment-Guide.md` §3.
 
 ```bash
 cd ../frontend

@@ -1,4 +1,5 @@
 import logging
+import os
 import sqlite3
 import threading
 from datetime import UTC, datetime
@@ -9,7 +10,9 @@ from app.schemas.question import Question
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# DATA_DIR is overridable so deployments with a mounted persistent disk
+# (e.g. Render) can point storage off the ephemeral app filesystem.
+DATA_DIR = Path(os.getenv("DATA_DIR", str(Path(__file__).resolve().parent.parent / "data")))
 # Renamed from attempts.db in the same change that introduced the sessions
 # table (session_store.py, Milestone C2) - the file now holds both tables.
 DB_PATH = DATA_DIR / "runtime.db"

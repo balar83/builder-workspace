@@ -47,7 +47,7 @@ VITE_API_BASE_URL=https://your-backend-host.example.com/api/v1 npm run build
 1. Connect the repository; set the service root to `backend/`.
 2. Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT` (these platforms inject `$PORT`; don't hardcode `8000`).
 3. Set the environment variables from §3 in the platform's dashboard — **`SESSION_SECRET_KEY` and `ALLOWED_ORIGINS` are not optional here**.
-4. **Provision a persistent disk/volume mounted so `backend/app/data/` survives a restart or redeploy.** This is the single most important step in this entire guide — most free tiers default to ephemeral storage, which would silently delete every account and every recorded attempt on the next deploy. See `Deployment-Readiness-RC1.md` §2 for why this isn't optional.
+4. **Provision a persistent disk/volume mounted so app data survives a restart or redeploy.** This is the single most important step in this entire guide — most free tiers default to ephemeral storage, which would silently delete every account and every recorded attempt on the next deploy. On Render, mount the disk at `/var/data` and set the environment variable `DATA_DIR=/var/data` so the app writes there instead of the ephemeral `backend/app/data/`. See `Deployment-Readiness-RC1.md` §2 for why this isn't optional.
 
 ### **[self-hosted]** Single box
 
@@ -105,6 +105,7 @@ Because Caddy fronts both under one origin, `ALLOWED_ORIGINS` doesn't need to in
 | Variable | Default | Deploy-time action |
 |---|---|---|
 | `SESSION_SECRET_KEY` | `dev-only-insecure-secret-change-me` | **Must change.** Generate a real secret (`python -c "import secrets; print(secrets.token_hex(32))"`) and set it wherever the backend runs. Every deployed session cookie is signed with this — a shared/default value across deployments would let one deployment forge another's sessions. |
+| `DATA_DIR` | `backend/app/data` | **[split, Render]**: set to `/var/data` (or wherever the persistent disk from §2 step 4 is mounted) — otherwise app data is silently written to ephemeral storage and lost on redeploy. **[self-hosted]**: no change needed if `backend/app/data/` already lives on durable storage. |
 | `ALLOWED_ORIGINS` | `http://localhost:5173` | **[split]**: set to the frontend's real deployed origin (comma-separated if more than one, e.g. a preview + production URL). **[self-hosted with Caddy]**: no change needed — same-origin. |
 | `SESSION_HTTPS_ONLY` | `false` | Set `true` once HTTPS is actually terminated in front of the backend (both recommended shapes get this for free — managed platforms and Caddy-with-a-real-domain both provide it). Leave `false` for LAN-only/no-TLS setups. |
 | `SHADOW_MODE_ENABLED` | `true` | Set `false` unless a real Ollama instance (`SHADOW_OLLAMA_URL`) is reachable from wherever the backend runs — almost certainly `false` for both recommended deployment shapes. |

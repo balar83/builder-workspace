@@ -1,11 +1,14 @@
 import json
+import os
 import sqlite3
 import threading
 from pathlib import Path
 
 from app.schemas.session import LearningSession, SelectedQuestion, SessionPlan, SessionState
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# DATA_DIR is overridable so deployments with a mounted persistent disk
+# (e.g. Render) can point storage off the ephemeral app filesystem.
+DATA_DIR = Path(os.getenv("DATA_DIR", str(Path(__file__).resolve().parent.parent / "data")))
 DB_PATH = DATA_DIR / "runtime.db"
 
 _lock = threading.Lock()
