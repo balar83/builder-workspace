@@ -1,5 +1,30 @@
 # Development Journal
 
+## 2026-07-29 (Milestone F1, Slice 1 — Student Authentication & Dashboard Foundation)
+
+*First implementation slice of the Session Frontend, following `Session-Frontend-Implementation-Plan.md` (Milestone F0) and the two Learning Session Engine ADRs ([ADR-006](ADR/ADR-006-learning-session-planning-architecture.md), [ADR-007](ADR/ADR-007-learning-session-runtime-architecture.md)). Scoped tightly to exactly Slice 1 per instruction — no session creation, no Start Practice functionality, no later slice's work. Full slice-level detail in `Implementation-Journal.md`; this entry is the summary.*
+
+### Features completed
+- `RequireStudent` (`components/RequireStudent.tsx`) — the app's first frontend route guard. Checks `authService.getCurrentUser()` on mount, redirects to `/student/join` unless a student session exists. No route in this app had any guard, in any form, before this slice.
+- `DashboardPage` (`pages/DashboardPage.tsx`), the new `/dashboard` route: student name, all 5 chapters, per-chapter performance where it exists.
+- `performanceService.ts` / `types/performance.ts` — the first frontend consumer of `GET /performance/me` (shipped in Milestone B, unconsumed by any page until now).
+- `ChapterPerformanceCard` — a new sibling to `ChapterCard`, reusing its CSS, carrying an explicitly disabled "Start Practice" placeholder (Slice 2's territory).
+- `StudentJoinPage.tsx`'s post-login destination changed from `/` to `/dashboard`.
+
+### Major engineering decisions
+- **Performance-to-chapter correlation requires a topic lookup.** `GET /performance/me` is keyed by `topicId` (`attempt_service.get_performance` filters `WHERE topic_id IS NOT NULL`), not `chapterId`. `DashboardPage` fetches each chapter's topics and matches on `topics[0].id`. Concrete consequence, confirmed live: the 3 chapters with no `Topic` today (Understanding Quadrilaterals, Practical Geometry, Data Handling) cannot show a performance badge under any circumstance until they gain one — not a bug introduced here, a pre-existing backend property this slice had to design around correctly.
+- **New component, not a modified one.** `ChapterPerformanceCard` was built as a sibling to `ChapterCard` specifically to avoid risking `ChapterCard.test.tsx`'s three existing pinned assertions (exact nav target, exact badge text) for a component that serves a different page with a different data source.
+- No backend file, API contract, or ADR-006/007 decision touched — confirmed by `git status` and by this slice's own scope, which never called a session-related endpoint.
+
+### Verification summary
+- Frontend: 59/59 vitest passing (49 → 59, +10). `tsc -b`, `oxlint` both clean.
+- Backend: 198/198 pytest, re-run fresh, unaffected — zero backend files touched.
+- Live, both servers running: unauthenticated `/dashboard` → redirected; real student join through the UI → Dashboard renders correctly with zero performance history; a real answer submission recorded via the standalone `/answer` endpoint → reloaded Dashboard → exactly the one chapter with both a Topic and an attempt showed a badge, every other chapter correctly showed none (validating the topic-correlation logic against real data, not just a mock). Mobile viewport (375px) confirmed no overflow. No console errors. Anonymous flow re-verified unaffected. Test data removed after verification.
+
+### Implementation notes
+- `evaluation_service.py`, `coaching_service.py`, `answer_service.py`, `session_planner.py`/`runtime_session_manager.py` and every other C1/C2 module, and the entire `/sessions/*` API surface are untouched — this slice never calls a session endpoint.
+- Full slice record, including the Definition of Done checklist, in `Implementation-Journal.md`.
+
 ## 2026-07-28 (Milestone C2 — Learning Session Engine, Stateful Runtime)
 
 *Follows four design-review passes on the runtime architecture (initial blueprint, critical review, final consolidation) that converged on an implementation-ready spec before any code was written. Implemented faithfully against that spec, step by step, each step compiling and passing the full suite before the next began — no architectural redesign during implementation, only the judgment calls the reviews explicitly deferred to implementation time.*

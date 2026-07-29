@@ -31,7 +31,7 @@ export default function StudentJoinPage() {
       <main className="container">
         <h1>Welcome, {student.displayName}!</h1>
         <div className="button-group">
-          <button onClick={() => navigate('/')}>Back to Home</button>
+          <button onClick={() => navigate('/dashboard')}>Go to Dashboard</button>
         </div>
       </main>
     );

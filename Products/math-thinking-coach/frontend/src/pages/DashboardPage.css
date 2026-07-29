@@ -1,0 +1,24 @@
+.dashboard-page {
+  justify-content: flex-start;
+}
+
+.chapter-grid {
+  width: 100%;
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  max-width: 920px;
+}
+
+@media (min-width: 640px) {
+  .chapter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .chapter-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

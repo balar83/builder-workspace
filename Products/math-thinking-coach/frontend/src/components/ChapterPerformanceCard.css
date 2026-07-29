@@ -1,0 +1,27 @@
+.chapter-performance-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: default;
+}
+
+.chapter-performance-card:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+.start-practice-button {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+.start-practice-button:disabled {
+  background: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+}
