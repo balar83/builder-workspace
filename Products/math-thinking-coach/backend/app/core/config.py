@@ -15,6 +15,12 @@ class Settings:
     shadow_log_path: str = os.getenv("SHADOW_LOG_PATH", "app/data/shadow_log/shadow_eval_log.jsonl")
     shadow_mode_enabled: bool = os.getenv("SHADOW_MODE_ENABLED", "true").lower() == "true"
     session_secret_key: str = os.getenv("SESSION_SECRET_KEY", "dev-only-insecure-secret-change-me")
+    # Comma-separated list; unset preserves the exact prior hardcoded behavior
+    # (local Vite dev server only).
+    allowed_origins: list[str] = [
+        origin.strip() for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if origin.strip()
+    ]
+    session_https_only: bool = os.getenv("SESSION_HTTPS_ONLY", "false").lower() == "true"
 
 
 settings = Settings()
