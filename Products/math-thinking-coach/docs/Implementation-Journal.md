@@ -4,6 +4,56 @@
 
 ---
 
+## Sprint C — Complete Version 1.0 and Prepare RC1 (2026-07-29)
+
+**Scope**: the three remaining pieces of `Sprint-C-Implementation-Plan.md` — Session Completion (C1), Resume (C2), Final UX Polish (C3) — plus a genuine deployment validation against a clean clone and the `v1.0.0-rc1` release notes entry. This closes out Milestone F1 (the Session Frontend) entirely; the full Dashboard → Configuration → Creation → Question → Coaching → Completion → Resume loop now works end to end.
+
+### Files added
+- `frontend/src/types/sessionPointer.ts` — `SessionPointer` (studentId, sessionId, chapterId, mode).
+- `frontend/src/services/sessionPointerStore.ts` / `sessionPointerService.ts` — mirrors `progressStore.ts`/`progressService.ts`'s exact split, under a new, separate `localStorage` key (`mtc.session-pointer.v1`). `sessionPointerService.getActiveSessionFor(studentId)` scopes lookups to the current student (a shared-device safety check); `clearActiveSessionIfMatches(sessionId)` only clears a pointer that actually points at the session being cleared.
+- `frontend/src/components/SessionCompleteSummary.tsx` + `.css` — the real, mode-aware Completion summary. Practice/Revision show a qualitative message only; Test mode is the one place a score renders.
+- `frontend/src/components/ResumeBanner.tsx` + `.css` — the Dashboard's "Continue where you left off" prompt.
+- Four new test files: `sessionPointerStore.test.ts`, `sessionPointerService.test.ts`, `SessionCompleteSummary.test.tsx`, `ResumeBanner.test.tsx`.
+
+### Files modified
+- `frontend/src/types/session.ts` — added `SessionSummaryResponse`/`SessionSummaryResult` (`GET /sessions/{id}`'s shape — the only place `mode` is available, since `SessionTerminalResponse` doesn't carry it).
+- `frontend/src/services/sessionService.ts` — added `getSessionSummary()`.
+- `frontend/src/pages/SessionQuestionPage.tsx` — the terminal branch now fetches the session summary (once, via a `[phase.kind, sessionId]`-scoped effect) and renders `SessionCompleteSummary`; the same effect clears the resume pointer via `clearActiveSessionIfMatches`. Added `aria-live="polite"` to every dynamic status region (coaching message, submit error, shortfall notice, sync notice) — a real accessibility gap, not previously covered, closed the same way `HintPanel`/`SolutionPanel` already handled it.
+- `frontend/src/pages/StartPracticePage.tsx` — writes the resume pointer immediately after a successful `POST /sessions`, using `authService.getCurrentUser()` for the student id (already an established pattern elsewhere in this codebase).
+- `frontend/src/pages/DashboardPage.tsx` — resolves the resume pointer on load: confirms liveness via `getSessionSummary`, only shows `ResumeBanner` for a confirmed-live session belonging to the current student, and **safely clears a confirmed-stale pointer** (not-found or terminal) without ever touching a pointer on a transient network failure. Also added the "Log out" affordance this sprint's own walkthrough required (see Notable decisions).
+
+### Tests added
+- 21 new frontend tests. Full suite: **96/96 passing** (75 → 96). `tsc -b` and `oxlint` both clean. Backend untouched: **198/198 pytest**.
+
+### Notable implementation decisions
+- **Caught and fixed a real bug in my own draft before it shipped**: the terminal branch's `summaryError` fallback originally displayed a raw `correctCount`/`totalCount` even when the session's mode was unknown — directly contradicting "scores hidden by default." Fixed to show no score at all in that fallback, matching the reasoning already written in the surrounding comment.
+- **Logout was missing entirely** — `authService.logout()` existed since Milestone A but no page ever called it. This sprint's own required walkthrough (`Login → ... → Logout`) is what surfaced this; added a small "Log out" link to `DashboardPage`, the only real "home base" for a logged-in student, wired to the existing service. Verified live that it actually invalidates the server-side session (a direct `/dashboard` visit afterward redirects to login), not just a client-side navigation.
+- **Stale-pointer cleanup is deliberately conservative**: only a *confirmed* signal (the session summary call returning `not-found`, or returning a real terminal status) clears a pointer. A network error leaves it alone — discarding a potentially-still-valid pointer on a transient failure would be worse than occasionally showing a resume banner one extra time.
+
+### Deployment Validation (using `Developer-Runbook.md`, as required by this sprint)
+
+Performed for real, not assumed: cloned the repository fresh (`git clone`) into an unrelated directory and followed only the documented steps, finding and fixing two real gaps before re-validating clean:
+
+1. **`python -m venv .venv` failed** on this machine — Windows' Microsoft Store app-execution alias shadows `python` with a non-functional stub even though a real 3.13.5 install exists. `py -m venv .venv` (the standard Python Launcher) works. Added to `Developer-Runbook.md` §2/§7/§8 and the Prerequisites table.
+2. **`npm install` failed outright** on the clean clone with an unresolvable peer-dependency error — `@testing-library/react@^14` peer-depends on React 18; this project is on React 19. `--legacy-peer-deps` resolves it. This is a real, reproducible gap in every prior sprint's documented setup commands, not a one-off — fixed in `Developer-Runbook.md` (install step + a new troubleshooting entry) and `Deployment-Guide.md` (build command, the Vercel/Netlify/Cloudflare Pages install-command override, and the self-hosted update procedure — three separate places that all needed the same fix).
+
+After both fixes, re-validated end to end from the same clean clone: backend venv + dependency install, `.env.example` copy (confirms last milestone's `.gitignore` fix actually works from a fresh clone, not just locally), backend and frontend dev servers both starting correctly, `runtime.db`/`teachers.json`/`classes.json`/`students.json` all auto-created with no init step (confirms §5's claim), the exact documented `curl` sequence (teacher register → create class → student join → create session) working verbatim, and all four test/build/lint commands passing (198 backend, 96 frontend, `tsc -b`, `oxlint`) — all in the fresh clone, not the working repo.
+
+### Live verification (both servers running, working repo)
+
+Full required walkthrough, in order: real student login → Dashboard (no resume banner, correct for a fresh student) → Start Practice (Test mode, Rational Numbers, 3 questions) → answered all three (one correct, one via the full TRY_AGAIN → SHOW_HINT → SHOW_SOLUTION path) → **Completion showed "You got 2 of 3"** (Test mode's one score-showing case) → Return to Dashboard → **performance correctly refreshed** ("5 attempted · 40% accuracy", matching real attempt-level aggregation) → started a second session (Linear Equations, Practice) → navigated away *before* answering anything → **Resume banner appeared** on Dashboard, correctly scoped to the right chapter → clicked Resume → **landed on the exact same first question** → fast-forwarded the session to terminal via direct API calls → reloaded Dashboard → **stale pointer cleared automatically, no banner** → manually planted a pointer belonging to a different student → confirmed no banner and the foreign pointer left untouched → **Logout** → confirmed a direct `/dashboard` revisit redirected to login (server-side invalidation, not just client-side). Mobile (375×812) and tablet (768×1024) both checked across Dashboard, configuration, question/coaching, and Completion screens — no overflow, no console errors anywhere in the entire walkthrough. Anonymous `/chapters` flow re-verified unaffected. All test data removed afterward.
+
+### Definition of Done
+- [x] Sprint C complete — Session Completion, Resume, and UX Polish (including the logout gap this sprint's own walkthrough surfaced) all implemented
+- [x] End-to-end Version 1.0 experience complete and live-verified, including every required walkthrough step
+- [x] Tests passing — 96/96 frontend, 198/198 backend
+- [x] `tsc -b` / `oxlint` clean
+- [x] Documentation updated — `Implementation-Journal.md` (this entry), `Developer-Runbook.md` and `Deployment-Guide.md` (two real setup bugs found and fixed via genuine clean-clone validation), `Release-Notes.md` (`v1.0.0-rc1` entry)
+- [x] No console errors (live-verified across every screen)
+- [x] Mobile and tablet layouts confirmed
+- [x] Anonymous flow regression-checked, unaffected
+- [ ] Commit — see this repository's `git log` for the resulting hash, recorded after commit
+
 ## Sprint B — Complete the Core Learning Loop (2026-07-29)
 
 **Scope**: Question → Submit Answer → Evaluation → Coaching → Next Question, repeated to the final question. Covers the original plan's Slice 4 (question experience) and Slice 5 (coaching feedback) together, in one sprint. Session Completion, Resume, and polish are explicitly out of scope — the terminal state gets a deliberately minimal placeholder, not the real Completion screen.

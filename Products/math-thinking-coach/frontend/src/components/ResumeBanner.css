@@ -1,0 +1,30 @@
+.resume-banner {
+  width: 100%;
+  max-width: 920px;
+  background: #ede9fe;
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.resume-banner-text {
+  color: #4c1d95;
+  font-size: 0.95rem;
+}
+
+.resume-banner-button {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}

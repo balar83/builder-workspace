@@ -7,10 +7,13 @@ import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
 import ProgressBar from '../components/ProgressBar';
 import QuestionProgress from '../components/QuestionProgress';
+import SessionCompleteSummary from '../components/SessionCompleteSummary';
 import SolutionPanel from '../components/SolutionPanel';
+import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type {
   CurrentQuestionResponse,
+  SessionSummaryResponse,
   SessionTerminalResponse,
   SubmitSessionAnswerResponse,
 } from '../types/session';
@@ -40,6 +43,8 @@ export default function SessionQuestionPage() {
   const [showSolution, setShowSolution] = useState(false);
   const [syncNotice, setSyncNotice] = useState('');
   const [submitError, setSubmitError] = useState('');
+  const [summary, setSummary] = useState<SessionSummaryResponse | null>(null);
+  const [summaryError, setSummaryError] = useState(false);
 
   // The single entry point back into "what question is current" - used for
   // the initial load, "Next Question", and resyncing after a stale (409)
@@ -75,6 +80,45 @@ export default function SessionQuestionPage() {
   useEffect(() => {
     loadCurrentQuestion();
   }, [loadCurrentQuestion]);
+
+  // Fires exactly once per session reaching a terminal state, however it
+  // got there (a fresh 409 on load, or advancing past the final question).
+  // SessionTerminalResponse has no `mode` field, so the mode-aware summary
+  // needs this one extra call - and this is also the single place the
+  // resume pointer (if any) gets cleared, since a terminal session should
+  // never surface a resume banner again.
+  useEffect(() => {
+    if (phase.kind !== 'terminal' || !sessionId) {
+      return;
+    }
+
+    let cancelled = false;
+    setSummary(null);
+    setSummaryError(false);
+    sessionPointerService.clearActiveSessionIfMatches(sessionId);
+
+    sessionService
+      .getSessionSummary(sessionId)
+      .then((result) => {
+        if (cancelled) {
+          return;
+        }
+        if (result.type === 'ok') {
+          setSummary(result.summary);
+        } else {
+          setSummaryError(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSummaryError(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [phase.kind, sessionId]);
 
   const handleSubmit = async () => {
     if (phase.kind !== 'question' || !sessionId) {
@@ -158,23 +202,33 @@ export default function SessionQuestionPage() {
   }
 
   if (phase.kind === 'terminal') {
-    // Deliberately no score shown here, even as a placeholder - "scores
-    // hidden by default" applies regardless of mode, and this page has no
-    // way to know the session's mode from a terminal response alone. The
-    // real, mode-aware Completion screen is a later sprint's scope.
     const { status } = phase.terminal;
-    const statusMessage =
-      status === 'expired'
-        ? "Time's up — this session has ended."
-        : status === 'abandoned'
-          ? 'This session went inactive and was closed. Nothing is lost.'
-          : "You've completed this session.";
 
     return (
       <main className="container">
         <h1>Session Complete</h1>
-        <p>{statusMessage}</p>
-        <p className="session-placeholder-note">A full summary is coming in a future update.</p>
+        {summary ? (
+          <SessionCompleteSummary
+            mode={summary.mode}
+            status={summary.status}
+            correctCount={summary.correctCount}
+            totalCount={summary.totalCount}
+          />
+        ) : summaryError ? (
+          // No score here, deliberately - the mode is genuinely unknown in
+          // this fallback, and "scores hidden by default" is the safer
+          // default when it can't be determined, not an edge case to treat
+          // casually.
+          <p>
+            {status === 'expired'
+              ? "Time's up — this session has ended."
+              : status === 'abandoned'
+                ? 'This session went inactive and was closed. Nothing is lost.'
+                : "You've completed this session."}
+          </p>
+        ) : (
+          <p>Loading your summary…</p>
+        )}
         <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
       </main>
     );
@@ -206,8 +260,16 @@ export default function SessionQuestionPage() {
         </div>
       </div>
 
-      {shortfallMessage && <p className="session-shortfall-notice">{shortfallMessage}</p>}
-      {syncNotice && <p className="session-sync-notice">{syncNotice}</p>}
+      {shortfallMessage && (
+        <p className="session-shortfall-notice" aria-live="polite">
+          {shortfallMessage}
+        </p>
+      )}
+      {syncNotice && (
+        <p className="session-sync-notice" aria-live="polite">
+          {syncNotice}
+        </p>
+      )}
 
       <section className="question-card">
         <p className="question-text">{content.question}</p>
@@ -220,9 +282,15 @@ export default function SessionQuestionPage() {
         />
 
         {(submitting || feedback) && (
-          <p className="question-text">{submitting ? 'Checking your answer…' : feedback?.coach.message}</p>
+          <p className="question-text" aria-live="polite">
+            {submitting ? 'Checking your answer…' : feedback?.coach.message}
+          </p>
         )}
-        {submitError && <p className="session-submit-error">{submitError}</p>}
+        {submitError && (
+          <p className="session-submit-error" aria-live="polite">
+            {submitError}
+          </p>
+        )}
 
         <div className="hint-row">
           {questionEnded ? (

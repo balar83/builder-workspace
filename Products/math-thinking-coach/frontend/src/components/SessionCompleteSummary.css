@@ -1,0 +1,20 @@
+.session-complete-summary {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  text-align: center;
+}
+
+.session-complete-status {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.session-complete-detail {
+  color: #55607a;
+}

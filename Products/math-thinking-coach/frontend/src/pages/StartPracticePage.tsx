@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import SessionModeSelector, { type SessionConfig } from '../components/SessionModeSelector';
+import { authService } from '../services/authService';
 import { questionService } from '../services/questionService';
+import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type { Chapter } from '../types/chapter';
 import './StartPracticePage.css';
@@ -62,6 +64,16 @@ export default function StartPracticePage() {
         questionCount: config.questionCount,
         timeLimitMinutes: config.mode === 'test' ? config.timeLimitMinutes : undefined,
       });
+
+      const user = await authService.getCurrentUser();
+      if (user?.id) {
+        sessionPointerService.setActiveSession({
+          studentId: user.id,
+          sessionId: response.sessionId,
+          chapterId,
+          mode: config.mode,
+        });
+      }
 
       navigate(`/session/${response.sessionId}`, {
         state: response.shortfall

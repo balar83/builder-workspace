@@ -2,6 +2,21 @@
   justify-content: flex-start;
 }
 
+.dashboard-header {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
+
+.dashboard-header h1,
+.dashboard-header .tagline {
+  text-align: left;
+}
+
 .chapter-grid {
   width: 100%;
   margin-top: 18px;

@@ -122,4 +122,37 @@ describe('sessionService', () => {
       'Failed to submit your answer',
     );
   });
+
+  it('getSessionSummary returns the summary on 200', async () => {
+    const summary = {
+      sessionId: 's1',
+      mode: 'test',
+      status: 'completed',
+      position: 5,
+      totalCount: 5,
+      correctCount: 4,
+      startedAt: '2026-07-29T10:00:00.000Z',
+      completedAt: '2026-07-29T10:10:00.000Z',
+    };
+    mockFetchOnce(200, summary);
+
+    const result = await sessionService.getSessionSummary('s1');
+
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/sessions/s1'), expect.objectContaining({ credentials: 'include' }));
+    expect(result).toEqual({ type: 'ok', summary });
+  });
+
+  it('getSessionSummary returns a not-found result on 404', async () => {
+    mockFetchOnce(404, { detail: 'Session s1 not found' });
+
+    const result = await sessionService.getSessionSummary('s1');
+
+    expect(result).toEqual({ type: 'not-found' });
+  });
+
+  it('getSessionSummary throws on an unexpected failure', async () => {
+    mockFetchOnce(500);
+
+    await expect(sessionService.getSessionSummary('s1')).rejects.toThrow('Failed to load the session summary');
+  });
 });

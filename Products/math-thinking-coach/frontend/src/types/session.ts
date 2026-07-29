@@ -81,3 +81,20 @@ export type SubmitAnswerResult =
   | { type: 'ok'; response: SubmitSessionAnswerResponse }
   | { type: 'stale' }
   | { type: 'not-found' };
+
+export interface SessionSummaryResponse {
+  sessionId: string;
+  mode: SessionMode;
+  status: SessionStatus;
+  position: number;
+  totalCount: number;
+  correctCount: number;
+  startedAt: string | null;
+  completedAt: string | null;
+}
+
+// 'not-found' is a real, expected outcome here (a resume pointer whose
+// session no longer exists) - not just an error case to throw past.
+export type SessionSummaryResult =
+  | { type: 'ok'; summary: SessionSummaryResponse }
+  | { type: 'not-found' };

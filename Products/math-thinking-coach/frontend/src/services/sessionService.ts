@@ -3,6 +3,7 @@ import type {
   CreateSessionRequest,
   CreateSessionResponse,
   CurrentQuestionResult,
+  SessionSummaryResult,
   SessionTerminalResponse,
   SubmitAnswerResult,
   SubmitSessionAnswerRequest,
@@ -77,8 +78,26 @@ async function submitSessionAnswer(
   return { type: 'ok', response: await response.json() };
 }
 
+async function getSessionSummary(sessionId: string): Promise<SessionSummaryResult> {
+  const response = await fetch(`${API_BASE_URL}/sessions/${sessionId}`, {
+    credentials: 'include',
+  });
+
+  // 'not-found' is a real outcome to handle, not just an error - a resume
+  // pointer whose session no longer exists is exactly this case.
+  if (response.status === 404) {
+    return { type: 'not-found' };
+  }
+  if (!response.ok) {
+    throw new Error('Failed to load the session summary');
+  }
+
+  return { type: 'ok', summary: await response.json() };
+}
+
 export const sessionService = {
   createSession,
   getCurrentQuestion,
   submitSessionAnswer,
+  getSessionSummary,
 };

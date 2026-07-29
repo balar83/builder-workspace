@@ -6,11 +6,11 @@
 
 ## 1. Prerequisites
 
-Verified against what this repository actually runs on as of commit `695fff6`:
+Verified against what this repository actually runs on, including a full re-validation from a clean clone during Sprint C/RC1:
 
 | Tool | Version used | Notes |
 |---|---|---|
-| Python | 3.13.5 | `backend/.venv` already targets 3.13; any 3.13.x should work |
+| Python | 3.13.5 | `backend/.venv` already targets 3.13; any 3.13.x should work. On Windows, use `py` if plain `python` doesn't resolve to a real install (§2, §8) |
 | Node.js | 22.16.0 | |
 | npm | 10.9.2 | ships with Node |
 | Git | any recent version | |
@@ -26,6 +26,8 @@ cd backend
 python -m venv .venv
 ```
 
+**Windows note, confirmed by re-validating this runbook against a clean clone:** on a machine where the Microsoft Store's Python app-execution alias is enabled (a common default), `python` resolves to a non-functional stub that just prints an install prompt, even with a real Python already installed. If `python -m venv .venv` fails that way, use the Python Launcher instead: `py -m venv .venv`.
+
 Activate it — Windows: `.venv\Scripts\activate`; macOS/Linux: `source .venv/bin/activate`. Then:
 
 ```bash
@@ -37,8 +39,10 @@ The defaults in `.env.example` are correct for local development as-is — no va
 
 ```bash
 cd ../frontend
-npm install
+npm install --legacy-peer-deps
 ```
+
+**`--legacy-peer-deps` is required, not optional, confirmed by re-validating this runbook against a clean clone:** a plain `npm install` fails outright with an unresolvable peer-dependency conflict (`@testing-library/react@^14` expects React 18; this project is on React 19). This isn't a transient npm quirk — it reproduces every time on a fresh `node_modules`, so `npm ci`/`npm install` elsewhere in this file and in `Deployment-Guide.md` mean the `--legacy-peer-deps` form.
 
 ## 3. Running the backend
 
@@ -121,7 +125,7 @@ Password/PIN requirements: teacher passwords go through `auth_service`'s normal 
 python -m pytest
 ```
 
-198 tests as of this commit. One file per module under `backend/tests/`.
+198 tests. One file per module under `backend/tests/`.
 
 **Frontend** (from `frontend/`):
 
@@ -132,9 +136,13 @@ npx tsc -b              # type-check
 npx oxlint               # lint
 ```
 
-75 tests as of this commit. Before calling anything done, this project's own convention is to run all four fresh, plus a live browser walkthrough for anything UI-observable — page-level behavior has no automated test coverage anywhere in this codebase, by established convention (see `ProductArchitecture.md` §9/`Session-Frontend-Implementation-Plan.md` §6.2).
+96 tests. Before calling anything done, this project's own convention is to run all four fresh, plus a live browser walkthrough for anything UI-observable — page-level behavior has no automated test coverage anywhere in this codebase, by established convention (see `ProductArchitecture.md` §9/`Session-Frontend-Implementation-Plan.md` §6.2).
 
 ## 8. Troubleshooting
+
+**`python -m venv .venv` prints a Microsoft Store install prompt instead of creating a venv.** The Windows App Execution Alias for `python`/`python3` is shadowing your real install (Settings → Apps → Advanced app settings → App execution aliases). Use `py -m venv .venv` instead (the standard Python Launcher for Windows), or disable the alias.
+
+**`npm install` fails with an `ERESOLVE`/peer-dependency error mentioning `react-router` or `@testing-library/react`.** Expected on a clean install — `@testing-library/react@^14` peer-depends on React 18, this project is on React 19. Use `npm install --legacy-peer-deps` (and the same flag for `npm ci` anywhere it's used, including in CI/deployment). Not something to "fix" by silently forcing a resolution; a real version mismatch worth revisiting if this dependency is ever upgraded on purpose.
 
 **CORS errors in the browser console.** The backend's `ALLOWED_ORIGINS` (default `http://localhost:5173`) must include whatever origin the frontend is actually served from. If you've changed the frontend's dev port or are testing against a built/deployed frontend, update `.env`'s `ALLOWED_ORIGINS` to match and restart the backend.
 

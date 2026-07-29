@@ -1,5 +1,29 @@
 # Development Journal
 
+## 2026-07-29 (Sprint C — Complete Version 1.0 and Prepare RC1)
+
+*Completes Milestone F1 (Student Learning Experience / Session Frontend), begun with Slice 1 (below) and continued through Sprint A (session entry flow) and Sprint B (the core answer/coaching loop) — both implemented in this same session's earlier turns and recorded in `Implementation-Journal.md` per their own narrower documentation policies, not repeated here. This entry covers Sprint C specifically: Session Completion, Resume, UX polish, and a genuine deployment validation, following `Sprint-C-Implementation-Plan.md` (produced during Milestone RC1, also this session). Full detail, including the complete live-verification walkthrough, is in `Implementation-Journal.md`'s Sprint C entry — this is the summary.*
+
+### Features completed
+- Session Completion: `SessionCompleteSummary` (mode-aware — Practice/Revision show a qualitative message only, Test mode is the one place a score renders), wired into `SessionQuestionPage`'s existing terminal branch via a new `sessionService.getSessionSummary()` call (`SessionTerminalResponse` has no `mode` field, so this is a genuine second call, made once per terminal session).
+- Resume: `sessionPointerService`/`sessionPointerStore` (new `localStorage` key, mirroring `progressService`/`progressStore`'s established split exactly), `ResumeBanner` on the Dashboard, pointer written on session creation and cleared on reaching a terminal state.
+- UX polish: `aria-live="polite"` added to every dynamic status region across the session flow; a "Log out" link added to `DashboardPage` — a real, missing piece (see below), not a nice-to-have.
+- Two real bugs in the `.env.example` template and workspace `.gitignore` (from Milestone RC1, same session) were independently confirmed fixed by this sprint's own clean-clone validation, not just asserted.
+
+### Major engineering decisions
+- **Stale resume-pointer cleanup is deliberately conservative**: a pointer is only ever cleared on a *confirmed* signal (the session summary call returning not-found, or a real terminal status) — never on a transient network failure, which would risk discarding a still-valid pointer to save showing one extra resume banner.
+- **A real gap this sprint's own required walkthrough surfaced, not anticipated in any prior plan**: `authService.logout()` had existed since Milestone A (2026-07-28) but no page ever called it — there was no way to log out of this application at all before this sprint. Fixed by adding a small link to `DashboardPage`, verified live to actually invalidate the server-side session (a direct `/dashboard` revisit afterward redirects to login).
+- **A real, reproducible setup bug found via genuine deployment validation, not assumed away**: this milestone's own instruction to "verify the application can be started from a clean checkout by following only the documented steps" was taken literally — a fresh `git clone` into an unrelated directory, following only `Developer-Runbook.md`. Two real failures surfaced: `python -m venv` silently fails on a Windows machine where the Store app-execution alias shadows a real Python install (fix: use `py`), and a plain `npm install` fails outright on a genuine React 19 vs. `@testing-library/react@^14` peer-dependency conflict (fix: `--legacy-peer-deps`, corrected in three separate places across `Developer-Runbook.md` and `Deployment-Guide.md` that all referenced the bare command). Both were real bugs in every prior sprint's documented setup steps, not edge cases invented for this exercise.
+
+### Verification summary
+- Frontend: 96/96 vitest passing (75 → 96, +21 across `sessionPointerStore`/`sessionPointerService`/`SessionCompleteSummary`/`ResumeBanner`). `tsc -b`, `oxlint` clean. Backend: 198/198, unaffected — this sprint touched no backend file.
+- Live, both servers running: the complete required walkthrough (login → Dashboard → Start Practice → session → answers → Completion → Dashboard → resume → logout), including a Test-mode session finishing at "2 of 3" (confirming the one mode where a score renders), a fast-forwarded second session confirming stale-pointer self-cleanup, a manually-planted foreign-student pointer confirming it's left untouched, and a confirmed server-side session invalidation on logout. Mobile (375px) and tablet (768px) both checked across every session-flow screen. Anonymous flow re-verified unaffected.
+- Deployment validation: a full clean-clone re-run of `Developer-Runbook.md` end to end (venv, dependency install, `.env.example` copy, both dev servers, the exact documented `curl` sequence, all four test/lint commands) passed cleanly only *after* the two fixes above — confirming the corrected docs, not just the original ones.
+
+### Implementation notes
+- No backend file touched this sprint — `evaluation_service.py`, `coaching_service.py`, `answer_service.py`, every C1/C2 module, and the entire `/sessions/*` route surface are all unchanged.
+- Milestone F1 (Student Learning Experience) is now complete in full, and Milestone RC1 (this same session) assessed the application ready for a `v1.0.0-rc1` tag. Tagging and deploying it remain the user's own decision.
+
 ## 2026-07-29 (Milestone F1, Slice 1 — Student Authentication & Dashboard Foundation)
 
 *First implementation slice of the Session Frontend, following `Session-Frontend-Implementation-Plan.md` (Milestone F0) and the two Learning Session Engine ADRs ([ADR-006](ADR/ADR-006-learning-session-planning-architecture.md), [ADR-007](ADR/ADR-007-learning-session-runtime-architecture.md)). Scoped tightly to exactly Slice 1 per instruction — no session creation, no Start Practice functionality, no later slice's work. Full slice-level detail in `Implementation-Journal.md`; this entry is the summary.*

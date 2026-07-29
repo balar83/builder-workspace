@@ -19,9 +19,11 @@ Steps below are marked **[split]** or **[self-hosted]** where they differ; unmar
 
 ```bash
 cd frontend
-npm ci
+npm ci --legacy-peer-deps
 npm run build
 ```
+
+`--legacy-peer-deps` is required, not optional — confirmed by validating this guide's steps against a clean clone (`Developer-Runbook.md` §2/§8): a plain `npm ci`/`npm install` fails outright on an unresolvable peer-dependency conflict (`@testing-library/react@^14` vs. this project's React 19). If a CI/deploy platform's build command is configured separately from this file, make sure the flag is set there too.
 
 `npm run build` runs `tsc -b && vite build` (per `package.json`) — type-checks, then produces static output in `frontend/dist/`. Fails the build on a type error, which is the intended gate; don't deploy a build that didn't pass `npm run build` cleanly.
 
@@ -36,7 +38,7 @@ VITE_API_BASE_URL=https://your-backend-host.example.com/api/v1 npm run build
 ### **[split]** Frontend (Vercel/Netlify/Cloudflare Pages)
 
 1. Connect the repository; set the project root to `frontend/`.
-2. Build command: `npm run build`. Output directory: `dist`.
+2. Build command: `npm run build`. Output directory: `dist`. **Override the platform's install command to `npm install --legacy-peer-deps`** — its default auto-detected install step will otherwise fail on the same peer-dependency conflict named in §1 (Vercel/Netlify/Cloudflare Pages all expose an "install command" override in their build settings).
 3. Set the `VITE_API_BASE_URL` environment variable in the platform's dashboard to the backend's real URL (§1).
 4. These platforms already handle SPA fallback (unmatched routes serving `index.html`) for a Vite/React Router app out of the box — confirm this is on (Netlify: add a `_redirects` file with `/* /index.html 200` in `frontend/public/` if it isn't automatic; Vercel/Cloudflare Pages detect this automatically for a Vite project). **Without this, a hard refresh on `/dashboard` or any other client-side route 404s** — this is the single most common SPA-deployment mistake, confirmed as a real gap in local static serving during this milestone's own testing (see `Developer-Runbook.md` §8).
 
@@ -119,7 +121,7 @@ Because Caddy fronts both under one origin, `ALLOWED_ORIGINS` doesn't need to in
 ```bash
 cd /path/to/Products/math-thinking-coach
 git pull
-cd frontend && VITE_API_BASE_URL=<real-url> npm ci && npm run build
+cd frontend && VITE_API_BASE_URL=<real-url> npm ci --legacy-peer-deps && npm run build
 sudo systemctl restart mtc-backend
 ```
 
