@@ -4,6 +4,49 @@
 
 ---
 
+## RC1 Polish — Test Mode Timer & Question Count UX (2026-07-29)
+
+**Scope**: exactly the two named RC1 polish fixes, nothing else — no redesign, no refactor, no unrelated UI changes.
+
+### Fix 1 — Test Mode Timer
+
+**One small, additive backend change was required and is documented here, per instruction.** `SessionSummaryResponse` (`GET /sessions/{id}`) had no way to expose `timeLimitMinutes` to the client — every other session-related response also lacks it. The data already existed (`SessionPlan.timeLimitMinutes`, persisted since Milestone C2 and already read into the runtime aggregate); this only surfaces it:
+- `backend/app/schemas/session.py`: added `timeLimitMinutes: int | None = None` to `SessionSummaryResponse`.
+- `backend/app/api/routes/sessions.py`: `get_session_summary` now passes `timeLimitMinutes=session.plan.timeLimitMinutes` through.
+- Purely additive — every existing consumer of this response is unaffected. Two new backend tests confirm the field is populated for Test mode and `None` for Practice.
+
+**Frontend** (`SessionQuestionPage.tsx`): fetches session meta (`mode`, `startedAt`, `timeLimitMinutes`) once per session via the existing `getSessionSummary` call — not a new per-second server call. The countdown itself ticks purely client-side (`setInterval`, 1000ms) from `startedAt + timeLimitMinutes - Date.now()`. Two details matter and were verified live, not assumed:
+- `startedAt` stays `null` until the student's *first* submission of any kind (`runtime_session_manager._advance_state` sets it unconditionally on both the advancing and non-advancing branches) — the timer renders a static, non-ticking full duration until then, then starts for real. Confirmed live: showed a static "1:00", stayed static for 3+ seconds, then began ticking the instant the first answer was submitted.
+- **Reaching zero locally never ends the session itself** — it only calls the existing `loadCurrentQuestion()`, which asks the server via the real `current-question` endpoint. ADR-007's lazy lifecycle check is what actually decides expiry. Confirmed live with a real 1-minute Test session: the client-side countdown hit zero, triggered the existing flow, and the server's own already-implemented expiry check correctly transitioned the session to `expired` — no client-side completion logic was written.
+- Timer persists correctly across "Next Question" advances and across a resume (re-derived fresh from the server on every page load, never cached across sessions).
+- New CSS (`.session-timer`, plus a `.session-question-page`-scoped `flex-wrap` on `.meta-row` for the now-three-item badge row) lives entirely in `SessionQuestionPage.css` — `QuestionPage.css` (shared with the anonymous flow) was not touched.
+
+### Fix 2 — Question Count UX
+
+No backend change. `StartPracticePage` already had everything needed: `questionService.getQuestions(chapterId)` (pre-existing, used by the anonymous flow) gives the chapter's total question count. `SessionModeSelector` gained an optional `maxQuestionCount` prop that (a) sets the input's `max` attribute, (b) clamps any typed value down in the `onChange` handler itself — not just a soft browser hint — and (c) shows a one-line availability note. `StartPracticePage` clamps the default `questionCount` down once the chapter's count resolves (so a chapter with fewer than 10 questions doesn't start the form already invalid) and added a matching upper-bound check alongside the existing lower-bound one in `handleSubmit`.
+
+Deliberately uniform across modes and difficulties — no per-difficulty or Revision-weak-topic availability prediction, exactly as instructed. A narrower request can still legitimately shortfall; that messaging is untouched and still fires correctly (verified live).
+
+### Tests added
+- Backend: 2 new tests (`test_session_summary_reports_time_limit_for_test_mode`, `test_session_summary_reports_no_time_limit_for_practice_mode`). 198 → 200.
+- Frontend: 4 new tests on `SessionModeSelector` (clamping with/without a max, the `max` attribute, the hint text/its absence). 96 → 100.
+
+### Live verification (both servers running)
+- **Timer**: static before first submission → ticking after → persists across "Next Question" → persists correctly across a full Resume (re-fetched fresh, still showed the correct static/ticking state) → a real 1-minute Test session run to actual expiry, ending on "Time's up" with the Test-mode score, via the existing server flow only. Confirmed absent in Practice and Revision mode. Confirmed responsive at 375px (no overflow, wraps cleanly).
+- **Question count**: typing 25 on a 5-question chapter clamped live to 5; opening the form on that chapter showed the default already clamped from 10 to 5 with the "5 questions available" note; a 44-question chapter showed no clamping and the correct larger count.
+- **Regression**: a complete Practice session (correct-answer path), a Revision session (started, correct content, no timer), and the full Test session above (including Resume and Completion) all worked. Anonymous `/chapters` flow re-verified unaffected. Zero console errors across the entire walkthrough.
+
+### Definition of Done
+- [x] Both RC1 polish fixes implemented — smallest possible implementation in each case
+- [x] Backend tests passing — 200/200 (198 → 200)
+- [x] Frontend tests passing — 100/100 (96 → 100)
+- [x] `tsc -b` / `oxlint` clean
+- [x] Manual verification complete for both fixes, plus full regression (Practice/Revision/Test/Resume/Completion/anonymous flow)
+- [x] No console errors
+- [x] The one additive backend field change is documented here, as instructed
+- [x] Documentation updated — this file only, per this milestone's explicit policy
+- [ ] Commit — see this repository's `git log` for the resulting hash, recorded after commit
+
 ## Sprint C — Complete Version 1.0 and Prepare RC1 (2026-07-29)
 
 **Scope**: the three remaining pieces of `Sprint-C-Implementation-Plan.md` — Session Completion (C1), Resume (C2), Final UX Polish (C3) — plus a genuine deployment validation against a clean clone and the `v1.0.0-rc1` release notes entry. This closes out Milestone F1 (the Session Frontend) entirely; the full Dashboard → Configuration → Creation → Question → Coaching → Completion → Resume loop now works end to end.

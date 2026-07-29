@@ -91,6 +91,9 @@ export interface SessionSummaryResponse {
   correctCount: number;
   startedAt: string | null;
   completedAt: string | null;
+  // RC1 polish: only ever set for Test mode - the field a countdown timer
+  // is derived from, combined with startedAt.
+  timeLimitMinutes: number | null;
 }
 
 // 'not-found' is a real, expected outcome here (a resume pointer whose

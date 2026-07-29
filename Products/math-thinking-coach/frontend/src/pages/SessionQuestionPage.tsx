@@ -13,6 +13,7 @@ import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type {
   CurrentQuestionResponse,
+  SessionMode,
   SessionSummaryResponse,
   SessionTerminalResponse,
   SubmitSessionAnswerResponse,
@@ -28,6 +29,23 @@ type Phase =
   | { kind: 'not-found' }
   | { kind: 'terminal'; terminal: SessionTerminalResponse }
   | { kind: 'question'; question: CurrentQuestionResponse };
+
+// Test-mode-only metadata needed for the countdown - fetched once via the
+// existing GET /sessions/{id} (ADR-007's own summary endpoint), never a new
+// per-second server call. startedAt stays null until the student's first
+// submission (matches runtime_session_manager._advance_state exactly), so
+// this is refreshed once after that first submit to pick it up.
+interface SessionMeta {
+  mode: SessionMode;
+  timeLimitMinutes: number | null;
+  startedAt: string | null;
+}
+
+function formatCountdown(totalSeconds: number): string {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
 
 export default function SessionQuestionPage() {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -45,6 +63,8 @@ export default function SessionQuestionPage() {
   const [submitError, setSubmitError] = useState('');
   const [summary, setSummary] = useState<SessionSummaryResponse | null>(null);
   const [summaryError, setSummaryError] = useState(false);
+  const [sessionMeta, setSessionMeta] = useState<SessionMeta | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
 
   // The single entry point back into "what question is current" - used for
   // the initial load, "Next Question", and resyncing after a stale (409)
@@ -80,6 +100,65 @@ export default function SessionQuestionPage() {
   useEffect(() => {
     loadCurrentQuestion();
   }, [loadCurrentQuestion]);
+
+  // Learns whether this is a Test-mode session at all, and its deadline
+  // inputs, via the one existing endpoint that carries `mode`
+  // (GET /sessions/{id} - current-question doesn't). Fetched once per
+  // session, not on a timer - the countdown itself ticks purely client-side.
+  useEffect(() => {
+    if (!sessionId) {
+      return;
+    }
+    let cancelled = false;
+
+    sessionService.getSessionSummary(sessionId).then((result) => {
+      if (!cancelled && result.type === 'ok') {
+        setSessionMeta({
+          mode: result.summary.mode,
+          timeLimitMinutes: result.summary.timeLimitMinutes,
+          startedAt: result.summary.startedAt,
+        });
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId]);
+
+  // Drives the visible countdown. Stops entirely once the session is
+  // already terminal. Reaching zero never ends the session itself - it
+  // only asks the server via the existing loadCurrentQuestion() call,
+  // which is what actually decides expiry (ADR-007: the server is the
+  // sole authority on lifecycle status).
+  useEffect(() => {
+    if (
+      phase.kind === 'terminal' ||
+      !sessionMeta ||
+      sessionMeta.mode !== 'test' ||
+      !sessionMeta.timeLimitMinutes ||
+      !sessionMeta.startedAt
+    ) {
+      setRemainingSeconds(null);
+      return;
+    }
+
+    const deadline = new Date(sessionMeta.startedAt).getTime() + sessionMeta.timeLimitMinutes * 60_000;
+    let expiryChecked = false;
+
+    const tick = () => {
+      const secondsLeft = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+      setRemainingSeconds(secondsLeft);
+      if (secondsLeft <= 0 && !expiryChecked) {
+        expiryChecked = true;
+        loadCurrentQuestion();
+      }
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [phase.kind, sessionMeta, loadCurrentQuestion]);
 
   // Fires exactly once per session reaching a terminal state, however it
   // got there (a fresh 409 on load, or advancing past the final question).
@@ -144,6 +223,17 @@ export default function SessionQuestionPage() {
 
       if (result.type === 'ok') {
         setFeedback(result.response);
+        // startedAt is null until the very first submission of any kind
+        // (runtime_session_manager._advance_state sets it unconditionally,
+        // whether or not the answer advances the question) - refresh once
+        // to pick that up, so the countdown can actually start.
+        if (sessionMeta?.mode === 'test' && !sessionMeta.startedAt) {
+          sessionService.getSessionSummary(sessionId).then((refreshed) => {
+            if (refreshed.type === 'ok') {
+              setSessionMeta((previous) => (previous ? { ...previous, startedAt: refreshed.summary.startedAt } : previous));
+            }
+          });
+        }
       } else if (result.type === 'stale') {
         setSyncNotice('Synced to your latest progress.');
         loadCurrentQuestion();
@@ -248,6 +338,12 @@ export default function SessionQuestionPage() {
   const hintButtonLabel =
     currentHintIndex === 0 ? 'Need a Hint' : isAllHintsRevealed ? 'All Hints Revealed' : 'Show Next Hint';
 
+  // Static full-duration display until the countdown actually starts
+  // (startedAt is still null pre-first-submission) - never shown for any
+  // mode other than Test.
+  const displaySeconds =
+    remainingSeconds ?? (sessionMeta?.mode === 'test' && sessionMeta.timeLimitMinutes ? sessionMeta.timeLimitMinutes * 60 : null);
+
   return (
     <main className="container question-page session-question-page">
       <div className="question-header">
@@ -257,6 +353,11 @@ export default function SessionQuestionPage() {
             Question {position + 1} of {totalCount}
           </span>
           <DifficultyBadge level={content.difficulty} />
+          {sessionMeta?.mode === 'test' && displaySeconds !== null && (
+            <span className="session-timer" aria-live="polite">
+              ⏱ {formatCountdown(displaySeconds)}
+            </span>
+          )}
         </div>
       </div>
 

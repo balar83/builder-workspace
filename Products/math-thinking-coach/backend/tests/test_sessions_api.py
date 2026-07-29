@@ -189,3 +189,28 @@ def test_submit_answer_request_has_no_attempt_number_field() -> None:
 
     assert response.status_code == 200
     assert response.json()["ui"]["hintLevel"] == 0  # correct-answer response, unaffected by the extra field
+
+
+def test_session_summary_reports_time_limit_for_test_mode() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions",
+        json={"chapterId": "rational-numbers", "mode": "test", "timeLimitMinutes": 15},
+    ).json()["sessionId"]
+
+    summary = student.get(f"/api/v1/sessions/{session_id}")
+
+    assert summary.status_code == 200
+    assert summary.json()["timeLimitMinutes"] == 15
+
+
+def test_session_summary_reports_no_time_limit_for_practice_mode() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice"}
+    ).json()["sessionId"]
+
+    summary = student.get(f"/api/v1/sessions/{session_id}")
+
+    assert summary.status_code == 200
+    assert summary.json()["timeLimitMinutes"] is None

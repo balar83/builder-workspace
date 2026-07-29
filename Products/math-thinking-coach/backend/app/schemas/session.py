@@ -229,3 +229,8 @@ class SessionSummaryResponse(BaseModel):
     correctCount: int
     startedAt: str | None
     completedAt: str | None
+    # RC1 polish: exposes SessionPlan.timeLimitMinutes (already persisted,
+    # already read into the aggregate) so a Test-mode client can render a
+    # countdown without a new endpoint. Additive only - every existing
+    # consumer of this response is unaffected.
+    timeLimitMinutes: int | None = None

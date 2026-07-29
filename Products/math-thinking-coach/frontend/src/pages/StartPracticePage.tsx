@@ -21,6 +21,7 @@ export default function StartPracticePage() {
 
   const [chapter, setChapter] = useState<Chapter | undefined>(undefined);
   const [config, setConfig] = useState<SessionConfig>(DEFAULT_CONFIG);
+  const [maxQuestionCount, setMaxQuestionCount] = useState<number | undefined>(undefined);
   const [validationError, setValidationError] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -34,10 +35,32 @@ export default function StartPracticePage() {
       }
     });
 
+    // The chapter's total question count (across all difficulties) - a
+    // simple, honest ceiling for "number of questions," not an attempt to
+    // predict per-difficulty or Revision availability. A narrower request
+    // can still legitimately shortfall; existing messaging already covers that.
+    questionService.getQuestions(chapterId).then((result) => {
+      if (!cancelled) {
+        setMaxQuestionCount(result.length);
+      }
+    });
+
     return () => {
       cancelled = true;
     };
   }, [chapterId]);
+
+  // Clamp down only - runs once when the chapter's count first resolves,
+  // so a chapter with fewer questions than the default (10) doesn't start
+  // the form in an already-invalid state.
+  useEffect(() => {
+    if (maxQuestionCount === undefined) {
+      return;
+    }
+    setConfig((previous) =>
+      previous.questionCount > maxQuestionCount ? { ...previous, questionCount: maxQuestionCount } : previous,
+    );
+  }, [maxQuestionCount]);
 
   const handleSubmit = async () => {
     setValidationError('');
@@ -45,6 +68,12 @@ export default function StartPracticePage() {
 
     if (!Number.isInteger(config.questionCount) || config.questionCount <= 0) {
       setValidationError('Number of questions must be a whole number greater than 0.');
+      return;
+    }
+    if (maxQuestionCount !== undefined && config.questionCount > maxQuestionCount) {
+      setValidationError(
+        `This chapter has ${maxQuestionCount} question${maxQuestionCount === 1 ? '' : 's'} available — please choose ${maxQuestionCount} or fewer.`,
+      );
       return;
     }
     if (config.mode === 'test' && (!Number.isInteger(config.timeLimitMinutes) || config.timeLimitMinutes <= 0)) {
@@ -101,7 +130,7 @@ export default function StartPracticePage() {
       <h1>Start Practice</h1>
       <p className="tagline">{chapter.title}</p>
 
-      <SessionModeSelector value={config} onChange={setConfig} />
+      <SessionModeSelector value={config} onChange={setConfig} maxQuestionCount={maxQuestionCount} />
 
       {validationError && <p className="start-practice-error">{validationError}</p>}
       {submitError && <p className="start-practice-error">{submitError}</p>}

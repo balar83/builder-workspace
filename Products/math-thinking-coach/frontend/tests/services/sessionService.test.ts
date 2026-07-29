@@ -133,6 +133,7 @@ describe('sessionService', () => {
       correctCount: 4,
       startedAt: '2026-07-29T10:00:00.000Z',
       completedAt: '2026-07-29T10:10:00.000Z',
+      timeLimitMinutes: 15,
     };
     mockFetchOnce(200, summary);
 

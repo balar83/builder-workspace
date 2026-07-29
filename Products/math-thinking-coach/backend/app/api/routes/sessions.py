@@ -128,4 +128,5 @@ def get_session_summary(session_id: str, request: Request) -> SessionSummaryResp
         correctCount=session.state.correctCount,
         startedAt=session.state.startedAt,
         completedAt=session.state.completedAt,
+        timeLimitMinutes=session.plan.timeLimitMinutes,
     )

@@ -11,6 +11,13 @@ export interface SessionConfig {
 export interface SessionModeSelectorProps {
   value: SessionConfig;
   onChange: (value: SessionConfig) => void;
+  // The chapter's total question count, when known - caps the number-of-
+  // questions input so a student can't request an obviously impossible
+  // amount. Uniform across modes deliberately (not narrowed by difficulty
+  // or Revision's weak-topic scoping) - a real shortfall can still legitimately
+  // occur for those narrower cases, and existing shortfall messaging already
+  // handles it.
+  maxQuestionCount?: number;
 }
 
 const MODES: { value: SessionMode; label: string; description: string }[] = [
@@ -24,7 +31,7 @@ const MODES: { value: SessionMode; label: string; description: string }[] = [
 // types/session.ts's note on CreateSessionRequest).
 const DIFFICULTIES: RequestedDifficulty[] = ['Mixed', 'Easy', 'Medium', 'Hard'];
 
-export default function SessionModeSelector({ value, onChange }: SessionModeSelectorProps) {
+export default function SessionModeSelector({ value, onChange, maxQuestionCount }: SessionModeSelectorProps) {
   return (
     <div className="session-mode-selector">
       <fieldset className="session-mode-field">
@@ -66,9 +73,17 @@ export default function SessionModeSelector({ value, onChange }: SessionModeSele
           id="session-question-count"
           type="number"
           min={1}
+          max={maxQuestionCount}
           value={value.questionCount}
-          onChange={(event) => onChange({ ...value, questionCount: Number(event.target.value) })}
+          onChange={(event) => {
+            const raw = Number(event.target.value);
+            const clamped = maxQuestionCount !== undefined ? Math.min(raw, maxQuestionCount) : raw;
+            onChange({ ...value, questionCount: clamped });
+          }}
         />
+        {maxQuestionCount !== undefined && (
+          <small className="session-mode-hint">This chapter has {maxQuestionCount} question{maxQuestionCount === 1 ? '' : 's'} available.</small>
+        )}
       </div>
 
       {value.mode === 'test' && (

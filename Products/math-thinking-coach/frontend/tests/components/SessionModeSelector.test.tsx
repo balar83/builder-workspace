@@ -52,4 +52,35 @@ describe('SessionModeSelector', () => {
 
     expect(onChange).toHaveBeenCalledWith({ ...baseConfig, questionCount: 5 });
   });
+
+  it('clamps a typed question count down to maxQuestionCount when one is known', () => {
+    const onChange = vi.fn();
+    render(<SessionModeSelector value={baseConfig} onChange={onChange} maxQuestionCount={5} />);
+
+    fireEvent.change(screen.getByLabelText(/number of questions/i), { target: { value: '20' } });
+
+    expect(onChange).toHaveBeenCalledWith({ ...baseConfig, questionCount: 5 });
+  });
+
+  it('does not clamp when maxQuestionCount is unknown', () => {
+    const onChange = vi.fn();
+    render(<SessionModeSelector value={baseConfig} onChange={onChange} />);
+
+    fireEvent.change(screen.getByLabelText(/number of questions/i), { target: { value: '20' } });
+
+    expect(onChange).toHaveBeenCalledWith({ ...baseConfig, questionCount: 20 });
+  });
+
+  it('sets the max attribute and shows an availability hint when maxQuestionCount is known', () => {
+    render(<SessionModeSelector value={baseConfig} onChange={vi.fn()} maxQuestionCount={5} />);
+
+    expect(screen.getByLabelText(/number of questions/i)).toHaveAttribute('max', '5');
+    expect(screen.getByText(/5 questions available/)).toBeInTheDocument();
+  });
+
+  it('shows no availability hint when maxQuestionCount is unknown', () => {
+    render(<SessionModeSelector value={baseConfig} onChange={vi.fn()} />);
+
+    expect(screen.queryByText(/questions available/)).not.toBeInTheDocument();
+  });
 });

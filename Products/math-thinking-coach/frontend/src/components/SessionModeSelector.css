@@ -38,3 +38,10 @@
   border: 1px solid #d1d5db;
   font-size: 1rem;
 }
+
+.session-mode-hint {
+  display: block;
+  margin-top: 4px;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
