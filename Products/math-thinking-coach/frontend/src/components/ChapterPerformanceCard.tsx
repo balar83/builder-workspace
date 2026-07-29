@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import '../components/ChapterCard.css';
 import './ChapterPerformanceCard.css';
 import type { Chapter } from '../types/chapter';
@@ -9,6 +10,8 @@ export interface ChapterPerformanceCardProps {
 }
 
 export default function ChapterPerformanceCard({ chapter, performance }: ChapterPerformanceCardProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="chapter-card chapter-performance-card">
       <div className="chapter-card-content">
@@ -24,7 +27,11 @@ export default function ChapterPerformanceCard({ chapter, performance }: Chapter
         </div>
       </div>
 
-      <button type="button" className="start-practice-button" disabled title="Coming soon">
+      <button
+        type="button"
+        className="start-practice-button"
+        onClick={() => navigate(`/practice/${chapter.id}`)}
+      >
         Start Practice
       </button>
     </div>

@@ -1,0 +1,40 @@
+.session-mode-selector {
+  width: 100%;
+  max-width: 420px;
+  text-align: left;
+}
+
+.session-mode-field {
+  margin-bottom: 1rem;
+  border: none;
+  padding: 0;
+}
+
+.session-mode-field legend {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+
+.session-mode-field > label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.session-mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.session-mode-field select,
+.session-mode-field input[type='number'] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}

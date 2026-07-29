@@ -18,10 +18,5 @@
   border-radius: 8px;
   font-size: 0.9rem;
   align-self: flex-start;
-}
-
-.start-practice-button:disabled {
-  background: #d1d5db;
-  color: #6b7280;
-  cursor: not-allowed;
+  cursor: pointer;
 }

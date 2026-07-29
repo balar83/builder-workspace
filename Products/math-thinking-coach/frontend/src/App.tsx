@@ -7,6 +7,8 @@ import QuestionPage from "./pages/QuestionPage";
 import TeacherAuthPage from "./pages/TeacherAuthPage";
 import StudentJoinPage from "./pages/StudentJoinPage";
 import DashboardPage from "./pages/DashboardPage";
+import StartPracticePage from "./pages/StartPracticePage";
+import SessionQuestionPage from "./pages/SessionQuestionPage";
 import RequireStudent from "./components/RequireStudent";
 import "./App.css";
 
@@ -26,6 +28,22 @@ function App() {
           element={
             <RequireStudent>
               <DashboardPage />
+            </RequireStudent>
+          }
+        />
+        <Route
+          path="/practice/:chapterId"
+          element={
+            <RequireStudent>
+              <StartPracticePage />
+            </RequireStudent>
+          }
+        />
+        <Route
+          path="/session/:sessionId"
+          element={
+            <RequireStudent>
+              <SessionQuestionPage />
             </RequireStudent>
           }
         />

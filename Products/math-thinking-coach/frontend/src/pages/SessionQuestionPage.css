@@ -1,0 +1,16 @@
+.session-shortfall-notice {
+  width: 100%;
+  max-width: 920px;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.session-answering-note {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}

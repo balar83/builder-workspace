@@ -1,0 +1,9 @@
+.start-practice-page {
+  align-items: center;
+}
+
+.start-practice-error {
+  color: #b00020;
+  margin-top: 0.5rem;
+  max-width: 420px;
+}

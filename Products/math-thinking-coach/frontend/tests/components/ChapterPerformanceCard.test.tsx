@@ -1,10 +1,20 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
+}));
+
 import ChapterPerformanceCard from '../../src/components/ChapterPerformanceCard';
 
 const chapter = { id: 'linear-equations', title: 'Linear Equations', description: 'D' };
 
 describe('ChapterPerformanceCard', () => {
+  afterEach(() => {
+    mockNavigate.mockClear();
+  });
+
   it('shows no performance badge when no performance is recorded yet', () => {
     render(<ChapterPerformanceCard chapter={chapter} />);
 
@@ -47,9 +57,11 @@ describe('ChapterPerformanceCard', () => {
     expect(screen.getByText('6 attempted · 100% accuracy · Mastered')).toBeInTheDocument();
   });
 
-  it('renders the Start Practice button as disabled', () => {
+  it('navigates to the practice configuration page on Start Practice', () => {
     render(<ChapterPerformanceCard chapter={chapter} />);
 
-    expect(screen.getByRole('button', { name: 'Start Practice' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Start Practice' }));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/practice/linear-equations');
   });
 });
