@@ -21,6 +21,16 @@ class Settings:
         origin.strip() for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if origin.strip()
     ]
     session_https_only: bool = os.getenv("SESSION_HTTPS_ONLY", "false").lower() == "true"
+    # "lax" (default) works for same-site deployments (self-hosted-behind-one-origin,
+    # local dev). Split hosting (frontend and backend on different domains, e.g.
+    # Vercel + Render) is cross-site and needs "none" here, paired with
+    # SESSION_HTTPS_ONLY=true — browsers reject SameSite=None without Secure.
+    session_cookie_samesite: str = os.getenv("SESSION_COOKIE_SAMESITE", "lax").lower()
 
 
 settings = Settings()
+
+if settings.session_cookie_samesite == "none" and not settings.session_https_only:
+    raise RuntimeError(
+        "SESSION_COOKIE_SAMESITE=none requires SESSION_HTTPS_ONLY=true"
+    )

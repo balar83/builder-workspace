@@ -28,7 +28,7 @@ app.add_middleware(
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.session_secret_key,
-    same_site="lax",
+    same_site=settings.session_cookie_samesite,
     https_only=settings.session_https_only,
 )
 

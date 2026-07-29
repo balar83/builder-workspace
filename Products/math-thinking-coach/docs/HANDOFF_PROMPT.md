@@ -3,6 +3,28 @@
 *Paste this document as the first message of a new chat to resume work with minimal re-explanation. This file is part of the repository — the repository is the source of truth; where anything below conflicts with what you observe in the code, trust the code and treat this document as stale. Regenerate it at the next stable checkpoint rather than letting it drift.*
 
 ---
+# Current Active Work (Update Every Session)
+
+Current focus:
+Deployment Stabilization
+
+Status:
+Backend and frontend deployed. Root cause of the session-cookie bug found, fixed, and verified locally (2026-07-29) — not yet redeployed.
+
+Root cause:
+Split hosting (Vercel frontend, Render backend) puts the two on different sites, making the session cookie cross-site. The cookie was set with hardcoded `SameSite=Lax` (`backend/app/main.py`) — browsers withhold `Lax` cookies on cross-site `fetch`/XHR, so login succeeded (Set-Cookie received) but the next authenticated call (`POST /auth/teacher/classes`) always came back 401. Reproduced locally by simulating cross-site (backend on `127.0.0.1`, frontend on `localhost` — different sites to Chrome) and getting the identical failure.
+
+Fix (uncommitted):
+`SESSION_COOKIE_SAMESITE` env var added (`backend/app/core/config.py`, `backend/app/main.py`), default `"lax"` (no behavior change for local/self-hosted). `docs/Deployment-Guide.md` and `backend/.env.example` updated to document that split hosting needs `SESSION_COOKIE_SAMESITE=none` paired with `SESSION_HTTPS_ONLY=true`. Verified: 205/205 backend tests pass; curl-level check confirms the cookie now carries `SameSite=None; Secure` when those env vars are set. Full in-browser cross-site verification over HTTPS was attempted locally (self-signed cert) but blocked by the sandboxed browser's own security policy — not a gap in the fix itself, just an unverified-in-browser step.
+
+Current plan:
+Reproduce locally. — done
+Fix locally. — done
+Verify. — done (tests + protocol-level; live in-browser HTTPS check not possible locally)
+Deploy. — next: set `SESSION_COOKIE_SAMESITE=none` and `SESSION_HTTPS_ONLY=true` in Render's dashboard, commit and push this fix, redeploy, then live-verify against the real Vercel+Render URLs (real TLS certs, so the local sandbox limitation doesn't apply there).
+Resume Release 0.2 afterwards.
+
+Everything below represents stable architecture.
 
 ## 1. Who you are on this project
 
