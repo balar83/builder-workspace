@@ -10,6 +10,14 @@ configure_logging()
 
 app = FastAPI(title=settings.app_name, version=settings.app_version)
 
+@app.get("/")
+def root():
+    return {
+        "name": "Math Thinking Coach API",
+        "status": "running",
+        "docs": "/docs"
+    }
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
