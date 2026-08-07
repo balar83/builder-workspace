@@ -387,7 +387,15 @@ export default function SessionQuestionPage() {
                 {hintButtonLabel}
               </button>
             )}
-            {canRevealSolution && (
+            {/* Revealing the solution is a purely client-side action — content.solution
+                already shipped to the browser with the question, same as the anonymous
+                flow's identical button. Gating it on canRevealSolution alone (a server
+                flag driven only by wrong-attempt count, independent of hints) left
+                students who exhausted all hints without yet racking up 3 wrong attempts
+                with neither button visible: a dead end, found in production. Showing it
+                once local hints are exhausted restores parity with QuestionPage.tsx,
+                which never had this bug. */}
+            {(isAllHintsRevealed || canRevealSolution) && (
               <button className="hint-button" type="button" onClick={handleRevealSolution}>
                 Reveal Solution
               </button>
