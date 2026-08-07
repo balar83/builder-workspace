@@ -9,6 +9,7 @@ import StudentJoinPage from "./pages/StudentJoinPage";
 import DashboardPage from "./pages/DashboardPage";
 import StartPracticePage from "./pages/StartPracticePage";
 import SessionQuestionPage from "./pages/SessionQuestionPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import RequireStudent from "./components/RequireStudent";
 import "./App.css";
 
@@ -47,6 +48,7 @@ function App() {
             </RequireStudent>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,7 +10,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="container">
+    <main className="container container-hero">
       <h1>🧠 Math Thinking Coach</h1>
 
       <p className="tagline">
@@ -20,7 +20,7 @@ export default function HomePage() {
       <div className="button-group">
         <button onClick={handleContinueLearning}>Continue Learning</button>
 
-        <button onClick={() => navigate("/chapters")}>
+        <button className="btn-secondary" onClick={() => navigate("/chapters")}>
           Select Chapter
         </button>
       </div>

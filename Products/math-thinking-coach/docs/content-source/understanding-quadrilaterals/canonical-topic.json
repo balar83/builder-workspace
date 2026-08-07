@@ -1,0 +1,104 @@
+{
+  "id": "topic-understanding-quadrilaterals-polygons-and-properties",
+  "chapterId": "understanding-quadrilaterals",
+  "title": "Understanding Quadrilaterals: Polygons and Their Properties",
+  "reviewStatus": "approved",
+  "consolidationNote": "Consolidates stage2-topic-detection.md, stage3-concept-extraction.md, stage4-learning-objectives.md and stage5-worked-examples.json into one canonical Topic record, per the Stage 10 export design — same process used for linear-equations and data-handling. This chapter has no raw/ source directory (see stage2's provenance note: the official NCERT PDF is scanned/image-based and not text-extractable); explanation prose and all downstream content are authored directly from standard NCERT Class 8 Chapter 3 curriculum knowledge, grounded in Stage 3's extracted concepts. Worked examples are carried over from stage5 unchanged. Learning objectives are carried over from stage4 unchanged, grouped by section. Approved 2026-08-07 for the Understanding Quadrilaterals end-to-end release (Release 0.1.1).",
+  "sourceRefs": {
+    "stage2": "stage2-topic-detection.md",
+    "stage3": "stage3-concept-extraction.md",
+    "stage4": "stage4-learning-objectives.md",
+    "stage5": "stage5-worked-examples.json"
+  },
+  "explanation": {
+    "sections": [
+      {
+        "title": "Polygons: curves, convexity and regularity",
+        "body": "A polygon is a simple closed figure made up entirely of line segments — 'simple' means its boundary doesn't cross itself, and 'closed' means it has no gaps. A circle or any shape with a curved edge is not a polygon, no matter how it's drawn. Polygons come in two important pairs of categories. First, convex vs. concave: a polygon is convex when every one of its interior angles is less than 180°; if even one angle is greater than 180° — a single 'caved-in' vertex — the whole polygon is concave. Second, regular vs. irregular: a polygon is regular only when it satisfies two conditions at once — all of its sides are equal in length, AND all of its angles are equal in measure. A shape that meets only one of those two conditions (like a rhombus, whose sides are all equal but whose angles usually aren't) is irregular, not regular."
+      },
+      {
+        "title": "Angle sum property of a polygon",
+        "body": "Every polygon's interior angles add up to a fixed total that depends only on its number of sides: for a polygon with n sides, the sum of the interior angles is (n − 2) × 180°. A quadrilateral (n = 4) always has interior angles summing to 360°; a pentagon (n = 5) always sums to 540°; and so on. This formula also works in reverse — if you're told the angle sum, you can solve for n. Alongside this, every convex polygon has a second, even simpler rule: its exterior angles, taken one at each vertex going around in order, always add up to 360° — this is true no matter how many sides the polygon has, unlike the interior sum. At any single vertex, the interior angle and its exterior angle always add up to 180°, since together they form a straight line. For a regular polygon specifically, this gives two useful shortcuts: each exterior angle equals 360° divided by the number of sides, and each interior angle equals (n − 2) × 180° divided by the number of sides."
+      },
+      {
+        "title": "Trapezium and kite",
+        "body": "A trapezium is a quadrilateral with exactly one pair of parallel sides — those parallel sides are called the bases, and the two non-parallel connecting sides are called the legs. A shape with both pairs of opposite sides parallel isn't a trapezium under this definition; it belongs to the parallelogram family instead, covered next. A kite is a quadrilateral with two distinct pairs of adjacent (side-by-side) sides that are equal in length — unlike a parallelogram, where it's the opposite sides that match, a kite's matching sides are neighbors that share a vertex. A kite's diagonals have their own distinct behavior: they cross at right angles, but only one of the two diagonals is actually cut exactly in half by the other — both diagonals being bisected is a parallelogram property, not a kite property."
+      },
+      {
+        "title": "Parallelograms and their special cases",
+        "body": "A parallelogram is a quadrilateral where both pairs of opposite sides are parallel and equal in length. This one shape gives rise to several more properties worth knowing: opposite angles are equal to each other; two angles that are adjacent (next to each other, sharing a side) are supplementary, meaning they add up to 180°; and the two diagonals bisect each other, crossing at a point that is the exact midpoint of both. Three special parallelograms each add one extra condition on top of all of this. A rhombus is a parallelogram where all four sides are equal — its diagonals bisect each other at right angles, and each diagonal also bisects the pair of angles it passes through. A rectangle is a parallelogram where all four angles are 90° — its diagonals are equal in length, in addition to bisecting each other. A square satisfies both extra conditions simultaneously — all sides equal AND all angles 90° — which makes it both a rhombus and a rectangle at the same time, with diagonals that are equal in length AND bisect each other at right angles. Because of this, there's a one-directional hierarchy worth remembering: every square is a rectangle and a rhombus; every rectangle is a parallelogram; every rhombus is a parallelogram — but none of these relationships work in reverse. Not every rectangle is a square, and not every parallelogram is a rhombus."
+      }
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "uq-we-01",
+      "section": "Angle sum property of a polygon",
+      "conceptRef": "Interior angle sum formula (uq-raw-concept-3.3)",
+      "problem": "Three angles of a quadrilateral measure 80°, 95°, and 100°. Find the fourth angle.",
+      "steps": [
+        "The sum of the interior angles of a quadrilateral is (4 − 2) × 180° = 360°.",
+        "Add the three known angles: 80° + 95° + 100° = 275°.",
+        "Subtract from the total: 360° − 275° = 85°."
+      ],
+      "finalAnswer": "The fourth angle is 85°."
+    },
+    {
+      "id": "uq-we-02",
+      "section": "Angle sum property of a polygon",
+      "conceptRef": "Exterior angle sum property + interior/exterior linear pair (uq-raw-concept-3.3)",
+      "problem": "Each interior angle of a regular polygon measures 156°. How many sides does the polygon have?",
+      "steps": [
+        "At each vertex, the interior and exterior angles form a linear pair: interior + exterior = 180°.",
+        "So the exterior angle = 180° − 156° = 24°.",
+        "For a regular polygon, number of sides = 360° ÷ each exterior angle.",
+        "Number of sides = 360° ÷ 24° = 15."
+      ],
+      "finalAnswer": "The polygon has 15 sides."
+    },
+    {
+      "id": "uq-we-03",
+      "section": "Parallelograms and their special cases",
+      "conceptRef": "Parallelogram adjacent/opposite angle properties (uq-raw-concept-3.5)",
+      "problem": "In parallelogram PQRS, angle P = 70°. Find angle Q (adjacent to P) and angle R (opposite to P).",
+      "steps": [
+        "Adjacent angles in a parallelogram are supplementary, so angle Q = 180° − 70° = 110°.",
+        "Opposite angles in a parallelogram are equal, so angle R = angle P = 70°."
+      ],
+      "finalAnswer": "Angle Q = 110°, angle R = 70°."
+    }
+  ],
+  "learningObjectives": [
+    {
+      "section": "Polygons: curves, convexity and regularity",
+      "objectives": [
+        "Distinguish a polygon (simple closed figure of line segments) from a curve that isn't one.",
+        "Distinguish a convex polygon from a concave polygon.",
+        "Distinguish a regular polygon from an irregular polygon."
+      ]
+    },
+    {
+      "section": "Angle sum property of a polygon",
+      "objectives": [
+        "Calculate the sum of the interior angles of a polygon with n sides using (n − 2) × 180°, including back-solving for n given the sum.",
+        "Apply the interior angle sum property to find an unknown interior angle when the others are given.",
+        "State and apply the exterior angle sum property (always 360°) to find an unknown exterior angle, number of sides, or related interior angle."
+      ]
+    },
+    {
+      "section": "Trapezium and kite",
+      "objectives": [
+        "Identify a trapezium by its one pair of parallel sides and name its parts (bases, legs).",
+        "Identify a kite by its two pairs of adjacent equal sides and state its diagonal properties."
+      ]
+    },
+    {
+      "section": "Parallelograms and their special cases",
+      "objectives": [
+        "State and apply the properties of a parallelogram (opposite sides, opposite angles, adjacent angles, diagonals).",
+        "Distinguish a rhombus, rectangle and square by their defining extra properties (sides, angles, diagonals).",
+        "Reason about the hierarchy among quadrilaterals (e.g. every square is a rectangle and a rhombus, but not vice versa)."
+      ]
+    }
+  ]
+}

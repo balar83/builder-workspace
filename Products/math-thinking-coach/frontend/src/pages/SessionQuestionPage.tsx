@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '../pages/QuestionPage.css';
 import './SessionQuestionPage.css';
+import AnswerFeedback from '../components/AnswerFeedback';
 import AnswerInput from '../components/AnswerInput';
+import BackLink from '../components/BackLink';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
-import ProgressBar from '../components/ProgressBar';
 import QuestionProgress from '../components/QuestionProgress';
 import SessionCompleteSummary from '../components/SessionCompleteSummary';
 import SolutionPanel from '../components/SolutionPanel';
@@ -305,7 +306,6 @@ export default function SessionQuestionPage() {
 
   const { position, totalCount, question: content } = phase.question;
   const totalHints = content.hints.length || 1;
-  const percent = Math.round((currentHintIndex / totalHints) * 100);
   const isAllHintsRevealed = currentHintIndex >= totalHints;
   const isCorrectAnswer = feedback?.coach.nextAction === 'NEXT_QUESTION';
   const isHintSuggested = feedback?.coach.nextAction === 'SHOW_HINT';
@@ -326,18 +326,12 @@ export default function SessionQuestionPage() {
   return (
     <main className="container question-page session-question-page">
       <div className="question-header">
+        <h1 className="visually-hidden">Practice session</h1>
+        {/* Safe to leave mid-session: state lives server-side (ADR-007) and
+            the Dashboard's ResumeBanner picks it back up — no confirm
+            dialog needed for a non-destructive exit. */}
+        <BackLink to="/dashboard" label="Dashboard" />
         <QuestionProgress totalQuestions={totalCount} currentQuestion={position + 1} />
-        <div className="meta-row">
-          <span className="q-number">
-            Question {position + 1} of {totalCount}
-          </span>
-          <DifficultyBadge level={content.difficulty} />
-          {sessionMeta?.mode === 'test' && displaySeconds !== null && (
-            <span className="session-timer" aria-live="polite">
-              ⏱ {formatCountdown(displaySeconds)}
-            </span>
-          )}
-        </div>
       </div>
 
       {shortfallMessage && (
@@ -352,6 +346,15 @@ export default function SessionQuestionPage() {
       )}
 
       <section className="question-card">
+        <div className="question-card-head">
+          <DifficultyBadge level={content.difficulty} />
+          {sessionMeta?.mode === 'test' && displaySeconds !== null && (
+            <span className="session-timer" aria-live="polite">
+              ⏱ {formatCountdown(displaySeconds)}
+            </span>
+          )}
+        </div>
+
         <p className="question-text">{content.question}</p>
 
         <AnswerInput
@@ -362,9 +365,10 @@ export default function SessionQuestionPage() {
         />
 
         {(submitting || feedback) && (
-          <p className="question-text" aria-live="polite">
-            {submitting ? 'Checking your answer…' : feedback?.coach.message}
-          </p>
+          <AnswerFeedback
+            state={submitting ? 'checking' : isCorrectAnswer ? 'correct' : 'retry'}
+            message={submitting ? 'Checking your answer…' : (feedback?.coach.message ?? '')}
+          />
         )}
         {submitError && (
           <p className="session-submit-error" aria-live="polite">
@@ -372,40 +376,39 @@ export default function SessionQuestionPage() {
           </p>
         )}
 
-        <div className="hint-row">
-          {questionEnded ? (
-            <button className="hint-button" type="button" onClick={handleNext}>
-              {isFinalAdvance ? 'Finish' : 'Next Question'}
-            </button>
-          ) : (
-            <div className="session-question-actions">
-              {!isAllHintsRevealed && (
-                <button
-                  className={isHintSuggested ? 'hint-button hint-button-suggested' : 'hint-button'}
-                  type="button"
-                  onClick={handleHint}
-                >
-                  {hintButtonLabel}
-                </button>
-              )}
-              {canRevealSolution && (
-                <button className="hint-button" type="button" onClick={handleRevealSolution}>
-                  Reveal Solution
-                </button>
-              )}
-            </div>
-          )}
+        {!questionEnded && (
+          <div className="question-actions">
+            {!isAllHintsRevealed && (
+              <button
+                className={isHintSuggested ? 'hint-button hint-button-suggested' : 'hint-button'}
+                type="button"
+                onClick={handleHint}
+              >
+                {hintButtonLabel}
+              </button>
+            )}
+            {canRevealSolution && (
+              <button className="hint-button" type="button" onClick={handleRevealSolution}>
+                Reveal Solution
+              </button>
+            )}
 
-          <div className="progress-wrap">
-            <small>
-              {currentHintIndex} / {totalHints} hints used
-            </small>
-            <ProgressBar percent={percent} />
+            <span className="hint-counter">
+              {currentHintIndex} of {totalHints} hints used
+            </span>
           </div>
-        </div>
+        )}
 
         <HintPanel hints={content.hints} currentHintIndex={currentHintIndex} />
         {showSolution && <SolutionPanel solution={content.solution} />}
+
+        {questionEnded && (
+          <div className="question-advance">
+            <button type="button" onClick={handleNext}>
+              {isFinalAdvance ? 'Finish' : 'Next Question'}
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );

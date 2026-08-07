@@ -1,0 +1,84 @@
+{
+  "id": "topic-data-handling-representation-and-probability",
+  "chapterId": "data-handling",
+  "title": "Data Handling: Graphs, Pie Charts and Probability",
+  "reviewStatus": "approved",
+  "consolidationNote": "Consolidates stage2-topic-detection.md, stage3-concept-extraction.md, stage4-learning-objectives.md and stage5-worked-examples.json into one canonical Topic record, per the accepted Stage 10 export design — same process used for linear-equations/canonical-topic.json. Explanation prose is newly authored here, grounded in Stage 3's extracted concepts, not re-deriving them. Worked examples are carried over from stage5 unchanged (Section 1 deliberately has none, by stage5's own design note — it's a recap of graph-reading with no multi-step procedure to demonstrate). Learning objectives are carried over from stage4 unchanged, grouped by section as originally authored, including objective 11 (naming a real-life probability application), which stage4 flagged as not-yet-exercised at the time but is in fact covered by dh-q13. Approved 2026-08-07 for the Data Handling end-to-end release (Release 0.1.1).",
+  "sourceRefs": {
+    "stage2": "stage2-topic-detection.md",
+    "stage3": "stage3-concept-extraction.md",
+    "stage4": "stage4-learning-objectives.md",
+    "stage5": "stage5-worked-examples.json"
+  },
+  "explanation": {
+    "sections": [
+      {
+        "title": "Reading graphs you already know",
+        "body": "Data is information collected about a situation, organised systematically so it can be read and compared, rather than left as a jumble of numbers. A pictograph represents that data using a picture symbol, where each symbol (or a fraction of one) stands for a fixed quantity — for example, one book symbol might mean '2 books read'. A bar graph represents the same kind of data with bars of uniform width, equally spaced, where the height of each bar is proportional to the value it represents — taller means more. A double bar graph places two related bars side by side for each category, which makes it easy to compare two data sets directly, category by category, rather than looking at two separate graphs. One detail that trips students up: if the bars in a bar graph are rearranged — say, from tallest to shortest instead of alphabetical order — the information the graph conveys does not change at all. Only the order in which it's presented changes; every bar still represents the same value it always did."
+      },
+      {
+        "title": "Pie charts: showing parts of a whole",
+        "body": "A pie chart (or circle graph) shows how a whole is split into parts, by dividing a circle into sectors whose sizes are proportional to what they represent — a category that makes up half the data gets a sector that's half the circle. The size of each sector is measured as a central angle, calculated with one formula: central angle = (that part's fraction of the whole) × 360°, since a full circle is 360°. For example, if 'Rent' is 25% of a family's expenses, its sector's central angle is (25/100) × 360° = 90°. To construct a pie chart by hand: draw a circle and mark its centre, draw a starting radius, then use a protractor centred at that point to mark off each sector's angle in turn, moving around the circle. A related, more subtle skill is back-solving: if you're told one sector's real-world value together with its percentage (or angle) of the total, that pair gives you a unit rate — for instance, 'Rent is 25% of the budget and equals ₹5,000' tells you that 1% equals ₹200, so the whole budget (100%) is ₹20,000. That same unit rate can then be used to find the real-world value behind any other sector in the same chart."
+      },
+      {
+        "title": "Chance and probability",
+        "body": "A random experiment is one whose result cannot be predicted or controlled in advance, even in principle — tossing a coin or throwing a die are both random experiments, but checking whether the sun will rise tomorrow is not, since that outcome is certain. Each single possible result of an experiment is called an outcome (e.g. getting 'Heads', or rolling a '4'); an event is one outcome or a whole collection of outcomes grouped together (e.g. 'rolling an even number' is the event made up of the outcomes 2, 4, and 6). Outcomes are equally likely when each one has exactly the same chance of happening — this is only true when nothing about the experiment favours one outcome over another (a fair die's six faces are equally likely; a spinner with unequal sector sizes is not). Whenever outcomes are equally likely, probability can be calculated with one formula: P(event) = (number of outcomes that make the event happen) / (total number of equally likely outcomes). Probability isn't just a classroom idea — it's used to make real-world predictions from incomplete information, such as exit polls estimating an election result from a small sample of voters, or weather forecasts estimating tomorrow's conditions from historical patterns. In both cases, the prediction is a likelihood, not a certainty."
+      }
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "dh-we-01",
+      "section": "Pie charts: showing parts of a whole",
+      "conceptRef": "Central angle formula + multi-category table (dh-raw-03)",
+      "problem": "A student's weekly pocket money of ₹120 is spent as: Snacks ₹60, Books ₹30, Savings ₹30. Find the central angle of each sector in a pie chart of this data.",
+      "steps": [
+        "Find each category's fraction of the total: Snacks = 60/120 = 1/2. Books = 30/120 = 1/4. Savings = 30/120 = 1/4.",
+        "Multiply each fraction by 360° to get its central angle: Snacks = 1/2 × 360° = 180°. Books = 1/4 × 360° = 90°. Savings = 1/4 × 360° = 90°.",
+        "Check that the angles add up to 360°: 180° + 90° + 90° = 360°."
+      ],
+      "finalAnswer": "Snacks: 180°, Books: 90°, Savings: 90°."
+    },
+    {
+      "id": "dh-we-02",
+      "section": "Chance and probability",
+      "conceptRef": "Probability formula (dh-raw-06)",
+      "problem": "A box has 3 red pens, 2 blue pens and 5 black pens, identical except for colour. One pen is drawn without looking. What is the probability of drawing a blue pen?",
+      "steps": [
+        "Find the total number of equally likely outcomes: 3 + 2 + 5 = 10 pens.",
+        "Count the outcomes that make the event 'drawing a blue pen': 2.",
+        "Apply the probability formula: P(blue) = (favourable outcomes) / (total outcomes) = 2/10.",
+        "Simplify the fraction: 2/10 = 1/5."
+      ],
+      "finalAnswer": "P(blue pen) = 1/5."
+    }
+  ],
+  "learningObjectives": [
+    {
+      "section": "Reading graphs you already know",
+      "objectives": [
+        "Read and interpret values from a pictograph, bar graph, or double bar graph.",
+        "Explain why rearranging a bar graph's bars does not change the information it conveys."
+      ]
+    },
+    {
+      "section": "Pie charts: showing parts of a whole",
+      "objectives": [
+        "Explain what a pie chart's sector size represents in relation to the whole.",
+        "Calculate a sector's central angle from its fraction of the total, using (part/whole) × 360°.",
+        "Construct a pie chart from a data table using a protractor.",
+        "Given one sector's real-world value and percentage, find the real-world value of another sector via the unit rate."
+      ]
+    },
+    {
+      "section": "Chance and probability",
+      "objectives": [
+        "Distinguish a random experiment from one with a predictable outcome.",
+        "Identify the outcomes of a simple random experiment (coin toss, die throw, spinner).",
+        "Identify whether a set of outcomes is equally likely.",
+        "Calculate the probability of an event as (favourable outcomes) / (total equally likely outcomes).",
+        "Name a real-life context where probability estimates are used (e.g. exit polls, weather prediction)."
+      ]
+    }
+  ]
+}

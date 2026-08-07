@@ -1,5 +1,29 @@
 # Development Journal
 
+## 2026-08-07 (Release 0.1.1 — Curriculum Expansion: Data Handling + Understanding Quadrilaterals)
+
+*Scoped as curriculum expansion only, per explicit instruction: no architecture, auth, session-management, deployment-config, or API changes. Both chapters already existed in `chapters.json` with 5 hand-seeded placeholder questions each and no Topic — the premise that "only Linear Equations is implemented" didn't match the repo and was corrected before any content work started.*
+
+### Content added
+- **Data Handling**: a full content-source authoring trail already existed (`docs/content-source/data-handling/`, stages 2–6, 42 questions with embedded misconceptions) from an earlier session but was never exported — `reviewStatus` was `"ai-generated"`, and there was no `canonical-topic.json` or `answer-keys.json`. This session: spot-verified the 42 questions' mathematical correctness, authored `answer-keys.json` (42 terse exact-match answers) and `canonical-topic.json` (Learn-stage explanation/worked examples/objectives, consolidated from stages 2–5), flipped `reviewStatus` to `"approved"`, and ran the Stage 10 export. Runtime: 5 → 42 questions, 1 new Topic.
+- **Understanding Quadrilaterals**: had no content-source authoring trail at all. The official NCERT PDF (`hemh103.pdf`) turned out to be scanned/image-based with no extractable text layer (confirmed via two fetch attempts) — authored instead directly from standard NCERT Class 8 Chapter 3 curriculum knowledge, with that provenance stated explicitly in `stage2-topic-detection.md` rather than fabricating a fake raw-source extraction. Authored the full trail from scratch: stage2 (topic detection), stage3 (concept extraction), stage4 (11 learning objectives across 4 sections — polygon basics, angle sum property, trapezium/kite, parallelograms and special cases), stage5 (3 worked examples), stage6 (40 questions, every one with a misconception block and 2–3 progressive hints; 15 Easy/17 Medium/8 Hard, recall/application/analysis bloom split), `canonical-topic.json`, and `answer-keys.json`. Approved and exported. Runtime: 5 → 40 questions, 1 new Topic.
+
+### Files changed
+- New: `docs/content-source/data-handling/{answer-keys,canonical-topic}.json`; `docs/content-source/understanding-quadrilaterals/{stage2-topic-detection.md,stage3-concept-extraction.md,stage4-learning-objectives.md,stage5-worked-examples.json,stage6-questions.json,canonical-topic.json,answer-keys.json}`.
+- Modified: `docs/content-source/data-handling/stage6-questions.json` (`reviewStatus` flipped to `approved`); `backend/app/data/{topics,questions,answer_keys}.json` (Stage 10 export output, both chapters); `backend/tests/test_content_repository.py` (one test's fixture chapter repointed from `data-handling` to `practical-geometry` — it asserted "topicless questions" using data-handling as the example chapter, which stopped being true once data-handling got a Topic; `practical-geometry` still has none).
+
+### Reusable improvements
+None — the Stage 10 export pipeline, approval gate, and content-source authoring format (from ADR-003) handled both chapters without any engineering changes. This is exactly what that pipeline was built for.
+
+### Verification summary
+- Backend: 205/205 pytest passing (one pre-existing test's fixture updated to match new content, not a regression).
+- Frontend: `tsc -b` clean, `oxlint` clean, 102/102 vitest passing — no frontend code was touched at all; this is proof the content model absorbed both new chapters through existing generic code paths.
+- Live walkthrough (both dev servers): chapter list shows all 5 chapters; Understanding Quadrilaterals and Data Handling both open into their new Topic (Learn) pages with full explanation/worked-examples/objectives content rendering correctly; "Start Practice" enters a 40-question / 42-question session; progressive hints (1/2 revealed) work; a correct answer produces the coaching "solved it correctly" message and advances; a wrong answer produces the "try again" coaching message without revealing the answer; Linear Equations re-checked afterward and still shows all 44 questions, unaffected.
+
+### Implementation notes
+- Evaluation is exact-string match against a private `answer_keys.json` (`evaluation_service.py`), separate from the long-form `solution` shown to students — this was already a known, documented limitation from Linear Equations' own export (some compound/reasoning answers are weak fits for exact match). Both new chapters' answer keys follow the same documented convention, flagging their own weak-fit questions by ID rather than silently accepting the risk.
+- No `raw/` source directory exists for `understanding-quadrilaterals` (unlike the other two exported chapters) — this is intentional and documented in its `stage2-topic-detection.md`, not an oversight to fix later.
+
 ## 2026-07-29 (Sprint C — Complete Version 1.0 and Prepare RC1)
 
 *Completes Milestone F1 (Student Learning Experience / Session Frontend), begun with Slice 1 (below) and continued through Sprint A (session entry flow) and Sprint B (the core answer/coaching loop) — both implemented in this same session's earlier turns and recorded in `Implementation-Journal.md` per their own narrower documentation policies, not repeated here. This entry covers Sprint C specifically: Session Completion, Resume, UX polish, and a genuine deployment validation, following `Sprint-C-Implementation-Plan.md` (produced during Milestone RC1, also this session). Full detail, including the complete live-verification walkthrough, is in `Implementation-Journal.md`'s Sprint C entry — this is the summary.*

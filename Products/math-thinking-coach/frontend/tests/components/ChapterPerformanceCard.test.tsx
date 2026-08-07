@@ -64,4 +64,17 @@ describe('ChapterPerformanceCard', () => {
 
     expect(mockNavigate).toHaveBeenCalledWith('/practice/linear-equations');
   });
+
+  // Release 0.1.2 (UX review IA-1): before this, /topic/:topicId was
+  // reachable only from the anonymous chapter page, so a logged-in student
+  // could never reach the lesson content at all.
+  it('offers a Learn action only for chapters that have a topic', () => {
+    const { rerender } = render(<ChapterPerformanceCard chapter={chapter} />);
+    expect(screen.queryByRole('button', { name: 'Learn' })).toBeNull();
+
+    rerender(<ChapterPerformanceCard chapter={chapter} topicId="topic-linear-equations" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Learn' }));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/topic/topic-linear-equations?from=dashboard');
+  });
 });

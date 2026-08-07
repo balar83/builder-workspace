@@ -1,11 +1,9 @@
-.student-join-field {
+.student-join-header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 0.75rem;
-  text-align: left;
+  gap: var(--space-1);
 }
 
-.student-join-error {
-  color: #b00020;
+.student-join-switch {
+  text-align: center;
 }

@@ -15,6 +15,10 @@ import './DashboardPage.css';
 interface ChapterWithPerformance {
   chapter: Chapter;
   performance?: TopicPerformance;
+  // The chapter's Topic, when it has one — carried through so the card can
+  // offer a Learn action (IA-1). The topic lookup below already happened
+  // for the performance correlation; this just stops discarding its id.
+  topicId?: string;
 }
 
 interface DashboardData {
@@ -43,7 +47,7 @@ async function loadDashboard(): Promise<DashboardData> {
   const chaptersWithPerformance = chapters.map((chapter, index) => {
     const topics = topicsPerChapter[index];
     const performance = topics.length > 0 ? performanceByTopicId.get(topics[0].id) : undefined;
-    return { chapter, performance };
+    return { chapter, performance, topicId: topics[0]?.id };
   });
 
   const resume = user?.id ? await resolveResume(user.id, chapters) : undefined;
@@ -150,8 +154,13 @@ export default function DashboardPage() {
       )}
 
       <div className="chapter-grid">
-        {data.chapters.map(({ chapter, performance }) => (
-          <ChapterPerformanceCard key={chapter.id} chapter={chapter} performance={performance} />
+        {data.chapters.map(({ chapter, performance, topicId }) => (
+          <ChapterPerformanceCard
+            key={chapter.id}
+            chapter={chapter}
+            performance={performance}
+            topicId={topicId}
+          />
         ))}
       </div>
     </main>

@@ -1,15 +1,76 @@
-.teacher-auth-field {
+.teacher-panel-header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 0.75rem;
+  gap: var(--space-1);
+}
+
+.teacher-mode-switch {
+  text-align: center;
+}
+
+/* Matches DashboardPage's .dashboard-header exactly (Part 5 consistency):
+   welcome text on the left, the one exit affordance (Log out) on the
+   right, same row. */
+.teacher-home-header {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
   text-align: left;
+  margin-bottom: var(--space-2);
 }
 
-.teacher-auth-error {
-  color: #b00020;
+/* Same flex min-width:auto trap as .dashboard-header — a long teacher name
+   would otherwise carry Log out off the right edge. */
+.teacher-home-header > div:first-child {
+  min-width: 0;
 }
 
-.teacher-auth-code {
-  font-size: 1.1rem;
+.teacher-home-header > .link-button {
+  flex-shrink: 0;
+}
+
+.teacher-home-header .tagline {
+  margin-top: var(--space-1);
+}
+
+/* The join code is the only route students have into a class, and there is
+   no "list my classes" view to recover it from — so it is given real
+   prominence and an explicit save-it-now warning (UX review T4 interim
+   mitigation; the full fix needs an endpoint that does not exist yet). */
+.teacher-code-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-primary-soft);
+  border: var(--border-width) solid var(--color-primary-border);
+  border-radius: var(--radius-md);
+}
+
+.teacher-code-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.teacher-code-value {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: 0.12em;
+  color: var(--color-primary-strong);
+}
+
+.teacher-code-copy {
+  min-height: 36px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.teacher-code-warning {
+  font-size: var(--text-sm);
+  color: var(--color-text);
 }

@@ -1,5 +1,18 @@
 # Release Notes
 
+## Release 0.1.1 (2026-08-07) — Curriculum Expansion
+
+*Curriculum expansion and production stabilization only — no architecture, auth, session-management, deployment, or API changes.*
+
+### New Content
+- **Data Handling** now has 42 questions (up from 5) and a full Learn page (graphs, pie charts, and probability), covering conceptual understanding, direct application, reasoning, and multi-step problems — not just computation.
+- **Understanding Quadrilaterals** now has 40 questions (up from 5) and a full Learn page (polygons, angle sum properties, trapeziums, kites, and parallelograms including rhombus/rectangle/square), authored from scratch with the same depth and hint/misconception structure as Linear Equations and Data Handling.
+- Both chapters' questions include progressive hints (never reveal the answer immediately) and Socratic-style guidance, matching the existing coaching philosophy.
+
+### Resolved from v1.0.0-rc1
+- The "three chapters still have their original 5 questions" limitation noted below now applies to only one chapter (Practical Geometry).
+- Data Handling's already-authored 42-question export (deferred at v1.0.0-rc1 pending content review) is complete: reviewed, approved, and live.
+
 ## v1.0.0-rc1 (2026-07-29)
 
 *A Release Candidate — a real, stable checkpoint meant for actual daily use while a few remaining pieces (a fuller session summary, teacher tools) continue to be built separately. Not the final v1.0 tag yet.*

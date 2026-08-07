@@ -1,6 +1,6 @@
 {
   "topicId": "topic-data-handling-representation-and-probability",
-  "reviewStatus": "ai-generated",
+  "reviewStatus": "approved",
   "expansionNote": "Expansion pass (approved after Stage 6 review) added dh-q14 through dh-q40 — 27 new questions — to reach 40 total. The original 13 questions left objectives 1, 2, 3, 5, 6, 7, 9 completely uncovered (they were all normalized from Exercise 4.1/4.2, which only exercise objectives 4, 8, 10, 11) — this pass closes every one of those gaps. Since the app's Question format is a typed text answer, objectives that reference reading a chart (obj 1) or drawing one with a protractor (obj 5) are presented as data tables / step-recall prompts rather than actual chart images. 'objective' field references stage4-learning-objectives.md by number.",
   "excludedSourceItems": [
     {"sourceRef": "Exercise 4.1 Q1", "reason": "Depends on a pie chart figure (music-preference percentages) that exists only as an image in the source PDF, not as extractable text."},

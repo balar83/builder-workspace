@@ -1,50 +1,66 @@
 .chapter-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+  /* A <button> inherits `text-align: center` from the UA stylesheet, so
+     this has to be set explicitly even though the app default is left. */
+  text-align: left;
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--weight-regular);
   transition: transform 160ms ease, box-shadow 160ms ease;
   cursor: pointer;
 }
 
-.chapter-card:focus {
-  outline: 2px solid #c7d2fe;
-  outline-offset: 2px;
-}
-
-.chapter-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.12);
+.chapter-card:hover:not(:disabled) {
+  background: var(--color-surface);
+  border-color: var(--color-primary-border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .chapter-card:active {
-  transform: translateY(-1px) scale(0.997);
+  transform: translateY(0);
 }
 
 .chapter-card-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
-.chapter-card-main h3 {
-  font-size: 1rem;
-  margin-bottom: 6px;
+/* Covers both cards: ChapterCard's <span> (inside a <button>, so it cannot
+   be a heading) and ChapterPerformanceCard's real <h2>. Identical
+   appearance, different semantics, one rule. */
+.chapter-card-main h2,
+.chapter-card-title {
+  display: block;
+  color: var(--color-text-strong);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-heading);
+  margin-bottom: var(--space-1);
 }
 
 .chapter-desc {
-  color: #55607a;
-  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
 }
 
 .chapter-progress-badge {
-  color: #7c3aed;
-  font-size: 0.8rem;
-  margin-top: 4px;
+  margin-top: var(--space-2);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
 }
 
 .chapter-arrow {
-  font-size: 1.5rem;
-  color: #7c3aed;
+  flex-shrink: 0;
+  font-size: var(--text-lg);
+  color: var(--color-primary);
 }

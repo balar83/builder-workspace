@@ -1,0 +1,43 @@
+{
+  "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+  "reviewStatus": "approved",
+  "authoringNote": "Section 1 ('Polygons: curves, convexity and regularity') and Section 3 ('Trapezium and kite') are definitional/classification recaps with no multi-step numeric procedure to demonstrate — no worked example authored for either, by design, matching the precedent set for Data Handling's Section 1. Sections 2 and 4 each get worked examples grounded in the Stage 3 concepts.",
+  "workedExamples": [
+    {
+      "id": "uq-we-01",
+      "section": "Angle sum property of a polygon",
+      "conceptRef": "Interior angle sum formula (uq-raw-concept-3.3)",
+      "problem": "Three angles of a quadrilateral measure 80°, 95°, and 100°. Find the fourth angle.",
+      "steps": [
+        "The sum of the interior angles of a quadrilateral is (4 − 2) × 180° = 360°.",
+        "Add the three known angles: 80° + 95° + 100° = 275°.",
+        "Subtract from the total: 360° − 275° = 85°."
+      ],
+      "finalAnswer": "The fourth angle is 85°."
+    },
+    {
+      "id": "uq-we-02",
+      "section": "Angle sum property of a polygon",
+      "conceptRef": "Exterior angle sum property + interior/exterior linear pair (uq-raw-concept-3.3)",
+      "problem": "Each interior angle of a regular polygon measures 156°. How many sides does the polygon have?",
+      "steps": [
+        "At each vertex, the interior and exterior angles form a linear pair: interior + exterior = 180°.",
+        "So the exterior angle = 180° − 156° = 24°.",
+        "For a regular polygon, number of sides = 360° ÷ each exterior angle.",
+        "Number of sides = 360° ÷ 24° = 15."
+      ],
+      "finalAnswer": "The polygon has 15 sides."
+    },
+    {
+      "id": "uq-we-03",
+      "section": "Parallelograms and their special cases",
+      "conceptRef": "Parallelogram adjacent/opposite angle properties (uq-raw-concept-3.5)",
+      "problem": "In parallelogram PQRS, angle P = 70°. Find angle Q (adjacent to P) and angle R (opposite to P).",
+      "steps": [
+        "Adjacent angles in a parallelogram are supplementary, so angle Q = 180° − 70° = 110°.",
+        "Opposite angles in a parallelogram are equal, so angle R = angle P = 70°."
+      ],
+      "finalAnswer": "Angle Q = 110°, angle R = 70°."
+    }
+  ]
+}

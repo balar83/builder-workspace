@@ -1,50 +1,37 @@
-.session-shortfall-notice {
+.session-shortfall-notice,
+.session-sync-notice {
   width: 100%;
-  max-width: 920px;
-  background: #fef3c7;
-  color: #92400e;
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 0.9rem;
+  max-width: var(--content-max);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.session-shortfall-notice {
+  background: var(--color-retry-soft);
+  border-color: var(--color-retry-border);
+  color: var(--color-retry);
 }
 
 .session-sync-notice {
-  width: 100%;
-  max-width: 920px;
-  background: #e0f2fe;
-  color: #075985;
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 0.9rem;
+  background: var(--color-info-soft);
+  border-color: var(--color-info-border);
+  color: var(--color-info);
 }
 
 .session-submit-error {
-  color: #b00020;
-  margin-top: 8px;
-}
-
-.session-question-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
 }
 
 .session-timer {
-  background: #ede9fe;
-  color: #4c1d95;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
   white-space: nowrap;
-}
-
-/* This page's .meta-row can now hold three items (question count,
-   difficulty, and the Test-mode timer) - wrap instead of overflowing on
-   narrow viewports, without touching QuestionPage.css's shared rule. */
-.session-question-page .meta-row {
-  flex-wrap: wrap;
-  row-gap: 6px;
 }

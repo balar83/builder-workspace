@@ -1,20 +1,23 @@
 .session-complete-summary {
-  background: white;
+  background: var(--color-surface);
   width: 100%;
   max-width: 480px;
-  padding: 20px;
-  border-radius: 12px;
-  margin: 16px 0;
-  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin: var(--space-4) 0;
+  box-shadow: var(--shadow-md);
   text-align: center;
 }
 
 .session-complete-status {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-2);
 }
 
 .session-complete-detail {
-  color: #55607a;
+  color: var(--color-text-muted);
+  line-height: var(--leading-body);
 }

@@ -42,7 +42,7 @@ def test_get_candidates_reflects_real_content_scale_for_linear_equations() -> No
 
 
 def test_get_candidates_includes_topicless_questions_with_topic_id_none() -> None:
-    candidates = content_repository.get_candidates("data-handling")
+    candidates = content_repository.get_candidates("practical-geometry")
 
     assert len(candidates) == 5
     assert all(candidate.topicId is None for candidate in candidates)

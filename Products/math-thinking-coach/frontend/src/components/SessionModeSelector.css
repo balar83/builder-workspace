@@ -5,43 +5,48 @@
 }
 
 .session-mode-field {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   border: none;
   padding: 0;
 }
 
 .session-mode-field legend {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-2);
   padding: 0;
 }
 
 .session-mode-field > label {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
+/* The radio itself is 13x13px, so the label is the real target. It measured
+   22px tall — under the 24px WCAG 2.2 SC 2.5.8 (AA) minimum, and well under
+   this product's own 44px control standard. Padding, not a bare min-height,
+   so the target grows around the text instead of leaving it top-aligned in
+   a tall empty row. */
 .session-mode-option {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: var(--space-2) 0;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
 }
 
-.session-mode-field select,
-.session-mode-field input[type='number'] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 1rem;
+.session-mode-option input {
+  width: auto;
+  min-height: 0;
+  flex-shrink: 0;
 }
 
 .session-mode-hint {
   display: block;
-  margin-top: 4px;
-  color: #6b7280;
-  font-size: 0.8rem;
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
 }

@@ -1,0 +1,18 @@
+/* Two classes, deliberately: App.css's `.link-button { min-height: 0 }` is
+   the same specificity as a bare `.back-link` and wins on source order, so
+   a single-class selector here silently lost and left the control at 33px. */
+.link-button.back-link {
+  padding-left: 0;
+  margin-bottom: var(--space-2);
+  /* This is the app's primary navigation control and it is aimed at
+     children on phones, so it takes the same 44px target the rest of the
+     product's controls use (tokens.css --control-height). It measured 25px
+     before this rule — above the 24px WCAG 2.2 AA floor, but below the
+     standard this product set for itself. `align-self: flex-start` keeps
+     the *visible* link the width of its text: the taller target is hit
+     area, not a wider-looking link. */
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: var(--control-height);
+}

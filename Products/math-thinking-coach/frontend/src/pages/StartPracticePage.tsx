@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import BackLink from '../components/BackLink';
 import SessionModeSelector, { type SessionConfig } from '../components/SessionModeSelector';
 import { authService } from '../services/authService';
 import { questionService } from '../services/questionService';
@@ -25,25 +26,43 @@ export default function StartPracticePage() {
   const [validationError, setValidationError] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // Without this the initial (still-loading) render was identical to the
+  // genuine missing-chapter render, so every visit flashed "Chapter not
+  // found." before the form appeared.
+  const [chapterState, setChapterState] = useState<'loading' | 'loaded' | 'error'>('loading');
 
   useEffect(() => {
     let cancelled = false;
 
-    questionService.getChapter(chapterId).then((result) => {
-      if (!cancelled) {
-        setChapter(result);
-      }
-    });
+    questionService
+      .getChapter(chapterId)
+      .then((result) => {
+        if (!cancelled) {
+          setChapter(result);
+          setChapterState('loaded');
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setChapterState('error');
+        }
+      });
 
     // The chapter's total question count (across all difficulties) - a
     // simple, honest ceiling for "number of questions," not an attempt to
     // predict per-difficulty or Revision availability. A narrower request
     // can still legitimately shortfall; existing messaging already covers that.
-    questionService.getQuestions(chapterId).then((result) => {
-      if (!cancelled) {
-        setMaxQuestionCount(result.length);
-      }
-    });
+    questionService
+      .getQuestions(chapterId)
+      .then((result) => {
+        if (!cancelled) {
+          setMaxQuestionCount(result.length);
+        }
+      })
+      .catch(() => {
+        // The ceiling is an optional convenience; the chapter fetch above
+        // already owns the page's error state.
+      });
 
     return () => {
       cancelled = true;
@@ -115,29 +134,67 @@ export default function StartPracticePage() {
     }
   };
 
+  if (chapterState === 'loading') {
+    return (
+      <main className="container">
+        <BackLink to="/dashboard" label="Dashboard" />
+        <h1>Start Practice</h1>
+        <p className="page-lead">Loading…</p>
+      </main>
+    );
+  }
+
+  if (chapterState === 'error') {
+    return (
+      <main className="container">
+        <BackLink to="/dashboard" label="Dashboard" />
+        <h1>Start Practice</h1>
+        <p className="page-lead">
+          We couldn&apos;t load this chapter. Check your connection and try again.
+        </p>
+        <div className="button-group">
+          <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
+        </div>
+      </main>
+    );
+  }
+
   if (!chapter) {
     return (
       <main className="container">
+        <BackLink to="/dashboard" label="Dashboard" />
         <h1>Start Practice</h1>
         <p>Chapter not found.</p>
-        <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
       </main>
     );
   }
 
   return (
     <main className="container start-practice-page">
+      <BackLink to="/dashboard" label="Dashboard" />
+
       <h1>Start Practice</h1>
       <p className="tagline">{chapter.title}</p>
 
       <SessionModeSelector value={config} onChange={setConfig} maxQuestionCount={maxQuestionCount} />
 
-      {validationError && <p className="start-practice-error">{validationError}</p>}
-      {submitError && <p className="start-practice-error">{submitError}</p>}
+      {validationError && (
+        <p className="form-error start-practice-error" aria-live="polite">
+          {validationError}
+        </p>
+      )}
+      {submitError && (
+        <p className="form-error start-practice-error" aria-live="polite">
+          {submitError}
+        </p>
+      )}
 
       <div className="button-group">
         <button onClick={handleSubmit} disabled={submitting}>
           {submitting ? 'Starting…' : 'Start Session'}
+        </button>
+        <button className="link-button" onClick={() => navigate('/dashboard')} disabled={submitting}>
+          Cancel
         </button>
       </div>
     </main>

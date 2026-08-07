@@ -1,9 +1,19 @@
 .start-practice-page {
-  align-items: center;
+  gap: var(--space-3);
+}
+
+/* BackLink is a direct flex child of .container here (unlike the
+   content-column pages, where it's nested), so .container's own gap
+   already provides the spacing below it — without this, the two would
+   add up to a visibly larger gap than every other page uses (Part 4/5). */
+.start-practice-page .back-link {
+  margin-bottom: 0;
+}
+
+.start-practice-page .tagline {
+  margin-bottom: var(--space-2);
 }
 
 .start-practice-error {
-  color: #b00020;
-  margin-top: 0.5rem;
   max-width: 420px;
 }

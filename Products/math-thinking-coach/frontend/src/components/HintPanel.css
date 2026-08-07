@@ -1,31 +1,43 @@
 .hint-panel {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.06);
-}
-
-.hint-panel-title {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  color: #111827;
-}
-
-.hint-panel-empty {
-  color: #6b7280;
-  font-size: 0.95rem;
+  margin-top: var(--space-4);
 }
 
 .hint-panel-list {
-  margin: 0;
-  padding-left: 18px;
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
+/* Each hint is its own card, progressively indented, so the ladder is
+   legible at a glance rather than reading as one block of prose. */
 .hint-panel-item {
-  color: #374151;
-  line-height: 1.5;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-primary-soft);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.hint-panel-item + .hint-panel-item {
+  margin-left: var(--space-4);
+}
+
+.hint-panel-step {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--space-1);
+}
+
+.hint-panel-text {
+  color: var(--color-text);
+  line-height: var(--leading-body);
+}
+
+@media (max-width: 640px) {
+  .hint-panel-item + .hint-panel-item {
+    margin-left: var(--space-2);
+  }
 }

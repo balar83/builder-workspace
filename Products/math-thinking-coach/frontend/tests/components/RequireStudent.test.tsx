@@ -63,4 +63,25 @@ describe('RequireStudent', () => {
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/student/join', { replace: true }));
     expect(screen.queryByText('Protected')).not.toBeInTheDocument();
   });
+
+  // Release 0.1.2 final audit: the guard had no rejection branch, so a
+  // failed /auth/me left it in 'checking' forever. Every route behind it
+  // (Dashboard, Start Practice, Session) became a permanent "Loading…"
+  // screen with no control of any kind — the pages' own error states never
+  // mounted. A failed check is also NOT "not logged in", so it must not
+  // redirect to the join form.
+  it('offers a recoverable error state when the server is unreachable', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+
+    render(
+      <RequireStudent>
+        <p>Protected</p>
+      </RequireStudent>,
+    );
+
+    expect(await screen.findByRole('button', { name: 'Try again' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Go to Home' })).toBeInTheDocument();
+    expect(screen.queryByText('Protected')).not.toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
 });

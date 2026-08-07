@@ -6,23 +6,15 @@
 # Current Active Work (Update Every Session)
 
 Current focus:
-Deployment Stabilization
+None — Release 0.1.1 (Curriculum Expansion) is complete, 2026-08-07.
 
 Status:
-Backend and frontend deployed. Root cause of the session-cookie bug found, fixed, and verified locally (2026-07-29) — not yet redeployed.
+Data Handling (5 → 42 questions, 1 new Topic) and Understanding Quadrilaterals (5 → 40 questions, 1 new Topic, authored entirely from scratch — no prior content-source trail existed) were both taken through review/authoring, approval, and the Stage 10 export pipeline, and are now live. No architecture, auth, session-management, deployment-config, or API changes — content-only, per explicit scope. See `Development-Journal.md`'s 2026-08-07 entry for full detail (content added, files changed, verification). 205/205 backend tests, 102/102 frontend tests, both clean; live-verified in browser (Topic pages, question flow, hints, evaluation) for both new chapters, with Linear Equations re-confirmed unaffected. Practical Geometry is now the only chapter still on its original 5 hand-seeded placeholder questions with no Topic.
 
-Root cause:
-Split hosting (Vercel frontend, Render backend) puts the two on different sites, making the session cookie cross-site. The cookie was set with hardcoded `SameSite=Lax` (`backend/app/main.py`) — browsers withhold `Lax` cookies on cross-site `fetch`/XHR, so login succeeded (Set-Cookie received) but the next authenticated call (`POST /auth/teacher/classes`) always came back 401. Reproduced locally by simulating cross-site (backend on `127.0.0.1`, frontend on `localhost` — different sites to Chrome) and getting the identical failure.
+Prior work (also complete, 2026-08-07): the session-cookie deployment bug (teacher login returned Set-Cookie, but the next authenticated call came back 401/"Teacher login required") — cross-site cookie config, fixed via `SESSION_COOKIE_SAMESITE`/`SESSION_HTTPS_ONLY` env vars (commit `d4445f5`, on `main`, pushed to `origin/main`), Render configured and redeployed, live-verified against real Vercel+Render URLs.
 
-Fix (uncommitted):
-`SESSION_COOKIE_SAMESITE` env var added (`backend/app/core/config.py`, `backend/app/main.py`), default `"lax"` (no behavior change for local/self-hosted). `docs/Deployment-Guide.md` and `backend/.env.example` updated to document that split hosting needs `SESSION_COOKIE_SAMESITE=none` paired with `SESSION_HTTPS_ONLY=true`. Verified: 205/205 backend tests pass; curl-level check confirms the cookie now carries `SameSite=None; Secure` when those env vars are set. Full in-browser cross-site verification over HTTPS was attempted locally (self-signed cert) but blocked by the sandboxed browser's own security policy — not a gap in the fix itself, just an unverified-in-browser step.
-
-Current plan:
-Reproduce locally. — done
-Fix locally. — done
-Verify. — done (tests + protocol-level; live in-browser HTTPS check not possible locally)
-Deploy. — next: set `SESSION_COOKIE_SAMESITE=none` and `SESSION_HTTPS_ONLY=true` in Render's dashboard, commit and push this fix, redeploy, then live-verify against the real Vercel+Render URLs (real TLS certs, so the local sandbox limitation doesn't apply there).
-Resume Release 0.2 afterwards.
+Next:
+Nothing queued. The deployment fix (commit `d4445f5`) is already committed and pushed; Release 0.1.1's content and doc updates are not yet committed — ask the user whether/how to commit this checkpoint (run `git status` to confirm current state), then archive this conversation and begin further work in a fresh chat.
 
 Everything below represents stable architecture.
 

@@ -4,12 +4,25 @@
 
 .dashboard-header {
   width: 100%;
-  max-width: 920px;
+  max-width: var(--content-max);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3);
   text-align: left;
+}
+
+/* A flex item defaults to min-width:auto, so a long unbroken student name
+   pushed the whole row wider than the viewport and carried Log out off the
+   right edge with it (measured: Log out sitting at x=1058 in a 360px
+   viewport, unreachable). min-width:0 lets the text column shrink and wrap;
+   flex-shrink:0 keeps the exit affordance at full size while it does. */
+.dashboard-header > div:first-child {
+  min-width: 0;
+}
+
+.dashboard-header > .link-button {
+  flex-shrink: 0;
 }
 
 .dashboard-header h1,
@@ -19,11 +32,11 @@
 
 .chapter-grid {
   width: 100%;
-  margin-top: 18px;
+  margin-top: var(--space-4);
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
-  max-width: 920px;
+  gap: var(--space-3);
+  max-width: var(--content-max);
 }
 
 @media (min-width: 640px) {

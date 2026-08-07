@@ -1,5 +1,551 @@
 [
   {
+    "id": "dh-q01",
+    "chapterId": "data-handling",
+    "question": "360 people voted for their favourite season: Summer got 90 votes, Rainy got 120 votes, and Winter got 150 votes. Which season got the most votes, and what is each season's central angle in a pie chart of this data?",
+    "text": "360 people voted for their favourite season: Summer got 90 votes, Rainy got 120 votes, and Winter got 150 votes. Which season got the most votes, and what is each season's central angle in a pie chart of this data?",
+    "difficulty": "Medium",
+    "hints": [
+      "Divide each season's votes by the total (360) to get its fraction of the whole.",
+      "Multiply each fraction by 360° to get its central angle."
+    ],
+    "solution": "Winter got the most votes (150). Central angles: Summer = (90/360)×360° = 90°, Rainy = (120/360)×360° = 120°, Winter = (150/360)×360° = 150°.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q02",
+    "chapterId": "data-handling",
+    "question": "A group of 36 people were asked their favourite colour: Blue 18, Green 9, Red 6, Yellow 3. Find the central angle of each colour's sector in a pie chart.",
+    "text": "A group of 36 people were asked their favourite colour: Blue 18, Green 9, Red 6, Yellow 3. Find the central angle of each colour's sector in a pie chart.",
+    "difficulty": "Medium",
+    "hints": [
+      "Blue is 18 out of 36 — simplify that fraction first (it's 1/2).",
+      "Multiply each colour's simplified fraction by 360° to get its angle."
+    ],
+    "solution": "Blue = (18/36)×360° = 180°. Green = (9/36)×360° = 90°. Red = (6/36)×360° = 60°. Yellow = (3/36)×360° = 30°. (Angles sum to 360°.)",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q03",
+    "chapterId": "data-handling",
+    "question": "In a hostel of 72 students, the first languages spoken are: Hindi 40, English 12, Marathi 9, Tamil 7, Bengali 4. Find the central angle of each language's sector in a pie chart.",
+    "text": "In a hostel of 72 students, the first languages spoken are: Hindi 40, English 12, Marathi 9, Tamil 7, Bengali 4. Find the central angle of each language's sector in a pie chart.",
+    "difficulty": "Medium",
+    "hints": [
+      "Notice that 360° ÷ 72 = 5° per student — multiply each language's count by 5° directly.",
+      "Check your five angles add up to exactly 360°."
+    ],
+    "solution": "Hindi = 200°, English = 60°, Marathi = 45°, Tamil = 35°, Bengali = 20°. (Angles sum to 360°.)",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q04",
+    "chapterId": "data-handling",
+    "question": "List all the possible outcomes when two coins are tossed together.",
+    "text": "List all the possible outcomes when two coins are tossed together.",
+    "difficulty": "Easy",
+    "hints": [
+      "Each coin independently lands Head or Tail — list every combination of the two coins' results.",
+      "Don't treat 'Head then Tail' and 'Tail then Head' as the same outcome."
+    ],
+    "solution": "HH, HT, TH, TT — four equally likely outcomes.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q05",
+    "chapterId": "data-handling",
+    "question": "A die is thrown once. What is the probability of getting (a) a prime number, and (b) a number that is not prime?",
+    "text": "A die is thrown once. What is the probability of getting (a) a prime number, and (b) a number that is not prime?",
+    "difficulty": "Easy",
+    "hints": [
+      "List the numbers 1 to 6 and mark which ones are prime.",
+      "Remember 1 is not a prime number — it only has one factor."
+    ],
+    "solution": "Prime numbers on a die are 2, 3, 5. P(prime) = 3/6 = 1/2. Not-prime numbers are 1, 4, 6. P(not prime) = 3/6 = 1/2.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q06",
+    "chapterId": "data-handling",
+    "question": "A die is thrown once. What is the probability of getting (a) a number greater than 5, and (b) a number not greater than 5?",
+    "text": "A die is thrown once. What is the probability of getting (a) a number greater than 5, and (b) a number not greater than 5?",
+    "difficulty": "Easy",
+    "hints": [
+      "List which of 1 to 6 are strictly greater than 5.",
+      "The two probabilities should add up to 1 — use that to check your second answer."
+    ],
+    "solution": "Only 6 is greater than 5. P(greater than 5) = 1/6. Not greater than 5: 1,2,3,4,5. P = 5/6.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q07",
+    "chapterId": "data-handling",
+    "question": "Find the probability of getting an ace when drawing one card from a well-shuffled deck of 52 playing cards.",
+    "text": "Find the probability of getting an ace when drawing one card from a well-shuffled deck of 52 playing cards.",
+    "difficulty": "Easy",
+    "hints": [
+      "How many aces are in a standard 52-card deck?",
+      "Write the probability as favourable outcomes over total outcomes, then simplify."
+    ],
+    "solution": "There are 4 aces in a deck of 52, so P(ace) = 4/52 = 1/13.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q08",
+    "chapterId": "data-handling",
+    "question": "Ten slips numbered 1 to 10 are placed in a box and mixed well. One slip is drawn without looking. What is the probability of getting the number 6?",
+    "text": "Ten slips numbered 1 to 10 are placed in a box and mixed well. One slip is drawn without looking. What is the probability of getting the number 6?",
+    "difficulty": "Easy",
+    "hints": [
+      "How many of the ten slips show the number 6?",
+      "Probability = favourable outcomes / total outcomes."
+    ],
+    "solution": "P(6) = 1/10.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q09",
+    "chapterId": "data-handling",
+    "question": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a number less than 6?",
+    "text": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a number less than 6?",
+    "difficulty": "Easy",
+    "hints": [
+      "List the slip numbers strictly less than 6.",
+      "Simplify the resulting fraction."
+    ],
+    "solution": "Numbers less than 6: 1,2,3,4,5. P = 5/10 = 1/2.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q10",
+    "chapterId": "data-handling",
+    "question": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a number greater than 6?",
+    "text": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a number greater than 6?",
+    "difficulty": "Easy",
+    "hints": [
+      "List the slip numbers strictly greater than 6.",
+      "Simplify the fraction to lowest terms."
+    ],
+    "solution": "Numbers greater than 6: 7,8,9,10. P = 4/10 = 2/5.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q11",
+    "chapterId": "data-handling",
+    "question": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a 1-digit number?",
+    "text": "From the same box of ten slips numbered 1 to 10, what is the probability of drawing a 1-digit number?",
+    "difficulty": "Easy",
+    "hints": [
+      "Which of 1 to 10 have only one digit?",
+      "Remember 10 itself has two digits."
+    ],
+    "solution": "1-digit numbers: 1 through 9 (10 is 2-digit). P = 9/10.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q12",
+    "chapterId": "data-handling",
+    "question": "A spinning wheel has 3 green sectors, 1 blue sector and 1 red sector (5 sectors total, all equally likely). Find the probability of getting (a) a green sector, and (b) a non-blue sector.",
+    "text": "A spinning wheel has 3 green sectors, 1 blue sector and 1 red sector (5 sectors total, all equally likely). Find the probability of getting (a) a green sector, and (b) a non-blue sector.",
+    "difficulty": "Easy",
+    "hints": [
+      "Total sectors = 3 + 1 + 1 = 5.",
+      "'Not blue' means every sector except blue — count green and red together."
+    ],
+    "solution": "P(green) = 3/5. Non-blue = green + red = 4/5.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q13",
+    "chapterId": "data-handling",
+    "question": "Name one real-life situation where probability is used to make a prediction, and briefly explain why it's a probability-based prediction rather than a certainty.",
+    "text": "Name one real-life situation where probability is used to make a prediction, and briefly explain why it's a probability-based prediction rather than a certainty.",
+    "difficulty": "Easy",
+    "hints": [
+      "Think of examples mentioned in the chapter: elections, or the weather.",
+      "A probability-based prediction estimates what's likely from limited or past information — it doesn't guarantee the outcome."
+    ],
+    "solution": "Any correct example works, e.g.: election exit polls, or weather forecasting from historical data. Both estimate what's likely, not what's certain.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q14",
+    "chapterId": "data-handling",
+    "question": "A pictograph shows books read by 4 friends, where each 📖 symbol = 2 books: Asha ●●●, Bilal ●●, Chetan ●●●●, Deepa ●. How many books did Chetan read?",
+    "text": "A pictograph shows books read by 4 friends, where each 📖 symbol = 2 books: Asha ●●●, Bilal ●●, Chetan ●●●●, Deepa ●. How many books did Chetan read?",
+    "difficulty": "Easy",
+    "hints": [
+      "Count Chetan's symbols.",
+      "Multiply the symbol count by the value each symbol represents (2 books)."
+    ],
+    "solution": "Chetan has 4 symbols × 2 books = 8 books.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q15",
+    "chapterId": "data-handling",
+    "question": "A bar graph shows ice creams sold each day: Mon 20, Tue 35, Wed 15, Thu 40, Fri 25. On which day were the most ice creams sold, and how many were sold that day?",
+    "text": "A bar graph shows ice creams sold each day: Mon 20, Tue 35, Wed 15, Thu 40, Fri 25. On which day were the most ice creams sold, and how many were sold that day?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare the heights (values) of all five bars.",
+      "The tallest bar corresponds to the day with the most sales."
+    ],
+    "solution": "Thursday, 40 ice creams.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q16",
+    "chapterId": "data-handling",
+    "question": "A double bar graph compares Class 8A and 8B's scores: Maths (8A: 72, 8B: 65) and Science (8A: 68, 8B: 74). In which subject did 8B score higher than 8A, and by how much?",
+    "text": "A double bar graph compares Class 8A and 8B's scores: Maths (8A: 72, 8B: 65) and Science (8A: 68, 8B: 74). In which subject did 8B score higher than 8A, and by how much?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare the two bars for each subject separately.",
+      "Subtract to find by how much the higher score exceeds the lower one."
+    ],
+    "solution": "Science — 8B scored 74 vs 8A's 68, so 8B scored 6 marks higher.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q17",
+    "chapterId": "data-handling",
+    "question": "Rainfall over 5 months (in mm): Jan 20, Feb 15, Mar 30, Apr 45, May 25. If drawn as a bar graph, which month's bar would be tallest, and which the shortest?",
+    "text": "Rainfall over 5 months (in mm): Jan 20, Feb 15, Mar 30, Apr 45, May 25. If drawn as a bar graph, which month's bar would be tallest, and which the shortest?",
+    "difficulty": "Easy",
+    "hints": [
+      "Find the maximum value in the table.",
+      "Find the minimum value in the table."
+    ],
+    "solution": "Tallest: April (45mm). Shortest: February (15mm).",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q18",
+    "chapterId": "data-handling",
+    "question": "If the bars in a bar graph showing weekly sales are rearranged from tallest to shortest, does the information the graph conveys change? Explain your answer.",
+    "text": "If the bars in a bar graph showing weekly sales are rearranged from tallest to shortest, does the information the graph conveys change? Explain your answer.",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about whether each bar's height changes when its position changes.",
+      "The value a bar represents is fixed to its label, not its position."
+    ],
+    "solution": "No — rearranging the bars only changes how the data is displayed, not the actual values each bar represents.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q19",
+    "chapterId": "data-handling",
+    "question": "In a pie chart, what does the size of a sector represent?",
+    "text": "In a pie chart, what does the size of a sector represent?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about what changes if a category's value goes up while the total stays the same.",
+      "A bigger share of the total should look like a bigger piece of the circle."
+    ],
+    "solution": "The sector's size (its central angle) represents that category's proportion (fraction) of the total data.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q20",
+    "chapterId": "data-handling",
+    "question": "A pie chart splits a class's favourite sport into three roughly equal-looking sectors. What does this tell you about how popular each sport is among the class?",
+    "text": "A pie chart splits a class's favourite sport into three roughly equal-looking sectors. What does this tell you about how popular each sport is among the class?",
+    "difficulty": "Easy",
+    "hints": [
+      "Equal sector sizes mean equal fractions of the total.",
+      "Three roughly equal fractions of a whole are each close to 1/3."
+    ],
+    "solution": "It tells you the three sports are liked by roughly equal proportions (close to one-third each) of the class.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q21",
+    "chapterId": "data-handling",
+    "question": "List, in order, the steps used to draw a sector of a pie chart with a central angle of 72°.",
+    "text": "List, in order, the steps used to draw a sector of a pie chart with a central angle of 72°.",
+    "difficulty": "Easy",
+    "hints": [
+      "Start with the circle and its centre before worrying about any angle.",
+      "The protractor is used after you have a starting radius to measure the angle from."
+    ],
+    "solution": "1) Draw a circle of any convenient radius and mark its centre O. 2) Draw a radius OA. 3) Use a protractor centred at O to mark a point B such that angle AOB = 72°. 4) Draw OB and shade the sector AOB.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q22",
+    "chapterId": "data-handling",
+    "question": "In a family's expense pie chart, the 'Rent' sector is 25% of the total and corresponds to ₹5,000. What is the family's total monthly expense?",
+    "text": "In a family's expense pie chart, the 'Rent' sector is 25% of the total and corresponds to ₹5,000. What is the family's total monthly expense?",
+    "difficulty": "Medium",
+    "hints": [
+      "Find what 1% of the total is worth, using the given 25% = ₹5,000.",
+      "Multiply that 1%-value by 100 to get the total."
+    ],
+    "solution": "₹20,000. (25% = ₹5,000, so 100% = 5,000 × 4 = ₹20,000.)",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q23",
+    "chapterId": "data-handling",
+    "question": "A pie chart shows that 'Sports' takes up 20% of a school's weekly timetable, corresponding to 6 periods. How many total periods are in the weekly timetable?",
+    "text": "A pie chart shows that 'Sports' takes up 20% of a school's weekly timetable, corresponding to 6 periods. How many total periods are in the weekly timetable?",
+    "difficulty": "Medium",
+    "hints": [
+      "Find what 1% of the total is worth from '20% = 6 periods.'",
+      "Multiply by 100 to find the total."
+    ],
+    "solution": "30 periods. (20% = 6 periods, so 100% = 6 × 5 = 30.)",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q24",
+    "chapterId": "data-handling",
+    "question": "In a pie chart of a shop's sales, the 'Stationery' sector is 15% of total sales and equals ₹3,000. Find the sales value corresponding to the 'Books' sector, which has a central angle of 108°.",
+    "text": "In a pie chart of a shop's sales, the 'Stationery' sector is 15% of total sales and equals ₹3,000. Find the sales value corresponding to the 'Books' sector, which has a central angle of 108°.",
+    "difficulty": "Hard",
+    "hints": [
+      "First find the total sales using the Stationery sector's known percentage and value.",
+      "Convert the Books sector's central angle into a percentage of 360°, then apply it to the total."
+    ],
+    "solution": "Total sales = ₹20,000 (since 15% = ₹3,000, 1% = ₹200, 100% = ₹20,000). Books' angle 108° = 108/360 = 30% of the total, so Books = 30% × ₹20,000 = ₹6,000.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q25",
+    "chapterId": "data-handling",
+    "question": "Which of these is a random experiment: (a) tossing a coin, (b) checking whether the sun will rise tomorrow?",
+    "text": "Which of these is a random experiment: (a) tossing a coin, (b) checking whether the sun will rise tomorrow?",
+    "difficulty": "Easy",
+    "hints": [
+      "A random experiment's result cannot be known in advance, even in principle.",
+      "Compare an uncertain result with a near-certain one."
+    ],
+    "solution": "(a) Tossing a coin is a random experiment — its outcome cannot be predicted in advance. (b) is not random — the outcome is certain.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q26",
+    "chapterId": "data-handling",
+    "question": "Is 'drawing a card from a well-shuffled deck' a random experiment? Why or why not?",
+    "text": "Is 'drawing a card from a well-shuffled deck' a random experiment? Why or why not?",
+    "difficulty": "Easy",
+    "hints": [
+      "Ask whether the exact result can be known before it happens.",
+      "A random experiment's outcome depends on chance, not a fixed, predictable rule."
+    ],
+    "solution": "Yes — which card is drawn cannot be predicted or controlled in advance.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q27",
+    "chapterId": "data-handling",
+    "question": "A spinner has 4 equal-sized sectors coloured red, blue, green, yellow. Are the four colours equally likely outcomes? Why?",
+    "text": "A spinner has 4 equal-sized sectors coloured red, blue, green, yellow. Are the four colours equally likely outcomes? Why?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare the sizes of the four sectors.",
+      "Equal sector sizes mean equal chances."
+    ],
+    "solution": "Yes — since the four sectors are equal in size, each colour has the same chance of the pointer landing on it.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q28",
+    "chapterId": "data-handling",
+    "question": "A biased spinner has a red sector twice as large as its blue sector, with no other colours. Are red and blue equally likely outcomes? Explain.",
+    "text": "A biased spinner has a red sector twice as large as its blue sector, with no other colours. Are red and blue equally likely outcomes? Explain.",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare the relative sizes of the red and blue sectors.",
+      "A larger sector means a greater chance of the pointer landing there."
+    ],
+    "solution": "No — since the red sector is larger, the pointer is more likely to land on red than blue, so the two outcomes are not equally likely.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q29",
+    "chapterId": "data-handling",
+    "question": "List all the possible outcomes when a single coin is tossed once.",
+    "text": "List all the possible outcomes when a single coin is tossed once.",
+    "difficulty": "Easy",
+    "hints": [
+      "A coin has exactly two faces.",
+      "List each face as a separate outcome."
+    ],
+    "solution": "Head, Tail (2 outcomes).",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q30",
+    "chapterId": "data-handling",
+    "question": "List all the possible outcomes when a die numbered 1 to 6 is thrown once.",
+    "text": "List all the possible outcomes when a die numbered 1 to 6 is thrown once.",
+    "difficulty": "Easy",
+    "hints": [
+      "A standard die has six faces.",
+      "List each face's number as a separate outcome."
+    ],
+    "solution": "1, 2, 3, 4, 5, 6 (6 outcomes).",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q31",
+    "chapterId": "data-handling",
+    "question": "A jar has 8 marbles: 5 red and 3 white, identical apart from colour. One marble is drawn at random. Find the probability it is white.",
+    "text": "A jar has 8 marbles: 5 red and 3 white, identical apart from colour. One marble is drawn at random. Find the probability it is white.",
+    "difficulty": "Medium",
+    "hints": [
+      "Count the total number of marbles.",
+      "Count how many are white, then form the ratio."
+    ],
+    "solution": "P(white) = 3/8.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q32",
+    "chapterId": "data-handling",
+    "question": "A class has 45 students, of whom 27 are girls. If one student's name is picked at random from the class list, what is the probability that a boy's name is picked?",
+    "text": "A class has 45 students, of whom 27 are girls. If one student's name is picked at random from the class list, what is the probability that a boy's name is picked?",
+    "difficulty": "Medium",
+    "hints": [
+      "Find the number of boys first by subtracting girls from the total.",
+      "Form the probability as boys/total, then simplify."
+    ],
+    "solution": "Boys = 45 - 27 = 18. P(boy) = 18/45 = 2/5.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q33",
+    "chapterId": "data-handling",
+    "question": "A bag contains red, blue and green balls only: 6 red and 3 blue. If the probability of drawing a green ball is 1/4, find the number of green balls and the total number of balls in the bag.",
+    "text": "A bag contains red, blue and green balls only: 6 red and 3 blue. If the probability of drawing a green ball is 1/4, find the number of green balls and the total number of balls in the bag.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the number of green balls be g. The total is 6 + 3 + g.",
+      "Set up g/(total) = 1/4 and solve for g."
+    ],
+    "solution": "Green = 3, Total = 12. (g/(9+g) = 1/4 → 4g = 9+g → 3g = 9 → g = 3.) Check: 3/12 = 1/4.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q34",
+    "chapterId": "data-handling",
+    "question": "A survey of 200 people found that the probability a randomly chosen person prefers tea over coffee is 3/5. How many people in the survey prefer tea, and how many prefer coffee (assuming everyone chose one or the other)?",
+    "text": "A survey of 200 people found that the probability a randomly chosen person prefers tea over coffee is 3/5. How many people in the survey prefer tea, and how many prefer coffee (assuming everyone chose one or the other)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply the total by the given probability to find the tea-preferring count.",
+      "Subtract from the total to find the coffee-preferring count."
+    ],
+    "solution": "Tea = (3/5)×200 = 120. Coffee = 200 - 120 = 80.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q35",
+    "chapterId": "data-handling",
+    "question": "A doctor tells a patient there is a 70% chance a treatment will be effective. Is this a probability statement? What does the remaining 30% represent?",
+    "text": "A doctor tells a patient there is a 70% chance a treatment will be effective. Is this a probability statement? What does the remaining 30% represent?",
+    "difficulty": "Easy",
+    "hints": [
+      "A probability statement expresses a chance, usually as a percentage or fraction.",
+      "If one outcome has a 70% chance, the only remaining outcome takes up what's left of 100%."
+    ],
+    "solution": "Yes, it's a probability statement. The remaining 30% represents the chance the treatment is not effective.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q36",
+    "chapterId": "data-handling",
+    "question": "A pie chart of a company's annual budget shows: Salaries 40%, Rent 15%, Marketing 20%, Miscellaneous 25%. If the Marketing budget is ₹8,00,000, find the total annual budget and the amount spent on Salaries.",
+    "text": "A pie chart of a company's annual budget shows: Salaries 40%, Rent 15%, Marketing 20%, Miscellaneous 25%. If the Marketing budget is ₹8,00,000, find the total annual budget and the amount spent on Salaries.",
+    "difficulty": "Hard",
+    "hints": [
+      "Use the Marketing percentage and value to find the total budget first.",
+      "Apply the Salaries percentage to that total."
+    ],
+    "solution": "Total = ₹40,00,000 (since 20% = ₹8,00,000, so 100% = ₹8,00,000 × 5). Salaries = 40% × ₹40,00,000 = ₹16,00,000.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q37",
+    "chapterId": "data-handling",
+    "question": "A box contains only red and blue balls. The probability of drawing a red ball is 3/7. If there are 12 blue balls in the box, how many red balls are there, and how many balls are there in total?",
+    "text": "A box contains only red and blue balls. The probability of drawing a red ball is 3/7. If there are 12 blue balls in the box, how many red balls are there, and how many balls are there in total?",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the number of red balls be r; the total is r + 12.",
+      "Set up r/(r+12) = 3/7 and cross-multiply to solve for r."
+    ],
+    "solution": "Red = 9, Total = 21. (r/(r+12) = 3/7 → 7r = 3r+36 → 4r=36 → r=9.) Check: 9/21 = 3/7.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q38",
+    "chapterId": "data-handling",
+    "question": "Two families have different total incomes. Family A spends 20% of ₹30,000 on groceries; Family B spends 25% of ₹20,000 on groceries. Which family spends more on groceries in actual rupees, even though Family B's percentage is higher?",
+    "text": "Two families have different total incomes. Family A spends 20% of ₹30,000 on groceries; Family B spends 25% of ₹20,000 on groceries. Which family spends more on groceries in actual rupees, even though Family B's percentage is higher?",
+    "difficulty": "Hard",
+    "hints": [
+      "Calculate each family's actual grocery spending in rupees first.",
+      "Compare the two rupee amounts, not the two percentages."
+    ],
+    "solution": "Family A spends ₹6,000 (20% of 30,000) vs Family B's ₹5,000 (25% of 20,000) — Family A spends more in actual rupees despite the lower percentage, because its total income is larger.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q39",
+    "chapterId": "data-handling",
+    "question": "A pie chart shows a school's students choosing extracurricular activities: Sports 30%, Music 25%, Art 20%, Debate 25%. If there are 45 more Sports students than Art students, find the total number of students in the school.",
+    "text": "A pie chart shows a school's students choosing extracurricular activities: Sports 30%, Music 25%, Art 20%, Debate 25%. If there are 45 more Sports students than Art students, find the total number of students in the school.",
+    "difficulty": "Hard",
+    "hints": [
+      "Find the percentage-point difference between Sports and Art.",
+      "That percentage difference corresponds to the 45-student difference — use it to find 100% (the total)."
+    ],
+    "solution": "Total = 450. (Sports − Art = 30% − 20% = 10% of total = 45 students, so total = 45 × 10 = 450.)",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q40",
+    "chapterId": "data-handling",
+    "question": "A game uses a spinner with 6 equal sectors numbered 1–6, but due to a printing error, the sector for number 6 is actually twice the size of the others. If the printing error is corrected, will the probability of landing on 6 increase, decrease, or stay the same? Explain using the idea of equally likely outcomes.",
+    "text": "A game uses a spinner with 6 equal sectors numbered 1–6, but due to a printing error, the sector for number 6 is actually twice the size of the others. If the printing error is corrected, will the probability of landing on 6 increase, decrease, or stay the same? Explain using the idea of equally likely outcomes.",
+    "difficulty": "Hard",
+    "hints": [
+      "Before the correction, is landing on 6 more, less, or equally likely compared to the other numbers?",
+      "Think about what 'equally likely' means for the corrected, equal-sized sectors."
+    ],
+    "solution": "It will decrease. With the enlarged sector, 6 was more likely than the others (not equally likely). Correcting the sectors to equal size restores all six outcomes as equally likely, so 6's probability drops back down to 1/6, the same as every other number.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q41",
+    "chapterId": "data-handling",
+    "question": "A pictograph and a bar graph are both drawn for the same fruit-sales data, but one lists the fruits alphabetically and the other lists them from highest sales to lowest. Does either ordering make its graph 'more correct' than the other? Explain.",
+    "text": "A pictograph and a bar graph are both drawn for the same fruit-sales data, but one lists the fruits alphabetically and the other lists them from highest sales to lowest. Does either ordering make its graph 'more correct' than the other? Explain.",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about whether a category's value changes depending on where it's placed in the graph.",
+      "Compare this to rearranging bars in a bar graph — does the data itself change?"
+    ],
+    "solution": "No — both orderings show the same underlying data and are equally correct. The order in which categories are listed is a presentation choice; it doesn't change any of the values being represented.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
+    "id": "dh-q42",
+    "chapterId": "data-handling",
+    "question": "When constructing a pie chart by hand, which drawing tool is used to mark out each sector's central angle accurately, and why is it needed instead of estimating by eye?",
+    "text": "When constructing a pie chart by hand, which drawing tool is used to mark out each sector's central angle accurately, and why is it needed instead of estimating by eye?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about which tool is specifically designed to measure and mark angles.",
+      "Consider why an approximate sketch wouldn't correctly represent the calculated central angles."
+    ],
+    "solution": "A protractor. It's needed because sector sizes must be proportional to the exact computed angles (e.g. 90°, 60°) — estimating by eye would make the sectors inaccurate and no longer truly proportional to the data.",
+    "topicId": "topic-data-handling-representation-and-probability"
+  },
+  {
     "id": "le-q01",
     "chapterId": "linear-equations",
     "question": "Solve for x and check your result: 3x = 2x + 18",
@@ -572,19 +1118,6 @@
     "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q1-data-handling",
-    "chapterId": "data-handling",
-    "question": "What is the mean of the numbers 2, 4, 6, 8?",
-    "text": "What is the mean of the numbers 2, 4, 6, 8?",
-    "difficulty": "Medium",
-    "hints": [
-      "Add all the numbers together first.",
-      "Then divide by how many numbers there are.",
-      "There are 4 numbers in the set."
-    ],
-    "solution": "The mean is (2 + 4 + 6 + 8) / 4 = 20 / 4 = 5."
-  },
-  {
     "id": "q1-practical-geometry",
     "chapterId": "practical-geometry",
     "question": "Which instrument is used to draw arcs of circle?",
@@ -610,32 +1143,6 @@
       "Add the numerators and keep the denominator 6."
     ],
     "solution": "1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2."
-  },
-  {
-    "id": "q1-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What is a property of a parallelogram?",
-    "text": "What is a property of a parallelogram?",
-    "difficulty": "Medium",
-    "hints": [
-      "Think about both pairs of opposite sides.",
-      "A parallelogram has opposite sides that are equal in length.",
-      "It also has opposite sides that are parallel."
-    ],
-    "solution": "A parallelogram has both pairs of opposite sides parallel and equal in length."
-  },
-  {
-    "id": "q2-data-handling",
-    "chapterId": "data-handling",
-    "question": "What is the mode of 2, 3, 3, 5, 7?",
-    "text": "What is the mode of 2, 3, 3, 5, 7?",
-    "difficulty": "Easy",
-    "hints": [
-      "Look for the number that appears most often.",
-      "3 appears twice while the others appear once.",
-      "The mode is 3."
-    ],
-    "solution": "The mode is 3."
   },
   {
     "id": "q2-practical-geometry",
@@ -665,32 +1172,6 @@
     "solution": "1/2 is a rational number because it can be written as a fraction."
   },
   {
-    "id": "q2-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What is the sum of the interior angles of a quadrilateral?",
-    "text": "What is the sum of the interior angles of a quadrilateral?",
-    "difficulty": "Easy",
-    "hints": [
-      "Use the rule for polygons with four sides.",
-      "A quadrilateral can be split into two triangles.",
-      "Each triangle has 180 degrees."
-    ],
-    "solution": "The sum of the interior angles of a quadrilateral is 360°."
-  },
-  {
-    "id": "q3-data-handling",
-    "chapterId": "data-handling",
-    "question": "What is the median of 1, 3, 4, 8, 10?",
-    "text": "What is the median of 1, 3, 4, 8, 10?",
-    "difficulty": "Easy",
-    "hints": [
-      "Arrange the numbers in order.",
-      "The data is already sorted.",
-      "The middle value is the median."
-    ],
-    "solution": "The median is 4."
-  },
-  {
     "id": "q3-practical-geometry",
     "chapterId": "practical-geometry",
     "question": "Which tool is used to measure angles?",
@@ -716,32 +1197,6 @@
       "Divide both by 4 to get the simplest form."
     ],
     "solution": "4/8 simplifies to 1/2."
-  },
-  {
-    "id": "q3-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "A rectangle is a parallelogram. True or false?",
-    "text": "A rectangle is a parallelogram. True or false?",
-    "difficulty": "Easy",
-    "hints": [
-      "Think about the properties of both shapes.",
-      "A rectangle has two pairs of parallel sides.",
-      "That means it also fits the definition of a parallelogram."
-    ],
-    "solution": "True. A rectangle is a parallelogram."
-  },
-  {
-    "id": "q4-data-handling",
-    "chapterId": "data-handling",
-    "question": "If the values are 10, 20, 30, and 40, what is the range?",
-    "text": "If the values are 10, 20, 30, and 40, what is the range?",
-    "difficulty": "Medium",
-    "hints": [
-      "Subtract the smallest value from the largest value.",
-      "The largest value is 40.",
-      "The smallest value is 10."
-    ],
-    "solution": "The range is 40 - 10 = 30."
   },
   {
     "id": "q4-practical-geometry",
@@ -771,32 +1226,6 @@
     "solution": "3/4 ÷ 1/2 = 3/2."
   },
   {
-    "id": "q4-understanding-quadrilaterals",
-    "chapterId": "understanding-quadrilaterals",
-    "question": "What do you call a quadrilateral with one pair of parallel sides?",
-    "text": "What do you call a quadrilateral with one pair of parallel sides?",
-    "difficulty": "Medium",
-    "hints": [
-      "Think of a shape that has exactly one pair of parallel sides.",
-      "It is often introduced as a shape with a single pair of bases.",
-      "The name is trapezium or trapezoid depending on the region."
-    ],
-    "solution": "It is called a trapezium or trapezoid."
-  },
-  {
-    "id": "q5-data-handling",
-    "chapterId": "data-handling",
-    "question": "A bag contains 2 red, 3 blue, and 5 green balls. What is the probability of picking a blue ball?",
-    "text": "A bag contains 2 red, 3 blue, and 5 green balls. What is the probability of picking a blue ball?",
-    "difficulty": "Hard",
-    "hints": [
-      "Count the total number of balls first.",
-      "There are 10 balls altogether.",
-      "The probability is favorable outcomes over total outcomes."
-    ],
-    "solution": "The probability of picking a blue ball is 3/10."
-  },
-  {
     "id": "q5-practical-geometry",
     "chapterId": "practical-geometry",
     "question": "How do you start drawing a circle of radius 3 cm?",
@@ -824,16 +1253,531 @@
     "solution": "2/3 is greater than 3/5."
   },
   {
-    "id": "q5-understanding-quadrilaterals",
+    "id": "uq-q01",
     "chapterId": "understanding-quadrilaterals",
-    "question": "What makes a square different from a rectangle?",
-    "text": "What makes a square different from a rectangle?",
+    "question": "What is a polygon?",
+    "text": "What is a polygon?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about what a polygon's sides are made of — straight lines or curves?",
+      "It must also be closed and 'simple' (its boundary doesn't cross itself)."
+    ],
+    "solution": "A simple closed figure made up entirely of line segments.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q02",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A shape has 5 straight sides, but its boundary crosses itself once. Is it a polygon? Why or why not?",
+    "text": "A shape has 5 straight sides, but its boundary crosses itself once. Is it a polygon? Why or why not?",
+    "difficulty": "Easy",
+    "hints": [
+      "A polygon must be 'simple' — think about what that means for the boundary.",
+      "If the sides cross each other, the figure is not simple."
+    ],
+    "solution": "No — a polygon must be a simple closed curve, meaning its boundary must not cross itself.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q03",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true of every interior angle of a convex polygon?",
+    "text": "What is true of every interior angle of a convex polygon?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare this to a concave polygon, which has at least one 'caved-in' vertex.",
+      "At a caved-in vertex the interior angle is more than 180° — convex polygons never have this."
+    ],
+    "solution": "Each interior angle is less than 180°.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q04",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A polygon has one interior angle measuring 200°. Is this polygon convex or concave?",
+    "text": "A polygon has one interior angle measuring 200°. Is this polygon convex or concave?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare 200° to the convex-polygon rule (every interior angle less than 180°).",
+      "Since 200° is greater than 180°, this vertex is 'caved in'."
+    ],
+    "solution": "Concave",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q05",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A hexagon has interior angles 100°, 110°, 120°, 130°, 140°, and 260°. Is this hexagon convex? Explain.",
+    "text": "A hexagon has interior angles 100°, 110°, 120°, 130°, 140°, and 260°. Is this hexagon convex? Explain.",
     "difficulty": "Medium",
     "hints": [
-      "Compare their side lengths.",
-      "A rectangle needs opposite sides equal.",
-      "A square has all four sides equal."
+      "Convexity depends on checking each individual angle, not the overall shape of the figure.",
+      "Look for any single angle greater than 180°."
     ],
-    "solution": "A square has all four sides equal, while a rectangle only needs opposite sides equal."
+    "solution": "No, it is concave, because the 260° angle is greater than 180°.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q06",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What makes a polygon 'regular'?",
+    "text": "What makes a polygon 'regular'?",
+    "difficulty": "Easy",
+    "hints": [
+      "A regular polygon must satisfy two conditions at once — think about sides and angles separately.",
+      "Equal sides alone is not enough if the angles differ."
+    ],
+    "solution": "All its sides are equal in length and all its angles are equal in measure.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q07",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral has all four sides equal in length, but its angles are 80°, 100°, 80°, 100°. Is it a regular polygon?",
+    "text": "A quadrilateral has all four sides equal in length, but its angles are 80°, 100°, 80°, 100°. Is it a regular polygon?",
+    "difficulty": "Easy",
+    "hints": [
+      "Regularity needs both equal sides AND equal angles.",
+      "Here the sides are equal — now check the angles."
+    ],
+    "solution": "No, because its angles are not all equal.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q08",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the interior angles of a quadrilateral?",
+    "text": "What is the sum of the interior angles of a quadrilateral?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use the formula (n − 2) × 180° with n = 4 for a quadrilateral.",
+      "(4 − 2) × 180° = 2 × 180°."
+    ],
+    "solution": "360°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q09",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the interior angles of a pentagon (5 sides)?",
+    "text": "What is the sum of the interior angles of a pentagon (5 sides)?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use the formula (n − 2) × 180° with n = 5.",
+      "(5 − 2) × 180° = 3 × 180°."
+    ],
+    "solution": "540°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q10",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the interior angles of an octagon (8 sides)?",
+    "text": "What is the sum of the interior angles of an octagon (8 sides)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use the formula (n − 2) × 180° with n = 8.",
+      "(8 − 2) × 180° = 6 × 180°."
+    ],
+    "solution": "1080°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q11",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A polygon's interior angles sum to 1260°. How many sides does it have?",
+    "text": "A polygon's interior angles sum to 1260°. How many sides does it have?",
+    "difficulty": "Medium",
+    "hints": [
+      "Set (n − 2) × 180° = 1260° and solve for n.",
+      "1260° ÷ 180° = 7, so n − 2 = 7."
+    ],
+    "solution": "9",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q12",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Three angles of a quadrilateral are 80°, 95°, and 100°. Find the fourth angle.",
+    "text": "Three angles of a quadrilateral are 80°, 95°, and 100°. Find the fourth angle.",
+    "difficulty": "Medium",
+    "hints": [
+      "The four angles of a quadrilateral must add up to 360°.",
+      "Add the three known angles, then subtract that total from 360°."
+    ],
+    "solution": "85°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q13",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a quadrilateral, three angles are equal to 90° each, and the fourth is unknown. Find the fourth angle.",
+    "text": "In a quadrilateral, three angles are equal to 90° each, and the fourth is unknown. Find the fourth angle.",
+    "difficulty": "Medium",
+    "hints": [
+      "The sum of the interior angles of a quadrilateral is 360°.",
+      "Subtract 3 × 90° from 360°."
+    ],
+    "solution": "90°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q14",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a pentagon, four angles are 100°, 110°, 120°, and 95°. Find the fifth angle.",
+    "text": "In a pentagon, four angles are 100°, 110°, 120°, and 95°. Find the fifth angle.",
+    "difficulty": "Hard",
+    "hints": [
+      "The sum of the interior angles of a pentagon is 540° (use (n − 2) × 180° with n = 5).",
+      "Add the four known angles and subtract that total from 540°.",
+      "540° − (100° + 110° + 120° + 95°) = ?"
+    ],
+    "solution": "115°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q15",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral's angles are in the ratio 2:3:4:6. Find all four angles.",
+    "text": "A quadrilateral's angles are in the ratio 2:3:4:6. Find all four angles.",
+    "difficulty": "Hard",
+    "hints": [
+      "The four angles must sum to 360°. Let the angles be 2x, 3x, 4x, 6x.",
+      "Solve 2x + 3x + 4x + 6x = 360° for x, then multiply each ratio term by x.",
+      "2x + 3x + 4x + 6x = 15x = 360°, so x = 24°."
+    ],
+    "solution": "48°, 72°, 96°, 144°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q16",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the exterior angles of any convex polygon, taken one at each vertex, in order?",
+    "text": "What is the sum of the exterior angles of any convex polygon, taken one at each vertex, in order?",
+    "difficulty": "Easy",
+    "hints": [
+      "This is true no matter how many sides the polygon has.",
+      "It's always a full turn — 360°."
+    ],
+    "solution": "360°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q17",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A regular polygon has 9 sides. Find the measure of each exterior angle.",
+    "text": "A regular polygon has 9 sides. Find the measure of each exterior angle.",
+    "difficulty": "Medium",
+    "hints": [
+      "For a regular polygon, each exterior angle = 360° ÷ number of sides.",
+      "360° ÷ 9 = ?"
+    ],
+    "solution": "40°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q18",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Each exterior angle of a regular polygon measures 24°. How many sides does the polygon have?",
+    "text": "Each exterior angle of a regular polygon measures 24°. How many sides does the polygon have?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use: number of sides = 360° ÷ each exterior angle.",
+      "360° ÷ 24° = ?"
+    ],
+    "solution": "15",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q19",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Each interior angle of a regular polygon measures 156°. How many sides does it have?",
+    "text": "Each interior angle of a regular polygon measures 156°. How many sides does it have?",
+    "difficulty": "Hard",
+    "hints": [
+      "Find the exterior angle first: interior + exterior = 180° at each vertex.",
+      "180° − 156° = 24°, then use 360° ÷ exterior angle to find the number of sides.",
+      "180° − 156° = 24°, then 360° ÷ 24° = ?"
+    ],
+    "solution": "15",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q20",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A regular polygon has an interior angle that is 5 times its exterior angle. Find the number of sides.",
+    "text": "A regular polygon has an interior angle that is 5 times its exterior angle. Find the number of sides.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the exterior angle be x, so the interior angle is 5x. Use interior + exterior = 180°.",
+      "x + 5x = 180° gives x = 30°; then use 360° ÷ x to find the number of sides.",
+      "6x = 180°, so x = 30°; then 360° ÷ 30° = ?"
+    ],
+    "solution": "12",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q21",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What do you call a quadrilateral with exactly one pair of parallel sides?",
+    "text": "What do you call a quadrilateral with exactly one pair of parallel sides?",
+    "difficulty": "Easy",
+    "hints": [
+      "It has one pair of parallel sides, called the bases, and one pair of non-parallel sides, called the legs.",
+      "In some regions this shape is also called a trapezoid."
+    ],
+    "solution": "Trapezium",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q22",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral has both pairs of opposite sides parallel. Can it be called a trapezium?",
+    "text": "A quadrilateral has both pairs of opposite sides parallel. Can it be called a trapezium?",
+    "difficulty": "Medium",
+    "hints": [
+      "Check the trapezium's defining condition carefully — how many pairs of sides must be parallel?",
+      "A shape with both pairs parallel belongs to a different quadrilateral family."
+    ],
+    "solution": "No, because a trapezium has exactly one pair of parallel sides — this shape is a parallelogram.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q23",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a trapezium, the two parallel sides are called the ______, and the two non-parallel sides are called the ______.",
+    "text": "In a trapezium, the two parallel sides are called the ______, and the two non-parallel sides are called the ______.",
+    "difficulty": "Medium",
+    "hints": [
+      "Think of the trapezium as sitting on its parallel sides.",
+      "The slanted connecting sides have their own separate name."
+    ],
+    "solution": "bases, legs",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q24",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about the sides of a kite?",
+    "text": "What is true about the sides of a kite?",
+    "difficulty": "Easy",
+    "hints": [
+      "Look at which sides are equal — are they opposite each other, or next to each other?",
+      "In a kite, the equal sides are adjacent (next to each other), not opposite."
+    ],
+    "solution": "It has two distinct pairs of adjacent sides that are equal in length.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q25",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about the diagonals of a kite?",
+    "text": "What is true about the diagonals of a kite?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about how a kite's diagonals cross — at what angle?",
+      "Only one of the two diagonals is cut exactly in half by the other."
+    ],
+    "solution": "They intersect at right angles, and one diagonal bisects the other.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q26",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A kite has sides of length 5 cm, 5 cm, 8 cm, and 8 cm. How must these sides be arranged around the kite?",
+    "text": "A kite has sides of length 5 cm, 5 cm, 8 cm, and 8 cm. How must these sides be arranged around the kite?",
+    "difficulty": "Medium",
+    "hints": [
+      "A kite's equal sides come in two adjacent pairs, not opposite pairs.",
+      "Arrange the sides so each pair of equal length shares a common vertex."
+    ],
+    "solution": "The two 5 cm sides must be adjacent to each other, and the two 8 cm sides must be adjacent to each other.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q27",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about the opposite sides of a parallelogram?",
+    "text": "What is true about the opposite sides of a parallelogram?",
+    "difficulty": "Easy",
+    "hints": [
+      "Check both properties — direction and length.",
+      "Both pairs of opposite sides share both properties."
+    ],
+    "solution": "They are parallel and equal in length.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q28",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about the opposite angles of a parallelogram?",
+    "text": "What is true about the opposite angles of a parallelogram?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare angles that are diagonally across from each other.",
+      "Each pair of opposite angles has the same measure."
+    ],
+    "solution": "They are equal.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q29",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about two adjacent (consecutive) angles of a parallelogram?",
+    "text": "What is true about two adjacent (consecutive) angles of a parallelogram?",
+    "difficulty": "Medium",
+    "hints": [
+      "Adjacent angles share a side.",
+      "Their measures always add up to a straight angle."
+    ],
+    "solution": "They are supplementary (they add up to 180°).",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q30",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In parallelogram ABCD, angle A = 70°. Find angle B (adjacent to A) and angle C (opposite to A).",
+    "text": "In parallelogram ABCD, angle A = 70°. Find angle B (adjacent to A) and angle C (opposite to A).",
+    "difficulty": "Medium",
+    "hints": [
+      "Adjacent angles in a parallelogram are supplementary.",
+      "Opposite angles in a parallelogram are equal."
+    ],
+    "solution": "Angle B = 110°, Angle C = 70°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q31",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is true about the diagonals of a parallelogram?",
+    "text": "What is true about the diagonals of a parallelogram?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about where the diagonals cross.",
+      "The point where they cross divides each diagonal into two equal halves."
+    ],
+    "solution": "They bisect each other.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q32",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In parallelogram PQRS, the diagonals intersect at O. If PO = 6 cm, find OR, and explain why.",
+    "text": "In parallelogram PQRS, the diagonals intersect at O. If PO = 6 cm, find OR, and explain why.",
+    "difficulty": "Hard",
+    "hints": [
+      "Diagonals of a parallelogram bisect each other — what does that mean for PO and OR specifically?",
+      "PO and OR are the two halves of the same diagonal PR.",
+      "No calculation needed — apply the bisection property directly to PO and OR."
+    ],
+    "solution": "OR = 6 cm, because the diagonals of a parallelogram bisect each other, so O is the midpoint of diagonal PR.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q33",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What extra property does a rhombus have that a general parallelogram does not?",
+    "text": "What extra property does a rhombus have that a general parallelogram does not?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rhombus is a parallelogram with one extra condition on its sides.",
+      "Compare the side lengths of a rhombus to a 'plain' parallelogram."
+    ],
+    "solution": "All four sides are equal in length.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q34",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What extra property does a rectangle have that a general parallelogram does not?",
+    "text": "What extra property does a rectangle have that a general parallelogram does not?",
+    "difficulty": "Medium",
+    "hints": [
+      "A rectangle is a parallelogram with one extra condition on its angles.",
+      "Every angle in a rectangle measures the same amount — what is it?"
+    ],
+    "solution": "All four angles are 90°.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q35",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "How are the diagonals of a rectangle different from the diagonals of a general parallelogram?",
+    "text": "How are the diagonals of a rectangle different from the diagonals of a general parallelogram?",
+    "difficulty": "Medium",
+    "hints": [
+      "Both shapes' diagonals bisect each other — that's not the difference.",
+      "Compare the lengths of the two diagonals in each shape."
+    ],
+    "solution": "A rectangle's diagonals are equal in length (as well as bisecting each other).",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q36",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral has all four sides equal AND all four angles equal to 90°. What is the most specific name for this shape?",
+    "text": "A quadrilateral has all four sides equal AND all four angles equal to 90°. What is the most specific name for this shape?",
+    "difficulty": "Hard",
+    "hints": [
+      "This shape satisfies the rhombus condition (all sides equal) and the rectangle condition (all angles 90°) at the same time.",
+      "A shape that is both a rhombus and a rectangle has one specific name.",
+      "Combining both special conditions at once gives the most specific quadrilateral name of all."
+    ],
+    "solution": "Square",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q37",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a square, what is true about the diagonals that is NOT true of a rhombus that isn't a square?",
+    "text": "In a square, what is true about the diagonals that is NOT true of a rhombus that isn't a square?",
+    "difficulty": "Hard",
+    "hints": [
+      "A square is both a rhombus and a rectangle — combine what you know about each.",
+      "Rhombus diagonals bisect at right angles; rectangle diagonals are equal — a square has both, but a non-square rhombus is missing one.",
+      "List the rhombus's diagonal properties, then the rectangle's, and find the one only in the rectangle's list."
+    ],
+    "solution": "The diagonals are equal in length.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q38",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Is every square a rectangle? Is every rectangle a square? Explain.",
+    "text": "Is every square a rectangle? Is every rectangle a square? Explain.",
+    "difficulty": "Medium",
+    "hints": [
+      "Check the rectangle's defining condition — does a square satisfy it?",
+      "Check the square's defining condition (all sides equal) — does every rectangle satisfy that too?"
+    ],
+    "solution": "Every square is a rectangle (it has all angles 90°), but not every rectangle is a square (a rectangle need not have all sides equal).",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q39",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Is every rhombus a parallelogram? Is every parallelogram a rhombus? Explain.",
+    "text": "Is every rhombus a parallelogram? Is every parallelogram a rhombus? Explain.",
+    "difficulty": "Medium",
+    "hints": [
+      "Check whether a rhombus satisfies the parallelogram's defining properties.",
+      "Check whether a general parallelogram automatically has all four sides equal."
+    ],
+    "solution": "Every rhombus is a parallelogram (opposite sides parallel and equal), but not every parallelogram is a rhombus (its sides need not all be equal).",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+  },
+  {
+    "id": "uq-q40",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral is a square. List every other quadrilateral name from this chapter that also correctly describes it.",
+    "text": "A quadrilateral is a square. List every other quadrilateral name from this chapter that also correctly describes it.",
+    "difficulty": "Hard",
+    "hints": [
+      "Work outward from the square: what two shapes combine to make a square?",
+      "Both of those shapes are themselves special cases of an even more general quadrilateral — name that one too.",
+      "Square is a rectangle; square is a rhombus; both rectangle and rhombus are parallelograms."
+    ],
+    "solution": "Rectangle, rhombus, and parallelogram",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
   }
 ]

@@ -1,0 +1,61 @@
+.answer-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid transparent;
+  border-left-width: 3px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-body);
+}
+
+.answer-feedback-icon {
+  flex-shrink: 0;
+  width: var(--space-6);
+  height: var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.answer-feedback-correct {
+  background: var(--color-success-soft);
+  border-color: var(--color-success-border);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.answer-feedback-correct .answer-feedback-icon {
+  background: var(--color-success);
+  color: var(--color-surface);
+}
+
+.answer-feedback-retry {
+  background: var(--color-retry-soft);
+  border-color: var(--color-retry-border);
+  border-left-color: var(--color-retry);
+  color: var(--color-retry);
+}
+
+.answer-feedback-retry .answer-feedback-icon {
+  background: var(--color-retry);
+  color: var(--color-surface);
+}
+
+.answer-feedback-checking {
+  background: var(--color-neutral-100);
+  border-color: var(--border-color);
+  border-left-color: var(--color-neutral-300);
+  color: var(--color-text-muted);
+}
+
+.answer-feedback-checking .answer-feedback-icon {
+  background: var(--color-neutral-300);
+  color: var(--color-surface);
+}

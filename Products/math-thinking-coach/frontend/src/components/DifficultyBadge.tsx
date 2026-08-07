@@ -1,11 +1,15 @@
 import './DifficultyBadge.css';
 import type { Difficulty } from '../types/question';
 
+// Muted chip rather than a saturated pill: difficulty is metadata, and a
+// solid green/amber/red badge previously competed with the primary action
+// for attention inside the question card (UX review Q8). The level is
+// still distinguishable by a colour dot *and* by its text, so colour is
+// never the only channel.
 export default function DifficultyBadge({ level }: { level: Difficulty }) {
-  const color = level === 'Easy' ? '#10b981' : level === 'Medium' ? '#f59e0b' : '#ef4444';
-
   return (
-    <span className="difficulty-badge" style={{ background: color }}>
+    <span className={`difficulty-badge difficulty-badge-${level.toLowerCase()}`}>
+      <span className="difficulty-badge-dot" aria-hidden="true" />
       {level}
     </span>
   );

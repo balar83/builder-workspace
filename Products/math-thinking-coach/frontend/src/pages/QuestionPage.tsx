@@ -5,10 +5,11 @@ import { questionService } from '../services/questionService';
 import type { AnswerEvaluationResponse } from '../types/answer';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
+import AnswerFeedback from '../components/AnswerFeedback';
 import AnswerInput from '../components/AnswerInput';
+import BackLink from '../components/BackLink';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
-import ProgressBar from '../components/ProgressBar';
 import QuestionProgress from '../components/QuestionProgress';
 import SolutionPanel from '../components/SolutionPanel';
 import './QuestionPage.css';
@@ -25,6 +26,9 @@ export default function QuestionPage() {
   const [submitted, setSubmitted] = useState(false);
   const [attemptNumber, setAttemptNumber] = useState(1);
   const [evaluation, setEvaluation] = useState<AnswerEvaluationResponse | null>(null);
+  const [submitError, setSubmitError] = useState('');
+  const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading');
+  const [retryToken, setRetryToken] = useState(0);
 
   const currentQuestion = chapterQuestions[currentQuestionIndex];
 
@@ -40,12 +44,15 @@ export default function QuestionPage() {
     setSubmitted(false);
     setAttemptNumber(1);
     setEvaluation(null);
+    setSubmitError('');
+    setState('loading');
 
-    Promise.all([questionService.getChapter(chapterId), questionService.getQuestions(chapterId)]).then(
-      ([chapterResult, questionsResult]) => {
+    Promise.all([questionService.getChapter(chapterId), questionService.getQuestions(chapterId)])
+      .then(([chapterResult, questionsResult]) => {
         if (!cancelled) {
           setChapter(chapterResult);
           setChapterQuestions(questionsResult);
+          setState('loaded');
 
           if (chapterId && questionsResult.length > 0) {
             const savedIndex = progressService.getChapterProgress(chapterId)?.currentQuestionIndex ?? 0;
@@ -53,27 +60,55 @@ export default function QuestionPage() {
             setCurrentQuestionIndex(resumeIndex);
           }
         }
-      },
-    );
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setState('error');
+        }
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [chapterId]);
+  }, [chapterId, retryToken]);
+
+  if (state === 'error') {
+    return (
+      <main className="container">
+        <BackLink to="/chapters" label="Chapters" />
+        <h1>Question</h1>
+        <p className="page-lead">
+          We couldn&apos;t load these questions. Check your connection and try again.
+        </p>
+        <div className="button-group">
+          <button onClick={() => setRetryToken((token) => token + 1)}>Try again</button>
+        </div>
+      </main>
+    );
+  }
+
+  if (state === 'loading') {
+    return (
+      <main className="container">
+        <BackLink to="/chapters" label="Chapters" />
+        <h1>Question</h1>
+        <p className="page-lead">Loading…</p>
+      </main>
+    );
+  }
 
   if (!chapter || !chapterQuestions.length || !currentQuestion) {
     return (
       <main className="container">
+        <BackLink to="/chapters" label="Chapters" />
         <h1>Question</h1>
         <p>Question not found for the selected chapter.</p>
-        <button onClick={() => navigate('/chapters')}>Back to chapters</button>
       </main>
     );
   }
 
   const totalQuestions = chapterQuestions.length;
   const totalHints = currentQuestion.hints.length || 1;
-  const percent = Math.round((currentHintIndex / totalHints) * 100);
   const isAllHintsRevealed = currentHintIndex >= totalHints;
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isCorrectAnswer = evaluation?.coach.nextAction === 'NEXT_QUESTION';
@@ -121,77 +156,97 @@ export default function QuestionPage() {
 
   const handleAnswerSubmit = () => {
     setSubmitted(true);
-    questionService.submitAnswer(currentQuestion.id, { answer, attemptNumber }).then((result) => {
-      setEvaluation(result);
-      setAttemptNumber((previous) => previous + 1);
+    setSubmitError('');
+    questionService
+      .submitAnswer(currentQuestion.id, { answer, attemptNumber })
+      .then((result) => {
+        setEvaluation(result);
+        setAttemptNumber((previous) => previous + 1);
 
-      if (chapterId) {
-        progressService.recordQuestionAttempt(chapterId, currentQuestion.id);
-      }
-    });
+        if (chapterId) {
+          progressService.recordQuestionAttempt(chapterId, currentQuestion.id);
+        }
+      })
+      // Previously unhandled: a failed submission left the feedback panel on
+      // "Checking your answer…" permanently, with no error and no way to
+      // tell that anything had gone wrong. The session flow already had this
+      // branch; the anonymous flow did not.
+      .catch(() => {
+        setSubmitted(false);
+        setSubmitError("We couldn't check your answer. Check your connection and try again.");
+      });
   };
 
   return (
     <main className="container question-page">
       <div className="question-header">
-        <div>
-          <h2 className="chapter-name">{chapter.title}</h2>
-          <QuestionProgress totalQuestions={totalQuestions} currentQuestion={currentQuestionIndex + 1} />
-          <div className="meta-row">
-            <span className="q-number">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-            <DifficultyBadge level={currentQuestion.difficulty} />
-          </div>
-        </div>
+        <BackLink to={`/chapter/${chapterId}`} label="Chapter overview" />
+        <h1 className="chapter-name">{chapter.title}</h1>
+        <QuestionProgress totalQuestions={totalQuestions} currentQuestion={currentQuestionIndex + 1} />
       </div>
 
       <section className="question-card">
+        <div className="question-card-head">
+          <DifficultyBadge level={currentQuestion.difficulty} />
+        </div>
+
         <p className="question-text">{currentQuestion.question}</p>
 
         <AnswerInput value={answer} onChange={setAnswer} onSubmit={handleAnswerSubmit} />
+
         {submitted && (
-          <p className="question-text">
-            {evaluation
-              ? evaluation.coach.message
-              : 'Checking your answer…'}
+          <AnswerFeedback
+            state={!evaluation ? 'checking' : isCorrectAnswer ? 'correct' : 'retry'}
+            message={evaluation ? evaluation.coach.message : 'Checking your answer…'}
+          />
+        )}
+        {submitError && (
+          <p className="form-error question-submit-error" aria-live="polite">
+            {submitError}
           </p>
         )}
 
-        <div className="hint-row">
-          {questionEnded ? (
-            isLastQuestion ? (
-              <div>
-                <p className="question-text">Chapter Complete!</p>
-                <button className="hint-button" type="button" onClick={handleQuestionComplete}>
-                  Return to Chapters
-                </button>
-              </div>
-            ) : (
-              <button className="hint-button" type="button" onClick={handleQuestionComplete}>
-                {isCorrectAnswer ? 'Next Question' : 'Mark Question Complete'}
+        {!questionEnded && (
+          <div className="question-actions">
+            {isAllHintsRevealed ? (
+              <button className="hint-button" type="button" onClick={handleSolutionReveal}>
+                Reveal Solution
               </button>
-            )
-          ) : isAllHintsRevealed ? (
-            <button className="hint-button" type="button" onClick={handleSolutionReveal}>
-              Reveal Solution
-            </button>
-          ) : (
-            <button
-              className={isHintSuggested ? 'hint-button hint-button-suggested' : 'hint-button'}
-              type="button"
-              onClick={handleHint}
-            >
-              {buttonLabel}
-            </button>
-          )}
+            ) : (
+              <button
+                className={isHintSuggested ? 'hint-button hint-button-suggested' : 'hint-button'}
+                type="button"
+                onClick={handleHint}
+              >
+                {buttonLabel}
+              </button>
+            )}
 
-          <div className="progress-wrap">
-            <small>{currentHintIndex} / {totalHints} hints used</small>
-            <ProgressBar percent={percent} />
+            <span className="hint-counter">
+              {currentHintIndex} of {totalHints} hints used
+            </span>
           </div>
-        </div>
+        )}
 
         <HintPanel hints={currentQuestion.hints} currentHintIndex={currentHintIndex} />
         {showSolution && <SolutionPanel solution={currentQuestion.solution} />}
+
+        {questionEnded && (
+          <div className="question-advance">
+            {isLastQuestion ? (
+              <>
+                <p className="question-complete-note">Chapter complete!</p>
+                <button type="button" onClick={handleQuestionComplete}>
+                  Return to Chapters
+                </button>
+              </>
+            ) : (
+              <button type="button" onClick={handleQuestionComplete}>
+                {isCorrectAnswer ? 'Next Question' : 'Mark Question Complete'}
+              </button>
+            )}
+          </div>
+        )}
       </section>
     </main>
   );

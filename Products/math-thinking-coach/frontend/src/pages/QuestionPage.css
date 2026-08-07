@@ -1,85 +1,126 @@
-.question-page .question-header {
+/* Shared by the anonymous question flow and the authenticated session
+   flow. Rebuilt in Release 0.1.2 so the question is the focal point: it
+   was previously 16.8px/400 centred, out-ranked by both the "Your answer"
+   form label (16px/600) and a 118px-tall progress dot grid (UX review
+   Q1/Q2). */
+
+.question-page .question-header,
+.question-page .question-card {
   width: 100%;
-  max-width: 920px;
+  max-width: var(--content-max);
 }
 
-.chapter-name {
-  font-size: 1.25rem;
-  margin-bottom: 8px;
-}
-
-.meta-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.q-number {
-  color: #6b7280;
+.question-page .chapter-name {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-4);
 }
 
 .question-card {
-  background: white;
-  width: 100%;
-  max-width: 920px;
-  padding: 16px;
-  border-radius: 12px;
-  margin-top: 16px;
-  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
 }
 
-.question-text {
-  font-size: 1.05rem;
-  margin-bottom: 14px;
-}
-
-.hint-row {
+.question-card-head {
   display: flex;
-  gap: 12px;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
 }
 
+/* The hero element of the page. */
+.question-text {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-heading);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-6);
+}
+
+.question-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+/* Secondary to "Check Answer" — hints stay one clear step below the
+   primary action rather than competing with it (Q8). */
 .hint-button {
-  background: #7c3aed;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-primary-border);
+}
+
+.hint-button:hover:not(:disabled) {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
 }
 
 .hint-button-suggested {
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.35);
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
   animation: hint-suggested-pulse 1.6s ease-in-out infinite;
 }
 
+/* Guarded so the infinite pulse never runs for users who have asked for
+   reduced motion (UX review Q9 / A5). */
+@media (prefers-reduced-motion: reduce) {
+  .hint-button-suggested {
+    animation: none;
+  }
+}
+
 @keyframes hint-suggested-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.35);
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.15);
+    box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.12);
   }
 }
 
-.hint-box {
-  margin-top: 12px;
-  background: #f8fafc;
-  padding: 12px;
-  border-radius: 8px;
+.hint-counter {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-left: auto;
 }
 
-.progress-wrap {
-  width: 40%;
-  min-width: 160px;
+.question-advance {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--border-color);
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
-@media (min-width: 640px) {
-  .progress-wrap {
-    width: 220px;
+.question-complete-note {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+
+@media (max-width: 640px) {
+  .question-card {
+    padding: var(--space-4);
+  }
+
+  .question-text {
+    font-size: var(--text-lg);
+  }
+
+  .question-actions button,
+  .question-advance button {
+    width: 100%;
+  }
+
+  .hint-counter {
+    margin-left: 0;
   }
 }

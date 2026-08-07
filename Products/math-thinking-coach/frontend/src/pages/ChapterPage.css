@@ -1,0 +1,9 @@
+.chapter-page-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.chapter-page-body .button-group {
+  margin-top: var(--space-4);
+}
