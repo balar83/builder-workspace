@@ -2,6 +2,17 @@
 
 **Scope:** how to actually build, deploy, update, and roll back Math Thinking Coach. Pairs with `Deployment-Readiness-RC1.md` (the architecture recommendation and rationale) and `Developer-Runbook.md` (local development, not covered again here).
 
+## 0. Current production deployment
+
+Split hosting, live as of Release 0.1.2 (2026-08-07):
+
+| | URL | Platform | Deploys on |
+|---|---|---|---|
+| Frontend | https://builder-workspace-zeta.vercel.app/ | Vercel | push to `main` (auto-deploy) |
+| Backend | https://math-thinking-coach-api.onrender.com | Render | push to `main` (auto-deploy) |
+
+The Vercel project is named `builder-workspace` (a rename to `math-thinking-coach` is planned — update this table, and re-verify §2's SPA-fallback step, when that happens, since a project rename changes the default `*.vercel.app` URL).
+
 Two deployment shapes are supported by everything below — pick one:
 
 - **Split, managed hosting** (recommended — see `Deployment-Readiness-RC1.md` §2): frontend on a static host (Vercel/Netlify/Cloudflare Pages), backend on a small always-on host (Render/Fly.io/Railway) with a **persistent disk** for `backend/app/data/`.
@@ -40,7 +51,11 @@ VITE_API_BASE_URL=https://your-backend-host.example.com/api/v1 npm run build
 1. Connect the repository; set the project root to `frontend/`.
 2. Build command: `npm run build`. Output directory: `dist`. **Override the platform's install command to `npm install --legacy-peer-deps`** — its default auto-detected install step will otherwise fail on the same peer-dependency conflict named in §1 (Vercel/Netlify/Cloudflare Pages all expose an "install command" override in their build settings).
 3. Set the `VITE_API_BASE_URL` environment variable in the platform's dashboard to the backend's real URL (§1).
-4. These platforms already handle SPA fallback (unmatched routes serving `index.html`) for a Vite/React Router app out of the box — confirm this is on (Netlify: add a `_redirects` file with `/* /index.html 200` in `frontend/public/` if it isn't automatic; Vercel/Cloudflare Pages detect this automatically for a Vite project). **Without this, a hard refresh on `/dashboard` or any other client-side route 404s** — this is the single most common SPA-deployment mistake, confirmed as a real gap in local static serving during this milestone's own testing (see `Developer-Runbook.md` §8).
+4. **SPA fallback (unmatched routes serving `index.html`) does not happen automatically on Vercel for this project — confirmed by testing the live production URL, not assumed.** A direct load or hard refresh of any client-side route (`/dashboard`, `/session/:id`, `/topic/:id`, ...) returned Vercel's own platform `404: NOT_FOUND` page, not the app — every deep link and every refresh was broken in production despite the app's own React Router catch-all route (Release 0.1.2's `NotFoundPage`) working perfectly once the SPA actually loads. Fixed with `frontend/vercel.json`:
+   ```json
+   { "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+   ```
+   Re-verify this specifically after any Vercel project rename or a switch to Netlify/Cloudflare Pages — `_redirects` (`/* /index.html 200` in `frontend/public/`) is the equivalent for Netlify; Cloudflare Pages' behavior should likewise be verified against the live URL, not assumed from documentation.
 
 ### **[split]** Backend (Render/Fly.io/Railway)
 
