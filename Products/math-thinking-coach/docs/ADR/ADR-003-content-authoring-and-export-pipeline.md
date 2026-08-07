@@ -51,7 +51,7 @@
 **Pros**
 - Nothing reaches `backend/app/data/*.json` without passing through the same Pydantic models the FastAPI app itself uses — the pipeline cannot drift into accepting a shape the backend would reject.
 - Chapter-partitioned atomic merge means an export for one chapter is provably incapable of corrupting or silently dropping another chapter's data, including hand-seeded data with no authoring trail (`rational-numbers`).
-- Every generated question is independently solved and verified, not templated-text-with-numbers-swapped-in — `stage6-expansion-coverage-report.md`'s self-review (duplicate check, difficulty/Bloom-level balance, misconception coverage) was possible only because generation produces real, checkable structure, not just prose.
+- Every generated question is independently solved and verified, not templated-text-with-numbers-swapped-in — `archive/stage6-expansion-coverage-report.md`'s self-review (duplicate check, difficulty/Bloom-level balance, misconception coverage) was possible only because generation produces real, checkable structure, not just prose.
 - Fully reversible/re-runnable: re-exporting unchanged canonical content doesn't flag itself as a duplicate collision (the touched chapter is excluded from its own duplicate comparison), so authors can iterate and re-run without special-casing "first export vs. re-export."
 - Zero new runtime dependencies — no npm package.json anywhere under `docs/content-pipeline/`, only Node built-ins (`fs`, `path`, `child_process`).
 
@@ -89,5 +89,5 @@ If content authoring/export ever needs to run somewhere the backend venv isn't c
 
 - [`ADR-001-evaluation-coaching-separation.md`](ADR-001-evaluation-coaching-separation.md) — the reason the export pipeline's answer-keys co-requisite check exists at all.
 - `Products/math-thinking-coach/docs/LearningExperienceArchitecture.md` §3, §6 — the `Topic` model and per-Topic authoring brief this pipeline exists to fulfill.
-- `Products/math-thinking-coach/docs/content-source/stage6-expansion-coverage-report.md` — the content-quality self-review this pipeline's generated/authored output was checked against.
+- `Products/math-thinking-coach/docs/archive/stage6-expansion-coverage-report.md` (archived 2026-08-07, moved from `docs/content-source/`) — the content-quality self-review this pipeline's generated/authored output was checked against.
 - `Products/math-thinking-coach/docs/Development-Journal.md` (2026-07-27 entries, Features 018–021) — the implementation record.

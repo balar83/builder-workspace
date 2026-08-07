@@ -1,8 +1,6 @@
 # Math Thinking Coach — Backend
 
-FastAPI backend foundation for the Math Thinking Coach application.
-
-This is a foundation only. It does not yet implement answer evaluation or AI functionality.
+FastAPI backend for the Math Thinking Coach application. See `../docs/README.md` for the current product overview and `../docs/Phase-1-Handoff.md` for the full architecture.
 
 ## Setup
 

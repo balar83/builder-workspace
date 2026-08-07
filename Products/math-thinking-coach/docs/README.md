@@ -1,27 +1,142 @@
-# Math Thinking Coach Documentation
+# Math Thinking Coach
 
-This folder contains project-specific documentation for the Math Thinking Coach frontend and planned backend.
+An AI-assisted coaching product for Class 8 CBSE mathematics, evolving toward an **AI Learning Companion**. The core philosophy, unchanged since the project's earliest design decisions: **coach students to think through problems — don't just quiz them.** Practice and Revision modes never show a score, no matter how the student did; hints are progressive, never handing over the answer; content is sourced from real NCERT Class 8 material. Full detail: [`Product-Vision.md`](Product-Vision.md).
 
-## Current focus
-- Frontend: React + TypeScript + Vite application with chapter selection, chapter detail, multi-question flow, progressive hint guidance, answer capture, and question progress indicators — backed by the live backend API.
-- Backend: FastAPI service layer live since Feature 007. Answer evaluation is rule-based and drives coaching (Feature 010, seam established by ADR-001). An experimental AI evaluator now runs alongside it in production, out-of-band and logging-only (Shadow Mode, Feature 015, ADR-002). A Topic data model and retrieval API (Feature 018) is fed by a content authoring and Stage 10 export pipeline (Features 019–021, ADR-003). Student/teacher identity (Milestone A, ADR-004) plus SQLite-backed server-side attempt history for logged-in students (Milestone B, ADR-005) — no frontend page consumes it yet. See `HANDOFF_PROMPT.md` for current status.
+**Current release: 0.1.2**, live in production. This file is the docs index and current-state overview — for a comprehensive, standalone project handoff (written so a fresh AI session can continue with zero context loss), see **[`Phase-1-Handoff.md`](Phase-1-Handoff.md)**, the canonical handoff document (see "Documentation conventions" below).
 
-## Documents
-- Product-Vision.md — why the product exists (living: mission, audience, principles, roadmap-adjacent philosophy)
-- ProductArchitecture.md — how the system is built
-- LearningExperienceArchitecture.md — how students learn (the pedagogical counterpart to ProductArchitecture.md)
-- Roadmap.md — living capability roadmap, phased and sequenced
-- Idea-Inbox.md — living, append-only, unfiltered idea capture
-- Backlog.md — approved future work only
-- Development-Journal.md — append-only engineering diary
-- Release-Notes.md — user-visible changes
-- ADR/ — accepted architecture decision records
-- Wireframes.md
-- HANDOFF_PROMPT.md
+---
 
-## Documentation Principles
-- Documentation is a living artifact.
-- Every architectural change must be reflected here.
-- Documentation should always match the implementation.
-- Only completed work should be documented as done.
-- **Exception**: `Product-Vision.md`, `Roadmap.md`, and `Idea-Inbox.md` are intentionally forward-looking and exempt from "only completed work" — see `AI-Builder-OS/CLAUDE.md`'s "Engineering Documentation vs. Product Documentation" section for the full rule.
+## Architecture
+
+**Stack:** React 19 + TypeScript + Vite (frontend) · Python 3.13 + FastAPI + Pydantic (backend) · `sqlite3` stdlib for session/attempt persistence · file-based JSON for content · REST/JSON under `/api/v1`.
+
+**Deployment (split hosting, both auto-deploy on push to `main`):**
+
+| | URL |
+|---|---|
+| Frontend | https://math-thinking-coach-zeta.vercel.app/ |
+| Backend | https://math-thinking-coach-api.onrender.com |
+
+Full deployment detail, including the two real production bugs found and fixed during Release 0.1.2 (a Vercel SPA-fallback gap and a rename-related domain-aliasing issue): [`Deployment-Guide.md`](Deployment-Guide.md).
+
+---
+
+## Current chapters
+
+| Chapter | Questions | Has a Learn page |
+|---|---|---|
+| Linear Equations | 44 | ✅ |
+| Data Handling | 42 | ✅ |
+| Understanding Quadrilaterals | 40 | ✅ |
+| Rational Numbers | 5 | ✅ |
+| Practical Geometry | 5 | ❌ |
+
+All five went through the same content model — authored offline, reviewed, and exported through the Stage 10 pipeline (see [`ADR-003`](ADR/ADR-003-content-authoring-and-export-pipeline.md)). Understanding Quadrilaterals was authored entirely from scratch in Release 0.1.1 after the official NCERT source PDF turned out to be a non-text-extractable scan — documented honestly in that chapter's own authoring trail rather than fabricated as a literal extraction.
+
+---
+
+## The Learning Session Engine
+
+The stateful core of the authenticated experience: a student configures a session (chapter, mode, difficulty, question count), the engine plans a question set from real attempt history, persists it, and serves it one question at a time with server-derived state (no client-trusted attempt numbers). Two halves, both implemented and documented:
+
+- **Planning** (stateless) — [`ADR-006`](ADR/ADR-006-learning-session-planning-architecture.md)
+- **Runtime** (stateful, session persistence + answer submission) — [`ADR-007`](ADR/ADR-007-learning-session-runtime-architecture.md)
+
+---
+
+## Workflows
+
+**Anonymous visitor:** browse all 5 chapters, read a Learn page where one exists, work the full question bank per chapter with progressive hints and rule-based evaluation. Progress tracked in `localStorage` only — no login required, no server record kept.
+
+**Student (authenticated):** join a class with a code + display name + 4-digit PIN (no email/password ever collected from students, by design). Dashboard shows real per-topic performance pulled from server-recorded history. Start a configured session (Practice / Revision / Test), work through it with server-persisted state, resume an abandoned session via a Dashboard banner, complete it (score shown only in Test mode).
+
+**Teacher:** register/login (email + password), create a class, get a join code (shown once — there is currently no way to retrieve a lost code; see Known limitations). No roster or class-progress view yet.
+
+---
+
+## Development setup
+
+```bash
+# Backend
+cd backend
+python -m venv .venv
+.venv\Scripts\activate          # Windows; source .venv/bin/activate on macOS/Linux
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app.main:app --reload   # http://localhost:8000
+
+# Frontend
+cd frontend
+npm install --legacy-peer-deps  # required — React 19 vs. a peer's React 18 constraint
+npm run dev                     # http://localhost:5173
+```
+
+Full setup, troubleshooting, and clean-clone validation notes: [`Developer-Runbook.md`](Developer-Runbook.md).
+
+---
+
+## Testing
+
+| Suite | Status |
+|---|---|
+| Backend `pytest` | 205/205 |
+| Frontend `vitest run` | 112/112 |
+| Frontend `tsc -b` | clean |
+| Frontend `oxlint` | clean |
+
+No page-level automated tests exist anywhere in this codebase, by established convention — page behavior is verified via live browser walkthrough every time, not unit tests. Before calling any change done: run all four fresh, then a live walkthrough for anything UI-observable. Full strategy: `Phase-1-Handoff.md` §11.
+
+---
+
+## Release 0.1.2 highlights
+
+- **Curriculum complete** — all five chapters authored/exported (see "Current chapters" above).
+- **Frontend UX overhaul** — a real design-token system, a rebuilt Learn page, visible coaching feedback, one consistent navigation pattern (`BackLink`) on every screen, verified at 10 responsive breakpoints (320–1440px) with zero overflow.
+- **Production-readiness audit** — 11 findings (blank page on bad URLs, permanent loading dead-ends when the backend is unreachable, Enter not submitting forms, WCAG touch-target/contrast gaps, and more), all fixed and verified.
+- **Two real defects found post-deploy, both fixed same-session:** a Vercel SPA-fallback gap (deep links and refreshes 404'd in production), and a session dead-end where a student who exhausted all hints without yet submitting a wrong answer saw neither a hint button nor a Reveal Solution button — found by the user's own hands-on production testing, not by any automated pass.
+
+Full detail: [`Release-0.1.2-Final.md`](Release-0.1.2-Final.md).
+
+---
+
+## Known limitations
+
+- Exact-string-match answer evaluation is brittle for some question formats (a correctly-typed answer in an unexpected format is marked wrong) — a known, accepted limitation, not a bug; see Phase 1 roadmap.
+- No "list my classes" endpoint — a teacher who navigates away loses their join code permanently (mitigated with a prominent, copy-button code display, not solved).
+- No length limit on user-supplied names anywhere in the schema.
+- The Learn page's content loses its authored section headings in the export pipeline (paragraphs are recoverable, headings are not, without a schema change).
+- No visual/screenshot verification has been possible in the current development environment across multiple sessions — all UI work is verified via DOM geometry, computed style, and live behavioral walkthrough, which is rigorous for correctness but blind to aesthetics.
+
+---
+
+## Phase 1 roadmap (brief)
+
+In priority order: (1) backend name-length limits, (2) a "list my classes" endpoint, (3) correct the Session page's `<h1>` in Test mode, (4) recover Topic section headings through a schema change, (5) address answer-matching brittleness (fuzzy matching and/or multiple-choice for the questions where exact-match genuinely doesn't work), (6) a real teacher dashboard (roster, class-wide progress) — currently the single biggest gap between "student tool" and "school-ready product." Full reasoning and recommended sequencing: `Phase-1-Handoff.md` §13–14.
+
+---
+
+## Documentation conventions
+
+**Canonical documents** — living, actively maintained, trust these for current state:
+```
+README.md                (this file)
+Deployment-Guide.md
+Phase-1-Handoff.md
+Release-0.1.2-Final.md
+Product-Vision.md · ProductArchitecture.md · LearningExperienceArchitecture.md
+Roadmap.md · Backlog.md · Idea-Inbox.md
+Development-Journal.md · Release-Notes.md · PROJECT_STATUS.md
+Wireframes.md · Developer-Runbook.md
+ADR/*.md (all seven accepted ADRs)
+```
+
+**Historical documents** — retained for reference, no longer updated except where a moved-file citation needed a path fix:
+```
+HANDOFF_PROMPT.md                  (superseded by Phase-1-Handoff.md — see that file's own header)
+archive/                           (previous release reports, RC reviews, implementation plans,
+                                     audit drafts, and one content-authoring coverage report —
+                                     each superseded by a living document or a shipped decision;
+                                     real historical value, no ongoing-reference value)
+```
+
+If a document isn't in either list above, treat it as living unless it's inside `archive/`.

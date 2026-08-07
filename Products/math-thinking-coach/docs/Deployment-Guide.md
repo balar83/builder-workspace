@@ -1,6 +1,6 @@
 # Deployment Guide
 
-**Scope:** how to actually build, deploy, update, and roll back Math Thinking Coach. Pairs with `Deployment-Readiness-RC1.md` (the architecture recommendation and rationale) and `Developer-Runbook.md` (local development, not covered again here).
+**Scope:** how to actually build, deploy, update, and roll back Math Thinking Coach. Pairs with `archive/Deployment-Readiness-RC1.md` (the architecture recommendation and rationale) and `Developer-Runbook.md` (local development, not covered again here).
 
 ## 0. Current production deployment
 
@@ -8,14 +8,14 @@ Split hosting, live as of Release 0.1.2 (2026-08-07):
 
 | | URL | Platform | Deploys on |
 |---|---|---|---|
-| Frontend | https://builder-workspace-zeta.vercel.app/ | Vercel | push to `main` (auto-deploy) |
+| Frontend | https://math-thinking-coach-zeta.vercel.app/ | Vercel | push to `main` (auto-deploy) |
 | Backend | https://math-thinking-coach-api.onrender.com | Render | push to `main` (auto-deploy) |
 
-The Vercel project is named `builder-workspace` (a rename to `math-thinking-coach` is planned — update this table, and re-verify §2's SPA-fallback step, when that happens, since a project rename changes the default `*.vercel.app` URL).
+The Vercel project was renamed from `builder-workspace` to `math-thinking-coach` on 2026-08-07 (old URL `builder-workspace-zeta.vercel.app` — now 404, do not use). **Renaming a Vercel project does not automatically re-alias an existing production deployment to the new default domain** — the new domain returned `DEPLOYMENT_NOT_FOUND` until a manual redeploy (Deployments tab → latest deployment → **⋯ → Redeploy**) was triggered. If this project is ever renamed again, expect the same step. **A rename also requires updating the backend's `ALLOWED_ORIGINS` env var on Render to the new URL** — CORS will otherwise silently break every API call from the new domain while the old one keeps working. Both were done and verified live for this rename.
 
 Two deployment shapes are supported by everything below — pick one:
 
-- **Split, managed hosting** (recommended — see `Deployment-Readiness-RC1.md` §2): frontend on a static host (Vercel/Netlify/Cloudflare Pages), backend on a small always-on host (Render/Fly.io/Railway) with a **persistent disk** for `backend/app/data/`.
+- **Split, managed hosting** (recommended — see `archive/Deployment-Readiness-RC1.md` §2): frontend on a static host (Vercel/Netlify/Cloudflare Pages), backend on a small always-on host (Render/Fly.io/Railway) with a **persistent disk** for `backend/app/data/`.
 - **Self-hosted single box**: both on one machine, fronted by Caddy.
 
 Steps below are marked **[split]** or **[self-hosted]** where they differ; unmarked steps apply to both.
@@ -62,7 +62,7 @@ VITE_API_BASE_URL=https://your-backend-host.example.com/api/v1 npm run build
 1. Connect the repository; set the service root to `backend/`.
 2. Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT` (these platforms inject `$PORT`; don't hardcode `8000`).
 3. Set the environment variables from §3 in the platform's dashboard — **`SESSION_SECRET_KEY` and `ALLOWED_ORIGINS` are not optional here**. Because the frontend and backend are on different domains in this shape, this is a **cross-site** deployment for cookie purposes: also set `SESSION_COOKIE_SAMESITE=none` and `SESSION_HTTPS_ONLY=true` (both together — a browser silently drops a `SameSite=None` cookie that isn't also `Secure`). Leaving `SESSION_COOKIE_SAMESITE` at its `lax` default here reproduces a confirmed bug: login succeeds and returns a cookie, but the very next authenticated request comes back 401 because the browser withholds a `Lax` cookie on a cross-site `fetch`/XHR call.
-4. **Provision a persistent disk/volume mounted so app data survives a restart or redeploy.** This is the single most important step in this entire guide — most free tiers default to ephemeral storage, which would silently delete every account and every recorded attempt on the next deploy. On Render, mount the disk at `/var/data` and set the environment variable `DATA_DIR=/var/data` so the app writes there instead of the ephemeral `backend/app/data/`. See `Deployment-Readiness-RC1.md` §2 for why this isn't optional.
+4. **Provision a persistent disk/volume mounted so app data survives a restart or redeploy.** This is the single most important step in this entire guide — most free tiers default to ephemeral storage, which would silently delete every account and every recorded attempt on the next deploy. On Render, mount the disk at `/var/data` and set the environment variable `DATA_DIR=/var/data` so the app writes there instead of the ephemeral `backend/app/data/`. See `archive/Deployment-Readiness-RC1.md` §2 for why this isn't optional.
 
 ### **[self-hosted]** Single box
 
@@ -165,7 +165,7 @@ There is no database migration to reverse in either case, since this project has
 Before tagging and deploying any Release Candidate or final release:
 
 1. `python -m pytest` (backend), `npx vitest run` + `npx tsc -b` + `npx oxlint` (frontend) — all clean, re-run fresh, not trusted from an earlier session.
-2. A live walkthrough of the full loop this RC actually claims to support (`Deployment-Readiness-RC1.md` §1's "what works" list) against a real running server — not just unit tests.
+2. A live walkthrough of the full loop this RC actually claims to support (`archive/Deployment-Readiness-RC1.md` §1's "what works" list) against a real running server — not just unit tests.
 3. `git status` clean; the commit being tagged is the one actually reviewed.
 4. Environment variables for the target deployment reviewed against §3 — `SESSION_SECRET_KEY` in particular, every time, for every new deployment target (never reuse one across environments).
 5. Persistent storage confirmed for `backend/app/data/` on whatever host is being deployed to (§2) — verify this by checking the platform's own volume/disk configuration, not by assuming a previous deploy's settings carried over.

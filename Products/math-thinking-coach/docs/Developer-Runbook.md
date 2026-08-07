@@ -136,7 +136,7 @@ npx tsc -b              # type-check
 npx oxlint               # lint
 ```
 
-96 tests. Before calling anything done, this project's own convention is to run all four fresh, plus a live browser walkthrough for anything UI-observable — page-level behavior has no automated test coverage anywhere in this codebase, by established convention (see `ProductArchitecture.md` §9/`Session-Frontend-Implementation-Plan.md` §6.2).
+96 tests. Before calling anything done, this project's own convention is to run all four fresh, plus a live browser walkthrough for anything UI-observable — page-level behavior has no automated test coverage anywhere in this codebase, by established convention (see `ProductArchitecture.md` §9/`archive/Session-Frontend-Implementation-Plan.md` §6.2).
 
 ## 8. Troubleshooting
 
