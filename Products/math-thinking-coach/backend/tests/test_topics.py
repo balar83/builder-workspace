@@ -11,7 +11,7 @@ def test_list_topics_returns_topics_for_chapter() -> None:
     assert response.status_code == 200
     body = response.json()
     assert len(body) == 1
-    assert body[0]["id"] == "topic-rational-numbers-basics"
+    assert body[0]["id"] == "topic-rational-numbers-properties-and-operations"
 
 
 def test_list_topics_returns_empty_list_for_chapter_without_topics() -> None:
@@ -28,11 +28,11 @@ def test_list_topics_returns_404_for_unknown_chapter() -> None:
 
 
 def test_get_topic_returns_single_topic() -> None:
-    response = client.get("/api/v1/topics/topic-rational-numbers-basics")
+    response = client.get("/api/v1/topics/topic-rational-numbers-properties-and-operations")
 
     assert response.status_code == 200
     body = response.json()
-    assert body["title"] == "What Are Rational Numbers?"
+    assert body["title"] == "Rational Numbers: Properties and Operations"
     assert body["chapterId"] == "rational-numbers"
 
 

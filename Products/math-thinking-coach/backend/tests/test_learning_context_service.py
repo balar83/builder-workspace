@@ -5,7 +5,7 @@ import pytest
 from app.services import attempt_service, learning_context_service
 
 CHAPTER_ID = "rational-numbers"
-TOPIC_ID = "topic-rational-numbers-basics"
+TOPIC_ID = "topic-rational-numbers-properties-and-operations"
 
 
 @pytest.fixture(autouse=True)

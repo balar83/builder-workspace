@@ -5,18 +5,18 @@ from app.schemas.question import Question
 from app.services import evaluation_service
 
 QUESTION = Question(
-    id="q1-rational-numbers",
+    id="rn-q01",
     chapterId="rational-numbers",
-    question="What is the result of adding 1/3 and 1/6?",
-    text="What is the result of adding 1/3 and 1/6?",
+    question="Is 5 a rational number?",
+    text="Is 5 a rational number?",
     difficulty="Easy",
-    hints=["Find a common denominator for 1/3 and 1/6."],
-    solution="1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2.",
+    hints=["A rational number is any number expressible as p/q, with q not zero."],
+    solution="Yes",
 )
 
 
 def test_correct_answer_is_marked_correct() -> None:
-    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="1/2", attemptNumber=1))
+    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="Yes", attemptNumber=1))
 
     assert result.isCorrect is True
     assert result.score == 1.0
@@ -30,7 +30,7 @@ def test_incorrect_answer_is_marked_incorrect() -> None:
 
 
 def test_leading_and_trailing_whitespace_is_trimmed() -> None:
-    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="  1/2  ", attemptNumber=1))
+    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="  Yes  ", attemptNumber=1))
 
     assert result.isCorrect is True
 
@@ -43,7 +43,7 @@ def test_empty_answer_is_marked_incorrect() -> None:
 
 
 def test_get_expected_answer_returns_the_canonical_answer() -> None:
-    assert evaluation_service.get_expected_answer(QUESTION.id) == "1/2"
+    assert evaluation_service.get_expected_answer(QUESTION.id) == "Yes"
 
 
 def test_get_expected_answer_raises_key_error_for_unknown_question() -> None:

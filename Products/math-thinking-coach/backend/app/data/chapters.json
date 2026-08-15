@@ -23,5 +23,10 @@
     "id": "data-handling",
     "title": "Data Handling",
     "description": "Collecting, organizing and interpreting data."
+  },
+  {
+    "id": "squares-and-cubes",
+    "title": "A Square and A Cube",
+    "description": "Squares, square roots, cubes and cube roots, and how to find them."
   }
 ]

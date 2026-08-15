@@ -10,7 +10,7 @@ def test_list_questions_returns_questions_for_chapter() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body) == 5
+    assert len(body) == 40
     assert all(question["chapterId"] == "rational-numbers" for question in body)
 
 
@@ -21,10 +21,10 @@ def test_list_questions_returns_404_for_unknown_chapter() -> None:
 
 
 def test_get_question_returns_single_question() -> None:
-    response = client.get("/api/v1/chapters/rational-numbers/questions/q1-rational-numbers")
+    response = client.get("/api/v1/chapters/rational-numbers/questions/rn-q01")
 
     assert response.status_code == 200
-    assert response.json()["solution"] == "1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2."
+    assert response.json()["solution"] == "Yes"
 
 
 def test_get_question_returns_404_for_unknown_question() -> None:

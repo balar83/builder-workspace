@@ -7,8 +7,8 @@ from app.core.config import settings
 from app.schemas.answer import AnswerSubmission, Evaluation
 from app.services import ai_evaluation_client, shadow_evaluation_service
 
-QUESTION_ID = "q1-rational-numbers"
-SUBMISSION = AnswerSubmission(answer="1/2", attemptNumber=1)
+QUESTION_ID = "rn-q01"
+SUBMISSION = AnswerSubmission(answer="Yes", attemptNumber=1)
 RULE_BASED_EVALUATION = Evaluation(isCorrect=True, score=1.0)
 
 

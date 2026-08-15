@@ -1,0 +1,450 @@
+{
+  "topicId": null,
+  "reviewStatus": "approved",
+  "expansionNote": "Replaces the 5 hand-seeded placeholder questions with a 35-question bank authored using the construction-specific material from the NCERT Exemplar Unit 5 'Understanding Quadrilaterals and Practical Geometry' (practical.pdf), deliberately excluding general quadrilateral-property material already covered by Understanding Quadrilaterals' own 40-question bank. No canonical-topic.json exists for this chapter (topicId is null throughout) - see stage2-topic-detection.md for the architectural reason and how this bank is merged into runtime data outside the normal Stage 10 pipeline. Difficulty split: 12 Easy (34%), 15 Medium (43%), 8 Hard (23%). All answers are single short values (a number, a short phrase, or Yes/No/True/False) to stay reliably compatible with the exact-string-match evaluator.",
+  "excludedSourceItems": [],
+  "questions": [
+    {
+      "id": "pg-q01",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "Which instrument is used to draw arcs and circles?",
+      "expectedAnswer": "Compass",
+      "hints": [
+        "This instrument has two pointed legs and a pencil arm.",
+        "It's the same tool used to mark off a fixed radius."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q02",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "Which instrument is used to draw a line segment of a given length?",
+      "expectedAnswer": "Ruler",
+      "hints": [
+        "This tool has markings in centimetres for measuring straight-line distances."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q03",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "Which instrument is used to measure or construct an angle of a given size?",
+      "expectedAnswer": "Protractor",
+      "hints": [
+        "This tool has a semicircular scale marked in degrees.",
+        "It's placed with its centre at the vertex of the angle."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q04",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "What do you call a ray that divides an angle into two equal parts?",
+      "expectedAnswer": "Angle bisector",
+      "hints": [
+        "It creates two equal smaller angles from one larger angle."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q05",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "analysis",
+      "prompt": "What two pieces of information must you know to draw a unique circle?",
+      "expectedAnswer": "Center and radius",
+      "hints": [
+        "Think about what you set the compass to, and where you place its point."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q06",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "recall",
+      "prompt": "What is the minimum number of measurements needed to construct a quadrilateral uniquely?",
+      "expectedAnswer": "5",
+      "hints": [
+        "A quadrilateral has 4 sides and 2 diagonals — but not all of these are independent measurements.",
+        "This is the general rule stated for quadrilaterals with no special properties."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q07",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "Can a quadrilateral be constructed uniquely if only the lengths of its 4 sides are known (no angle or diagonal)?",
+      "expectedAnswer": "No",
+      "hints": [
+        "A quadrilateral's shape can flex even if all four side lengths stay fixed — think of a hinge.",
+        "You need a fifth measurement (a diagonal or an angle) to fix the shape."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q08",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "recall",
+      "prompt": "Can a quadrilateral be constructed uniquely given its four sides and one diagonal?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "This is one of the four standard measurement combinations for constructing a quadrilateral."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q09",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "recall",
+      "prompt": "Can a quadrilateral be constructed uniquely given three sides and two diagonals?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "This is one of the four standard measurement combinations for constructing a quadrilateral."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q10",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "recall",
+      "prompt": "Can a quadrilateral be constructed uniquely given two adjacent sides and three angles?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "This is one of the four standard measurement combinations for constructing a quadrilateral."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q11",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "recall",
+      "prompt": "Can a quadrilateral be constructed uniquely given three sides and the two angles included between them?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "This is one of the four standard measurement combinations for constructing a quadrilateral."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q12",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "application",
+      "prompt": "How many triangles is a quadrilateral split into when one diagonal is drawn?",
+      "expectedAnswer": "2",
+      "hints": [
+        "A diagonal connects two opposite vertices, cutting the quadrilateral in two."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q13",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "analysis",
+      "prompt": "In the 4-sides-and-1-diagonal construction method, each of the two triangles is drawn using which triangle congruence rule: SSS, SAS, or ASA?",
+      "expectedAnswer": "SSS",
+      "hints": [
+        "Each triangle is built from three known side lengths — two sides of the quadrilateral plus the shared diagonal.",
+        "No angle is given directly in this method, only side lengths."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q14",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 40 degrees and angle DBC = 35 degrees, what is the full angle ABC?",
+      "expectedAnswer": "75°",
+      "hints": [
+        "Angle ABC is made up of the two smaller angles on either side of the diagonal BD.",
+        "Add the two given angles together."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q15",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A parallelogram PQRS is being constructed with PQ = 5 cm, QR = 4 cm and angle PQR = 70 degrees. What is the measure of the adjacent angle QRS?",
+      "expectedAnswer": "110°",
+      "hints": [
+        "Adjacent angles in a parallelogram are supplementary — they add up to 180 degrees.",
+        "Subtract the given angle from 180 degrees."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q16",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rectangle is to be constructed with one side 6 cm and a diagonal of 10 cm. What is the length of the other side?",
+      "expectedAnswer": "8 cm",
+      "hints": [
+        "A rectangle's diagonal, together with two adjacent sides, forms a right triangle.",
+        "Use the Pythagorean relation: diagonal² = side² + side²."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q17",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with diagonals of 6 cm and 8 cm. What is the length of each side?",
+      "expectedAnswer": "5 cm",
+      "hints": [
+        "A rhombus's diagonals bisect each other at right angles, forming four right triangles.",
+        "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q18",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "analysis",
+      "prompt": "A rhombus is being constructed with side 5 cm, using a diagonal of 6 cm to split it into two triangles. Is each of those triangles equilateral, isosceles, or scalene?",
+      "expectedAnswer": "Isosceles",
+      "hints": [
+        "Each triangle has two sides that are sides of the rhombus (so they're equal to each other) and a base that's the diagonal.",
+        "A triangle with exactly two equal sides is isosceles."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q19",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "True or False: a quadrilateral can be constructed uniquely knowing only its three sides and one diagonal (no angles given).",
+      "expectedAnswer": "False",
+      "hints": [
+        "Compare this to the four valid measurement combinations for constructing a quadrilateral.",
+        "3 sides and 1 diagonal is not enough — the valid combination needs 2 diagonals, not 1."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q20",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "recall",
+      "prompt": "True or False: a trapezium can sometimes be constructed by first drawing a triangle formed from the difference of its two parallel sides.",
+      "expectedAnswer": "True",
+      "hints": [
+        "This is a standard technique for trapezium construction when the two parallel sides and the legs are known."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q21",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A trapezium is to be constructed with parallel sides of 9 cm and 5 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+      "expectedAnswer": "4 cm",
+      "hints": [
+        "Subtract the shorter parallel side from the longer one."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q22",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "Can a unique quadrilateral be constructed if only its four angles are given (no side lengths)?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Angles alone fix the quadrilateral's shape but not its size.",
+        "Without at least one length measurement, the quadrilateral could be scaled to any size."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q23",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "Can a unique rectangle be constructed if only one side length is given?",
+      "expectedAnswer": "No",
+      "hints": [
+        "A rectangle's angles are already fixed at 90 degrees, but one side length alone doesn't fix the other side."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q24",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "What is the minimum number of measurements needed to construct a unique rectangle?",
+      "expectedAnswer": "2",
+      "hints": [
+        "A rectangle's angles are already fixed at 90 degrees, so you don't need to measure any angle.",
+        "You just need its length and its breadth."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q25",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "What is the minimum number of measurements needed to construct a unique parallelogram?",
+      "expectedAnswer": "3",
+      "hints": [
+        "Two adjacent sides and the angle between them are enough to fix a parallelogram completely."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q26",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "What is the minimum number of measurements needed to construct a unique square?",
+      "expectedAnswer": "1",
+      "hints": [
+        "A square's angles are all fixed at 90 degrees, and all its sides are equal by definition.",
+        "Only one length is needed."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q27",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "What is the minimum number of measurements needed to construct a unique rhombus?",
+      "expectedAnswer": "2",
+      "hints": [
+        "A rhombus's four sides are already equal by definition.",
+        "Either a side and one angle, or the two diagonals, are enough."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q28",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "application",
+      "prompt": "In the '2 adjacent sides and 3 angles' construction method, how many of the quadrilateral's four vertex angles are directly given as measurements?",
+      "expectedAnswer": "3",
+      "hints": [
+        "The method's name tells you exactly how many angles are given.",
+        "The fourth angle is worked out afterward, not given directly."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q29",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 80, 95 and 100 degrees. What is the fourth angle?",
+      "expectedAnswer": "85°",
+      "hints": [
+        "The interior angles of any quadrilateral add up to 360 degrees.",
+        "Add the three given angles, then subtract from 360."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q30",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "recall",
+      "prompt": "When constructing a square using its diagonals, the two equal diagonals are drawn bisecting each other at what angle?",
+      "expectedAnswer": "90°",
+      "hints": [
+        "This is the same diagonal property that a rhombus has (a square is a special rhombus)."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q31",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rectangle is to be constructed with sides 8 cm and 6 cm. What is the length of each diagonal?",
+      "expectedAnswer": "10 cm",
+      "hints": [
+        "A rectangle's diagonal, together with two adjacent sides, forms a right triangle.",
+        "Use the Pythagorean relation: diagonal² = side² + side²."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q32",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with diagonals of 10 cm and 24 cm. What is the length of each side?",
+      "expectedAnswer": "13 cm",
+      "hints": [
+        "A rhombus's diagonals bisect each other at right angles, forming four right triangles.",
+        "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q33",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with side 8 cm and one angle of 60 degrees. What is the measure of the adjacent angle?",
+      "expectedAnswer": "120°",
+      "hints": [
+        "A rhombus is a parallelogram, so adjacent angles are supplementary.",
+        "Subtract the given angle from 180 degrees."
+      ],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q34",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "recall",
+      "prompt": "True or False: every quadrilateral has exactly two diagonals.",
+      "expectedAnswer": "True",
+      "hints": [
+        "A diagonal connects two non-adjacent vertices.",
+        "A quadrilateral has 4 vertices — count how many non-adjacent pairs that gives."
+      ],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q35",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "synthesis",
+      "prompt": "A parallelogram is constructed with adjacent sides 6 cm and 8 cm, and the included angle is 90 degrees. What special quadrilateral results?",
+      "expectedAnswer": "Rectangle",
+      "hints": [
+        "A parallelogram with one 90-degree angle automatically has all four angles at 90 degrees.",
+        "The two adjacent sides are different lengths (6 cm and 8 cm), so it isn't a square."
+      ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    }
+  ]
+}

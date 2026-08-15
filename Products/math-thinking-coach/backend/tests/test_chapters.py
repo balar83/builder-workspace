@@ -10,7 +10,7 @@ def test_list_chapters_returns_all_chapters() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body) == 5
+    assert len(body) == 6
     assert body[0]["id"] == "rational-numbers"
 
 

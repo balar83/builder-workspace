@@ -1,0 +1,134 @@
+{
+  "id": "topic-rational-numbers-properties-and-operations",
+  "chapterId": "rational-numbers",
+  "title": "Rational Numbers: Properties and Operations",
+  "reviewStatus": "approved",
+  "consolidationNote": "Consolidates stage2-topic-detection.md, stage3-concept-extraction.md, stage4-learning-objectives.md and stage5-worked-examples.json into one canonical Topic record, per the Stage 10 export design. Sourced from NCERT Class 8 Ch.1 'Rational Numbers' (prior edition, Reprint 2024-25) for sections 1-3; sections 4-5 (negative/reciprocal, number line/between-two-rationals) are authored from standard NCERT Class 8 Ch.1 curriculum knowledge since the supplied PDF's extractable text stops after distributivity (see stage2's provenance note). This replaces the previous non-pipeline-authored Topic 'topic-rational-numbers-basics' in full. Explanation prose and all questions are written in this project's own voice, not reproduced verbatim from NCERT text. Approved 2026-08-15 for the Curriculum Expansion milestone.",
+  "sourceRefs": {
+    "stage2": "stage2-topic-detection.md",
+    "stage3": "stage3-concept-extraction.md",
+    "stage4": "stage4-learning-objectives.md",
+    "stage5": "stage5-worked-examples.json"
+  },
+  "explanation": {
+    "sections": [
+      {
+        "title": "What is a rational number?",
+        "body": "A rational number is any number that can be written as a fraction p/q, where p and q are integers and q is not zero. This is a broad definition — every whole number and every integer is automatically a rational number too, since 5 can be written as 5/1, and −3 as −3/1. The same rational number can be written in more than one way: −4/6, 2/−3 and −2/3 are all the same number, just written with different numerators and denominators. To avoid this ambiguity, a rational number is said to be in standard form when its denominator is positive and the numerator and denominator share no common factor other than 1 — reducing any equivalent fraction down to one canonical version. For example, −4/6 reduces to −2/3 in standard form: divide both numerator and denominator by their common factor of 2, and flip the sign so the denominator stays positive."
+      },
+      {
+        "title": "Closure, commutativity and associativity",
+        "body": "Rational numbers are closed under addition, subtraction and multiplication, which means combining any two rational numbers with one of these operations always produces another rational number — you never leave the set. They are not closed under division, because dividing by 0 is undefined. This mirrors what's true of whole numbers and integers, with one difference: integers are also closed under subtraction, while whole numbers are not (5 − 7 = −2 is not a whole number, but it is an integer and a rational number). Addition and multiplication are commutative for rational numbers — the order you combine two numbers in doesn't change the result, so a + b = b + a and a × b = b × a for any rational numbers a and b. Subtraction and division are not commutative: swapping the order generally gives a different answer. The same pattern holds for associativity, which is about grouping rather than order: addition and multiplication are associative, meaning a + (b + c) = (a + b) + c and a × (b × c) = (a × b) × c no matter how the numbers are grouped, but subtraction and division are not associative — regrouping them can change the result."
+      },
+      {
+        "title": "Distributivity and the identity elements",
+        "body": "Zero is the additive identity for rational numbers: adding 0 to any rational number a leaves it unchanged, a + 0 = 0 + a = a. This is the same role zero plays for whole numbers and integers. One is the multiplicative identity for rational numbers in exactly the same way: multiplying any rational number a by 1 leaves it unchanged, a × 1 = 1 × a = a. Distributivity connects addition and multiplication: for any rational numbers a, b and c, a(b + c) = ab + ac, and equally a(b − c) = ab − ac. This isn't just a rule to memorise — it's a genuinely useful calculation shortcut. Instead of adding two fractions first and then multiplying the sum by a third number, you can multiply each piece separately and add the results, whichever order turns out to involve simpler arithmetic. Recognising when an expression fits this pattern is what makes distributivity useful in practice, not just as an abstract property."
+      },
+      {
+        "title": "Negative and reciprocal",
+        "body": "Every rational number a has an additive inverse, written −a, which is the number that brings a back to the additive identity: a + (−a) = 0. This is sometimes just called the negative of a number. Flipping the sign of a rational number (positive to negative, or negative to positive) always produces its additive inverse — the additive inverse of 3/8 is −3/8, and the additive inverse of −5/9 is 5/9. Every non-zero rational number a = p/q also has a multiplicative inverse, called its reciprocal, formed by swapping the numerator and denominator: the reciprocal of p/q is q/p, and a × (q/p) = 1 always holds. The reciprocal of a whole number like 5 is 1/5, since 5 = 5/1 and swapping gives 1/5. There's exactly one important exception: 0 has no reciprocal, because no number multiplied by 0 can ever equal 1 — division by zero is precisely the operation that's left undefined."
+      },
+      {
+        "title": "The number line and rational numbers between two rationals",
+        "body": "Rational numbers occupy positions on the number line just like whole numbers and integers do, but far more densely — a rational number with denominator q is found by subdividing the space between consecutive integers into q equal parts. Unlike integers, where the number line has visible gaps (there's nothing between 3 and 4), rational numbers pack every one of those gaps with more rational numbers, and each of those with still more. A simple, reliable way to find a rational number that lies exactly between two given rational numbers a and b is to compute their mean, (a + b) ÷ 2 — this average always lies exactly halfway between them. Repeating this process — taking the mean of the new number and one of the originals — produces yet another rational number in between, and this can be repeated without ever running out. This is why there are infinitely many rational numbers between any two given rational numbers, no matter how close together those two numbers already are — a sharp contrast to integers, where only a finite number (or sometimes none at all) fit between two given values."
+      }
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "rn-we-01",
+      "section": "What is a rational number?",
+      "conceptRef": "Standard form (rn-raw-concept-1.1)",
+      "problem": "Write −18/24 in standard form.",
+      "steps": [
+        "Find the greatest common factor of 18 and 24: it is 6.",
+        "Divide both the numerator and denominator by 6: −18÷6 = −3, 24÷6 = 4."
+      ],
+      "finalAnswer": "−18/24 in standard form is −3/4."
+    },
+    {
+      "id": "rn-we-02",
+      "section": "Closure, commutativity and associativity",
+      "conceptRef": "Commutativity of addition (rn-raw-concept-1.2.2)",
+      "problem": "Show that addition is commutative for −2/5 and 3/7 by computing both sums.",
+      "steps": [
+        "Compute −2/5 + 3/7 using a common denominator of 35: (−14 + 15)/35 = 1/35.",
+        "Compute 3/7 + (−2/5) using the same common denominator: (15 − 14)/35 = 1/35.",
+        "Both sums equal 1/35, regardless of the order the two numbers were added in."
+      ],
+      "finalAnswer": "Both sums equal 1/35, confirming addition is commutative for these two numbers."
+    },
+    {
+      "id": "rn-we-03",
+      "section": "Distributivity and the identity elements",
+      "conceptRef": "Distributivity (rn-raw-concept-1.2.6)",
+      "problem": "Use distributivity to compute 5/6 × (2/3 + 1/3).",
+      "steps": [
+        "Add the bracketed terms first: 2/3 + 1/3 = 1.",
+        "Multiply: 5/6 × 1 = 5/6.",
+        "Check by distributing instead: 5/6×2/3 + 5/6×1/3 = 10/18 + 5/18 = 15/18 = 5/6 — same result either way."
+      ],
+      "finalAnswer": "5/6 × (2/3 + 1/3) = 5/6."
+    },
+    {
+      "id": "rn-we-04",
+      "section": "Negative and reciprocal",
+      "conceptRef": "Reciprocal (rn-raw-concept-1.2.7)",
+      "problem": "Find the reciprocal of −4/9, and verify it by multiplying the two numbers together.",
+      "steps": [
+        "To find the reciprocal, swap the numerator and denominator, keeping the sign: the reciprocal of −4/9 is −9/4.",
+        "Verify: −4/9 × −9/4 = 36/36 = 1."
+      ],
+      "finalAnswer": "The reciprocal of −4/9 is −9/4."
+    },
+    {
+      "id": "rn-we-05",
+      "section": "The number line and rational numbers between two rationals",
+      "conceptRef": "Mean method (rn-raw-concept-1.4)",
+      "problem": "Find a rational number that lies between 1/3 and 2/3.",
+      "steps": [
+        "Add the two numbers: 1/3 + 2/3 = 1.",
+        "Divide the sum by 2 to find their mean: 1 ÷ 2 = 1/2."
+      ],
+      "finalAnswer": "1/2 lies exactly between 1/3 and 2/3."
+    }
+  ],
+  "learningObjectives": [
+    {
+      "section": "What is a rational number?",
+      "objectives": [
+        "Recognize a rational number as any number expressible as p/q, where p and q are integers and q ≠ 0.",
+        "Reduce a rational number to its standard form (positive denominator, no common factor)."
+      ]
+    },
+    {
+      "section": "Closure, commutativity and associativity",
+      "objectives": [
+        "Determine whether rational numbers are closed under addition, subtraction, multiplication and division.",
+        "Identify commutativity of addition/multiplication for rational numbers, and recognize that subtraction/division are not commutative.",
+        "Identify associativity of addition/multiplication for rational numbers, and recognize that subtraction/division are not associative."
+      ]
+    },
+    {
+      "section": "Distributivity and the identity elements",
+      "objectives": [
+        "State the additive identity (0) and multiplicative identity (1) for rational numbers.",
+        "Apply the distributive property of multiplication over addition to simplify a calculation."
+      ]
+    },
+    {
+      "section": "Negative and reciprocal",
+      "objectives": [
+        "Find the additive inverse (negative) of a rational number.",
+        "Find the multiplicative inverse (reciprocal) of a rational number, and recognize that 0 has no reciprocal."
+      ]
+    },
+    {
+      "section": "The number line and rational numbers between two rationals",
+      "objectives": [
+        "Use the mean method to reason about a rational number's position relative to two others.",
+        "Find a rational number between two given rational numbers using the mean method, and recognize that infinitely many such numbers exist."
+      ]
+    }
+  ]
+}

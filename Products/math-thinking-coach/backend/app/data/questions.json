@@ -1118,139 +1118,1485 @@
     "topicId": "topic-linear-equations-one-variable"
   },
   {
-    "id": "q1-practical-geometry",
+    "id": "pg-q01",
     "chapterId": "practical-geometry",
-    "question": "Which instrument is used to draw arcs of circle?",
-    "text": "Which instrument is used to draw arcs of circle?",
+    "question": "Which instrument is used to draw arcs and circles?",
+    "text": "Which instrument is used to draw arcs and circles?",
     "difficulty": "Easy",
     "hints": [
-      "The instrument is used for drawing circles and arcs.",
-      "It has two pointed legs and a pencil arm.",
-      "It is commonly used in geometry constructions."
+      "This instrument has two pointed legs and a pencil arm.",
+      "It's the same tool used to mark off a fixed radius."
     ],
-    "solution": "A compass is used to draw arcs and circles."
+    "solution": "Compass",
+    "topicId": null
   },
   {
-    "id": "q1-rational-numbers",
-    "chapterId": "rational-numbers",
-    "topicId": "topic-rational-numbers-basics",
-    "question": "What is the result of adding 1/3 and 1/6?",
-    "text": "What is the result of adding 1/3 and 1/6?",
-    "difficulty": "Easy",
-    "hints": [
-      "Find a common denominator for 1/3 and 1/6.",
-      "Rewrite 1/3 as 2/6 so the denominators match.",
-      "Add the numerators and keep the denominator 6."
-    ],
-    "solution": "1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2."
-  },
-  {
-    "id": "q2-practical-geometry",
+    "id": "pg-q02",
     "chapterId": "practical-geometry",
     "question": "Which instrument is used to draw a line segment of a given length?",
     "text": "Which instrument is used to draw a line segment of a given length?",
     "difficulty": "Easy",
     "hints": [
-      "The tool is used for measuring and drawing straight lines.",
-      "It often has markings in centimeters or inches.",
-      "A ruler or scale is used for this."
+      "This tool has markings in centimetres for measuring straight-line distances."
     ],
-    "solution": "A ruler or scale is used to draw a line segment of a given length."
+    "solution": "Ruler",
+    "topicId": null
   },
   {
-    "id": "q2-rational-numbers",
-    "chapterId": "rational-numbers",
-    "topicId": "topic-rational-numbers-basics",
-    "question": "Which of these is a rational number: 1/2, √2, or π?",
-    "text": "Which of these is a rational number: 1/2, √2, or π?",
+    "id": "pg-q03",
+    "chapterId": "practical-geometry",
+    "question": "Which instrument is used to measure or construct an angle of a given size?",
+    "text": "Which instrument is used to measure or construct an angle of a given size?",
     "difficulty": "Easy",
     "hints": [
-      "A rational number can be written as a fraction of two integers.",
-      "Check whether the number can be expressed as a ratio.",
-      "1/2 fits that definition."
+      "This tool has a semicircular scale marked in degrees.",
+      "It's placed with its centre at the vertex of the angle."
     ],
-    "solution": "1/2 is a rational number because it can be written as a fraction."
+    "solution": "Protractor",
+    "topicId": null
   },
   {
-    "id": "q3-practical-geometry",
+    "id": "pg-q04",
     "chapterId": "practical-geometry",
-    "question": "Which tool is used to measure angles?",
-    "text": "Which tool is used to measure angles?",
+    "question": "What do you call a ray that divides an angle into two equal parts?",
+    "text": "What do you call a ray that divides an angle into two equal parts?",
     "difficulty": "Easy",
     "hints": [
-      "The tool has a semicircular scale.",
-      "It is placed at the vertex of the angle.",
-      "A protractor measures angles."
+      "It creates two equal smaller angles from one larger angle."
     ],
-    "solution": "A protractor is used to measure angles."
+    "solution": "Angle bisector",
+    "topicId": null
   },
   {
-    "id": "q3-rational-numbers",
-    "chapterId": "rational-numbers",
-    "topicId": "topic-rational-numbers-basics",
-    "question": "Simplify 4/8 to its lowest terms.",
-    "text": "Simplify 4/8 to its lowest terms.",
+    "id": "pg-q05",
+    "chapterId": "practical-geometry",
+    "question": "What two pieces of information must you know to draw a unique circle?",
+    "text": "What two pieces of information must you know to draw a unique circle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about what you set the compass to, and where you place its point."
+    ],
+    "solution": "Center and radius",
+    "topicId": null
+  },
+  {
+    "id": "pg-q06",
+    "chapterId": "practical-geometry",
+    "question": "What is the minimum number of measurements needed to construct a quadrilateral uniquely?",
+    "text": "What is the minimum number of measurements needed to construct a quadrilateral uniquely?",
     "difficulty": "Easy",
     "hints": [
-      "Look for a common factor of the numerator and denominator.",
-      "Both 4 and 8 can be divided by 4.",
-      "Divide both by 4 to get the simplest form."
+      "A quadrilateral has 4 sides and 2 diagonals — but not all of these are independent measurements.",
+      "This is the general rule stated for quadrilaterals with no special properties."
     ],
-    "solution": "4/8 simplifies to 1/2."
+    "solution": "5",
+    "topicId": null
   },
   {
-    "id": "q4-practical-geometry",
+    "id": "pg-q07",
     "chapterId": "practical-geometry",
-    "question": "What do you call a line that divides an angle into two equal parts?",
-    "text": "What do you call a line that divides an angle into two equal parts?",
-    "difficulty": "Medium",
+    "question": "Can a quadrilateral be constructed uniquely if only the lengths of its 4 sides are known (no angle or diagonal)?",
+    "text": "Can a quadrilateral be constructed uniquely if only the lengths of its 4 sides are known (no angle or diagonal)?",
+    "difficulty": "Easy",
     "hints": [
-      "It is a special line inside an angle.",
-      "It creates two equal smaller angles.",
-      "It is called an angle bisector."
+      "A quadrilateral's shape can flex even if all four side lengths stay fixed — think of a hinge.",
+      "You need a fifth measurement (a diagonal or an angle) to fix the shape."
     ],
-    "solution": "It is called an angle bisector."
+    "solution": "No",
+    "topicId": null
   },
   {
-    "id": "q4-rational-numbers",
-    "chapterId": "rational-numbers",
-    "topicId": "topic-rational-numbers-basics",
-    "question": "What is 3/4 ÷ 1/2?",
-    "text": "What is 3/4 ÷ 1/2?",
-    "difficulty": "Medium",
-    "hints": [
-      "Divide by a fraction by multiplying by its reciprocal.",
-      "The reciprocal of 1/2 is 2.",
-      "3/4 × 2 = 3/2."
-    ],
-    "solution": "3/4 ÷ 1/2 = 3/2."
-  },
-  {
-    "id": "q5-practical-geometry",
+    "id": "pg-q08",
     "chapterId": "practical-geometry",
-    "question": "How do you start drawing a circle of radius 3 cm?",
-    "text": "How do you start drawing a circle of radius 3 cm?",
+    "question": "Can a quadrilateral be constructed uniquely given its four sides and one diagonal?",
+    "text": "Can a quadrilateral be constructed uniquely given its four sides and one diagonal?",
     "difficulty": "Medium",
     "hints": [
-      "Use a compass for drawing the circle.",
-      "Set the distance between the points to 3 cm.",
-      "Then place the compass point on the center and rotate."
+      "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
-    "solution": "Set the compass to 3 cm and draw around a fixed center point."
+    "solution": "Yes",
+    "topicId": null
   },
   {
-    "id": "q5-rational-numbers",
-    "chapterId": "rational-numbers",
-    "topicId": "topic-rational-numbers-basics",
-    "question": "Which is greater: 2/3 or 3/5?",
-    "text": "Which is greater: 2/3 or 3/5?",
+    "id": "pg-q09",
+    "chapterId": "practical-geometry",
+    "question": "Can a quadrilateral be constructed uniquely given three sides and two diagonals?",
+    "text": "Can a quadrilateral be constructed uniquely given three sides and two diagonals?",
     "difficulty": "Medium",
     "hints": [
-      "Compare the fractions using a common denominator.",
-      "A common denominator is 15.",
-      "2/3 = 10/15 and 3/5 = 9/15, so 2/3 is greater."
+      "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
-    "solution": "2/3 is greater than 3/5."
+    "solution": "Yes",
+    "topicId": null
+  },
+  {
+    "id": "pg-q10",
+    "chapterId": "practical-geometry",
+    "question": "Can a quadrilateral be constructed uniquely given two adjacent sides and three angles?",
+    "text": "Can a quadrilateral be constructed uniquely given two adjacent sides and three angles?",
+    "difficulty": "Medium",
+    "hints": [
+      "This is one of the four standard measurement combinations for constructing a quadrilateral."
+    ],
+    "solution": "Yes",
+    "topicId": null
+  },
+  {
+    "id": "pg-q11",
+    "chapterId": "practical-geometry",
+    "question": "Can a quadrilateral be constructed uniquely given three sides and the two angles included between them?",
+    "text": "Can a quadrilateral be constructed uniquely given three sides and the two angles included between them?",
+    "difficulty": "Medium",
+    "hints": [
+      "This is one of the four standard measurement combinations for constructing a quadrilateral."
+    ],
+    "solution": "Yes",
+    "topicId": null
+  },
+  {
+    "id": "pg-q12",
+    "chapterId": "practical-geometry",
+    "question": "How many triangles is a quadrilateral split into when one diagonal is drawn?",
+    "text": "How many triangles is a quadrilateral split into when one diagonal is drawn?",
+    "difficulty": "Easy",
+    "hints": [
+      "A diagonal connects two opposite vertices, cutting the quadrilateral in two."
+    ],
+    "solution": "2",
+    "topicId": null
+  },
+  {
+    "id": "pg-q13",
+    "chapterId": "practical-geometry",
+    "question": "In the 4-sides-and-1-diagonal construction method, each of the two triangles is drawn using which triangle congruence rule: SSS, SAS, or ASA?",
+    "text": "In the 4-sides-and-1-diagonal construction method, each of the two triangles is drawn using which triangle congruence rule: SSS, SAS, or ASA?",
+    "difficulty": "Medium",
+    "hints": [
+      "Each triangle is built from three known side lengths — two sides of the quadrilateral plus the shared diagonal.",
+      "No angle is given directly in this method, only side lengths."
+    ],
+    "solution": "SSS",
+    "topicId": null
+  },
+  {
+    "id": "pg-q14",
+    "chapterId": "practical-geometry",
+    "question": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 40 degrees and angle DBC = 35 degrees, what is the full angle ABC?",
+    "text": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 40 degrees and angle DBC = 35 degrees, what is the full angle ABC?",
+    "difficulty": "Medium",
+    "hints": [
+      "Angle ABC is made up of the two smaller angles on either side of the diagonal BD.",
+      "Add the two given angles together."
+    ],
+    "solution": "75°",
+    "topicId": null
+  },
+  {
+    "id": "pg-q15",
+    "chapterId": "practical-geometry",
+    "question": "A parallelogram PQRS is being constructed with PQ = 5 cm, QR = 4 cm and angle PQR = 70 degrees. What is the measure of the adjacent angle QRS?",
+    "text": "A parallelogram PQRS is being constructed with PQ = 5 cm, QR = 4 cm and angle PQR = 70 degrees. What is the measure of the adjacent angle QRS?",
+    "difficulty": "Medium",
+    "hints": [
+      "Adjacent angles in a parallelogram are supplementary — they add up to 180 degrees.",
+      "Subtract the given angle from 180 degrees."
+    ],
+    "solution": "110°",
+    "topicId": null
+  },
+  {
+    "id": "pg-q16",
+    "chapterId": "practical-geometry",
+    "question": "A rectangle is to be constructed with one side 6 cm and a diagonal of 10 cm. What is the length of the other side?",
+    "text": "A rectangle is to be constructed with one side 6 cm and a diagonal of 10 cm. What is the length of the other side?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rectangle's diagonal, together with two adjacent sides, forms a right triangle.",
+      "Use the Pythagorean relation: diagonal² = side² + side²."
+    ],
+    "solution": "8 cm",
+    "topicId": null
+  },
+  {
+    "id": "pg-q17",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with diagonals of 6 cm and 8 cm. What is the length of each side?",
+    "text": "A rhombus is to be constructed with diagonals of 6 cm and 8 cm. What is the length of each side?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rhombus's diagonals bisect each other at right angles, forming four right triangles.",
+      "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
+    ],
+    "solution": "5 cm",
+    "topicId": null
+  },
+  {
+    "id": "pg-q18",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is being constructed with side 5 cm, using a diagonal of 6 cm to split it into two triangles. Is each of those triangles equilateral, isosceles, or scalene?",
+    "text": "A rhombus is being constructed with side 5 cm, using a diagonal of 6 cm to split it into two triangles. Is each of those triangles equilateral, isosceles, or scalene?",
+    "difficulty": "Hard",
+    "hints": [
+      "Each triangle has two sides that are sides of the rhombus (so they're equal to each other) and a base that's the diagonal.",
+      "A triangle with exactly two equal sides is isosceles."
+    ],
+    "solution": "Isosceles",
+    "topicId": null
+  },
+  {
+    "id": "pg-q19",
+    "chapterId": "practical-geometry",
+    "question": "True or False: a quadrilateral can be constructed uniquely knowing only its three sides and one diagonal (no angles given).",
+    "text": "True or False: a quadrilateral can be constructed uniquely knowing only its three sides and one diagonal (no angles given).",
+    "difficulty": "Hard",
+    "hints": [
+      "Compare this to the four valid measurement combinations for constructing a quadrilateral.",
+      "3 sides and 1 diagonal is not enough — the valid combination needs 2 diagonals, not 1."
+    ],
+    "solution": "False",
+    "topicId": null
+  },
+  {
+    "id": "pg-q20",
+    "chapterId": "practical-geometry",
+    "question": "True or False: a trapezium can sometimes be constructed by first drawing a triangle formed from the difference of its two parallel sides.",
+    "text": "True or False: a trapezium can sometimes be constructed by first drawing a triangle formed from the difference of its two parallel sides.",
+    "difficulty": "Medium",
+    "hints": [
+      "This is a standard technique for trapezium construction when the two parallel sides and the legs are known."
+    ],
+    "solution": "True",
+    "topicId": null
+  },
+  {
+    "id": "pg-q21",
+    "chapterId": "practical-geometry",
+    "question": "A trapezium is to be constructed with parallel sides of 9 cm and 5 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+    "text": "A trapezium is to be constructed with parallel sides of 9 cm and 5 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Subtract the shorter parallel side from the longer one."
+    ],
+    "solution": "4 cm",
+    "topicId": null
+  },
+  {
+    "id": "pg-q22",
+    "chapterId": "practical-geometry",
+    "question": "Can a unique quadrilateral be constructed if only its four angles are given (no side lengths)?",
+    "text": "Can a unique quadrilateral be constructed if only its four angles are given (no side lengths)?",
+    "difficulty": "Easy",
+    "hints": [
+      "Angles alone fix the quadrilateral's shape but not its size.",
+      "Without at least one length measurement, the quadrilateral could be scaled to any size."
+    ],
+    "solution": "No",
+    "topicId": null
+  },
+  {
+    "id": "pg-q23",
+    "chapterId": "practical-geometry",
+    "question": "Can a unique rectangle be constructed if only one side length is given?",
+    "text": "Can a unique rectangle be constructed if only one side length is given?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rectangle's angles are already fixed at 90 degrees, but one side length alone doesn't fix the other side."
+    ],
+    "solution": "No",
+    "topicId": null
+  },
+  {
+    "id": "pg-q24",
+    "chapterId": "practical-geometry",
+    "question": "What is the minimum number of measurements needed to construct a unique rectangle?",
+    "text": "What is the minimum number of measurements needed to construct a unique rectangle?",
+    "difficulty": "Medium",
+    "hints": [
+      "A rectangle's angles are already fixed at 90 degrees, so you don't need to measure any angle.",
+      "You just need its length and its breadth."
+    ],
+    "solution": "2",
+    "topicId": null
+  },
+  {
+    "id": "pg-q25",
+    "chapterId": "practical-geometry",
+    "question": "What is the minimum number of measurements needed to construct a unique parallelogram?",
+    "text": "What is the minimum number of measurements needed to construct a unique parallelogram?",
+    "difficulty": "Medium",
+    "hints": [
+      "Two adjacent sides and the angle between them are enough to fix a parallelogram completely."
+    ],
+    "solution": "3",
+    "topicId": null
+  },
+  {
+    "id": "pg-q26",
+    "chapterId": "practical-geometry",
+    "question": "What is the minimum number of measurements needed to construct a unique square?",
+    "text": "What is the minimum number of measurements needed to construct a unique square?",
+    "difficulty": "Easy",
+    "hints": [
+      "A square's angles are all fixed at 90 degrees, and all its sides are equal by definition.",
+      "Only one length is needed."
+    ],
+    "solution": "1",
+    "topicId": null
+  },
+  {
+    "id": "pg-q27",
+    "chapterId": "practical-geometry",
+    "question": "What is the minimum number of measurements needed to construct a unique rhombus?",
+    "text": "What is the minimum number of measurements needed to construct a unique rhombus?",
+    "difficulty": "Medium",
+    "hints": [
+      "A rhombus's four sides are already equal by definition.",
+      "Either a side and one angle, or the two diagonals, are enough."
+    ],
+    "solution": "2",
+    "topicId": null
+  },
+  {
+    "id": "pg-q28",
+    "chapterId": "practical-geometry",
+    "question": "In the '2 adjacent sides and 3 angles' construction method, how many of the quadrilateral's four vertex angles are directly given as measurements?",
+    "text": "In the '2 adjacent sides and 3 angles' construction method, how many of the quadrilateral's four vertex angles are directly given as measurements?",
+    "difficulty": "Medium",
+    "hints": [
+      "The method's name tells you exactly how many angles are given.",
+      "The fourth angle is worked out afterward, not given directly."
+    ],
+    "solution": "3",
+    "topicId": null
+  },
+  {
+    "id": "pg-q29",
+    "chapterId": "practical-geometry",
+    "question": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 80, 95 and 100 degrees. What is the fourth angle?",
+    "text": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 80, 95 and 100 degrees. What is the fourth angle?",
+    "difficulty": "Hard",
+    "hints": [
+      "The interior angles of any quadrilateral add up to 360 degrees.",
+      "Add the three given angles, then subtract from 360."
+    ],
+    "solution": "85°",
+    "topicId": null
+  },
+  {
+    "id": "pg-q30",
+    "chapterId": "practical-geometry",
+    "question": "When constructing a square using its diagonals, the two equal diagonals are drawn bisecting each other at what angle?",
+    "text": "When constructing a square using its diagonals, the two equal diagonals are drawn bisecting each other at what angle?",
+    "difficulty": "Easy",
+    "hints": [
+      "This is the same diagonal property that a rhombus has (a square is a special rhombus)."
+    ],
+    "solution": "90°",
+    "topicId": null
+  },
+  {
+    "id": "pg-q31",
+    "chapterId": "practical-geometry",
+    "question": "A rectangle is to be constructed with sides 8 cm and 6 cm. What is the length of each diagonal?",
+    "text": "A rectangle is to be constructed with sides 8 cm and 6 cm. What is the length of each diagonal?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rectangle's diagonal, together with two adjacent sides, forms a right triangle.",
+      "Use the Pythagorean relation: diagonal² = side² + side²."
+    ],
+    "solution": "10 cm",
+    "topicId": null
+  },
+  {
+    "id": "pg-q32",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with diagonals of 10 cm and 24 cm. What is the length of each side?",
+    "text": "A rhombus is to be constructed with diagonals of 10 cm and 24 cm. What is the length of each side?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rhombus's diagonals bisect each other at right angles, forming four right triangles.",
+      "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
+    ],
+    "solution": "13 cm",
+    "topicId": null
+  },
+  {
+    "id": "pg-q33",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with side 8 cm and one angle of 60 degrees. What is the measure of the adjacent angle?",
+    "text": "A rhombus is to be constructed with side 8 cm and one angle of 60 degrees. What is the measure of the adjacent angle?",
+    "difficulty": "Medium",
+    "hints": [
+      "A rhombus is a parallelogram, so adjacent angles are supplementary.",
+      "Subtract the given angle from 180 degrees."
+    ],
+    "solution": "120°",
+    "topicId": null
+  },
+  {
+    "id": "pg-q34",
+    "chapterId": "practical-geometry",
+    "question": "True or False: every quadrilateral has exactly two diagonals.",
+    "text": "True or False: every quadrilateral has exactly two diagonals.",
+    "difficulty": "Easy",
+    "hints": [
+      "A diagonal connects two non-adjacent vertices.",
+      "A quadrilateral has 4 vertices — count how many non-adjacent pairs that gives."
+    ],
+    "solution": "True",
+    "topicId": null
+  },
+  {
+    "id": "pg-q35",
+    "chapterId": "practical-geometry",
+    "question": "A parallelogram is constructed with adjacent sides 6 cm and 8 cm, and the included angle is 90 degrees. What special quadrilateral results?",
+    "text": "A parallelogram is constructed with adjacent sides 6 cm and 8 cm, and the included angle is 90 degrees. What special quadrilateral results?",
+    "difficulty": "Hard",
+    "hints": [
+      "A parallelogram with one 90-degree angle automatically has all four angles at 90 degrees.",
+      "The two adjacent sides are different lengths (6 cm and 8 cm), so it isn't a square."
+    ],
+    "solution": "Rectangle",
+    "topicId": null
+  },
+  {
+    "id": "rn-q01",
+    "chapterId": "rational-numbers",
+    "question": "Is 5 a rational number?",
+    "text": "Is 5 a rational number?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rational number is any number expressible as p/q, with q not zero.",
+      "Can 5 be written as a fraction, such as 5/1?"
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q02",
+    "chapterId": "rational-numbers",
+    "question": "Write 0.5 as a rational number in the form p/q.",
+    "text": "Write 0.5 as a rational number in the form p/q.",
+    "difficulty": "Easy",
+    "hints": [
+      "0.5 means five tenths — write it as a fraction first.",
+      "Simplify 5/10 to its lowest terms."
+    ],
+    "solution": "1/2",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q03",
+    "chapterId": "rational-numbers",
+    "question": "Which of these is NOT a rational number: 3/4, the square root of 2, or -7?",
+    "text": "Which of these is NOT a rational number: 3/4, the square root of 2, or -7?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rational number must be expressible as a ratio of two integers.",
+      "The square root of 2 cannot be written exactly as any fraction of integers."
+    ],
+    "solution": "the square root of 2",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q04",
+    "chapterId": "rational-numbers",
+    "question": "Write 8/-12 in standard form.",
+    "text": "Write 8/-12 in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Standard form needs a positive denominator — move the negative sign to the numerator first.",
+      "Then simplify -8/12 by dividing both numbers by their greatest common factor."
+    ],
+    "solution": "-2/3",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q05",
+    "chapterId": "rational-numbers",
+    "question": "Are -4/6 and 2/-3 equivalent rational numbers?",
+    "text": "Are -4/6 and 2/-3 equivalent rational numbers?",
+    "difficulty": "Medium",
+    "hints": [
+      "Reduce both fractions to standard form and compare.",
+      "-4/6 simplifies to the same value as 2/-3 once both are written with a positive denominator."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q06",
+    "chapterId": "rational-numbers",
+    "question": "Is the sum of 2/3 and 5/7 a rational number?",
+    "text": "Is the sum of 2/3 and 5/7 a rational number?",
+    "difficulty": "Easy",
+    "hints": [
+      "Rational numbers are closed under addition.",
+      "The sum of any two rational numbers is always another rational number."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q07",
+    "chapterId": "rational-numbers",
+    "question": "Rational numbers are closed under which of these operations: addition or division?",
+    "text": "Rational numbers are closed under which of these operations: addition or division?",
+    "difficulty": "Easy",
+    "hints": [
+      "Closure means the result of the operation always stays a rational number.",
+      "Division is not closed, because division by 0 is undefined."
+    ],
+    "solution": "Addition",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q08",
+    "chapterId": "rational-numbers",
+    "question": "Find 3/4 + (-2/5).",
+    "text": "Find 3/4 + (-2/5).",
+    "difficulty": "Medium",
+    "hints": [
+      "Find a common denominator for 4 and 5.",
+      "Rewrite both fractions with denominator 20, then add."
+    ],
+    "solution": "7/20",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q09",
+    "chapterId": "rational-numbers",
+    "question": "Which property is illustrated by 2/3 + 5/7 = 5/7 + 2/3?",
+    "text": "Which property is illustrated by 2/3 + 5/7 = 5/7 + 2/3?",
+    "difficulty": "Medium",
+    "hints": [
+      "Look at what changed between the two sides of the equation — only the order of the terms.",
+      "This property says a + b = b + a for any two rational numbers."
+    ],
+    "solution": "Commutativity of addition",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q10",
+    "chapterId": "rational-numbers",
+    "question": "Which property is illustrated by (1/2 + 1/3) + 1/4 = 1/2 + (1/3 + 1/4)?",
+    "text": "Which property is illustrated by (1/2 + 1/3) + 1/4 = 1/2 + (1/3 + 1/4)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Look at what changed between the two sides — the grouping of the terms, not their order.",
+      "This property says (a + b) + c = a + (b + c) for any three rational numbers."
+    ],
+    "solution": "Associativity of addition",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q11",
+    "chapterId": "rational-numbers",
+    "question": "Is subtraction commutative for rational numbers?",
+    "text": "Is subtraction commutative for rational numbers?",
+    "difficulty": "Easy",
+    "hints": [
+      "Try a quick example: is 1/2 − 1/3 the same as 1/3 − 1/2?",
+      "Swapping the order in a subtraction generally changes the sign of the result."
+    ],
+    "solution": "No",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q12",
+    "chapterId": "rational-numbers",
+    "question": "Find (-2/5) × (3/7) × (5/6).",
+    "text": "Find (-2/5) × (3/7) × (5/6).",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply all three numerators together, and all three denominators together.",
+      "Then simplify the resulting fraction to lowest terms."
+    ],
+    "solution": "-1/7",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q13",
+    "chapterId": "rational-numbers",
+    "question": "Is division associative for rational numbers?",
+    "text": "Is division associative for rational numbers?",
+    "difficulty": "Hard",
+    "hints": [
+      "Associativity would require (a ÷ b) ÷ c to equal a ÷ (b ÷ c) for all rational numbers.",
+      "Try a, b, c = 8, 4, 2: compute both groupings and compare."
+    ],
+    "solution": "No",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q14",
+    "chapterId": "rational-numbers",
+    "question": "What is the additive identity for rational numbers?",
+    "text": "What is the additive identity for rational numbers?",
+    "difficulty": "Easy",
+    "hints": [
+      "The additive identity is the number that, when added to any rational number, leaves it unchanged."
+    ],
+    "solution": "0",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q15",
+    "chapterId": "rational-numbers",
+    "question": "What is the multiplicative identity for rational numbers?",
+    "text": "What is the multiplicative identity for rational numbers?",
+    "difficulty": "Easy",
+    "hints": [
+      "The multiplicative identity is the number that, when multiplied with any rational number, leaves it unchanged."
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q16",
+    "chapterId": "rational-numbers",
+    "question": "Use distributivity to find 3/4 × 2/3 + 3/4 × 1/3.",
+    "text": "Use distributivity to find 3/4 × 2/3 + 3/4 × 1/3.",
+    "difficulty": "Medium",
+    "hints": [
+      "Both terms share the same factor of 3/4 — factor it out first.",
+      "Add what's left inside the brackets: 2/3 + 1/3."
+    ],
+    "solution": "3/4",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q17",
+    "chapterId": "rational-numbers",
+    "question": "Which property is illustrated by 2/5 × (3/7 + 1/7) = 2/5 × 3/7 + 2/5 × 1/7?",
+    "text": "Which property is illustrated by 2/5 × (3/7 + 1/7) = 2/5 × 3/7 + 2/5 × 1/7?",
+    "difficulty": "Medium",
+    "hints": [
+      "Notice that the multiplication is being spread across the two terms inside the brackets.",
+      "This property says a(b + c) = ab + ac."
+    ],
+    "solution": "Distributivity of multiplication over addition",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q18",
+    "chapterId": "rational-numbers",
+    "question": "Use distributivity to find 5/9 × 4/13 + 5/9 × 9/13.",
+    "text": "Use distributivity to find 5/9 × 4/13 + 5/9 × 9/13.",
+    "difficulty": "Hard",
+    "hints": [
+      "Both terms share the same factor of 5/9 — factor it out first.",
+      "Add what's left inside the brackets: 4/13 + 9/13."
+    ],
+    "solution": "5/9",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q19",
+    "chapterId": "rational-numbers",
+    "question": "What is the additive inverse of 3/8?",
+    "text": "What is the additive inverse of 3/8?",
+    "difficulty": "Easy",
+    "hints": [
+      "The additive inverse of a number, added to that number, gives 0.",
+      "Flip the sign of 3/8."
+    ],
+    "solution": "-3/8",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q20",
+    "chapterId": "rational-numbers",
+    "question": "What is the reciprocal of 5/9?",
+    "text": "What is the reciprocal of 5/9?",
+    "difficulty": "Easy",
+    "hints": [
+      "The reciprocal of a fraction swaps its numerator and denominator.",
+      "A number multiplied by its reciprocal always gives 1."
+    ],
+    "solution": "9/5",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q21",
+    "chapterId": "rational-numbers",
+    "question": "What is the reciprocal of -7?",
+    "text": "What is the reciprocal of -7?",
+    "difficulty": "Easy",
+    "hints": [
+      "First write -7 as a fraction: -7/1.",
+      "Swap the numerator and denominator, keeping the sign."
+    ],
+    "solution": "-1/7",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q22",
+    "chapterId": "rational-numbers",
+    "question": "Does 0 have a reciprocal?",
+    "text": "Does 0 have a reciprocal?",
+    "difficulty": "Medium",
+    "hints": [
+      "A reciprocal would need to satisfy 0 × x = 1.",
+      "Is there any number that, multiplied by 0, gives 1?"
+    ],
+    "solution": "No",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q23",
+    "chapterId": "rational-numbers",
+    "question": "First write -4/-9 in standard form, then find its additive inverse.",
+    "text": "First write -4/-9 in standard form, then find its additive inverse.",
+    "difficulty": "Medium",
+    "hints": [
+      "A negative divided by a negative is positive — write -4/-9 as a positive fraction first.",
+      "Then flip the sign of that standard-form fraction to get its additive inverse."
+    ],
+    "solution": "-4/9",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q24",
+    "chapterId": "rational-numbers",
+    "question": "What is the reciprocal of 1?",
+    "text": "What is the reciprocal of 1?",
+    "difficulty": "Easy",
+    "hints": [
+      "Which number, multiplied by 1, gives 1?"
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q25",
+    "chapterId": "rational-numbers",
+    "question": "Multiply -3/7 by its reciprocal. What do you get?",
+    "text": "Multiply -3/7 by its reciprocal. What do you get?",
+    "difficulty": "Medium",
+    "hints": [
+      "You don't need to compute the reciprocal's exact value to answer this.",
+      "Any non-zero number multiplied by its own reciprocal always gives the same result."
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q26",
+    "chapterId": "rational-numbers",
+    "question": "Which rational number lies exactly halfway between 0 and 1 on the number line?",
+    "text": "Which rational number lies exactly halfway between 0 and 1 on the number line?",
+    "difficulty": "Easy",
+    "hints": [
+      "The halfway point between two numbers is their mean.",
+      "Add 0 and 1, then divide by 2."
+    ],
+    "solution": "1/2",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q27",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between 1/4 and 1/2 using the mean method.",
+    "text": "Find a rational number between 1/4 and 1/2 using the mean method.",
+    "difficulty": "Medium",
+    "hints": [
+      "Add the two given numbers together first.",
+      "Divide that sum by 2."
+    ],
+    "solution": "3/8",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q28",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between 2 and 3 using the mean method.",
+    "text": "Find a rational number between 2 and 3 using the mean method.",
+    "difficulty": "Medium",
+    "hints": [
+      "Add the two given numbers together first.",
+      "Divide that sum by 2."
+    ],
+    "solution": "5/2",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q29",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between -1/2 and 1/2 using the mean method.",
+    "text": "Find a rational number between -1/2 and 1/2 using the mean method.",
+    "difficulty": "Medium",
+    "hints": [
+      "Add the two given numbers together first.",
+      "Divide that sum by 2 — what do -1/2 and 1/2 add up to?"
+    ],
+    "solution": "0",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q30",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between 3/5 and 4/5 using the mean method.",
+    "text": "Find a rational number between 3/5 and 4/5 using the mean method.",
+    "difficulty": "Hard",
+    "hints": [
+      "Add the two given numbers together first — they already share a denominator.",
+      "Divide that sum by 2."
+    ],
+    "solution": "7/10",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q31",
+    "chapterId": "rational-numbers",
+    "question": "How many rational numbers lie between any two given rational numbers?",
+    "text": "How many rational numbers lie between any two given rational numbers?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about what happens if you keep applying the mean method between a number and its own mean.",
+      "The process of finding a new number in between never runs out of room to repeat."
+    ],
+    "solution": "Infinite",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q32",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between -3 and -2 using the mean method.",
+    "text": "Find a rational number between -3 and -2 using the mean method.",
+    "difficulty": "Medium",
+    "hints": [
+      "Add the two given numbers together first.",
+      "Divide that sum by 2."
+    ],
+    "solution": "-5/2",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q33",
+    "chapterId": "rational-numbers",
+    "question": "Is -7 a rational number?",
+    "text": "Is -7 a rational number?",
+    "difficulty": "Easy",
+    "hints": [
+      "Every integer is a rational number.",
+      "Can -7 be written as a fraction, such as -7/1?"
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q34",
+    "chapterId": "rational-numbers",
+    "question": "Write 3 as a rational number with denominator 5.",
+    "text": "Write 3 as a rational number with denominator 5.",
+    "difficulty": "Easy",
+    "hints": [
+      "You need an equivalent fraction to 3/1 with denominator 5.",
+      "Multiply both the numerator and denominator of 3/1 by 5."
+    ],
+    "solution": "15/5",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q35",
+    "chapterId": "rational-numbers",
+    "question": "Simplify -18/24 to its standard form.",
+    "text": "Simplify -18/24 to its standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Find the greatest common factor of 18 and 24.",
+      "Divide both the numerator and denominator by that common factor."
+    ],
+    "solution": "-3/4",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q36",
+    "chapterId": "rational-numbers",
+    "question": "Find the sum of 1/2, 1/3 and 1/6.",
+    "text": "Find the sum of 1/2, 1/3 and 1/6.",
+    "difficulty": "Medium",
+    "hints": [
+      "Find a common denominator for all three fractions — 6 works for all of them.",
+      "Rewrite each fraction with denominator 6, then add all three numerators."
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q37",
+    "chapterId": "rational-numbers",
+    "question": "The product of two rational numbers is -1. If one number is 4/7, what is the other?",
+    "text": "The product of two rational numbers is -1. If one number is 4/7, what is the other?",
+    "difficulty": "Hard",
+    "hints": [
+      "If 4/7 × x = -1, you need to isolate x.",
+      "Divide both sides by 4/7, which is the same as multiplying by its reciprocal."
+    ],
+    "solution": "-7/4",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q38",
+    "chapterId": "rational-numbers",
+    "question": "The sum of two rational numbers is 0. If one number is -5/9, what is the other?",
+    "text": "The sum of two rational numbers is 0. If one number is -5/9, what is the other?",
+    "difficulty": "Hard",
+    "hints": [
+      "Two numbers that sum to 0 are additive inverses of each other.",
+      "Flip the sign of -5/9."
+    ],
+    "solution": "5/9",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q39",
+    "chapterId": "rational-numbers",
+    "question": "Find a rational number between 0 and 1/5 using the mean method.",
+    "text": "Find a rational number between 0 and 1/5 using the mean method.",
+    "difficulty": "Medium",
+    "hints": [
+      "Add the two given numbers together first.",
+      "Divide that sum by 2."
+    ],
+    "solution": "1/10",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "rn-q40",
+    "chapterId": "rational-numbers",
+    "question": "Is 2/3 divided by 4/9 equal to 4/9 divided by 2/3?",
+    "text": "Is 2/3 divided by 4/9 equal to 4/9 divided by 2/3?",
+    "difficulty": "Hard",
+    "hints": [
+      "Compute both divisions separately and compare the results.",
+      "Division is not commutative for rational numbers — swapping the order changes the answer."
+    ],
+    "solution": "No",
+    "topicId": "topic-rational-numbers-properties-and-operations"
+  },
+  {
+    "id": "sc-q01",
+    "chapterId": "squares-and-cubes",
+    "question": "What is 15 squared (15²)?",
+    "text": "What is 15 squared (15²)?",
+    "difficulty": "Easy",
+    "hints": [
+      "Squaring a number means multiplying it by itself.",
+      "Compute 15 × 15."
+    ],
+    "solution": "225",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q02",
+    "chapterId": "squares-and-cubes",
+    "question": "Is 250 a perfect square?",
+    "text": "Is 250 a perfect square?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think of the two consecutive whole numbers whose squares are just below and just above 250.",
+      "15² = 225 and 16² = 256 — does 250 fall exactly on either one?"
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q03",
+    "chapterId": "squares-and-cubes",
+    "question": "True or False: a number ending in 3 can never be a perfect square.",
+    "text": "True or False: a number ending in 3 can never be a perfect square.",
+    "difficulty": "Easy",
+    "hints": [
+      "Recall which unit's digits are possible for a perfect square.",
+      "Perfect squares only ever end in 0, 1, 4, 5, 6 or 9."
+    ],
+    "solution": "True",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q04",
+    "chapterId": "squares-and-cubes",
+    "question": "How many non-perfect-square numbers lie strictly between 12² and 13²?",
+    "text": "How many non-perfect-square numbers lie strictly between 12² and 13²?",
+    "difficulty": "Easy",
+    "hints": [
+      "Between n² and (n+1)² there are always exactly 2n non-square numbers.",
+      "Here n = 12, so compute 2 × 12."
+    ],
+    "solution": "24",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q05",
+    "chapterId": "squares-and-cubes",
+    "question": "Express 49 as the sum of consecutive odd numbers starting from 1. How many odd numbers did you need to add?",
+    "text": "Express 49 as the sum of consecutive odd numbers starting from 1. How many odd numbers did you need to add?",
+    "difficulty": "Medium",
+    "hints": [
+      "Every perfect square n² is the sum of the first n odd numbers.",
+      "49 = 7², so how many odd numbers make up that sum?"
+    ],
+    "solution": "7",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q06",
+    "chapterId": "squares-and-cubes",
+    "question": "Is 40 a perfect square? Use the repeated-subtraction method (successively subtracting 1, 3, 5, ...) to decide.",
+    "text": "Is 40 a perfect square? Use the repeated-subtraction method (successively subtracting 1, 3, 5, ...) to decide.",
+    "difficulty": "Medium",
+    "hints": [
+      "Keep subtracting consecutive odd numbers (1, then 3, then 5, ...) from 40.",
+      "If you land exactly on 0 at some step, it's a perfect square — if you go negative before that, it isn't."
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q07",
+    "chapterId": "squares-and-cubes",
+    "question": "Using the form 2m, m²−1, m²+1, find the Pythagorean triplet whose smallest member is 10.",
+    "text": "Using the form 2m, m²−1, m²+1, find the Pythagorean triplet whose smallest member is 10.",
+    "difficulty": "Hard",
+    "hints": [
+      "Since 10 is the smallest member, try setting 2m = 10 and solve for m.",
+      "With m found, compute m² − 1 and m² + 1 to get the other two members.",
+      "List all three numbers in increasing order, separated by commas."
+    ],
+    "solution": "10, 24, 26",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q08",
+    "chapterId": "squares-and-cubes",
+    "question": "Using the form 2m, m²−1, m²+1, find a Pythagorean triplet in which one member is 14.",
+    "text": "Using the form 2m, m²−1, m²+1, find a Pythagorean triplet in which one member is 14.",
+    "difficulty": "Hard",
+    "hints": [
+      "Try setting 2m = 14 first and see if m comes out to a whole number.",
+      "With m found, compute m² − 1 and m² + 1 to get the other two members.",
+      "List all three numbers in increasing order, separated by commas."
+    ],
+    "solution": "14, 48, 50",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q09",
+    "chapterId": "squares-and-cubes",
+    "question": "Can a perfect square number end in exactly 3 zeros?",
+    "text": "Can a perfect square number end in exactly 3 zeros?",
+    "difficulty": "Hard",
+    "hints": [
+      "Think about how many zeros a number's square gains compared to the number itself.",
+      "If a number ends in k zeros, its square ends in exactly 2k zeros — always an even count."
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q10",
+    "chapterId": "squares-and-cubes",
+    "question": "What is the unit's digit of 78²?",
+    "text": "What is the unit's digit of 78²?",
+    "difficulty": "Easy",
+    "hints": [
+      "You only need the unit's digit of 78, not the whole number, to find the unit's digit of its square.",
+      "8 × 8 = 64 — what's the unit's digit of that?"
+    ],
+    "solution": "4",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q11",
+    "chapterId": "squares-and-cubes",
+    "question": "Using prime factorisation, is 180 a perfect square?",
+    "text": "Using prime factorisation, is 180 a perfect square?",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 180 completely.",
+      "Check whether every prime factor can be grouped into a pair."
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q12",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 180 must be multiplied to make it a perfect square.",
+    "text": "Find the smallest number by which 180 must be multiplied to make it a perfect square.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 180 and find which prime factor is left unpaired.",
+      "Multiplying by that unpaired factor completes the pair."
+    ],
+    "solution": "5",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q13",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 200 must be divided to obtain a perfect square.",
+    "text": "Find the smallest number by which 200 must be divided to obtain a perfect square.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 200 and find which prime factor appears an odd number of times.",
+      "Dividing out one copy of that factor leaves all factors paired."
+    ],
+    "solution": "2",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q14",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest perfect square number that is divisible by each of 8, 12 and 18.",
+    "text": "Find the smallest perfect square number that is divisible by each of 8, 12 and 18.",
+    "difficulty": "Hard",
+    "hints": [
+      "First find the LCM of 8, 12 and 18.",
+      "Prime factorise the LCM and check whether every factor is already paired.",
+      "If any factor is unpaired, multiply the LCM by the missing partner to complete it."
+    ],
+    "solution": "144",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q15",
+    "chapterId": "squares-and-cubes",
+    "question": "Find √196 using prime factorisation.",
+    "text": "Find √196 using prime factorisation.",
+    "difficulty": "Easy",
+    "hints": [
+      "Prime factorise 196 and pair up identical factors.",
+      "Multiply one factor from each pair together."
+    ],
+    "solution": "14",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q16",
+    "chapterId": "squares-and-cubes",
+    "question": "Find √225 using prime factorisation.",
+    "text": "Find √225 using prime factorisation.",
+    "difficulty": "Easy",
+    "hints": [
+      "Prime factorise 225 and pair up identical factors.",
+      "Multiply one factor from each pair together."
+    ],
+    "solution": "15",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q17",
+    "chapterId": "squares-and-cubes",
+    "question": "Using repeated subtraction of consecutive odd numbers, find √64.",
+    "text": "Using repeated subtraction of consecutive odd numbers, find √64.",
+    "difficulty": "Medium",
+    "hints": [
+      "Subtract 1, then 3, then 5, and so on from 64, counting each subtraction.",
+      "Stop when you reach exactly 0 — the number of subtractions is the square root."
+    ],
+    "solution": "8",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q18",
+    "chapterId": "squares-and-cubes",
+    "question": "Between which two consecutive whole numbers does √500 lie? Give the smaller one.",
+    "text": "Between which two consecutive whole numbers does √500 lie? Give the smaller one.",
+    "difficulty": "Medium",
+    "hints": [
+      "Find two consecutive whole numbers whose squares fall just below and just above 500.",
+      "Try 22² and 23²."
+    ],
+    "solution": "22",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q19",
+    "chapterId": "squares-and-cubes",
+    "question": "The area of a square garden is 324 m². Find the length of its side.",
+    "text": "The area of a square garden is 324 m². Find the length of its side.",
+    "difficulty": "Medium",
+    "hints": [
+      "The side length of a square is the square root of its area.",
+      "Prime factorise 324 to find √324, and don't forget the unit."
+    ],
+    "solution": "18 m",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q20",
+    "chapterId": "squares-and-cubes",
+    "question": "A right triangle has legs of 9 cm and 12 cm. Find the length of the hypotenuse.",
+    "text": "A right triangle has legs of 9 cm and 12 cm. Find the length of the hypotenuse.",
+    "difficulty": "Medium",
+    "hints": [
+      "Use the Pythagorean relation: hypotenuse² = leg² + leg².",
+      "Compute 9² + 12², then take the square root of the result."
+    ],
+    "solution": "15 cm",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q21",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest perfect square number that is divisible by 4, 9 and 25.",
+    "text": "Find the smallest perfect square number that is divisible by 4, 9 and 25.",
+    "difficulty": "Hard",
+    "hints": [
+      "First find the LCM of 4, 9 and 25.",
+      "Prime factorise the LCM and check whether every factor is already paired — if so, the LCM itself is your answer."
+    ],
+    "solution": "900",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q22",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 1250 must be divided to obtain a perfect square.",
+    "text": "Find the smallest number by which 1250 must be divided to obtain a perfect square.",
+    "difficulty": "Hard",
+    "hints": [
+      "Prime factorise 1250 completely.",
+      "Find the prime factor that appears an odd number of times, and divide it out."
+    ],
+    "solution": "2",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q23",
+    "chapterId": "squares-and-cubes",
+    "question": "What is √1?",
+    "text": "What is √1?",
+    "difficulty": "Easy",
+    "hints": [
+      "Which number multiplied by itself gives 1?"
+    ],
+    "solution": "1",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q24",
+    "chapterId": "squares-and-cubes",
+    "question": "Find √441.",
+    "text": "Find √441.",
+    "difficulty": "Easy",
+    "hints": [
+      "Prime factorise 441 and pair up identical factors.",
+      "Multiply one factor from each pair together."
+    ],
+    "solution": "21",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q25",
+    "chapterId": "squares-and-cubes",
+    "question": "What is 6 cubed (6³)?",
+    "text": "What is 6 cubed (6³)?",
+    "difficulty": "Easy",
+    "hints": [
+      "Cubing a number means multiplying it by itself three times.",
+      "Compute 6 × 6 × 6."
+    ],
+    "solution": "216",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q26",
+    "chapterId": "squares-and-cubes",
+    "question": "Is 100 a perfect cube?",
+    "text": "Is 100 a perfect cube?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think of the two consecutive whole numbers whose cubes fall just below and just above 100.",
+      "4³ = 64 and 5³ = 125 — does 100 match either one exactly?"
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q27",
+    "chapterId": "squares-and-cubes",
+    "question": "Which of these is a perfect cube: 125 or 150?",
+    "text": "Which of these is a perfect cube: 125 or 150?",
+    "difficulty": "Easy",
+    "hints": [
+      "Try cubing small whole numbers like 5 and see which one matches.",
+      "5³ = 125."
+    ],
+    "solution": "125",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q28",
+    "chapterId": "squares-and-cubes",
+    "question": "Using prime factorisation, is 392 a perfect cube?",
+    "text": "Using prime factorisation, is 392 a perfect cube?",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 392 completely.",
+      "Check whether every prime factor can be grouped into a complete triple."
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q29",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 392 must be multiplied to make it a perfect cube.",
+    "text": "Find the smallest number by which 392 must be multiplied to make it a perfect cube.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 392 and find which prime factor's triple is incomplete.",
+      "Multiplying by the missing factor(s) completes that triple."
+    ],
+    "solution": "7",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q30",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 250 must be divided to obtain a perfect cube.",
+    "text": "Find the smallest number by which 250 must be divided to obtain a perfect cube.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 250 and find which prime factor is left without a complete triple.",
+      "Dividing out that leftover factor leaves every remaining factor in a complete triple."
+    ],
+    "solution": "2",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q31",
+    "chapterId": "squares-and-cubes",
+    "question": "The Hardy–Ramanujan number 1729 can be written as 1³ + 12³, or as the sum of two other cubes. Calculate 10³ + 9³ to find the second pair.",
+    "text": "The Hardy–Ramanujan number 1729 can be written as 1³ + 12³, or as the sum of two other cubes. Calculate 10³ + 9³ to find the second pair.",
+    "difficulty": "Hard",
+    "hints": [
+      "Cube each number separately first: 10³ and 9³.",
+      "Then add the two results together."
+    ],
+    "solution": "1729",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q32",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the cube of −4.",
+    "text": "Find the cube of −4.",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply −4 by itself three times, keeping track of the sign.",
+      "A negative number multiplied an odd number of times stays negative."
+    ],
+    "solution": "-64",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q33",
+    "chapterId": "squares-and-cubes",
+    "question": "What is the unit's digit of 12³?",
+    "text": "What is the unit's digit of 12³?",
+    "difficulty": "Easy",
+    "hints": [
+      "You only need the unit's digit of 12, not the whole number, to find the unit's digit of its cube.",
+      "2 × 2 × 2 = 8 — what's the unit's digit of that?"
+    ],
+    "solution": "8",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q34",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 88 must be multiplied to make it a perfect cube.",
+    "text": "Find the smallest number by which 88 must be multiplied to make it a perfect cube.",
+    "difficulty": "Hard",
+    "hints": [
+      "Prime factorise 88 completely — note how many times each prime factor appears.",
+      "One factor already appears in a complete triple; the other appears only once and needs two more copies to complete its triple.",
+      "Multiply by the square of that second factor to complete its triple."
+    ],
+    "solution": "121",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q35",
+    "chapterId": "squares-and-cubes",
+    "question": "Find ∛8 (the cube root of 8).",
+    "text": "Find ∛8 (the cube root of 8).",
+    "difficulty": "Easy",
+    "hints": [
+      "Which number, multiplied by itself three times, gives 8?"
+    ],
+    "solution": "2",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q36",
+    "chapterId": "squares-and-cubes",
+    "question": "Find ∛1000 (the cube root of 1000).",
+    "text": "Find ∛1000 (the cube root of 1000).",
+    "difficulty": "Easy",
+    "hints": [
+      "Which number, multiplied by itself three times, gives 1000?"
+    ],
+    "solution": "10",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q37",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the cube root of 3375 using prime factorisation.",
+    "text": "Find the cube root of 3375 using prime factorisation.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 3375 and group identical factors into triples.",
+      "Multiply one factor from each triple together."
+    ],
+    "solution": "15",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q38",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the cube root of 13824 using prime factorisation.",
+    "text": "Find the cube root of 13824 using prime factorisation.",
+    "difficulty": "Medium",
+    "hints": [
+      "Prime factorise 13824 and group identical factors into triples.",
+      "Multiply one factor from each triple together."
+    ],
+    "solution": "24",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q39",
+    "chapterId": "squares-and-cubes",
+    "question": "A cube has a volume of 729 cm³. Find the length of its edge.",
+    "text": "A cube has a volume of 729 cm³. Find the length of its edge.",
+    "difficulty": "Medium",
+    "hints": [
+      "The edge length of a cube is the cube root of its volume.",
+      "Prime factorise 729 to find ∛729, and don't forget the unit."
+    ],
+    "solution": "9 cm",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+  },
+  {
+    "id": "sc-q40",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the cube root of 74088 using prime factorisation.",
+    "text": "Find the cube root of 74088 using prime factorisation.",
+    "difficulty": "Hard",
+    "hints": [
+      "Prime factorise 74088 and group identical factors into triples.",
+      "Multiply one factor from each triple together.",
+      "You should find three distinct prime factors, each forming its own triple."
+    ],
+    "solution": "42",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots"
   },
   {
     "id": "uq-q01",

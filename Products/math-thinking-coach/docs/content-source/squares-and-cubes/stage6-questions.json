@@ -1,0 +1,580 @@
+{
+  "topicId": "topic-squares-and-cubes-numbers-and-roots",
+  "reviewStatus": "approved",
+  "expansionNote": "Authored from scratch using NCERT Ganita Prakash Class 8 Ch.1 'A Square and A Cube' (current edition) plus the prior edition's Ch.5/Ch.6 as supplementary source. 40 questions across 11 learning objectives, mixed Understand/Apply/Reason/Challenge progression per section: conceptual/definitional recall, direct prime-factorisation application, multi-step reasoning (Pythagorean triplet construction, smallest-multiplier/divisor problems), and real-world area/volume word problems. Difficulty split: 15 Easy (37.5%), 16 Medium (40%), 9 Hard (22.5%) — matches the style already used for Understanding Quadrilaterals. Every expectedAnswer is a single short value (a number, a short phrase, or Yes/No/True/False) deliberately, to stay reliably compatible with the current exact-string-match evaluator — no open-ended 'explain your reasoning' questions were included, unlike some other chapters, specifically to avoid the known evaluator brittleness documented in those chapters' answer-keys.json.",
+  "excludedSourceItems": [],
+  "questions": [
+    {
+      "id": "sc-q01",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "application",
+      "prompt": "What is 15 squared (15²)?",
+      "expectedAnswer": "225",
+      "hints": [
+        "Squaring a number means multiplying it by itself.",
+        "Compute 15 × 15."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "computation"]
+    },
+    {
+      "id": "sc-q02",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "analysis",
+      "prompt": "Is 250 a perfect square?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Think of the two consecutive whole numbers whose squares are just below and just above 250.",
+        "15² = 225 and 16² = 256 — does 250 fall exactly on either one?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "identification"]
+    },
+    {
+      "id": "sc-q03",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "recall",
+      "prompt": "True or False: a number ending in 3 can never be a perfect square.",
+      "expectedAnswer": "True",
+      "hints": [
+        "Recall which unit's digits are possible for a perfect square.",
+        "Perfect squares only ever end in 0, 1, 4, 5, 6 or 9."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "unit-digit-test"],
+      "misconception": {
+        "commonWrongAnswer": "False, because some other digits like 2 or 7 also seem excluded so the rule feels made up.",
+        "why": "Students sometimes doubt the unit's-digit rule because it isn't intuitive that squaring restricts the last digit.",
+        "remediationHint": "Check a few squares yourself (3²=9, 13²=169, 23²=529) — none end in 3, and this holds for every perfect square."
+      }
+    },
+    {
+      "id": "sc-q04",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.3" },
+      "objective": 3,
+      "bloomLevel": "application",
+      "prompt": "How many non-perfect-square numbers lie strictly between 12² and 13²?",
+      "expectedAnswer": "24",
+      "hints": [
+        "Between n² and (n+1)² there are always exactly 2n non-square numbers.",
+        "Here n = 12, so compute 2 × 12."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "between-squares"]
+    },
+    {
+      "id": "sc-q05",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 2,
+      "bloomLevel": "application",
+      "prompt": "Express 49 as the sum of consecutive odd numbers starting from 1. How many odd numbers did you need to add?",
+      "expectedAnswer": "7",
+      "hints": [
+        "Every perfect square n² is the sum of the first n odd numbers.",
+        "49 = 7², so how many odd numbers make up that sum?"
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "odd-number-sum"]
+    },
+    {
+      "id": "sc-q06",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.2" },
+      "objective": 2,
+      "bloomLevel": "application",
+      "prompt": "Is 40 a perfect square? Use the repeated-subtraction method (successively subtracting 1, 3, 5, ...) to decide.",
+      "expectedAnswer": "No",
+      "hints": [
+        "Keep subtracting consecutive odd numbers (1, then 3, then 5, ...) from 40.",
+        "If you land exactly on 0 at some step, it's a perfect square — if you go negative before that, it isn't."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "repeated-subtraction"]
+    },
+    {
+      "id": "sc-q07",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.4.2" },
+      "objective": 4,
+      "bloomLevel": "application",
+      "prompt": "Using the form 2m, m²−1, m²+1, find the Pythagorean triplet whose smallest member is 10.",
+      "expectedAnswer": "10, 24, 26",
+      "hints": [
+        "Since 10 is the smallest member, try setting 2m = 10 and solve for m.",
+        "With m found, compute m² − 1 and m² + 1 to get the other two members.",
+        "List all three numbers in increasing order, separated by commas."
+      ],
+      "difficulty": "Hard",
+      "tags": ["squares", "pythagorean-triplet"]
+    },
+    {
+      "id": "sc-q08",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.4.2" },
+      "objective": 4,
+      "bloomLevel": "application",
+      "prompt": "Using the form 2m, m²−1, m²+1, find a Pythagorean triplet in which one member is 14.",
+      "expectedAnswer": "14, 48, 50",
+      "hints": [
+        "Try setting 2m = 14 first and see if m comes out to a whole number.",
+        "With m found, compute m² − 1 and m² + 1 to get the other two members.",
+        "List all three numbers in increasing order, separated by commas."
+      ],
+      "difficulty": "Hard",
+      "tags": ["squares", "pythagorean-triplet"]
+    },
+    {
+      "id": "sc-q09",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.2" },
+      "objective": 1,
+      "bloomLevel": "analysis",
+      "prompt": "Can a perfect square number end in exactly 3 zeros?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Think about how many zeros a number's square gains compared to the number itself.",
+        "If a number ends in k zeros, its square ends in exactly 2k zeros — always an even count."
+      ],
+      "difficulty": "Hard",
+      "tags": ["squares", "trailing-zeros"]
+    },
+    {
+      "id": "sc-q10",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.2" },
+      "objective": 1,
+      "bloomLevel": "application",
+      "prompt": "What is the unit's digit of 78²?",
+      "expectedAnswer": "4",
+      "hints": [
+        "You only need the unit's digit of 78, not the whole number, to find the unit's digit of its square.",
+        "8 × 8 = 64 — what's the unit's digit of that?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "unit-digit-test"]
+    },
+    {
+      "id": "sc-q11",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 5,
+      "bloomLevel": "analysis",
+      "prompt": "Using prime factorisation, is 180 a perfect square?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Prime factorise 180 completely.",
+        "Check whether every prime factor can be grouped into a pair."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q12",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "Find the smallest number by which 180 must be multiplied to make it a perfect square.",
+      "expectedAnswer": "5",
+      "hints": [
+        "Prime factorise 180 and find which prime factor is left unpaired.",
+        "Multiplying by that unpaired factor completes the pair."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "smallest-multiplier"]
+    },
+    {
+      "id": "sc-q13",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "Find the smallest number by which 200 must be divided to obtain a perfect square.",
+      "expectedAnswer": "2",
+      "hints": [
+        "Prime factorise 200 and find which prime factor appears an odd number of times.",
+        "Dividing out one copy of that factor leaves all factors paired."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "smallest-divisor"]
+    },
+    {
+      "id": "sc-q14",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 8,
+      "bloomLevel": "synthesis",
+      "prompt": "Find the smallest perfect square number that is divisible by each of 8, 12 and 18.",
+      "expectedAnswer": "144",
+      "hints": [
+        "First find the LCM of 8, 12 and 18.",
+        "Prime factorise the LCM and check whether every factor is already paired.",
+        "If any factor is unpaired, multiply the LCM by the missing partner to complete it."
+      ],
+      "difficulty": "Hard",
+      "tags": ["squares", "lcm", "smallest-multiplier"]
+    },
+    {
+      "id": "sc-q15",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Find √196 using prime factorisation.",
+      "expectedAnswer": "14",
+      "hints": [
+        "Prime factorise 196 and pair up identical factors.",
+        "Multiply one factor from each pair together."
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q16",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Find √225 using prime factorisation.",
+      "expectedAnswer": "15",
+      "hints": [
+        "Prime factorise 225 and pair up identical factors.",
+        "Multiply one factor from each pair together."
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q17",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.2" },
+      "objective": 6,
+      "bloomLevel": "application",
+      "prompt": "Using repeated subtraction of consecutive odd numbers, find √64.",
+      "expectedAnswer": "8",
+      "hints": [
+        "Subtract 1, then 3, then 5, and so on from 64, counting each subtraction.",
+        "Stop when you reach exactly 0 — the number of subtractions is the square root."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "repeated-subtraction"]
+    },
+    {
+      "id": "sc-q18",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 7,
+      "bloomLevel": "application",
+      "prompt": "Between which two consecutive whole numbers does √500 lie? Give the smaller one.",
+      "expectedAnswer": "22",
+      "hints": [
+        "Find two consecutive whole numbers whose squares fall just below and just above 500.",
+        "Try 22² and 23²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "estimation"]
+    },
+    {
+      "id": "sc-q19",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "The area of a square garden is 324 m². Find the length of its side.",
+      "expectedAnswer": "18 m",
+      "hints": [
+        "The side length of a square is the square root of its area.",
+        "Prime factorise 324 to find √324, and don't forget the unit."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "area-application"]
+    },
+    {
+      "id": "sc-q20",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "A right triangle has legs of 9 cm and 12 cm. Find the length of the hypotenuse.",
+      "expectedAnswer": "15 cm",
+      "hints": [
+        "Use the Pythagorean relation: hypotenuse² = leg² + leg².",
+        "Compute 9² + 12², then take the square root of the result."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "pythagoras-application"]
+    },
+    {
+      "id": "sc-q21",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 8,
+      "bloomLevel": "synthesis",
+      "prompt": "Find the smallest perfect square number that is divisible by 4, 9 and 25.",
+      "expectedAnswer": "900",
+      "hints": [
+        "First find the LCM of 4, 9 and 25.",
+        "Prime factorise the LCM and check whether every factor is already paired — if so, the LCM itself is your answer."
+      ],
+      "difficulty": "Hard",
+      "tags": ["square-roots", "lcm"]
+    },
+    {
+      "id": "sc-q22",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "Find the smallest number by which 1250 must be divided to obtain a perfect square.",
+      "expectedAnswer": "2",
+      "hints": [
+        "Prime factorise 1250 completely.",
+        "Find the prime factor that appears an odd number of times, and divide it out."
+      ],
+      "difficulty": "Hard",
+      "tags": ["square-roots", "smallest-divisor"]
+    },
+    {
+      "id": "sc-q23",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objective": 5,
+      "bloomLevel": "recall",
+      "prompt": "What is √1?",
+      "expectedAnswer": "1",
+      "hints": [
+        "Which number multiplied by itself gives 1?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "recall"]
+    },
+    {
+      "id": "sc-q24",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Find √441.",
+      "expectedAnswer": "21",
+      "hints": [
+        "Prime factorise 441 and pair up identical factors.",
+        "Multiply one factor from each pair together."
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q25",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "What is 6 cubed (6³)?",
+      "expectedAnswer": "216",
+      "hints": [
+        "Cubing a number means multiplying it by itself three times.",
+        "Compute 6 × 6 × 6."
+      ],
+      "difficulty": "Easy",
+      "tags": ["cubes", "computation"]
+    },
+    {
+      "id": "sc-q26",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "analysis",
+      "prompt": "Is 100 a perfect cube?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Think of the two consecutive whole numbers whose cubes fall just below and just above 100.",
+        "4³ = 64 and 5³ = 125 — does 100 match either one exactly?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["cubes", "identification"]
+    },
+    {
+      "id": "sc-q27",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "recall",
+      "prompt": "Which of these is a perfect cube: 125 or 150?",
+      "expectedAnswer": "125",
+      "hints": [
+        "Try cubing small whole numbers like 5 and see which one matches.",
+        "5³ = 125."
+      ],
+      "difficulty": "Easy",
+      "tags": ["cubes", "identification"]
+    },
+    {
+      "id": "sc-q28",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
+      "objective": 9,
+      "bloomLevel": "analysis",
+      "prompt": "Using prime factorisation, is 392 a perfect cube?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Prime factorise 392 completely.",
+        "Check whether every prime factor can be grouped into a complete triple."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q29",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
+      "objective": 10,
+      "bloomLevel": "application",
+      "prompt": "Find the smallest number by which 392 must be multiplied to make it a perfect cube.",
+      "expectedAnswer": "7",
+      "hints": [
+        "Prime factorise 392 and find which prime factor's triple is incomplete.",
+        "Multiplying by the missing factor(s) completes that triple."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "smallest-multiplier"]
+    },
+    {
+      "id": "sc-q30",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
+      "objective": 10,
+      "bloomLevel": "application",
+      "prompt": "Find the smallest number by which 250 must be divided to obtain a perfect cube.",
+      "expectedAnswer": "2",
+      "hints": [
+        "Prime factorise 250 and find which prime factor is left without a complete triple.",
+        "Dividing out that leftover factor leaves every remaining factor in a complete triple."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "smallest-divisor"]
+    },
+    {
+      "id": "sc-q31",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "The Hardy–Ramanujan number 1729 can be written as 1³ + 12³, or as the sum of two other cubes. Calculate 10³ + 9³ to find the second pair.",
+      "expectedAnswer": "1729",
+      "hints": [
+        "Cube each number separately first: 10³ and 9³.",
+        "Then add the two results together."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cubes", "hardy-ramanujan"]
+    },
+    {
+      "id": "sc-q32",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "Find the cube of −4.",
+      "expectedAnswer": "-64",
+      "hints": [
+        "Multiply −4 by itself three times, keeping track of the sign.",
+        "A negative number multiplied an odd number of times stays negative."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "negative-numbers"],
+      "misconception": {
+        "commonWrongAnswer": "64 (dropping the negative sign)",
+        "why": "Students often assume cubing, like squaring, always produces a positive result.",
+        "remediationHint": "Unlike squaring, cubing a negative number keeps it negative, because you're multiplying an odd number of negative signs together."
+      }
+    },
+    {
+      "id": "sc-q33",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "What is the unit's digit of 12³?",
+      "expectedAnswer": "8",
+      "hints": [
+        "You only need the unit's digit of 12, not the whole number, to find the unit's digit of its cube.",
+        "2 × 2 × 2 = 8 — what's the unit's digit of that?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["cubes", "unit-digit-test"]
+    },
+    {
+      "id": "sc-q34",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
+      "objective": 10,
+      "bloomLevel": "synthesis",
+      "prompt": "Find the smallest number by which 88 must be multiplied to make it a perfect cube.",
+      "expectedAnswer": "121",
+      "hints": [
+        "Prime factorise 88 completely — note how many times each prime factor appears.",
+        "One factor already appears in a complete triple; the other appears only once and needs two more copies to complete its triple.",
+        "Multiply by the square of that second factor to complete its triple."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cubes", "smallest-multiplier"]
+    },
+    {
+      "id": "sc-q35",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 11,
+      "bloomLevel": "recall",
+      "prompt": "Find ∛8 (the cube root of 8).",
+      "expectedAnswer": "2",
+      "hints": [
+        "Which number, multiplied by itself three times, gives 8?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["cube-roots", "recall"]
+    },
+    {
+      "id": "sc-q36",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
+      "objective": 11,
+      "bloomLevel": "recall",
+      "prompt": "Find ∛1000 (the cube root of 1000).",
+      "expectedAnswer": "10",
+      "hints": [
+        "Which number, multiplied by itself three times, gives 1000?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["cube-roots", "recall"]
+    },
+    {
+      "id": "sc-q37",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find the cube root of 3375 using prime factorisation.",
+      "expectedAnswer": "15",
+      "hints": [
+        "Prime factorise 3375 and group identical factors into triples.",
+        "Multiply one factor from each triple together."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cube-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q38",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find the cube root of 13824 using prime factorisation.",
+      "expectedAnswer": "24",
+      "hints": [
+        "Prime factorise 13824 and group identical factors into triples.",
+        "Multiply one factor from each triple together."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cube-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q39",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "A cube has a volume of 729 cm³. Find the length of its edge.",
+      "expectedAnswer": "9 cm",
+      "hints": [
+        "The edge length of a cube is the cube root of its volume.",
+        "Prime factorise 729 to find ∛729, and don't forget the unit."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cube-roots", "volume-application"]
+    },
+    {
+      "id": "sc-q40",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find the cube root of 74088 using prime factorisation.",
+      "expectedAnswer": "42",
+      "hints": [
+        "Prime factorise 74088 and group identical factors into triples.",
+        "Multiply one factor from each triple together.",
+        "You should find three distinct prime factors, each forming its own triple."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cube-roots", "prime-factorisation"]
+    }
+  ]
+}

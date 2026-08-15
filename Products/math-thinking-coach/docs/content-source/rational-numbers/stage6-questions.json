@@ -1,0 +1,570 @@
+{
+  "topicId": "topic-rational-numbers-properties-and-operations",
+  "reviewStatus": "approved",
+  "expansionNote": "Replaces the 5 hand-seeded placeholder questions with a 40-question bank authored using NCERT Class 8 Ch.1 'Rational Numbers' (prior edition) as primary source, supplemented with standard curriculum knowledge for negative/reciprocal and number-line content not present in the extracted PDF text (see stage2-topic-detection.md). Difficulty split: 15 Easy (37.5%), 16 Medium (40%), 9 Hard (22.5%). Fraction answers use a consistent standard form (reduced, positive denominator, '/' separator, e.g. '-3/4' not '3/-4' or '-0.75') to stay as reliable as possible under the exact-string-match evaluator. A small number of 'which property' questions (rn-q09, rn-q10, rn-q17) are a weaker fit for exact-match, since a student could phrase the property name slightly differently (e.g. 'commutative property' vs 'commutativity of addition') — this is the same pre-existing limitation already documented for Understanding Quadrilaterals and other chapters, not something introduced or fixable here.",
+  "excludedSourceItems": [],
+  "questions": [
+    {
+      "id": "rn-q01",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "recall",
+      "prompt": "Is 5 a rational number?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "A rational number is any number expressible as p/q, with q not zero.",
+        "Can 5 be written as a fraction, such as 5/1?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "definition"]
+    },
+    {
+      "id": "rn-q02",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "application",
+      "prompt": "Write 0.5 as a rational number in the form p/q.",
+      "expectedAnswer": "1/2",
+      "hints": [
+        "0.5 means five tenths — write it as a fraction first.",
+        "Simplify 5/10 to its lowest terms."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "decimal-to-fraction"]
+    },
+    {
+      "id": "rn-q03",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "analysis",
+      "prompt": "Which of these is NOT a rational number: 3/4, the square root of 2, or -7?",
+      "expectedAnswer": "the square root of 2",
+      "hints": [
+        "A rational number must be expressible as a ratio of two integers.",
+        "The square root of 2 cannot be written exactly as any fraction of integers."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "identification"]
+    },
+    {
+      "id": "rn-q04",
+      "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
+      "objective": 2,
+      "bloomLevel": "application",
+      "prompt": "Write 8/-12 in standard form.",
+      "expectedAnswer": "-2/3",
+      "hints": [
+        "Standard form needs a positive denominator — move the negative sign to the numerator first.",
+        "Then simplify -8/12 by dividing both numbers by their greatest common factor."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "standard-form"]
+    },
+    {
+      "id": "rn-q05",
+      "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
+      "objective": 2,
+      "bloomLevel": "analysis",
+      "prompt": "Are -4/6 and 2/-3 equivalent rational numbers?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "Reduce both fractions to standard form and compare.",
+        "-4/6 simplifies to the same value as 2/-3 once both are written with a positive denominator."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "equivalent-fractions"]
+    },
+    {
+      "id": "rn-q06",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objective": 3,
+      "bloomLevel": "application",
+      "prompt": "Is the sum of 2/3 and 5/7 a rational number?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "Rational numbers are closed under addition.",
+        "The sum of any two rational numbers is always another rational number."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "closure"]
+    },
+    {
+      "id": "rn-q07",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objective": 3,
+      "bloomLevel": "recall",
+      "prompt": "Rational numbers are closed under which of these operations: addition or division?",
+      "expectedAnswer": "Addition",
+      "hints": [
+        "Closure means the result of the operation always stays a rational number.",
+        "Division is not closed, because division by 0 is undefined."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "closure"]
+    },
+    {
+      "id": "rn-q08",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objective": 3,
+      "bloomLevel": "application",
+      "prompt": "Find 3/4 + (-2/5).",
+      "expectedAnswer": "7/20",
+      "hints": [
+        "Find a common denominator for 4 and 5.",
+        "Rewrite both fractions with denominator 20, then add."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "addition"]
+    },
+    {
+      "id": "rn-q09",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
+      "objective": 4,
+      "bloomLevel": "analysis",
+      "prompt": "Which property is illustrated by 2/3 + 5/7 = 5/7 + 2/3?",
+      "expectedAnswer": "Commutativity of addition",
+      "hints": [
+        "Look at what changed between the two sides of the equation — only the order of the terms.",
+        "This property says a + b = b + a for any two rational numbers."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "commutativity"]
+    },
+    {
+      "id": "rn-q10",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
+      "objective": 5,
+      "bloomLevel": "analysis",
+      "prompt": "Which property is illustrated by (1/2 + 1/3) + 1/4 = 1/2 + (1/3 + 1/4)?",
+      "expectedAnswer": "Associativity of addition",
+      "hints": [
+        "Look at what changed between the two sides — the grouping of the terms, not their order.",
+        "This property says (a + b) + c = a + (b + c) for any three rational numbers."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "associativity"]
+    },
+    {
+      "id": "rn-q11",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
+      "objective": 4,
+      "bloomLevel": "recall",
+      "prompt": "Is subtraction commutative for rational numbers?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Try a quick example: is 1/2 − 1/3 the same as 1/3 − 1/2?",
+        "Swapping the order in a subtraction generally changes the sign of the result."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "commutativity"]
+    },
+    {
+      "id": "rn-q12",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
+      "objective": 5,
+      "bloomLevel": "application",
+      "prompt": "Find (-2/5) × (3/7) × (5/6).",
+      "expectedAnswer": "-1/7",
+      "hints": [
+        "Multiply all three numerators together, and all three denominators together.",
+        "Then simplify the resulting fraction to lowest terms."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "multiplication"]
+    },
+    {
+      "id": "rn-q13",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
+      "objective": 5,
+      "bloomLevel": "analysis",
+      "prompt": "Is division associative for rational numbers?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Associativity would require (a ÷ b) ÷ c to equal a ÷ (b ÷ c) for all rational numbers.",
+        "Try a, b, c = 8, 4, 2: compute both groupings and compare."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "associativity"]
+    },
+    {
+      "id": "rn-q14",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.4" },
+      "objective": 6,
+      "bloomLevel": "recall",
+      "prompt": "What is the additive identity for rational numbers?",
+      "expectedAnswer": "0",
+      "hints": [
+        "The additive identity is the number that, when added to any rational number, leaves it unchanged."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "identity"]
+    },
+    {
+      "id": "rn-q15",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.5" },
+      "objective": 6,
+      "bloomLevel": "recall",
+      "prompt": "What is the multiplicative identity for rational numbers?",
+      "expectedAnswer": "1",
+      "hints": [
+        "The multiplicative identity is the number that, when multiplied with any rational number, leaves it unchanged."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "identity"]
+    },
+    {
+      "id": "rn-q16",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
+      "objective": 7,
+      "bloomLevel": "application",
+      "prompt": "Use distributivity to find 3/4 × 2/3 + 3/4 × 1/3.",
+      "expectedAnswer": "3/4",
+      "hints": [
+        "Both terms share the same factor of 3/4 — factor it out first.",
+        "Add what's left inside the brackets: 2/3 + 1/3."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "distributivity"]
+    },
+    {
+      "id": "rn-q17",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
+      "objective": 7,
+      "bloomLevel": "analysis",
+      "prompt": "Which property is illustrated by 2/5 × (3/7 + 1/7) = 2/5 × 3/7 + 2/5 × 1/7?",
+      "expectedAnswer": "Distributivity of multiplication over addition",
+      "hints": [
+        "Notice that the multiplication is being spread across the two terms inside the brackets.",
+        "This property says a(b + c) = ab + ac."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "distributivity"]
+    },
+    {
+      "id": "rn-q18",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
+      "objective": 7,
+      "bloomLevel": "application",
+      "prompt": "Use distributivity to find 5/9 × 4/13 + 5/9 × 9/13.",
+      "expectedAnswer": "5/9",
+      "hints": [
+        "Both terms share the same factor of 5/9 — factor it out first.",
+        "Add what's left inside the brackets: 4/13 + 9/13."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "distributivity"]
+    },
+    {
+      "id": "rn-q19",
+      "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "What is the additive inverse of 3/8?",
+      "expectedAnswer": "-3/8",
+      "hints": [
+        "The additive inverse of a number, added to that number, gives 0.",
+        "Flip the sign of 3/8."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "additive-inverse"]
+    },
+    {
+      "id": "rn-q20",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "What is the reciprocal of 5/9?",
+      "expectedAnswer": "9/5",
+      "hints": [
+        "The reciprocal of a fraction swaps its numerator and denominator.",
+        "A number multiplied by its reciprocal always gives 1."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q21",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "application",
+      "prompt": "What is the reciprocal of -7?",
+      "expectedAnswer": "-1/7",
+      "hints": [
+        "First write -7 as a fraction: -7/1.",
+        "Swap the numerator and denominator, keeping the sign."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q22",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "analysis",
+      "prompt": "Does 0 have a reciprocal?",
+      "expectedAnswer": "No",
+      "hints": [
+        "A reciprocal would need to satisfy 0 × x = 1.",
+        "Is there any number that, multiplied by 0, gives 1?"
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "reciprocal"],
+      "misconception": {
+        "commonWrongAnswer": "Yes, the reciprocal of 0 is 0.",
+        "why": "Students sometimes assume every number has a reciprocal, following the same pattern as additive inverses (where 0 is its own inverse).",
+        "remediationHint": "Reciprocals are defined by a × (reciprocal) = 1 — and no number times 0 can ever equal 1, so 0 is the one rational number with no reciprocal."
+      }
+    },
+    {
+      "id": "rn-q23",
+      "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
+      "objective": 8,
+      "bloomLevel": "application",
+      "prompt": "First write -4/-9 in standard form, then find its additive inverse.",
+      "expectedAnswer": "-4/9",
+      "hints": [
+        "A negative divided by a negative is positive — write -4/-9 as a positive fraction first.",
+        "Then flip the sign of that standard-form fraction to get its additive inverse."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "additive-inverse", "standard-form"]
+    },
+    {
+      "id": "rn-q24",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "recall",
+      "prompt": "What is the reciprocal of 1?",
+      "expectedAnswer": "1",
+      "hints": [
+        "Which number, multiplied by 1, gives 1?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q25",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "analysis",
+      "prompt": "Multiply -3/7 by its reciprocal. What do you get?",
+      "expectedAnswer": "1",
+      "hints": [
+        "You don't need to compute the reciprocal's exact value to answer this.",
+        "Any non-zero number multiplied by its own reciprocal always gives the same result."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q26",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 10,
+      "bloomLevel": "recall",
+      "prompt": "Which rational number lies exactly halfway between 0 and 1 on the number line?",
+      "expectedAnswer": "1/2",
+      "hints": [
+        "The halfway point between two numbers is their mean.",
+        "Add 0 and 1, then divide by 2."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "number-line"]
+    },
+    {
+      "id": "rn-q27",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between 1/4 and 1/2 using the mean method.",
+      "expectedAnswer": "3/8",
+      "hints": [
+        "Add the two given numbers together first.",
+        "Divide that sum by 2."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q28",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between 2 and 3 using the mean method.",
+      "expectedAnswer": "5/2",
+      "hints": [
+        "Add the two given numbers together first.",
+        "Divide that sum by 2."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q29",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between -1/2 and 1/2 using the mean method.",
+      "expectedAnswer": "0",
+      "hints": [
+        "Add the two given numbers together first.",
+        "Divide that sum by 2 — what do -1/2 and 1/2 add up to?"
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q30",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between 3/5 and 4/5 using the mean method.",
+      "expectedAnswer": "7/10",
+      "hints": [
+        "Add the two given numbers together first — they already share a denominator.",
+        "Divide that sum by 2."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q31",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "recall",
+      "prompt": "How many rational numbers lie between any two given rational numbers?",
+      "expectedAnswer": "Infinite",
+      "hints": [
+        "Think about what happens if you keep applying the mean method between a number and its own mean.",
+        "The process of finding a new number in between never runs out of room to repeat."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q32",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between -3 and -2 using the mean method.",
+      "expectedAnswer": "-5/2",
+      "hints": [
+        "Add the two given numbers together first.",
+        "Divide that sum by 2."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q33",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "recall",
+      "prompt": "Is -7 a rational number?",
+      "expectedAnswer": "Yes",
+      "hints": [
+        "Every integer is a rational number.",
+        "Can -7 be written as a fraction, such as -7/1?"
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "definition"]
+    },
+    {
+      "id": "rn-q34",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objective": 1,
+      "bloomLevel": "application",
+      "prompt": "Write 3 as a rational number with denominator 5.",
+      "expectedAnswer": "15/5",
+      "hints": [
+        "You need an equivalent fraction to 3/1 with denominator 5.",
+        "Multiply both the numerator and denominator of 3/1 by 5."
+      ],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "equivalent-fractions"]
+    },
+    {
+      "id": "rn-q35",
+      "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
+      "objective": 2,
+      "bloomLevel": "application",
+      "prompt": "Simplify -18/24 to its standard form.",
+      "expectedAnswer": "-3/4",
+      "hints": [
+        "Find the greatest common factor of 18 and 24.",
+        "Divide both the numerator and denominator by that common factor."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "standard-form"]
+    },
+    {
+      "id": "rn-q36",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objective": 3,
+      "bloomLevel": "application",
+      "prompt": "Find the sum of 1/2, 1/3 and 1/6.",
+      "expectedAnswer": "1",
+      "hints": [
+        "Find a common denominator for all three fractions — 6 works for all of them.",
+        "Rewrite each fraction with denominator 6, then add all three numerators."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "addition"]
+    },
+    {
+      "id": "rn-q37",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objective": 9,
+      "bloomLevel": "synthesis",
+      "prompt": "The product of two rational numbers is -1. If one number is 4/7, what is the other?",
+      "expectedAnswer": "-7/4",
+      "hints": [
+        "If 4/7 × x = -1, you need to isolate x.",
+        "Divide both sides by 4/7, which is the same as multiplying by its reciprocal."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q38",
+      "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
+      "objective": 8,
+      "bloomLevel": "synthesis",
+      "prompt": "The sum of two rational numbers is 0. If one number is -5/9, what is the other?",
+      "expectedAnswer": "5/9",
+      "hints": [
+        "Two numbers that sum to 0 are additive inverses of each other.",
+        "Flip the sign of -5/9."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "additive-inverse"]
+    },
+    {
+      "id": "rn-q39",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objective": 11,
+      "bloomLevel": "application",
+      "prompt": "Find a rational number between 0 and 1/5 using the mean method.",
+      "expectedAnswer": "1/10",
+      "hints": [
+        "Add the two given numbers together first.",
+        "Divide that sum by 2."
+      ],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "mean-method"]
+    },
+    {
+      "id": "rn-q40",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
+      "objective": 4,
+      "bloomLevel": "analysis",
+      "prompt": "Is 2/3 divided by 4/9 equal to 4/9 divided by 2/3?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Compute both divisions separately and compare the results.",
+        "Division is not commutative for rational numbers — swapping the order changes the answer."
+      ],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "commutativity"]
+    }
+  ]
+}
