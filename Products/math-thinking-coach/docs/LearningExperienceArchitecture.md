@@ -136,7 +136,7 @@ This is the brief the next release's content work produces against — one Topic
 | Release | LXA piece it delivers |
 |---|---|
 | 0.1 | Tracked history that Homework/Revision/Mastery all depend on — no journey stage itself, the substrate under three of them. Shipped — see `Development-Journal.md`'s 2026-07-27 entries. |
-| 0.2 | Learn, Understand, Worked Examples — the new stages, one Topic per Chapter. **First slice implemented 2026-07-27** (Features 018–021, see `Roadmap.md` and [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md)): Learn + Worked Examples shipped for Linear Equations only. Understand not yet built for any chapter; Data Handling, Practical Geometry, Understanding Quadrilaterals, Rational Numbers not yet migrated. |
+| 0.2 | Learn, Understand, Worked Examples — the new stages, one Topic per Chapter. **First slice implemented 2026-07-27** (Features 018–021, see `Roadmap.md` and [ADR-003](ADR/ADR-003-content-authoring-and-export-pipeline.md)): Learn + Worked Examples shipped for Linear Equations only at the time. As of the Curriculum Expansion Milestone (2026-08-15), five of six chapters have Learn/Topic content — Linear Equations, Data Handling, Understanding Quadrilaterals, A Square and A Cube, and Rational Numbers. Practical Geometry remains without a Topic, deliberately (see `Phase-1-Handoff.md` §8). Understand still not built for any chapter. |
 | 0.3 | (Orthogonal — answer tolerance, not a journey stage) |
 | 0.4 | (Orthogonal — question-pool depth, feeds Guided/Independent/Homework/Revision pools) |
 | 0.5 | Homework Practice, Revision, Mastery — the deterministic layer over 0.1's data |

@@ -4,6 +4,8 @@ This file tracks two separate tracks that move at different speeds — don't con
 
 ## Engineering Milestone
 
+**Curriculum Expansion Milestone (2026-08-15, complete, commit `fbc7eed`, live in production).** Added a new chapter, A Square and A Cube (40 questions, full Topic/Learn content — sourced from NCERT's current "Ganita Prakash" syllabus, which already merges Squares/Square Roots and Cubes/Cube Roots into one chapter). Expanded Rational Numbers (5→40 questions, Topic replaced with a 5-section explanation) and Practical Geometry (5→35 questions, deliberately still no Topic) via the Stage 10 pipeline — Practical Geometry specifically via a new dedicated topic-less export path (`run-topicless.js`), since the normal pipeline can't resolve a chapterId for questions with no Topic to anchor them. 12 backend test files updated for Rational Numbers' content-shape change (45 tests across 9 files initially broke on stale question/topic ids and a no-longer-true "zero Hard questions" assumption — all fixed as fixture updates, not weakened, per that milestone's own pre-commit audit). 205/205 backend, 112/112 frontend, both unaffected in count (content-only change, zero frontend files touched). See `Phase-1-Handoff.md` §8/§12.6/§17 for full detail.
+
 **Release 0.1.2 — UX overhaul, production-readiness audit, and deployment fixes (2026-08-07, complete, shipped to production).** Frontend design-token system, rebuilt Learn page, reworked question experience, a single consistent navigation pattern (`BackLink`) applied to every screen, verified at 10 responsive breakpoints. An adversarial production-readiness audit found and fixed 11 real defects (blank page on bad URLs, permanent loading dead-ends when the backend is unreachable, Enter not submitting forms, WCAG gaps, and more). Two further defects were found and fixed **after** deployment: a Vercel SPA-fallback gap (deep links/refreshes 404'd in production) and a session hint/reveal-solution dead-end found by the user's own hands-on production testing. Commits `c414563`/`22fdcb0`/`a16788e`. Full detail: [`Release-0.1.2-Final.md`](Release-0.1.2-Final.md) and [`Phase-1-Handoff.md`](Phase-1-Handoff.md) (the new canonical handoff — see that file's own note on `HANDOFF_PROMPT.md`'s superseded status).
 
 **Release 0.1.1 — Curriculum Expansion (2026-08-07, complete, folded into the 0.1.2 commit).** Data Handling (5 → 42 questions, 1 new Topic) and Understanding Quadrilaterals (5 → 40 questions, 1 new Topic, authored from scratch) both exported via the existing Stage 10 pipeline — no engineering changes, exactly what ADR-003's pipeline was built for. See `Development-Journal.md`'s 2026-08-07 entry.
@@ -100,6 +102,8 @@ Sprint C — Complete Version 1.0 and prepare RC1 (2026-07-29) — Session Compl
 
 ## Current Release
 
+**Curriculum Expansion Milestone — complete, committed as `fbc7eed`, deployed and live in production, 2026-08-15.** New chapter (A Square and A Cube), Rational Numbers expanded 5→40, Practical Geometry expanded 5→35 (still topic-less by design). 6 chapters, 241 questions total, all confirmed live via direct production verification. See "Engineering Milestone" above for full detail, `Phase-1-Handoff.md` §18 for the production verification record.
+
 **Release 0.1.2 — complete, shipped, live in production, 2026-08-07.** Frontend UX overhaul (design tokens, rebuilt Learn page, consistent navigation, 10-breakpoint responsive verification), an 11-finding production-readiness audit (all fixed), and two post-deploy fixes found via live production testing (Vercel SPA-fallback gap; a session hint/reveal-solution dead-end). See `Release-0.1.2-Final.md` for the full record, `Phase-1-Handoff.md` for the standing project handoff.
 
 **Release 0.1.1 — Curriculum Expansion, complete 2026-08-07 (shipped as part of the 0.1.2 commit).** Data Handling (5 → 42 questions, 1 Topic) and Understanding Quadrilaterals (authored from scratch, 5 → 40 questions, 1 Topic) both live via the Stage 10 pipeline. Practical Geometry remains the only chapter still on its original 5 hand-seeded placeholder questions with no Topic — see Phase 1 roadmap.
@@ -112,7 +116,7 @@ Sprint C — Complete Version 1.0 and prepare RC1 (2026-07-29) — Session Compl
 
 ## Next Engineering Objective
 
-**No further engineering queued without explicit instruction — this is Phase 1's own stated boundary, unchanged.** `Phase-1-Handoff.md` §13–14 has the deferred-work list and recommended order (name-length limits → Topic section headings → a "list my classes" endpoint + teacher dashboard → answer-matching brittleness), but starting any of it needs a fresh design/review/approval pass first, per this project's established workflow (§16 of that same document) — do not treat the sequencing as a green light. Independent, non-blocking tracks: operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered); Practical Geometry remains the one chapter with no content-source authoring trail and no Topic.
+**No further engineering queued without explicit instruction — this is Phase 1's own stated boundary, unchanged.** The Product Architect has flagged a pending decision between two candidate next milestones — **Structured Learning Content / Topic schema improvements** vs. **Answer Evaluation v2 / mathematical answer semantics** — neither approved yet. `Phase-1-Handoff.md` §13–14 has the older deferred-work list and recommended order (name-length limits → Topic section headings → a "list my classes" endpoint + teacher dashboard → answer-matching brittleness), but starting any of it, or either of the two candidate milestones above, needs a fresh design/review/approval pass first, per this project's established workflow (§16 of that same document) — do not treat any of this as a green light. Independent, non-blocking track: operate Shadow Mode and gather data (toward scoping confidence-gated live evaluation, not yet numbered). Practical Geometry now has a content-source authoring trail (added this milestone) but still has no Topic, deliberately, via its own topic-less export path.
 
 ## Recommended Next Milestone (Documentation)
 
@@ -170,7 +174,7 @@ main
 
 ## Uncommitted Work
 
-None as of the Release 0.1.2 closure pass (2026-08-07) — Release 0.1.1's content, Release 0.1.2's UX/audit work, and the two post-deploy fixes are all committed and pushed (`c414563`, `22fdcb0`, `a16788e`). This documentation-cleanup and archival pass is committed separately. See `git log` for exact hashes and the `v0.1.2` tag.
+None as of this documentation-closure pass (2026-08-15) — the Curriculum Expansion Milestone (`fbc7eed`) has been pushed to `origin/main` and deployed to production (Vercel + Render, both auto-deploy on push to `main`); see `Phase-1-Handoff.md` §18 for the confirmed production state (6 chapters, 241 questions, live-verified). The only remaining uncommitted item is a pre-existing, unrelated `.gitignore` modification that predates this milestone and was left untouched throughout.
 
 Run `git status` before starting new work, as always.
 

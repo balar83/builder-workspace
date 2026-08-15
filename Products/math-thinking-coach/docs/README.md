@@ -28,10 +28,11 @@ Full deployment detail, including the two real production bugs found and fixed d
 | Linear Equations | 44 | ✅ |
 | Data Handling | 42 | ✅ |
 | Understanding Quadrilaterals | 40 | ✅ |
-| Rational Numbers | 5 | ✅ |
-| Practical Geometry | 5 | ❌ |
+| A Square and A Cube | 40 | ✅ |
+| Rational Numbers | 40 | ✅ |
+| Practical Geometry | 35 | ❌ |
 
-All five went through the same content model — authored offline, reviewed, and exported through the Stage 10 pipeline (see [`ADR-003`](ADR/ADR-003-content-authoring-and-export-pipeline.md)). Understanding Quadrilaterals was authored entirely from scratch in Release 0.1.1 after the official NCERT source PDF turned out to be a non-text-extractable scan — documented honestly in that chapter's own authoring trail rather than fabricated as a literal extraction.
+**241 questions across 6 chapters.** All six went through the same content model — authored offline, reviewed, and exported through the Stage 10 pipeline (see [`ADR-003`](ADR/ADR-003-content-authoring-and-export-pipeline.md)) — **except Practical Geometry**, which uses a dedicated topic-less export path (`docs/content-pipeline/export/run-topicless.js`) instead of the normal `run.js`, since the normal pipeline has no way to resolve a chapter's id for questions with no Topic to anchor them. That script reuses the pipeline's real approval-gate and transform/validate/merge logic, but not its structural loader — tracked architectural debt, not a second content pipeline. Understanding Quadrilaterals was authored entirely from scratch in Release 0.1.1 after the official NCERT source PDF turned out to be a non-text-extractable scan — documented honestly in that chapter's own authoring trail rather than fabricated as a literal extraction. A Square and A Cube matches NCERT's own current "Ganita Prakash" syllabus, which already merges Squares/Square Roots and Cubes/Cube Roots into one chapter.
 
 ---
 
@@ -46,7 +47,7 @@ The stateful core of the authenticated experience: a student configures a sessio
 
 ## Workflows
 
-**Anonymous visitor:** browse all 5 chapters, read a Learn page where one exists, work the full question bank per chapter with progressive hints and rule-based evaluation. Progress tracked in `localStorage` only — no login required, no server record kept.
+**Anonymous visitor:** browse all 6 chapters, read a Learn page where one exists (5 of 6 — Practical Geometry intentionally has none), work the full question bank per chapter with progressive hints and rule-based evaluation. Progress tracked in `localStorage` only — no login required, no server record kept.
 
 **Student (authenticated):** join a class with a code + display name + 4-digit PIN (no email/password ever collected from students, by design). Dashboard shows real per-topic performance pulled from server-recorded history. Start a configured session (Practice / Revision / Test), work through it with server-persisted state, resume an abandoned session via a Dashboard banner, complete it (score shown only in Test mode).
 
@@ -96,6 +97,17 @@ No page-level automated tests exist anywhere in this codebase, by established co
 - **Two real defects found post-deploy, both fixed same-session:** a Vercel SPA-fallback gap (deep links and refreshes 404'd in production), and a session dead-end where a student who exhausted all hints without yet submitting a wrong answer saw neither a hint button nor a Reveal Solution button — found by the user's own hands-on production testing, not by any automated pass.
 
 Full detail: [`Release-0.1.2-Final.md`](Release-0.1.2-Final.md).
+
+---
+
+## Curriculum Expansion Milestone (commit `fbc7eed`)
+
+- **New chapter: A Square and A Cube** — 40 questions, full Topic/Learn content. Matches NCERT's own current "Ganita Prakash" syllabus, which already merges Squares/Square Roots and Cubes/Cube Roots into one chapter.
+- **Rational Numbers expanded 5 → 40 questions**, Topic replaced with a 5-section explanation (closure/commutativity/associativity, distributivity and identities, inverses, the number line).
+- **Practical Geometry expanded 5 → 35 questions**, still intentionally has no Topic/Learn page — see "Current chapters" above for why its export path differs from the other five.
+- No frontend, evaluation, coaching, or session-architecture changes — content-only, per this milestone's explicit scope.
+
+Full detail: `Phase-1-Handoff.md` §8, §12.6, §17.
 
 ---
 

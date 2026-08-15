@@ -1,6 +1,7 @@
 # Math Thinking Coach — Phase 1 Handoff
 
 **Written:** 2026-08-07, immediately after Release 0.1.2 shipped to production.
+**Updated:** 2026-08-15, after the Curriculum Expansion Milestone (commit `fbc7eed`) — see §8, §10, §17.
 **Purpose:** let a brand-new Claude conversation continue this project with zero context loss. Read this document fully before touching code. Where anything here conflicts with what you observe in the repository, **trust the repository** — this document describes a snapshot, not a live source of truth.
 
 ---
@@ -136,7 +137,9 @@ Known gaps, unchanged since ADR-004/005: no "list my classes" endpoint (a teache
 
 Content is authored offline in `docs/content-source/<chapter>/` — a staged trail (topic detection → concept extraction → learning objectives → worked examples → questions, roughly stages 2–6) with a `reviewStatus` field gating export (`"ai-generated"` by default, must be `"approved"` to export). A Stage 10 Export Pipeline (`docs/content-pipeline/export/`, run via `node run.js --chapter=<slug> [--dry-run]`) merges approved content into the real runtime `backend/app/data/*.json`, validating against actual backend Pydantic schemas and writing atomically per-chapter. Full detail: ADR-003.
 
-**All five chapters are now content-complete** as of Release 0.1.1 (folded into 0.1.2's commit — see §17): Linear Equations (44 questions), Data Handling (42), Understanding Quadrilaterals (40, authored from scratch this cycle — the official NCERT PDF for this chapter turned out to be a scanned image with no extractable text layer, so it was authored directly from standard NCERT Class 8 Ch.3 curriculum knowledge instead, documented honestly in that chapter's `stage2-topic-detection.md` rather than fabricated as a literal extraction), Rational Numbers (5, still placeholder-scale), Practical Geometry (5, still placeholder-scale, and the only chapter with no Topic/Learn page at all).
+**All six chapters are now content-complete** as of the Curriculum Expansion Milestone (`fbc7eed`, 2026-08-15 — see §17): Linear Equations (44 questions), Data Handling (42), Understanding Quadrilaterals (40, authored from scratch in Release 0.1.1 — the official NCERT PDF for this chapter turned out to be a scanned image with no extractable text layer, so it was authored directly from standard NCERT Class 8 Ch.3 curriculum knowledge instead, documented honestly in that chapter's `stage2-topic-detection.md` rather than fabricated as a literal extraction), **A Square and A Cube** (40, new chapter this milestone — NCERT's own current "Ganita Prakash" syllabus already merges Squares/Square Roots and Cubes/Cube Roots into this one chapter, confirming the merge wasn't invented), **Rational Numbers** (expanded 5→40 this milestone, Topic replaced with a 5-section explanation), **Practical Geometry** (expanded 5→35 this milestone, **deliberately still has no Topic/Learn page** — see below).
+
+Practical Geometry's export doesn't go through the normal Stage 10 `run.js`: the pipeline has no code path to resolve a `chapterId` for questions without a Topic to anchor it, so a dedicated topic-less path (`docs/content-pipeline/export/run-topicless.js`) is used instead — it reuses the pipeline's real approval-gate (`applyApprovalGate`) and transform/validate/merge modules, but not `loadCanonical()`'s structural loader (that loader's `requireFields()` rejects `topicId: null`, which is exactly the value this chapter's content-source files use to mean "genuinely no Topic"). This is tracked architectural debt, not a hidden feature of the normal pipeline — don't assume `run.js` alone can onboard a topic-less chapter.
 
 **A known, permanent limitation:** the export pipeline's `transformTopic` function joins each authored section's `body` text but **drops the section `title`** — so the runtime `Topic.explanation` field is one opaque string. The frontend (`TopicPage.tsx`) recovers *paragraph* structure by splitting on blank lines, but cannot recover section *headings* without a schema change. Documented in that file's own comments. This is real, deferred Phase 1 work (§13.4).
 
@@ -162,7 +165,7 @@ Seven accepted ADRs, all implemented and verified against shipped code (`docs/AD
 
 Everything a student, teacher, or anonymous visitor can currently do:
 
-- **Anonymous:** browse all 5 chapters, read a Topic/Learn page (4 of 5 chapters have one), work through the full question bank per chapter with progressive hints and rule-based evaluation, progress tracked in `localStorage` only.
+- **Anonymous:** browse all 6 chapters, read a Topic/Learn page (5 of 6 chapters have one — Practical Geometry intentionally doesn't, see §8), work through the full question bank per chapter with progressive hints and rule-based evaluation, progress tracked in `localStorage` only.
 - **Student (authenticated):** join a class via code, see a Dashboard with real per-topic performance (attempts, accuracy, mastered flag) pulled from server-recorded history, start a configured session (Practice / Revision / Test mode, difficulty filter, question count, time limit for Test), work through it one question at a time with server-persisted state, resume an abandoned session via a Dashboard banner, complete a session (score shown only in Test mode).
 - **Teacher (authenticated):** register/login, create a class, get a join code (shown once, no way to retrieve it later — see §7).
 - **Navigation:** every screen has an explicit way out that isn't the browser Back button (Release 0.1.2's headline UX work); a catch-all 404 page for any bad URL; recoverable error states everywhere the backend might be unreachable.
@@ -186,6 +189,7 @@ Everything a student, teacher, or anonymous visitor can currently do:
 3. **`coaching_service.decide()` is a pure function of `(is_correct, attempt_number)` only** — it has no concept of hint usage. This is fine as a coaching-message driver, but don't reuse `canRevealSolution` as a proxy for "has the student exhausted their scaffolding" anywhere else in the frontend; it isn't that.
 4. **No teacher-facing value beyond "create a class."** No roster, no class-wide progress view, no way to see or recover a lost join code. This is a real, acknowledged gap, not an oversight — a full teacher dashboard is unscoped Phase 1/2 work.
 5. **`--control-height: 44px` on the base `input` rule silently catches every `<input>` type**, including radio/checkbox, unless explicitly scoped away. Found and fixed once (`SessionModeSelector.css`) — if you add any new radio/checkbox input anywhere, check it isn't rendering as a 44px invisible box.
+6. **Rational Numbers was an undocumented Learning Session Engine test fixture.** Discovered during the Curriculum Expansion Milestone: 9 backend test files across the Learning Session Engine, evaluation, and Shadow Mode suites relied on Rational Numbers staying small (5 questions) and difficulty-sparse (zero Hard questions) — not because those tests were *about* Rational Numbers, but because it happened to be a convenient small chapter. Expanding it to 40 questions broke 45 tests on stale assumptions baked into fixtures, not test logic. All were updated to match the new content shape (not weakened — see that milestone's pre-commit audit). **This is a standing risk for any future chapter expansion**: any chapter's content shape may be silently load-bearing for tests that aren't about that chapter. No chapter is currently "safe by construction" for this — worth a dedicated synthetic fixture chapter for the Learning Session Engine's own tests at some point, not scoped or built yet.
 
 ---
 
@@ -249,7 +253,8 @@ Do not start any of these without a design/review/approval pass first — this p
 | v1.0.0-rc1 → production | Split deployment live on Vercel + Render |
 | Cross-site cookie fix (`d4445f5`) | Fixed `SESSION_COOKIE_SAMESITE`/`SESSION_HTTPS_ONLY` for the split-hosting shape — teacher login was silently broken (401 on the very next authenticated call) until this shipped |
 | **0.1.1** (folded into 0.1.2's commit, never shipped standalone) | Data Handling + Understanding Quadrilaterals fully authored/exported (5→42, 5→40 questions) |
-| **0.1.2** (this handoff's release, `c414563`/`22fdcb0`/`a16788e`) | Frontend UX overhaul, production-readiness audit fixes, Vercel SPA-fallback fix, session hint/reveal-solution dead-end fix |
+| **0.1.2** (`c414563`/`22fdcb0`/`a16788e`) | Frontend UX overhaul, production-readiness audit fixes, Vercel SPA-fallback fix, session hint/reveal-solution dead-end fix |
+| **Curriculum Expansion Milestone** (this handoff update's release, `fbc7eed`) | New chapter A Square and A Cube (40 questions, full Topic/Learn); Rational Numbers expanded 5→40 questions with a replaced 5-section Topic; Practical Geometry expanded 5→35 questions via the topic-less export path, still no Topic by design. 12 backend test files updated for Rational Numbers' content-shape change (question/topic ids, difficulty distribution — see §12.6). No frontend, evaluation, or session-architecture changes. |
 
 ---
 
@@ -259,11 +264,11 @@ Do not start any of these without a design/review/approval pass first — this p
 |---|---|
 | Frontend | https://math-thinking-coach-zeta.vercel.app/ (Vercel project renamed from `builder-workspace` to `math-thinking-coach` on 2026-08-07; old URL `builder-workspace-zeta.vercel.app` now 404s — do not use) |
 | Backend | https://math-thinking-coach-api.onrender.com |
-| Latest commit live | `a16788e` |
-| Backend health | confirmed healthy, content confirmed live (42/40 question counts match the export) |
-| Frontend health | confirmed — Anonymous journey (Home → Chapters → Learn → Practice) walked live in production; SPA fallback and the 404 page both confirmed working post-fix |
-| Known live issue at time of writing | none confirmed open — the hint/reveal-solution dead end (§12.3) was fixed and deployed same-session; a final user click-test to close the loop was requested but its result isn't in this document (check with the user or re-verify directly) |
-| Test/throwaway accounts in production | one teacher + one class created by the user for smoke testing (join code `A996AX` at time of writing) — not cleaned up by me, since I don't have production database access; the user may want to clean this up eventually, or it can just be left as inert data |
+| Latest commit live | `fbc7eed` (Curriculum Expansion Milestone — pushed and deployed 2026-08-15) |
+| Backend health | confirmed healthy post-deploy; content confirmed live via direct API calls — 6 chapters, per-chapter question counts 44/42/40/40/40/35 (linear-equations/data-handling/understanding-quadrilaterals/squares-and-cubes/rational-numbers/practical-geometry), all matching the export exactly |
+| Frontend health | confirmed — chapter list shows all 6 chapters including "A Square and A Cube"; A Square and A Cube's chapter page (0 of 40), Learn page (full 4-section content), and first question all verified live, including a real answer submission (`225` for "What is 15 squared?") producing the correct coaching response and advancing; Rational Numbers' chapter page (0 of 40) and expanded 5-section Learn page confirmed live; Practical Geometry's chapter page (0 of 35) and Practice (question 1 of 35) confirmed live with no broken Learn link — it correctly shows "Start Learning" straight into Practice, same topic-less behavior as before this milestone, just with more questions |
+| Known live issue at time of writing | none found during this milestone's verification |
+| Test/throwaway accounts in production | one teacher + one class created by the user for smoke testing (join code `A996AX` at time of writing) — still not cleaned up, since I don't have production database access; carried over from the prior handoff, unrelated to this milestone |
 
 ---
 
@@ -275,5 +280,5 @@ If the user's first message doesn't specify, the single most useful thing to do 
 
 1. Run `git status` and `git log --oneline -5` to confirm this document isn't stale.
 2. Re-run backend `pytest` and frontend `vitest run` fresh — confirm 205/112 still holds.
-3. Ask the user to confirm the hint/reveal-solution fix (§12.3, §18) actually closed cleanly in production — as of this document's writing, that confirmation was still outstanding.
-5. Then ask what they want to work on, offering §14's recommended order as a starting menu, not a mandate.
+3. Confirm the Curriculum Expansion Milestone (`fbc7eed`) is actually live in production, per §18 — this document's own §18 may still show a deployment gap if the push/deploy decision from that milestone's closure wasn't resolved before this was written.
+4. Then ask what they want to work on. The Product Architect has flagged a pending decision between two candidate next milestones — **(A) Structured Learning Content / Topic schema improvements** vs. **(B) Answer Evaluation v2 / mathematical answer semantics** — neither approved yet; don't start either without an explicit go-ahead. §14's deferred-item order is still the fallback menu if nothing else is specified.
