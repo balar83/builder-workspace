@@ -13,6 +13,7 @@ const path = require('path');
 const { loadCanonical, ExportValidationError } = require('./loadCanonical');
 const { applyApprovalGate } = require('./approvalGate');
 const { validateReferences } = require('./referentialValidation');
+const { validateConceptReferences } = require('./conceptReferentialValidation');
 const { checkDuplicates } = require('./duplicateCheck');
 const { transformTopic, transformQuestion } = require('./transform');
 const { validateAgainstRuntimeSchemas } = require('./pydanticValidate');
@@ -101,6 +102,11 @@ function main() {
       chapters,
       existingTopics,
     });
+
+    // [3] concept/objective referential validation (Slice A1) + legacy
+    // "objective" field rejection - self-contained within this chapter's own
+    // canonical-topic.json/stage6-questions.json, no cross-chapter lookup.
+    validateConceptReferences({ topic, questionBank });
 
     // [3] duplicates - excludes the chapter this run is about to replace, so
     // re-exporting unchanged content isn't flagged as colliding with itself

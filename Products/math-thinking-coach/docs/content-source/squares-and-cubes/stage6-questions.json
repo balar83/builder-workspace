@@ -2,12 +2,13 @@
   "topicId": "topic-squares-and-cubes-numbers-and-roots",
   "reviewStatus": "approved",
   "expansionNote": "Authored from scratch using NCERT Ganita Prakash Class 8 Ch.1 'A Square and A Cube' (current edition) plus the prior edition's Ch.5/Ch.6 as supplementary source. 40 questions across 11 learning objectives, mixed Understand/Apply/Reason/Challenge progression per section: conceptual/definitional recall, direct prime-factorisation application, multi-step reasoning (Pythagorean triplet construction, smallest-multiplier/divisor problems), and real-world area/volume word problems. Difficulty split: 15 Easy (37.5%), 16 Medium (40%), 9 Hard (22.5%) — matches the style already used for Understanding Quadrilaterals. Every expectedAnswer is a single short value (a number, a short phrase, or Yes/No/True/False) deliberately, to stay reliably compatible with the current exact-string-match evaluator — no open-ended 'explain your reasoning' questions were included, unlike some other chapters, specifically to avoid the known evaluator brittleness documented in those chapters' answer-keys.json.",
+  "objectiveMigrationNote": "Migrated 2026-08-17 for Slice A1 (Structured Learning Content Foundation, pilot chapter): the legacy integer `objective` field (an index into the pre-migration flattened cross-section objective list) was mechanically mapped to the corresponding new `objectiveIds` entry from canonical-topic.json, one-for-one, preserving the original semantic relationship exactly — no mapping was inferred or guessed. The legacy `objective` field is retired and does not appear on any question below. See docs/Structured-Learning-Content-Design-Proposal.md §I.",
   "excludedSourceItems": [],
   "questions": [
     {
       "id": "sc-q01",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-squares-unit-digit"],
       "bloomLevel": "application",
       "prompt": "What is 15 squared (15²)?",
       "expectedAnswer": "225",
@@ -21,7 +22,7 @@
     {
       "id": "sc-q02",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-squares-unit-digit"],
       "bloomLevel": "analysis",
       "prompt": "Is 250 a perfect square?",
       "expectedAnswer": "No",
@@ -35,7 +36,7 @@
     {
       "id": "sc-q03",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-squares-unit-digit"],
       "bloomLevel": "recall",
       "prompt": "True or False: a number ending in 3 can never be a perfect square.",
       "expectedAnswer": "True",
@@ -54,7 +55,7 @@
     {
       "id": "sc-q04",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.3" },
-      "objective": 3,
+      "objectiveIds": ["obj-squares-between-squares"],
       "bloomLevel": "application",
       "prompt": "How many non-perfect-square numbers lie strictly between 12² and 13²?",
       "expectedAnswer": "24",
@@ -68,7 +69,7 @@
     {
       "id": "sc-q05",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 2,
+      "objectiveIds": ["obj-squares-odd-sum"],
       "bloomLevel": "application",
       "prompt": "Express 49 as the sum of consecutive odd numbers starting from 1. How many odd numbers did you need to add?",
       "expectedAnswer": "7",
@@ -82,7 +83,7 @@
     {
       "id": "sc-q06",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.2" },
-      "objective": 2,
+      "objectiveIds": ["obj-squares-odd-sum"],
       "bloomLevel": "application",
       "prompt": "Is 40 a perfect square? Use the repeated-subtraction method (successively subtracting 1, 3, 5, ...) to decide.",
       "expectedAnswer": "No",
@@ -96,7 +97,7 @@
     {
       "id": "sc-q07",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.4.2" },
-      "objective": 4,
+      "objectiveIds": ["obj-squares-pythagorean-triplet"],
       "bloomLevel": "application",
       "prompt": "Using the form 2m, m²−1, m²+1, find the Pythagorean triplet whose smallest member is 10.",
       "expectedAnswer": "10, 24, 26",
@@ -111,7 +112,7 @@
     {
       "id": "sc-q08",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.4.2" },
-      "objective": 4,
+      "objectiveIds": ["obj-squares-pythagorean-triplet"],
       "bloomLevel": "application",
       "prompt": "Using the form 2m, m²−1, m²+1, find a Pythagorean triplet in which one member is 14.",
       "expectedAnswer": "14, 48, 50",
@@ -126,7 +127,7 @@
     {
       "id": "sc-q09",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.2" },
-      "objective": 1,
+      "objectiveIds": ["obj-squares-unit-digit"],
       "bloomLevel": "analysis",
       "prompt": "Can a perfect square number end in exactly 3 zeros?",
       "expectedAnswer": "No",
@@ -140,7 +141,7 @@
     {
       "id": "sc-q10",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.2" },
-      "objective": 1,
+      "objectiveIds": ["obj-squares-unit-digit"],
       "bloomLevel": "application",
       "prompt": "What is the unit's digit of 78²?",
       "expectedAnswer": "4",
@@ -154,7 +155,7 @@
     {
       "id": "sc-q11",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
       "bloomLevel": "analysis",
       "prompt": "Using prime factorisation, is 180 a perfect square?",
       "expectedAnswer": "No",
@@ -168,7 +169,7 @@
     {
       "id": "sc-q12",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "Find the smallest number by which 180 must be multiplied to make it a perfect square.",
       "expectedAnswer": "5",
@@ -182,7 +183,7 @@
     {
       "id": "sc-q13",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "Find the smallest number by which 200 must be divided to obtain a perfect square.",
       "expectedAnswer": "2",
@@ -196,7 +197,7 @@
     {
       "id": "sc-q14",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "synthesis",
       "prompt": "Find the smallest perfect square number that is divisible by each of 8, 12 and 18.",
       "expectedAnswer": "144",
@@ -211,7 +212,7 @@
     {
       "id": "sc-q15",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find √196 using prime factorisation.",
       "expectedAnswer": "14",
@@ -225,7 +226,7 @@
     {
       "id": "sc-q16",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find √225 using prime factorisation.",
       "expectedAnswer": "15",
@@ -239,7 +240,7 @@
     {
       "id": "sc-q17",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.2" },
-      "objective": 6,
+      "objectiveIds": ["obj-square-roots-repeated-subtraction"],
       "bloomLevel": "application",
       "prompt": "Using repeated subtraction of consecutive odd numbers, find √64.",
       "expectedAnswer": "8",
@@ -253,7 +254,7 @@
     {
       "id": "sc-q18",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 7,
+      "objectiveIds": ["obj-square-roots-estimation"],
       "bloomLevel": "application",
       "prompt": "Between which two consecutive whole numbers does √500 lie? Give the smaller one.",
       "expectedAnswer": "22",
@@ -267,7 +268,7 @@
     {
       "id": "sc-q19",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "The area of a square garden is 324 m². Find the length of its side.",
       "expectedAnswer": "18 m",
@@ -281,7 +282,7 @@
     {
       "id": "sc-q20",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "A right triangle has legs of 9 cm and 12 cm. Find the length of the hypotenuse.",
       "expectedAnswer": "15 cm",
@@ -295,7 +296,7 @@
     {
       "id": "sc-q21",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "synthesis",
       "prompt": "Find the smallest perfect square number that is divisible by 4, 9 and 25.",
       "expectedAnswer": "900",
@@ -309,7 +310,7 @@
     {
       "id": "sc-q22",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 8,
+      "objectiveIds": ["obj-square-roots-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "Find the smallest number by which 1250 must be divided to obtain a perfect square.",
       "expectedAnswer": "2",
@@ -323,7 +324,7 @@
     {
       "id": "sc-q23",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
-      "objective": 5,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
       "bloomLevel": "recall",
       "prompt": "What is √1?",
       "expectedAnswer": "1",
@@ -336,7 +337,7 @@
     {
       "id": "sc-q24",
       "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find √441.",
       "expectedAnswer": "21",
@@ -350,7 +351,7 @@
     {
       "id": "sc-q25",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "What is 6 cubed (6³)?",
       "expectedAnswer": "216",
@@ -364,7 +365,7 @@
     {
       "id": "sc-q26",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "analysis",
       "prompt": "Is 100 a perfect cube?",
       "expectedAnswer": "No",
@@ -378,7 +379,7 @@
     {
       "id": "sc-q27",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "recall",
       "prompt": "Which of these is a perfect cube: 125 or 150?",
       "expectedAnswer": "125",
@@ -392,7 +393,7 @@
     {
       "id": "sc-q28",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "analysis",
       "prompt": "Using prime factorisation, is 392 a perfect cube?",
       "expectedAnswer": "No",
@@ -406,7 +407,7 @@
     {
       "id": "sc-q29",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
-      "objective": 10,
+      "objectiveIds": ["obj-cubes-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "Find the smallest number by which 392 must be multiplied to make it a perfect cube.",
       "expectedAnswer": "7",
@@ -420,7 +421,7 @@
     {
       "id": "sc-q30",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
-      "objective": 10,
+      "objectiveIds": ["obj-cubes-smallest-multiplier"],
       "bloomLevel": "application",
       "prompt": "Find the smallest number by which 250 must be divided to obtain a perfect cube.",
       "expectedAnswer": "2",
@@ -434,7 +435,7 @@
     {
       "id": "sc-q31",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "The Hardy–Ramanujan number 1729 can be written as 1³ + 12³, or as the sum of two other cubes. Calculate 10³ + 9³ to find the second pair.",
       "expectedAnswer": "1729",
@@ -448,7 +449,7 @@
     {
       "id": "sc-q32",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find the cube of −4.",
       "expectedAnswer": "-64",
@@ -467,7 +468,7 @@
     {
       "id": "sc-q33",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 9,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "What is the unit's digit of 12³?",
       "expectedAnswer": "8",
@@ -481,7 +482,7 @@
     {
       "id": "sc-q34",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
-      "objective": 10,
+      "objectiveIds": ["obj-cubes-smallest-multiplier"],
       "bloomLevel": "synthesis",
       "prompt": "Find the smallest number by which 88 must be multiplied to make it a perfect cube.",
       "expectedAnswer": "121",
@@ -496,7 +497,7 @@
     {
       "id": "sc-q35",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "recall",
       "prompt": "Find ∛8 (the cube root of 8).",
       "expectedAnswer": "2",
@@ -509,7 +510,7 @@
     {
       "id": "sc-q36",
       "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.2" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "recall",
       "prompt": "Find ∛1000 (the cube root of 1000).",
       "expectedAnswer": "10",
@@ -522,7 +523,7 @@
     {
       "id": "sc-q37",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find the cube root of 3375 using prime factorisation.",
       "expectedAnswer": "15",
@@ -536,7 +537,7 @@
     {
       "id": "sc-q38",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find the cube root of 13824 using prime factorisation.",
       "expectedAnswer": "24",
@@ -550,7 +551,7 @@
     {
       "id": "sc-q39",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "A cube has a volume of 729 cm³. Find the length of its edge.",
       "expectedAnswer": "9 cm",
@@ -564,7 +565,7 @@
     {
       "id": "sc-q40",
       "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
-      "objective": 11,
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
       "bloomLevel": "application",
       "prompt": "Find the cube root of 74088 using prime factorisation.",
       "expectedAnswer": "42",

@@ -2087,7 +2087,10 @@
       "Compute 15 × 15."
     ],
     "solution": "225",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
   },
   {
     "id": "sc-q02",
@@ -2100,7 +2103,10 @@
       "15² = 225 and 16² = 256 — does 250 fall exactly on either one?"
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
   },
   {
     "id": "sc-q03",
@@ -2113,7 +2119,10 @@
       "Perfect squares only ever end in 0, 1, 4, 5, 6 or 9."
     ],
     "solution": "True",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
   },
   {
     "id": "sc-q04",
@@ -2126,7 +2135,10 @@
       "Here n = 12, so compute 2 × 12."
     ],
     "solution": "24",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-between-squares"
+    ]
   },
   {
     "id": "sc-q05",
@@ -2139,7 +2151,10 @@
       "49 = 7², so how many odd numbers make up that sum?"
     ],
     "solution": "7",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-odd-sum"
+    ]
   },
   {
     "id": "sc-q06",
@@ -2152,7 +2167,10 @@
       "If you land exactly on 0 at some step, it's a perfect square — if you go negative before that, it isn't."
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-odd-sum"
+    ]
   },
   {
     "id": "sc-q07",
@@ -2166,7 +2184,10 @@
       "List all three numbers in increasing order, separated by commas."
     ],
     "solution": "10, 24, 26",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-pythagorean-triplet"
+    ]
   },
   {
     "id": "sc-q08",
@@ -2180,7 +2201,10 @@
       "List all three numbers in increasing order, separated by commas."
     ],
     "solution": "14, 48, 50",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-pythagorean-triplet"
+    ]
   },
   {
     "id": "sc-q09",
@@ -2193,7 +2217,10 @@
       "If a number ends in k zeros, its square ends in exactly 2k zeros — always an even count."
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
   },
   {
     "id": "sc-q10",
@@ -2206,7 +2233,10 @@
       "8 × 8 = 64 — what's the unit's digit of that?"
     ],
     "solution": "4",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
   },
   {
     "id": "sc-q11",
@@ -2219,7 +2249,10 @@
       "Check whether every prime factor can be grouped into a pair."
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q12",
@@ -2232,7 +2265,10 @@
       "Multiplying by that unpaired factor completes the pair."
     ],
     "solution": "5",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q13",
@@ -2245,7 +2281,10 @@
       "Dividing out one copy of that factor leaves all factors paired."
     ],
     "solution": "2",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q14",
@@ -2259,7 +2298,10 @@
       "If any factor is unpaired, multiply the LCM by the missing partner to complete it."
     ],
     "solution": "144",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q15",
@@ -2272,7 +2314,10 @@
       "Multiply one factor from each pair together."
     ],
     "solution": "14",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q16",
@@ -2285,7 +2330,10 @@
       "Multiply one factor from each pair together."
     ],
     "solution": "15",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q17",
@@ -2298,7 +2346,10 @@
       "Stop when you reach exactly 0 — the number of subtractions is the square root."
     ],
     "solution": "8",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-repeated-subtraction"
+    ]
   },
   {
     "id": "sc-q18",
@@ -2311,7 +2362,10 @@
       "Try 22² and 23²."
     ],
     "solution": "22",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-estimation"
+    ]
   },
   {
     "id": "sc-q19",
@@ -2324,7 +2378,10 @@
       "Prime factorise 324 to find √324, and don't forget the unit."
     ],
     "solution": "18 m",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q20",
@@ -2337,7 +2394,10 @@
       "Compute 9² + 12², then take the square root of the result."
     ],
     "solution": "15 cm",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q21",
@@ -2350,7 +2410,10 @@
       "Prime factorise the LCM and check whether every factor is already paired — if so, the LCM itself is your answer."
     ],
     "solution": "900",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q22",
@@ -2363,7 +2426,10 @@
       "Find the prime factor that appears an odd number of times, and divide it out."
     ],
     "solution": "2",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q23",
@@ -2375,7 +2441,10 @@
       "Which number multiplied by itself gives 1?"
     ],
     "solution": "1",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q24",
@@ -2388,7 +2457,10 @@
       "Multiply one factor from each pair together."
     ],
     "solution": "21",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q25",
@@ -2401,7 +2473,10 @@
       "Compute 6 × 6 × 6."
     ],
     "solution": "216",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q26",
@@ -2414,7 +2489,10 @@
       "4³ = 64 and 5³ = 125 — does 100 match either one exactly?"
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q27",
@@ -2427,7 +2505,10 @@
       "5³ = 125."
     ],
     "solution": "125",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q28",
@@ -2440,7 +2521,10 @@
       "Check whether every prime factor can be grouped into a complete triple."
     ],
     "solution": "No",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q29",
@@ -2453,7 +2537,10 @@
       "Multiplying by the missing factor(s) completes that triple."
     ],
     "solution": "7",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q30",
@@ -2466,7 +2553,10 @@
       "Dividing out that leftover factor leaves every remaining factor in a complete triple."
     ],
     "solution": "2",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q31",
@@ -2479,7 +2569,10 @@
       "Then add the two results together."
     ],
     "solution": "1729",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q32",
@@ -2492,7 +2585,10 @@
       "A negative number multiplied an odd number of times stays negative."
     ],
     "solution": "-64",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q33",
@@ -2505,7 +2601,10 @@
       "2 × 2 × 2 = 8 — what's the unit's digit of that?"
     ],
     "solution": "8",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q34",
@@ -2519,7 +2618,10 @@
       "Multiply by the square of that second factor to complete its triple."
     ],
     "solution": "121",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cubes-smallest-multiplier"
+    ]
   },
   {
     "id": "sc-q35",
@@ -2531,7 +2633,10 @@
       "Which number, multiplied by itself three times, gives 8?"
     ],
     "solution": "2",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q36",
@@ -2543,7 +2648,10 @@
       "Which number, multiplied by itself three times, gives 1000?"
     ],
     "solution": "10",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q37",
@@ -2556,7 +2664,10 @@
       "Multiply one factor from each triple together."
     ],
     "solution": "15",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q38",
@@ -2569,7 +2680,10 @@
       "Multiply one factor from each triple together."
     ],
     "solution": "24",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q39",
@@ -2582,7 +2696,10 @@
       "Prime factorise 729 to find ∛729, and don't forget the unit."
     ],
     "solution": "9 cm",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "sc-q40",
@@ -2596,7 +2713,10 @@
       "You should find three distinct prime factors, each forming its own triple."
     ],
     "solution": "42",
-    "topicId": "topic-squares-and-cubes-numbers-and-roots"
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
   },
   {
     "id": "uq-q01",
