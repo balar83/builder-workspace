@@ -102,6 +102,18 @@ function loadCanonicalTopic(chapterDir, issues) {
   return topic;
 }
 
+// Slice 1 (Question & Response Semantics, M2): the full durable taxonomy -
+// only "short_text"/"numeric" have a registered evaluator
+// (evaluation_service.py) and are exportable. The other five are valid,
+// named, reserved values - a question may not claim one until its own
+// slice implements it. Kept in sync with app/schemas/question.py's
+// QuestionType by hand (this pipeline has no import access to the Python
+// enum) - see docs/Question-Response-Semantics-Design-Proposal.md §9/§17.
+const NAMED_QUESTION_TYPES = new Set([
+  'short_text', 'numeric', 'single_choice', 'multi_choice', 'fill_blank', 'matching', 'multi_part',
+]);
+const EXPORTABLE_QUESTION_TYPES = new Set(['short_text', 'numeric']);
+
 function loadCanonicalQuestions(chapterDir, issues) {
   const questionsPath = path.join(chapterDir, 'stage6-questions.json');
   if (!fs.existsSync(questionsPath)) {
@@ -128,6 +140,21 @@ function loadCanonicalQuestions(chapterDir, issues) {
         issues.push(`stage6-questions.json: duplicate canonical id "${q.id}" within the same file`);
       }
       seenIds.add(q.id);
+    }
+
+    // Slice 1 (M2): questionType is optional (omitted means "short_text" at
+    // transform time, §13) - but if a question names one at all, it must be
+    // a real, exportable type, not a typo and not a reserved-but-unbuilt one.
+    if (q.questionType !== undefined) {
+      if (!NAMED_QUESTION_TYPES.has(q.questionType)) {
+        issues.push(
+          `stage6-questions.json questions[${i}] ("${q.id}") has an unknown questionType "${q.questionType}"`
+        );
+      } else if (!EXPORTABLE_QUESTION_TYPES.has(q.questionType)) {
+        issues.push(
+          `stage6-questions.json questions[${i}] ("${q.id}") has questionType "${q.questionType}", which is reserved for a future slice and has no evaluator yet - it cannot be exported`
+        );
+      }
     }
   });
 

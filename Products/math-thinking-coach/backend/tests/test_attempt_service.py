@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, Coach, Evaluation, NextAction, UiState
+from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, Coach, EvaluationResult, NextAction, UiState
 from app.schemas.question import Question
 from app.services import attempt_service
 
@@ -170,7 +170,7 @@ def test_record_attempt_for_answer_never_raises_even_if_recording_fails(
     )
     submission = AnswerSubmission(answer="4", attemptNumber=1)
     response = AnswerEvaluationResponse(
-        evaluation=Evaluation(isCorrect=True, score=1.0),
+        evaluation=EvaluationResult(isCorrect=True, score=1.0, maxScore=1.0, evaluatorId="short_text_v1"),
         coach=Coach(message="Great job!", nextAction=NextAction.NEXT_QUESTION),
         ui=UiState(canTryAgain=False, canRevealSolution=False, hintLevel=0),
     )

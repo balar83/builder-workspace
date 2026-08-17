@@ -54,7 +54,14 @@ def test_correct_answer_returns_next_question() -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "evaluation": {"isCorrect": True, "score": 1.0},
+        "evaluation": {
+            "isCorrect": True,
+            "score": 1.0,
+            "maxScore": 1.0,
+            "evaluatorId": "short_text_v1",
+            "scoreBreakdown": None,
+            "confidence": None,
+        },
         "coach": {
             "message": "Excellent! You solved it correctly.",
             "nextAction": "NEXT_QUESTION",
@@ -75,7 +82,14 @@ def test_incorrect_first_attempt_returns_try_again() -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "evaluation": {"isCorrect": False, "score": 0.0},
+        "evaluation": {
+            "isCorrect": False,
+            "score": 0.0,
+            "maxScore": 1.0,
+            "evaluatorId": "short_text_v1",
+            "scoreBreakdown": None,
+            "confidence": None,
+        },
         "coach": {
             "message": "Not quite. Try solving it once more before using a hint.",
             "nextAction": "TRY_AGAIN",
@@ -89,7 +103,14 @@ def test_incorrect_second_attempt_returns_show_hint() -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "evaluation": {"isCorrect": False, "score": 0.0},
+        "evaluation": {
+            "isCorrect": False,
+            "score": 0.0,
+            "maxScore": 1.0,
+            "evaluatorId": "short_text_v1",
+            "scoreBreakdown": None,
+            "confidence": None,
+        },
         "coach": {
             "message": "Good effort. Here's a hint to help you.",
             "nextAction": "SHOW_HINT",
@@ -103,7 +124,14 @@ def test_incorrect_third_attempt_returns_show_solution() -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "evaluation": {"isCorrect": False, "score": 0.0},
+        "evaluation": {
+            "isCorrect": False,
+            "score": 0.0,
+            "maxScore": 1.0,
+            "evaluatorId": "short_text_v1",
+            "scoreBreakdown": None,
+            "confidence": None,
+        },
         "coach": {
             "message": "If you're still stuck, you can view the solution.",
             "nextAction": "SHOW_SOLUTION",
@@ -132,7 +160,14 @@ def test_empty_answer_is_treated_as_incorrect() -> None:
     response = submit("", 1)
 
     assert response.status_code == 200
-    assert response.json()["evaluation"] == {"isCorrect": False, "score": 0.0}
+    assert response.json()["evaluation"] == {
+        "isCorrect": False,
+        "score": 0.0,
+        "maxScore": 1.0,
+        "evaluatorId": "short_text_v1",
+        "scoreBreakdown": None,
+        "confidence": None,
+    }
     assert response.json()["coach"]["nextAction"] == "TRY_AGAIN"
 
 
@@ -169,7 +204,14 @@ def test_response_is_unaffected_when_shadow_evaluation_fails(
 
     assert response.status_code == 200
     assert response.json() == {
-        "evaluation": {"isCorrect": True, "score": 1.0},
+        "evaluation": {
+            "isCorrect": True,
+            "score": 1.0,
+            "maxScore": 1.0,
+            "evaluatorId": "short_text_v1",
+            "scoreBreakdown": None,
+            "confidence": None,
+        },
         "coach": {
             "message": "Excellent! You solved it correctly.",
             "nextAction": "NEXT_QUESTION",

@@ -1,7 +1,8 @@
 import json
+from fractions import Fraction
 from pathlib import Path
 
-from app.schemas.answer import AnswerSubmission, Evaluation
+from app.schemas.answer import AnswerSubmission, EvaluationResult
 from app.schemas.question import Question
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -21,8 +22,94 @@ def get_expected_answer(question_id: str) -> str:
     return _answer_keys[question_id]
 
 
-def evaluate(question: Question, submission: AnswerSubmission) -> Evaluation:
+def _evaluate_short_text(question: Question, submission: AnswerSubmission) -> EvaluationResult:
+    """
+    Behavior-preserving extraction of the evaluator this project has always
+    had: exact match after stripping whitespace. This is the default
+    evaluator (Question.questionType == "short_text" unless set otherwise),
+    so this function's behavior for all 241 existing questions is unchanged.
+    """
     expected_answer = get_expected_answer(question.id)
     is_correct = submission.answer.strip() == expected_answer.strip()
+    return EvaluationResult(
+        isCorrect=is_correct,
+        score=question.maxScore if is_correct else 0.0,
+        maxScore=question.maxScore,
+        evaluatorId="short_text_v1",
+    )
 
-    return Evaluation(isCorrect=is_correct, score=1.0 if is_correct else 0.0)
+
+def _parse_number(raw: str) -> Fraction | None:
+    """
+    Exact rational parsing (not float) - "1/2" and "0.5" parse to the same
+    Fraction, so they compare equal even with zero tolerance. Returns None,
+    never raises, for anything that isn't a clean number (e.g. "18 m") - the
+    caller decides what that means rather than this crashing the request.
+    """
+    try:
+        return Fraction(raw.strip())
+    except (ValueError, ZeroDivisionError):
+        return None
+
+
+def _evaluate_numeric(question: Question, submission: AnswerSubmission) -> EvaluationResult:
+    """
+    Deterministic Fraction-based numeric comparison - not a symbolic math
+    engine. "1/2" == "0.5" and "4" == "4.0" compare correct with zero
+    tolerance (the default); Question.responseSpecification.numericTolerance
+    widens that to an approximate-answer band only when a question opts in.
+    """
+    expected_answer = get_expected_answer(question.id)
+    tolerance = question.responseSpecification.numericTolerance if question.responseSpecification else 0.0
+
+    expected_value = _parse_number(expected_answer)
+    submitted_value = _parse_number(submission.answer)
+
+    if expected_value is None:
+        # Content-authoring mistake (this question is typed "numeric" but
+        # its canonical answer isn't a clean number, e.g. carries a unit) -
+        # fail safe to exact-text comparison rather than raising into the
+        # student's request.
+        is_correct = submission.answer.strip() == expected_answer.strip()
+    elif submitted_value is None:
+        # A non-numeric submission to a numeric question is simply wrong,
+        # not an error.
+        is_correct = False
+    elif tolerance > 0:
+        is_correct = abs(float(submitted_value) - float(expected_value)) <= tolerance
+    else:
+        is_correct = submitted_value == expected_value
+
+    return EvaluationResult(
+        isCorrect=is_correct,
+        score=question.maxScore if is_correct else 0.0,
+        maxScore=question.maxScore,
+        evaluatorId="numeric_tolerance_v1",
+    )
+
+
+# The one dispatch point in the system (design doc §6): every consumer
+# (answer_service, runtime_session_manager, Shadow Mode) only ever sees the
+# EvaluationResult an evaluator produces, never questionType itself - no
+# if/elif ladder exists or should be added anywhere else. Plain functions in
+# a dict, not classes, matching this project's service-module convention
+# (Phase-1-Handoff.md §16).
+_EVALUATORS = {
+    "short_text": _evaluate_short_text,
+    "numeric": _evaluate_numeric,
+}
+
+
+def evaluate(question: Question, submission: AnswerSubmission) -> EvaluationResult:
+    evaluator = _EVALUATORS.get(question.questionType)
+    if evaluator is None:
+        # Reserved-but-unimplemented questionType (single_choice,
+        # multi_choice, fill_blank, matching, multi_part) - the content
+        # pipeline (loadCanonical.js) already refuses to export a question
+        # naming one of these, so this should never occur in production;
+        # raised loudly here rather than silently guessing.
+        raise ValueError(
+            f'No evaluator is registered for questionType="{question.questionType}" '
+            f"(question {question.id}) - this type is reserved for a future slice."
+        )
+    return evaluator(question, submission)

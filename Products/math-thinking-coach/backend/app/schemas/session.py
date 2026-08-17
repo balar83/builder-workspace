@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from app.schemas.answer import Coach, Evaluation, UiState
+from app.schemas.answer import Coach, EvaluationResult, UiState
 from app.schemas.question import Difficulty
 
 Mode = Literal["practice", "test", "revision"]
@@ -212,7 +212,7 @@ class SubmitSessionAnswerRequest(BaseModel):
 
 
 class SubmitSessionAnswerResponse(BaseModel):
-    evaluation: Evaluation
+    evaluation: EvaluationResult
     coach: Coach
     ui: UiState
     position: int

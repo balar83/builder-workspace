@@ -1,14 +1,14 @@
 import logging
 from datetime import UTC, datetime
 
-from app.schemas.answer import AnswerSubmission, Evaluation
+from app.schemas.answer import AnswerSubmission, EvaluationResult
 from app.services import ai_evaluation_service, evaluation_service, question_service, shadow_log_writer
 
 logger = logging.getLogger(__name__)
 
 
 def run_shadow_evaluation(
-    question_id: str, submission: AnswerSubmission, rule_based_evaluation: Evaluation
+    question_id: str, submission: AnswerSubmission, rule_based_evaluation: EvaluationResult
 ) -> None:
     """
     Runs the experimental AI evaluator alongside the production rule-based

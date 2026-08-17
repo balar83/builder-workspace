@@ -158,6 +158,24 @@ function transformQuestion(canonicalQuestion, context) {
     topicId: context.topicId,
   };
 
+  // Slice 1 (M2, Question & Response Semantics): always emitted, defaulted
+  // to today's behavior - "short_text" and maxScore 1.0 - so every question
+  // that doesn't opt in produces exactly the runtime shape it always has.
+  // See docs/Question-Response-Semantics-Design-Proposal.md §13.
+  question.questionType = canonicalQuestion.questionType !== undefined ? canonicalQuestion.questionType : 'short_text';
+  question.maxScore = canonicalQuestion.maxScore !== undefined ? canonicalQuestion.maxScore : 1.0;
+
+  // Only set when the canonical question actually opts in (only meaningful
+  // for questionType "numeric" today) - whitelist field-by-field, no spread.
+  if (canonicalQuestion.responseSpecification !== undefined) {
+    question.responseSpecification = {
+      numericTolerance:
+        canonicalQuestion.responseSpecification.numericTolerance !== undefined
+          ? canonicalQuestion.responseSpecification.numericTolerance
+          : 0.0,
+    };
+  }
+
   // Additive, optional (Slice A1) - only set when the canonical question
   // actually carries it, so an un-migrated chapter's questions keep
   // producing exactly the same runtime shape as before this slice.
