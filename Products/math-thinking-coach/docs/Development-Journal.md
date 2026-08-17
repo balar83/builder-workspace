@@ -1,5 +1,49 @@
 # Development Journal
 
+## 2026-08-17 (M2.4 — Content Activation Pilot: Linear Equations)
+
+*An **activation** slice, not a capability slice. M2.1–M2.3 built the numeric, single_choice and multi_choice evaluators, the evaluator registry, `ResponseSpecification`, the private answer-key boundary, Stage 10 validation, session propagation and the frontend response dispatch — and repository inspection at the M2.4 authorization checkpoint confirmed that **no production question used any of them**: all 241 questions still defaulted to `short_text`, including M2.1's own Definition-of-Done item (§26) requiring a real `numeric` pilot, which had never been ticked. M2.4 changes content only. No evaluator, schema, coaching, session-engine or frontend source file was touched.*
+
+### Student-visible behavior — before and after
+
+- **`le-q21` (and the other choice questions).** Before: the prompt string carried its own options inline — "Which of the following is a linear equation in one variable? (a) x² + 3 = 7 (b) 2x + 5 = 11 (c) xy + 1 = 0" — rendered in a free-text box, and the private answer key was the single letter `"b"`. A student who read the options off the screen and typed `(b)`, `B`, or `2x + 5 = 11` was marked wrong; only a bare `b` was accepted. After: the prompt is the question alone, the options render as a vertical radio group, and the student picks one. The letter-format guessing game is gone.
+- **`le-q27`/`le-q28` (true/false).** Before: answer key `"Yes"`, compared case-sensitively — typing `yes` was marked wrong. After: a two-option Yes/No radio group, modeled as `single_choice` per the design document's Part II §A ruling that `true_false` should not become its own type.
+- **`le-q23`.** Before: "State whether each of the following is an expression or an equation: (a) 5x - 2 (b) 5x - 2 = 13", answer key `"(a) expression, (b) equation"` — a string essentially no student would ever type exactly. After: a select-all checkbox question over four items with two correct.
+- **The 28 numeric questions.** Before: `3/2` was the only accepted form for `le-q04`; a student who solved correctly and wrote `1.5` was marked wrong. After: `1.5`, `1.50`, `6/4` and `3/2` are all accepted, because the `numeric` evaluator compares parsed `Fraction` values instead of strings. Nothing that was accepted before is rejected now — the change is strictly widening.
+
+### Content changed
+
+- **`single_choice` (3)**: `le-q21`, `le-q27`, `le-q28`. Inline `(a)/(b)/(c)` option lists moved out of `prompt` into `responseSpecification.options`; the letter labels are kept inside each option's *text* so each question's existing `expectedAnswer` prose, which cites them, stays accurate. Private answer keys became option ids (`opt-b`, `opt-yes`).
+- **`multi_choice` (2)**: `le-q23`, `le-q24`. `le-q24` was already plural-framed ("Which of the following **are**...") and its authored misconception was already an over-selection error, so it converted directly with a single-element correct set `{opt-a}` — which is what exercises the "don't over-select" half of exact-set equality. `le-q23` is the one question whose wording and item list were genuinely re-authored (two items in prose → four items, two correct), preserving its objective (1), difficulty (Easy), bloom level (recall) and misconception in select-all form.
+- **`numeric` (28)**: `le-q01`–`le-q20`, `le-q31`–`le-q36`, `le-q38`, `le-q43`. Criterion, applied as a checkable rule rather than by taste: *every Linear Equations question whose private answer key was already a bare scalar*. No `responseSpecification` was added — `numericTolerance` stays at its `0.0` default, since the point is exact rational equivalence, not an approximation band.
+- **Left `short_text` (11)**: `le-q22`, `le-q25`, `le-q26`, `le-q29`, `le-q30`, `le-q37`, `le-q39`–`le-q42`, `le-q44` — compound (LHS+RHS), multi-value ("16 and 21") or prose answers. These are the documented `multi_part` targets and remain deliberately weak fits; typing them as any of the three authorized types would have been mis-typing to inflate a count.
+- **`misconception.commonWrongOptionId`** added to each converted question, mapping the already-authored `commonWrongAnswer` onto the option a student would actually click. It is canonical-only: `transform.js`'s whitelist never emits `misconception`, so it does not reach runtime data.
+
+### Files changed
+
+- `docs/content-source/linear-equations/stage6-questions.json` (44 question records; `activationNote` added), `docs/content-source/linear-equations/answer-keys.json` (5 keys; `activationNote` added).
+- `backend/app/data/{questions,answer_keys,topics}.json` — Stage 10 export output only. `topics.json`'s single change is the Linear Equations topic gaining `"concepts": []`/`"workedExamples": []`: Slice A1's legacy-topic transform shape, applied to a chapter that had not been re-exported since A1 landed. Semantically a no-op (the Pydantic model already defaulted both to empty), and Linear Equations remains a **legacy** topic — no A1/A2 structured content was created or migrated.
+
+### Verification summary
+
+- **Question count unchanged: 44 → 44** (241 → 241 overall); difficulty split unchanged at 14 Easy / 16 Medium / 14 Hard. Record-by-record comparison against `HEAD` confirms all 44 changed records are Linear Equations and **zero questions in any other chapter changed**, with no ids added or removed.
+- Stage 10: dry-run clean, then real export — 44 questions, 44 answer keys, 1 topic, **0 validation errors, 0 rejections** both times.
+- Suites: **267/267 backend pytest**, **88/88 Stage 10 pipeline tests**, **134/134 frontend vitest**, `tsc -b` clean, `oxlint` clean. The nine backend test files that reference `linear-equations` were specifically re-checked, per the standing §12.6 risk that a chapter's content shape is silently load-bearing for tests that aren't about that chapter; none broke, which the unchanged question count and difficulty split explain.
+- **Anonymous flow, live**: `le-q21` renders as a vertical radio group ("Choose one"); the correct option is marked correct, the misconception option produces the ordinary "Not quite. Try solving it once more before using a hint." coaching with the answer still hidden. `le-q23` renders as four checkboxes ("Choose all that apply"); a partial selection is incorrect and the exact set is correct. `18.0` submitted against key `18` is accepted.
+- **Learning Session flow, live**: the session payload carries `questionType`/`responseSpecification`; `le-q21` renders as a radio group in-session, `le-q23`/`le-q24` as checkbox groups, `le-q22` (unconverted) still as free text; two full 14-question sessions were completed 14/14, and `GET /performance/me` recorded `accuracy: 1, currentStreak: 14, mastered: true`. `0.8` was accepted for key `4/5` inside a real session.
+- **Evaluator provenance** confirmed per type via the API: `short_text_v1`, `numeric_tolerance_v1`, `single_choice_v1`, `multi_choice_v1`. Multi-choice is order-independent (`opt-d,opt-b` == `opt-b,opt-d`) and all-or-nothing (both under- and over-selection are incorrect).
+- **Regression**: the unconverted `short_text` questions (`le-q22`, `le-q29`, `le-q37`, `le-q40`) still evaluate exactly as before via `short_text_v1`.
+- **Mobile, 375px**: measured geometry (screenshots remain unavailable in this environment, per §15) — no horizontal overflow (`scrollWidth` 375 = viewport), options stacked vertically, **every option label 44px tall**, all option rows inside the viewport, 14px option text that does not wrap, 47px of separation between prompt and options, and the "Choose all that apply" legend visible.
+- **No answer leakage**: `GET /chapters/linear-equations/questions/le-q21` returns option ids and text but no correctness marker; the correct option id is resolved only through the private `answer_keys.json` path. No `opt-*` id appears anywhere in rendered page text, so the comma-delimited internal serialization is never shown to a student.
+
+### Implementation notes
+
+- **M2.1's outstanding content-pilot Definition-of-Done item (§26) is now closed** — real `numeric` questions exist in production content. The pilot landed in Linear Equations rather than the originally-proposed Squares and Cubes because Linear Equations is where the documented brittleness actually lives.
+- Question-type validation in `loadCanonical.js` is independent of Slice A1's legacy-vs-structured topic discriminator, so this pilot ran on a legacy-topic chapter without touching A1 or pre-empting A2 — verified before authoring, not assumed.
+- No new question was authored, deliberately: adding questions would have changed the chapter's question count and difficulty distribution, forcing fixture churn across the nine LE-referencing backend test files. Two `multi_choice` questions (the authorized range was 2–3) is the honest maximum available from existing content without inventing items.
+- `MultiChoiceInput` reuses `SingleChoiceInput.css` and therefore its `single-choice-*` class names — cosmetic naming debt noted while verifying the 44px control-height fix, not addressed here.
+- Documentation drift predating this slice is **not** addressed here, per M2.4's explicit scope: `Development-Journal.md` still has no entries for Slice A1 or M2.1–M2.3, and `Backlog.md`/`Roadmap.md`/`PROJECT_STATUS.md`/`Phase-1-Handoff.md` remain stale. That reconciliation is its own authorized slice.
+
 ## 2026-08-07 (Release 0.1.1 — Curriculum Expansion: Data Handling + Understanding Quadrilaterals)
 
 *Scoped as curriculum expansion only, per explicit instruction: no architecture, auth, session-management, deployment-config, or API changes. Both chapters already existed in `chapters.json` with 5 hand-seeded placeholder questions each and no Topic — the premise that "only Linear Equations is implemented" didn't match the repo and was corrected before any content work started.*

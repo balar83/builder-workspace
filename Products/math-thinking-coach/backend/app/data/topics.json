@@ -34,7 +34,9 @@
       "Solve a linear equation with a fractional coefficient by first clearing the denominator.",
       "Reduce a linear equation containing brackets and/or multiple denominators to a simpler linear form before solving.",
       "Solve the simplified equation and check the result by substituting back into the original LHS and RHS."
-    ]
+    ],
+    "concepts": [],
+    "workedExamples": []
   },
   {
     "id": "topic-rational-numbers-properties-and-operations",

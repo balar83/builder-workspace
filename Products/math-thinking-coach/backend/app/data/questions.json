@@ -556,7 +556,9 @@
       "Simplify the left side, then x is already isolated."
     ],
     "solution": "x = 18. Check: LHS = 3(18) = 54, RHS = 2(18) + 18 = 54. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q02",
@@ -569,7 +571,9 @@
       "Combine like terms on each side before dividing."
     ],
     "solution": "t = -1. Check: LHS = 5(-1) - 3 = -8, RHS = 3(-1) - 5 = -8. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q03",
@@ -582,7 +586,9 @@
       "2x = -4, so divide both sides by 2."
     ],
     "solution": "x = -2. Check: LHS = 5(-2) + 9 = -1, RHS = 5 + 3(-2) = -1. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q04",
@@ -595,7 +601,9 @@
       "2z = 3, so z = 3/2 — it's fine for the solution to be a fraction."
     ],
     "solution": "z = 3/2 (= 1.5). Check: LHS = 4(1.5) + 3 = 9, RHS = 6 + 2(1.5) = 9. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q05",
@@ -608,7 +616,9 @@
       "3x = 15, so divide both sides by 3."
     ],
     "solution": "x = 5. Check: LHS = 2(5) - 1 = 9, RHS = 14 - 5 = 9. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q06",
@@ -621,7 +631,9 @@
       "Simplify the right side to 3x + 4, then transpose."
     ],
     "solution": "x = 0. Check: LHS = 8(0) + 4 = 4, RHS = 3(0 - 1) + 7 = -3 + 7 = 4. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q07",
@@ -634,7 +646,9 @@
       "Expand the right side, then transpose the x terms."
     ],
     "solution": "x = 40. Check: LHS = 40, RHS = (4/5)(40 + 10) = (4/5)(50) = 40. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q08",
@@ -647,7 +661,9 @@
       "After clearing fractions you get 10x + 15 = 7x + 45 — transpose from there."
     ],
     "solution": "x = 10. Check: LHS = 20/3 + 1 = 23/3, RHS = 70/15 + 3 = 14/3 + 3 = 23/3. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q09",
@@ -660,7 +676,9 @@
       "Transpose -3y to the left and 5 to the right, then divide."
     ],
     "solution": "y = 7/3. Check: LHS = 14/3 + 5/3 = 19/3, RHS = 26/3 - 7/3 = 19/3. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q10",
@@ -673,7 +691,9 @@
       "-2m = -8/5 — divide both sides by -2, keeping track of the sign."
     ],
     "solution": "m = 4/5. Check: LHS = 3(4/5) = 12/5, RHS = 5(4/5) - 8/5 = 20/5 - 8/5 = 12/5. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q11",
@@ -686,7 +706,9 @@
       "After clearing fractions: 30x - 12 = 20x + 15. Transpose from there."
     ],
     "solution": "x = 27/10 (= 2.7). Check: LHS = 27/20 - 1/5 = 23/20, RHS = 27/30 + 1/4 = 23/20. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q12",
@@ -699,7 +721,9 @@
       "After clearing fractions: 6n - 9n + 10n = 252, which simplifies to 7n = 252."
     ],
     "solution": "n = 36. Check: 36/2 - 3(36)/4 + 5(36)/6 = 18 - 27 + 30 = 21.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q13",
@@ -712,7 +736,9 @@
       "After clearing fractions: 6x + 42 - 16x = 17 - 15x. Combine like terms on the left first."
     ],
     "solution": "x = -5. Check: LHS = -5 + 7 - 8(-5)/3 = 2 + 40/3 = 46/3, RHS = 17/6 - 5(-5)/2 = 17/6 + 25/2 = 46/3. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q14",
@@ -725,7 +751,9 @@
       "Expand both sides, then transpose the x terms to one side."
     ],
     "solution": "x = 8. Check: LHS = (8-5)/3 = 1, RHS = (8-3)/5 = 1. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q15",
@@ -738,7 +766,9 @@
       "After clearing fractions: 3(3t-2) - 4(2t+3) = 8 - 12t. Expand both brackets carefully, watching the signs."
     ],
     "solution": "t = 2. Check: LHS = (6-2)/4 - (4+3)/3 = 1 - 7/3 = -4/3, RHS = 2/3 - 2 = -4/3. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q16",
@@ -751,7 +781,9 @@
       "After clearing fractions: 6m - 3(m-1) = 6 - 2(m-2). Expand both brackets before transposing."
     ],
     "solution": "m = 7/5 (= 1.4). Check: LHS = 7/5 - (2/5)/2 = 7/5 - 1/5 = 6/5, RHS = 1 - (-3/5)/3 = 1 + 1/5 = 6/5. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q17",
@@ -764,7 +796,9 @@
       "Transpose 10t to the left and -9 to the right."
     ],
     "solution": "t = -2. Check: LHS = 3(-2-3) = -15, RHS = 5(2(-2)+1) = -15. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q18",
@@ -777,7 +811,9 @@
       "Combine all the y-terms and all the constant terms separately, then solve."
     ],
     "solution": "y = 2/3. Check: 15(2/3-4) - 2(2/3-9) + 5(2/3+6) = -50 + 50/3 + 100/3 = -50 + 50 = 0.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q19",
@@ -790,7 +826,9 @@
       "Combine like terms on each side fully before transposing anything."
     ],
     "solution": "z = 2. Check: LHS = 3(3) - 2(7) = -5, RHS = 4(3) - 17 = -5. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q20",
@@ -803,20 +841,41 @@
       "Expand both brackets, then transpose to solve for f."
     ],
     "solution": "f = 3/5 (= 0.6). Check: LHS = 0.25(-0.6) = -0.15, RHS = 0.05(-3) = -0.15. LHS = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q21",
     "chapterId": "linear-equations",
-    "question": "Which of the following is a linear equation in one variable? (a) x² + 3 = 7  (b) 2x + 5 = 11  (c) xy + 1 = 0",
-    "text": "Which of the following is a linear equation in one variable? (a) x² + 3 = 7  (b) 2x + 5 = 11  (c) xy + 1 = 0",
+    "question": "Which of the following is a linear equation in one variable?",
+    "text": "Which of the following is a linear equation in one variable?",
     "difficulty": "Easy",
     "hints": [
       "Check each option for how many variables it has, and the highest power any variable is raised to.",
       "A linear equation in one variable has exactly one variable, and its highest power must be exactly 1."
     ],
     "solution": "(b) 2x + 5 = 11. It has exactly one variable and the highest power of that variable is 1. (a) is not linear because x has power 2. (c) is not linear in one variable because it has two variables, x and y.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(a) x² + 3 = 7"
+        },
+        {
+          "id": "opt-b",
+          "text": "(b) 2x + 5 = 11"
+        },
+        {
+          "id": "opt-c",
+          "text": "(c) xy + 1 = 0"
+        }
+      ]
+    }
   },
   {
     "id": "le-q22",
@@ -829,33 +888,77 @@
       "RHS means the expression written to the right of the equals sign."
     ],
     "solution": "LHS (Left Hand Side) = 5x - 2. RHS (Right Hand Side) = 3x + 8.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q23",
     "chapterId": "linear-equations",
-    "question": "State whether each of the following is an expression or an equation: (a) 5x - 2  (b) 5x - 2 = 13",
-    "text": "State whether each of the following is an expression or an equation: (a) 5x - 2  (b) 5x - 2 = 13",
+    "question": "Which of the following are equations?",
+    "text": "Which of the following are equations?",
     "difficulty": "Easy",
     "hints": [
       "An equation always contains an equality (=) sign; an expression never does.",
       "Check each item for the presence of an '=' sign."
     ],
-    "solution": "(a) 5x - 2 is an expression (no equality sign). (b) 5x - 2 = 13 is an equation (it has an equality sign).",
-    "topicId": "topic-linear-equations-one-variable"
+    "solution": "(b) 5x - 2 = 13 and (d) 7 = 2x - 1 are equations — each one contains an equality (=) sign. (a) 5x - 2 and (c) 3y + 7 are expressions: they have no equals sign.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "multi_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(a) 5x - 2"
+        },
+        {
+          "id": "opt-b",
+          "text": "(b) 5x - 2 = 13"
+        },
+        {
+          "id": "opt-c",
+          "text": "(c) 3y + 7"
+        },
+        {
+          "id": "opt-d",
+          "text": "(d) 7 = 2x - 1"
+        }
+      ]
+    }
   },
   {
     "id": "le-q24",
     "chapterId": "linear-equations",
-    "question": "Which of the following are linear equations in one variable? (a) 7 = 2x - 3  (b) x + y = 10  (c) x³ - 1 = 0",
-    "text": "Which of the following are linear equations in one variable? (a) 7 = 2x - 3  (b) x + y = 10  (c) x³ - 1 = 0",
+    "question": "Which of the following are linear equations in one variable?",
+    "text": "Which of the following are linear equations in one variable?",
     "difficulty": "Easy",
     "hints": [
       "Check how many different variables appear in each equation.",
       "Then check the highest power of the variable in the ones with only one variable."
     ],
     "solution": "Only (a) 7 = 2x - 3 is a linear equation in one variable. (b) has two variables (x and y). (c) has only one variable but its highest power is 3.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "multi_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(a) 7 = 2x - 3"
+        },
+        {
+          "id": "opt-b",
+          "text": "(b) x + y = 10"
+        },
+        {
+          "id": "opt-c",
+          "text": "(c) x³ - 1 = 0"
+        }
+      ]
+    }
   },
   {
     "id": "le-q25",
@@ -868,7 +971,9 @@
       "RHS is everything written after the equals sign."
     ],
     "solution": "LHS = 9 - 2x. RHS = 5x + 2.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q26",
@@ -881,7 +986,9 @@
       "Write the full equation first, then split it at the equals sign to get LHS and RHS."
     ],
     "solution": "Equation: 3x + 5 = 26. LHS = 3x + 5, RHS = 26.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q27",
@@ -894,7 +1001,22 @@
       "Compare the simplified LHS with the RHS."
     ],
     "solution": "Yes. LHS = 4(3) - 5 = 7 = RHS, so x = 3 is a solution.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-yes",
+          "text": "Yes"
+        },
+        {
+          "id": "opt-no",
+          "text": "No"
+        }
+      ]
+    }
   },
   {
     "id": "le-q28",
@@ -907,7 +1029,22 @@
       "Compare the result with the RHS."
     ],
     "solution": "Yes. LHS = 3(-2) + 8 = -6 + 8 = 2 = RHS, so y = -2 is a solution.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-yes",
+          "text": "Yes"
+        },
+        {
+          "id": "opt-no",
+          "text": "No"
+        }
+      ]
+    }
   },
   {
     "id": "le-q29",
@@ -920,7 +1057,9 @@
       "If they don't match, redo the solving steps yourself: transpose 3, then divide."
     ],
     "solution": "The student's answer is wrong. Checking x = 5: LHS = 2(5) + 3 = 13, RHS = 15 — they don't match. Correct solution: 2x = 15 - 3 = 12, so x = 6. Check: LHS = 2(6) + 3 = 15 = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q30",
@@ -933,7 +1072,9 @@
       "Redo the bracket expansion correctly, then transpose and solve again."
     ],
     "solution": "The mistake is in Step 1: the student expanded 5(x - 2) as 5x - 2, but it should be 5x - 10. Correct solution: 5x - 10 = 3x + 4, so 2x = 14, x = 7. Check: LHS = 5(7-2) = 25, RHS = 3(7) + 4 = 25.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q31",
@@ -946,7 +1087,9 @@
       "Then transpose -7 to the right side and simplify."
     ],
     "solution": "x = 6. Check: LHS = 6(6) - 7 = 29, RHS = 3(6) + 11 = 29.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q32",
@@ -959,7 +1102,9 @@
       "Then transpose 2 to the right side and simplify."
     ],
     "solution": "y = 5. Check: LHS = 9(5) + 2 = 47, RHS = 5(5) + 22 = 47.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q33",
@@ -972,7 +1117,9 @@
       "After clearing fractions: 3x - 8 = 2x + 12. Transpose from there."
     ],
     "solution": "x = 20. Check: LHS = 15 - 2 = 13, RHS = 10 + 3 = 13.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q34",
@@ -985,7 +1132,9 @@
       "Then transpose the variable terms to one side and the constants to the other."
     ],
     "solution": "x = 10. Check: LHS = 4(10-2) = 32, RHS = 2(10+6) = 32.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q35",
@@ -998,7 +1147,9 @@
       "After clearing fractions: 2(2x+5) - (x-1) = 18. Expand carefully, watching the sign in front of the second bracket."
     ],
     "solution": "x = 7/3. Check: LHS = 29/9 - 2/9 = 27/9 = 3 = RHS.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q36",
@@ -1011,7 +1162,9 @@
       "Expand both brackets before transposing."
     ],
     "solution": "x = 5.5 (= 11/2). Check: LHS = 0.5(12.5) = 6.25, RHS = 0.25(21) + 1 = 6.25.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q37",
@@ -1024,7 +1177,9 @@
       "Write their sum as an equation: x + (x + 5) = 37, then solve for x."
     ],
     "solution": "The numbers are 16 and 21. (x + (x+5) = 37 → 2x = 32 → x = 16, and x+5 = 21.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q38",
@@ -1037,7 +1192,9 @@
       "Set 5x - 4 equal to 26 and solve."
     ],
     "solution": "x = 6. (5x - 4 = 26 → 5x = 30 → x = 6.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q39",
@@ -1050,7 +1207,9 @@
       "Add all three expressions and set the sum equal to 51."
     ],
     "solution": "The integers are 16, 17, and 18. (x + (x+1) + (x+2) = 51 → 3x + 3 = 51 → x = 16.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q40",
@@ -1063,7 +1222,9 @@
       "Set up 2(x + 4 + x) = 40 and solve for x."
     ],
     "solution": "Breadth = 8 cm, Length = 12 cm. (2(2x+4) = 40 → 4x = 32 → x = 8.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q41",
@@ -1076,7 +1237,9 @@
       "In 5 years, Raju will be x+5 and his father will be 4x+5 — set up the '3 times as old' relationship using these."
     ],
     "solution": "Raju is 10 years old and his father is 40. (4x+5 = 3(x+5) → x = 10.) Check: in 5 years Raju is 15, father is 45 = 3×15.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q42",
@@ -1089,7 +1252,9 @@
       "Write the total value as an equation: 10x + 20(25 - x) = 380."
     ],
     "solution": "12 notes of ₹10 and 13 notes of ₹20. (10x + 20(25-x) = 380 → -10x = -120 → x = 12.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "le-q43",
@@ -1102,7 +1267,9 @@
       "Multiply every term by 12 (the LCM of 4 and 6) to clear the fractions."
     ],
     "solution": "x = 36. (x/4 = x/6 + 3 → 3x = 2x + 36 → x = 36.) Check: 36/4 = 9, and 36/6 + 3 = 9.",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1
   },
   {
     "id": "le-q44",
@@ -1115,7 +1282,9 @@
       "Set up 2(x + (2/3)x) = 60 and solve for x."
     ],
     "solution": "Length = 18 cm, Width = 12 cm. (2(x + (2/3)x) = 60 → (10/3)x = 60 → x = 18.)",
-    "topicId": "topic-linear-equations-one-variable"
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q01",
