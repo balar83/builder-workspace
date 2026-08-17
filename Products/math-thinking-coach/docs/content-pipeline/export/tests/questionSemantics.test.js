@@ -56,27 +56,27 @@ test('loadCanonical: an unknown questionType fails structural validation', () =>
   );
 });
 
-test('loadCanonical: a reserved-but-unimplemented questionType (multi_choice) is rejected, not silently exported', () => {
-  // single_choice was this test's original example - it gained a real
-  // evaluator/pipeline support in Slice 2, so this now specifically needs a
-  // still-reserved type. multi_choice's own rejection is also covered by
-  // the parametrized loop below; this one stays as the detailed
-  // issue-message assertion.
+test('loadCanonical: a reserved-but-unimplemented questionType (fill_blank) is rejected, not silently exported', () => {
+  // single_choice/multi_choice were this test's original examples - both
+  // gained real evaluator/pipeline support (Slice 2, Slice 3), so this now
+  // specifically needs a still-reserved type. fill_blank's own rejection is
+  // also covered by the parametrized loop below; this one stays as the
+  // detailed issue-message assertion.
   const bank = clone(validQuestionBank());
-  bank.questions[0].questionType = 'multi_choice';
+  bank.questions[0].questionType = 'fill_blank';
   const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
 
   assert.throws(
     () => loadCanonical({ chapterDir, dataDir }),
     (err) => {
       assert.ok(err instanceof ExportValidationError);
-      assert.ok(err.issues.some((i) => i.includes('fx-q01') && i.includes('multi_choice') && i.includes('reserved')));
+      assert.ok(err.issues.some((i) => i.includes('fx-q01') && i.includes('fill_blank') && i.includes('reserved')));
       return true;
     }
   );
 });
 
-for (const reserved of ['multi_choice', 'fill_blank', 'matching', 'multi_part']) {
+for (const reserved of ['fill_blank', 'matching', 'multi_part']) {
   test(`loadCanonical: reserved questionType "${reserved}" is also rejected`, () => {
     const bank = clone(validQuestionBank());
     bank.questions[0].questionType = reserved;

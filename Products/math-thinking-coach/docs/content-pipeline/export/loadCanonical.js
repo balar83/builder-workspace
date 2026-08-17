@@ -112,18 +112,21 @@ function loadCanonicalTopic(chapterDir, issues) {
 const NAMED_QUESTION_TYPES = new Set([
   'short_text', 'numeric', 'single_choice', 'multi_choice', 'fill_blank', 'matching', 'multi_part',
 ]);
-const EXPORTABLE_QUESTION_TYPES = new Set(['short_text', 'numeric', 'single_choice']);
+const EXPORTABLE_QUESTION_TYPES = new Set(['short_text', 'numeric', 'single_choice', 'multi_choice']);
 
-// Slice 2 (M2): a stable option id must be a safe, unambiguous token - not
+// Slice 2/3 (M2): a stable option id must be a safe, unambiguous token - not
 // empty, not containing characters that could collide across authoring
 // tools or JSON-key contexts. Mirrors the plain slug convention already
-// used for Concept/LearningObjective ids (A1).
+// used for Concept/LearningObjective ids (A1). Shared by both choice-based
+// types (single_choice, multi_choice) - the option-list shape itself
+// doesn't vary between "pick one" and "pick several", only the evaluator's
+// comparison does.
 const OPTION_ID_FORMAT = /^[a-zA-Z0-9_-]+$/;
 
-function validateSingleChoiceOptions(question, label, issues) {
+function validateChoiceOptions(question, label, issues) {
   const spec = question.responseSpecification;
   if (!spec || !Array.isArray(spec.options) || spec.options.length === 0) {
-    issues.push(`${label} has questionType "single_choice" but no non-empty responseSpecification.options array`);
+    issues.push(`${label} has questionType "${question.questionType}" but no non-empty responseSpecification.options array`);
     return;
   }
 
@@ -182,8 +185,8 @@ function loadCanonicalQuestions(chapterDir, issues) {
         issues.push(
           `stage6-questions.json questions[${i}] ("${q.id}") has questionType "${q.questionType}", which is reserved for a future slice and has no evaluator yet - it cannot be exported`
         );
-      } else if (q.questionType === 'single_choice') {
-        validateSingleChoiceOptions(q, `stage6-questions.json questions[${i}] ("${q.id}")`, issues);
+      } else if (q.questionType === 'single_choice' || q.questionType === 'multi_choice') {
+        validateChoiceOptions(q, `stage6-questions.json questions[${i}] ("${q.id}")`, issues);
       }
     }
   });

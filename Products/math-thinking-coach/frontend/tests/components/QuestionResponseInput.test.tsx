@@ -67,6 +67,42 @@ describe('QuestionResponseInput', () => {
     expect(screen.getByPlaceholderText('Type your answer')).toBeInTheDocument();
   });
 
+  it('renders MultiChoiceInput for questionType "multi_choice" with real options', () => {
+    render(
+      <QuestionResponseInput
+        questionType="multi_choice"
+        responseSpecification={{
+          numericTolerance: 0,
+          options: [
+            { id: 'opt-a', text: '2' },
+            { id: 'opt-b', text: '3' },
+          ],
+        }}
+        value=""
+        onChange={vi.fn()}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByRole('checkbox', { name: '2' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: '3' })).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('Type your answer')).not.toBeInTheDocument();
+  });
+
+  it('falls back to the free-text AnswerInput if multi_choice has no options (defensive, never crashes the page)', () => {
+    render(
+      <QuestionResponseInput
+        questionType="multi_choice"
+        responseSpecification={null}
+        value=""
+        onChange={vi.fn()}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByPlaceholderText('Type your answer')).toBeInTheDocument();
+  });
+
   it('falls back to the free-text AnswerInput for a still-reserved questionType (e.g. matching)', () => {
     render(
       <QuestionResponseInput

@@ -77,6 +77,25 @@ SINGLE_CHOICE_QUESTION = Question(
     ),
 )
 
+MULTI_CHOICE_QUESTION = Question(
+    id="test-multi-choice-basic",
+    chapterId="fixture-chapter",
+    question="Which of these are prime numbers?",
+    text="Which of these are prime numbers?",
+    difficulty="Easy",
+    hints=[],
+    solution="2, 3, 5",
+    questionType="multi_choice",
+    responseSpecification=ResponseSpecification(
+        options=[
+            Option(id="opt-a", text="2"),
+            Option(id="opt-b", text="3"),
+            Option(id="opt-c", text="4"),
+            Option(id="opt-d", text="5"),
+        ]
+    ),
+)
+
 UNSUPPORTED_TYPE_QUESTION = Question(
     id="test-unsupported-type",
     chapterId="fixture-chapter",
@@ -85,9 +104,9 @@ UNSUPPORTED_TYPE_QUESTION = Question(
     difficulty="Easy",
     hints=[],
     solution="a-2, b-1",
-    # multi_choice, not single_choice: single_choice gained a real evaluator
-    # in Slice 2 - this fixture specifically needs a still-reserved type.
-    questionType="multi_choice",
+    # matching, not single_choice/multi_choice: both gained real evaluators
+    # in Slice 2/3 - this fixture specifically needs a still-reserved type.
+    questionType="matching",
 )
 
 
@@ -108,6 +127,10 @@ def _synthetic_answer_keys(monkeypatch: pytest.MonkeyPatch) -> None:
     # The private answer-key value for single_choice is simply the correct
     # option's id - no second, richer answer-key mechanism.
     monkeypatch.setitem(evaluation_service._answer_keys, SINGLE_CHOICE_QUESTION.id, "opt-b")
+    # multi_choice (Slice 3): the correct *set* of option ids, using the same
+    # comma-delimited string convention the submission itself uses - still a
+    # plain string value, answer_keys.json's dict[str, str] shape unchanged.
+    monkeypatch.setitem(evaluation_service._answer_keys, MULTI_CHOICE_QUESTION.id, "opt-a,opt-b,opt-d")
 
 
 # --- Backward compatibility: legacy (default) short_text behavior ---------
@@ -315,6 +338,134 @@ def test_single_choice_with_no_options_at_all_is_incorrect_not_a_crash() -> None
     assert result.isCorrect is False
 
 
+# --- Multi-choice evaluator (Slice 3) ---------------------------------------
+
+
+def test_multi_choice_exact_set_match_is_correct() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+    assert result.score == 1.0
+    assert result.evaluatorId == "multi_choice_v1"
+
+
+def test_multi_choice_order_is_irrelevant() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-d,opt-a,opt-b", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+
+
+def test_multi_choice_duplicate_submitted_ids_are_deduplicated_and_still_correct() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+
+
+def test_multi_choice_incomplete_subset_is_incorrect() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+
+
+def test_multi_choice_superset_is_incorrect() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-c,opt-d", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+
+
+def test_multi_choice_disjoint_set_is_incorrect() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-c", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+def test_multi_choice_unknown_option_id_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-does-not-exist", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+    assert result.evidence is not None
+    assert "not all among" in result.evidence
+
+
+def test_multi_choice_empty_submission_is_incorrect_and_not_a_crash() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+
+
+def test_multi_choice_whitespace_only_submission_is_treated_as_empty() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="   ", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+def test_multi_choice_whitespace_around_tokens_is_tolerated() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer=" opt-a , opt-b ,opt-d", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+
+
+def test_multi_choice_malformed_submission_with_a_double_comma_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,,opt-b", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+    assert result.evidence is not None
+    assert "well-formed" in result.evidence
+
+
+def test_multi_choice_trailing_comma_is_malformed_and_incorrect() -> None:
+    result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.evidence is not None
+
+
+def test_multi_choice_correct_result_carries_full_maxscore_and_incorrect_carries_zero() -> None:
+    correct = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+    incorrect = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
+
+    assert correct.score == correct.maxScore == 1.0
+    assert incorrect.score == 0.0
+    assert incorrect.maxScore == 1.0
+
+
+def test_multi_choice_result_carries_no_speculative_populated_fields() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+
+    assert result.maxScore == 1.0
+    assert result.confidence is None
+    assert result.scoreBreakdown is None
+    assert result.partResults is None
+
+
+def test_multi_choice_with_no_options_at_all_is_incorrect_not_a_crash() -> None:
+    # Defensive, mirrors single_choice's own equivalent test above.
+    malformed_question = MULTI_CHOICE_QUESTION.model_copy(update={"responseSpecification": None})
+    result = evaluation_service.evaluate(malformed_question, AnswerSubmission(answer="opt-a", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
 # --- Evaluator dispatch ------------------------------------------------------
 
 
@@ -333,8 +484,15 @@ def test_dispatch_selects_the_single_choice_evaluator_for_single_choice_question
     assert result.evaluatorId == "single_choice_v1"
 
 
+def test_dispatch_selects_the_multi_choice_evaluator_for_multi_choice_questiontype() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+    assert result.evaluatorId == "multi_choice_v1"
+
+
 def test_dispatch_raises_a_clear_error_for_an_unsupported_reserved_questiontype() -> None:
-    with pytest.raises(ValueError, match="multi_choice"):
+    with pytest.raises(ValueError, match="matching"):
         evaluation_service.evaluate(UNSUPPORTED_TYPE_QUESTION, AnswerSubmission(answer="a-2, b-1", attemptNumber=1))
 
 
@@ -361,5 +519,17 @@ def test_single_choice_evaluationresult_feeds_coaching_service_unchanged() -> No
     assert coach.nextAction.value == "NEXT_QUESTION"
 
     wrong_result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
+    coach, ui = coaching_service.decide(wrong_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "TRY_AGAIN"
+
+
+def test_multi_choice_evaluationresult_feeds_coaching_service_unchanged() -> None:
+    correct_result = evaluation_service.evaluate(
+        MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
+    )
+    coach, ui = coaching_service.decide(correct_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "NEXT_QUESTION"
+
+    wrong_result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
     coach, ui = coaching_service.decide(wrong_result.isCorrect, attempt_number=1)
     assert coach.nextAction.value == "TRY_AGAIN"

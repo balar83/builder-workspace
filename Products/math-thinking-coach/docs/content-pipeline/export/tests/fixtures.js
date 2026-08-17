@@ -110,6 +110,39 @@ function singleChoiceAnswerKeys() {
   return { topicId: 'topic-fixture', reviewStatus: 'approved', answers: { 'fx-sc-q01': 'opt-b' } };
 }
 
+// Slice 3 (M2, Question & Response Semantics): a multi_choice question bank
+// - same public/private option-id split as single_choice, except the
+// private answer-keys.json value is a comma-delimited *set* of option ids
+// (exact-set equality, all-or-nothing scoring - no partial credit).
+function multiChoiceQuestionBank() {
+  return {
+    topicId: 'topic-fixture',
+    reviewStatus: 'approved',
+    questions: [
+      {
+        id: 'fx-mc-q01',
+        prompt: 'Which of these are prime numbers?',
+        expectedAnswer: '2, 3, 5',
+        hints: ['A prime number has exactly two factors: 1 and itself.'],
+        difficulty: 'Easy',
+        questionType: 'multi_choice',
+        responseSpecification: {
+          options: [
+            { id: 'opt-a', text: '2' },
+            { id: 'opt-b', text: '3' },
+            { id: 'opt-c', text: '4' },
+            { id: 'opt-d', text: '5' },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+function multiChoiceAnswerKeys() {
+  return { topicId: 'topic-fixture', reviewStatus: 'approved', answers: { 'fx-mc-q01': 'opt-a,opt-b,opt-d' } };
+}
+
 // Deep clone via JSON round-trip - fine for these plain-data fixtures, and
 // keeps each test's mutation from leaking into another test's fixture.
 function clone(value) {
@@ -167,6 +200,8 @@ module.exports = {
   legacyQuestionBank,
   singleChoiceQuestionBank,
   singleChoiceAnswerKeys,
+  multiChoiceQuestionBank,
+  multiChoiceAnswerKeys,
   clone,
   writeChapterFixture,
 };

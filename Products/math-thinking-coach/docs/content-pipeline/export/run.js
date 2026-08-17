@@ -128,22 +128,48 @@ function main() {
           missingAnswerKeys.push(q.id);
           continue;
         }
-        // Slice 2 (M2): for single_choice, the private answer-keys.json
-        // value IS the correct option's id (a plain string - no second,
-        // richer answer-key mechanism was introduced). It must resolve to
-        // one of the question's own public option ids, or every real
-        // submission would silently be marked wrong against a
-        // never-selectable "correct" answer.
-        if (q.questionType === 'single_choice') {
+        // Slice 2/3 (M2): for choice-based types, the private
+        // answer-keys.json value must resolve to real option id(s) on this
+        // question, or a submission could never actually be markable
+        // correct. single_choice's value is one option id (a plain
+        // string); multi_choice's is a comma-delimited *set* of option ids
+        // - the SAME convention its evaluator/frontend use for the
+        // student's own submission (design doc Part II §B/§F correction).
+        if (q.questionType === 'single_choice' || q.questionType === 'multi_choice') {
           const validOptionIds = new Set(
             (q.responseSpecification && Array.isArray(q.responseSpecification.options)
               ? q.responseSpecification.options
               : []
             ).map((option) => option.id)
           );
-          if (!validOptionIds.has(value)) {
-            invalidAnswerKeys.push(`"${q.id}": answer-keys.json value "${value}" is not one of this question's option ids`);
-            continue;
+
+          if (q.questionType === 'single_choice') {
+            if (!validOptionIds.has(value)) {
+              invalidAnswerKeys.push(`"${q.id}": answer-keys.json value "${value}" is not one of this question's option ids`);
+              continue;
+            }
+          } else {
+            // loadCanonical.js's phase-1 structural check already rejects an
+            // empty-string answers.json value for every questionType (must
+            // be a non-empty string) - so `value` here is always non-empty,
+            // and split(',') on a non-empty trimmed string always yields at
+            // least one token. Rule "expected empty set must not be
+            // permitted" is therefore already enforced upstream; no
+            // additional empty-token-list check is reachable here.
+            const tokens = value.trim().split(',').map((t) => t.trim());
+            if (tokens.some((t) => t === '')) {
+              invalidAnswerKeys.push(
+                `"${q.id}": answer-keys.json value "${value}" is not a well-formed comma-delimited list of option ids`
+              );
+              continue;
+            }
+            const unknown = [...new Set(tokens)].filter((t) => !validOptionIds.has(t));
+            if (unknown.length > 0) {
+              invalidAnswerKeys.push(
+                `"${q.id}": answer-keys.json value "${value}" contains option id(s) not among this question's options: ${unknown.join(', ')}`
+              );
+              continue;
+            }
           }
         }
         newAnswerEntries[q.id] = value;

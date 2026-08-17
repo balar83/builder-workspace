@@ -1,9 +1,9 @@
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
 // Kept in sync by hand with backend/app/schemas/question.py's QuestionType -
-// only "short_text" and "numeric" (Slice 1) and "single_choice" (Slice 2)
-// have real evaluators/UI; the rest are reserved, named values a future
-// slice implements one at a time.
+// only "short_text" and "numeric" (Slice 1), "single_choice" (Slice 2), and
+// "multi_choice" (Slice 3) have real evaluators/UI; the rest are reserved,
+// named values a future slice implements one at a time.
 export type QuestionType =
   | 'short_text'
   | 'numeric'
