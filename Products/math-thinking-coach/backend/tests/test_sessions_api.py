@@ -160,6 +160,28 @@ def test_question_1_and_question_5_use_the_same_endpoint() -> None:
     assert summary.json()["correctCount"] == 5
 
 
+def test_current_question_carries_questiontype_and_responsespecification() -> None:
+    """
+    Slice 2 (M2): the session flow's QuestionContent must expose
+    questionType/responseSpecification exactly like the standalone Question
+    model does - otherwise SessionQuestionPage has no way to know how to
+    render a served question. Rational Numbers is unmigrated (short_text),
+    so this also doubles as a backward-compatibility check: existing
+    session-served questions get the new fields with their default values,
+    nothing else about the response changes.
+    """
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 1}
+    ).json()["sessionId"]
+
+    current = student.get(f"/api/v1/sessions/{session_id}/current-question")
+    assert current.status_code == 200
+    question = current.json()["question"]
+    assert question["questionType"] == "short_text"
+    assert question["responseSpecification"] is None
+
+
 def test_current_question_on_a_completed_session_returns_409() -> None:
     student = _student_client()
     session_id = student.post(

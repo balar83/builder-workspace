@@ -88,6 +88,44 @@ def _evaluate_numeric(question: Question, submission: AnswerSubmission) -> Evalu
     )
 
 
+def _evaluate_single_choice(question: Question, submission: AnswerSubmission) -> EvaluationResult:
+    """
+    The expected answer is the correct option's id, resolved through the
+    exact same private answer_keys.json path every other evaluator uses -
+    no second answer-key mechanism. AnswerSubmission.answer carries the
+    selected option's id as a plain string; no new submission shape was
+    needed, since "which one option was picked" fits a single string
+    exactly as naturally as short_text/numeric's answers do.
+    """
+    expected_option_id = get_expected_answer(question.id)
+    valid_option_ids = (
+        {option.id for option in question.responseSpecification.options}
+        if question.responseSpecification and question.responseSpecification.options
+        else set()
+    )
+    submitted_option_id = submission.answer.strip()
+
+    if submitted_option_id not in valid_option_ids:
+        # Distinguished from a recognized-but-wrong option via `evidence`,
+        # not a separate boolean - both cases are simply incorrect, but a
+        # future consumer (or a debugging session) can tell them apart.
+        return EvaluationResult(
+            isCorrect=False,
+            score=0.0,
+            maxScore=question.maxScore,
+            evaluatorId="single_choice_v1",
+            evidence="submitted option id is not among this question's valid options",
+        )
+
+    is_correct = submitted_option_id == expected_option_id
+    return EvaluationResult(
+        isCorrect=is_correct,
+        score=question.maxScore if is_correct else 0.0,
+        maxScore=question.maxScore,
+        evaluatorId="single_choice_v1",
+    )
+
+
 # The one dispatch point in the system (design doc §6): every consumer
 # (answer_service, runtime_session_manager, Shadow Mode) only ever sees the
 # EvaluationResult an evaluator produces, never questionType itself - no
@@ -97,17 +135,18 @@ def _evaluate_numeric(question: Question, submission: AnswerSubmission) -> Evalu
 _EVALUATORS = {
     "short_text": _evaluate_short_text,
     "numeric": _evaluate_numeric,
+    "single_choice": _evaluate_single_choice,
 }
 
 
 def evaluate(question: Question, submission: AnswerSubmission) -> EvaluationResult:
     evaluator = _EVALUATORS.get(question.questionType)
     if evaluator is None:
-        # Reserved-but-unimplemented questionType (single_choice,
-        # multi_choice, fill_blank, matching, multi_part) - the content
-        # pipeline (loadCanonical.js) already refuses to export a question
-        # naming one of these, so this should never occur in production;
-        # raised loudly here rather than silently guessing.
+        # Reserved-but-unimplemented questionType (multi_choice, fill_blank,
+        # matching, multi_part) - the content pipeline (loadCanonical.js)
+        # already refuses to export a question naming one of these, so this
+        # should never occur in production; raised loudly here rather than
+        # silently guessing.
         raise ValueError(
             f'No evaluator is registered for questionType="{question.questionType}" '
             f"(question {question.id}) - this type is reserved for a future slice."

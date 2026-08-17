@@ -83,6 +83,8 @@ def get_current_question(session_id: str, request: Request):
             difficulty=result.question.difficulty,
             hints=result.question.hints,
             solution=result.question.solution,
+            questionType=result.question.questionType,
+            responseSpecification=result.question.responseSpecification,
         ),
     )
 

@@ -3,7 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from app.schemas.answer import Coach, EvaluationResult, UiState
-from app.schemas.question import Difficulty
+from app.schemas.question import Difficulty, QuestionType, ResponseSpecification
 
 Mode = Literal["practice", "test", "revision"]
 RequestedDifficulty = Literal["Easy", "Medium", "Hard", "Mixed"]
@@ -190,6 +190,13 @@ class QuestionContent(BaseModel):
     difficulty: Difficulty
     hints: list[str]
     solution: str
+    # Additive, Slice 2 (M2): without these, the session flow's frontend has
+    # no way to know a served question is single_choice (or any future
+    # type) and would render the wrong input - a concrete integration gap,
+    # not a speculative addition. Defaults preserve today's response shape
+    # exactly for every existing session-served question.
+    questionType: QuestionType = "short_text"
+    responseSpecification: ResponseSpecification | None = None
 
 
 class CurrentQuestionResponse(BaseModel):

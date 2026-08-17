@@ -1,7 +1,7 @@
 import pytest
 
 from app.schemas.answer import AnswerSubmission
-from app.schemas.question import Question, ResponseSpecification
+from app.schemas.question import Option, Question, ResponseSpecification
 from app.services import coaching_service, evaluation_service
 
 QUESTION = Question(
@@ -59,15 +59,35 @@ NUMERIC_NON_NUMERIC_CANONICAL_QUESTION = Question(
     questionType="numeric",
 )
 
+SINGLE_CHOICE_QUESTION = Question(
+    id="test-single-choice-basic",
+    chapterId="fixture-chapter",
+    question="Which of these is a perfect square?",
+    text="Which of these is a perfect square?",
+    difficulty="Easy",
+    hints=[],
+    solution="16",
+    questionType="single_choice",
+    responseSpecification=ResponseSpecification(
+        options=[
+            Option(id="opt-a", text="12"),
+            Option(id="opt-b", text="16"),
+            Option(id="opt-c", text="20"),
+        ]
+    ),
+)
+
 UNSUPPORTED_TYPE_QUESTION = Question(
     id="test-unsupported-type",
     chapterId="fixture-chapter",
-    question="Which of these is correct?",
-    text="Which of these is correct?",
+    question="Match each term to its definition.",
+    text="Match each term to its definition.",
     difficulty="Easy",
     hints=[],
-    solution="(b)",
-    questionType="single_choice",
+    solution="a-2, b-1",
+    # multi_choice, not single_choice: single_choice gained a real evaluator
+    # in Slice 2 - this fixture specifically needs a still-reserved type.
+    questionType="multi_choice",
 )
 
 
@@ -84,7 +104,10 @@ def _synthetic_answer_keys(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(evaluation_service._answer_keys, NUMERIC_WHOLE_QUESTION.id, "4")
     monkeypatch.setitem(evaluation_service._answer_keys, NUMERIC_TOLERANT_QUESTION.id, "3.14159")
     monkeypatch.setitem(evaluation_service._answer_keys, NUMERIC_NON_NUMERIC_CANONICAL_QUESTION.id, "18 m")
-    monkeypatch.setitem(evaluation_service._answer_keys, UNSUPPORTED_TYPE_QUESTION.id, "(b)")
+    monkeypatch.setitem(evaluation_service._answer_keys, UNSUPPORTED_TYPE_QUESTION.id, "a-2, b-1")
+    # The private answer-key value for single_choice is simply the correct
+    # option's id - no second, richer answer-key mechanism.
+    monkeypatch.setitem(evaluation_service._answer_keys, SINGLE_CHOICE_QUESTION.id, "opt-b")
 
 
 # --- Backward compatibility: legacy (default) short_text behavior ---------
@@ -228,6 +251,70 @@ def test_numeric_zero_tolerance_default_requires_exact_numeric_equality() -> Non
     assert result.isCorrect is False
 
 
+# --- Single-choice evaluator (Slice 2) --------------------------------------
+
+
+def test_single_choice_correct_option_is_marked_correct() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-b", attemptNumber=1))
+
+    assert result.isCorrect is True
+    assert result.score == 1.0
+    assert result.evaluatorId == "single_choice_v1"
+
+
+def test_single_choice_recognized_wrong_option_is_marked_incorrect() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+    # A real, recognized (just wrong) option carries no evidence note - only
+    # an unrecognized submission does (see the next two tests).
+    assert result.evidence is None
+
+
+def test_single_choice_unrecognized_submission_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(
+        SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-does-not-exist", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+    assert result.evidence is not None
+    assert "not among" in result.evidence
+
+
+def test_single_choice_empty_submission_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.evidence is not None
+
+
+def test_single_choice_whitespace_around_the_submitted_option_id_is_tolerated() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="  opt-b  ", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
+def test_single_choice_result_carries_no_speculative_populated_fields() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-b", attemptNumber=1))
+
+    assert result.maxScore == 1.0
+    assert result.confidence is None
+    assert result.scoreBreakdown is None
+    assert result.partResults is None
+
+
+def test_single_choice_with_no_options_at_all_is_incorrect_not_a_crash() -> None:
+    # Defensive: Stage 10 already refuses to export a single_choice question
+    # with no options, but the evaluator must not crash if one somehow
+    # reaches it (e.g. a directly-constructed Question in a future caller).
+    malformed_question = SINGLE_CHOICE_QUESTION.model_copy(update={"responseSpecification": None})
+    result = evaluation_service.evaluate(malformed_question, AnswerSubmission(answer="opt-b", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
 # --- Evaluator dispatch ------------------------------------------------------
 
 
@@ -241,9 +328,14 @@ def test_dispatch_selects_the_numeric_evaluator_for_numeric_questiontype() -> No
     assert result.evaluatorId == "numeric_tolerance_v1"
 
 
+def test_dispatch_selects_the_single_choice_evaluator_for_single_choice_questiontype() -> None:
+    result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-b", attemptNumber=1))
+    assert result.evaluatorId == "single_choice_v1"
+
+
 def test_dispatch_raises_a_clear_error_for_an_unsupported_reserved_questiontype() -> None:
-    with pytest.raises(ValueError, match="single_choice"):
-        evaluation_service.evaluate(UNSUPPORTED_TYPE_QUESTION, AnswerSubmission(answer="(b)", attemptNumber=1))
+    with pytest.raises(ValueError, match="multi_choice"):
+        evaluation_service.evaluate(UNSUPPORTED_TYPE_QUESTION, AnswerSubmission(answer="a-2, b-1", attemptNumber=1))
 
 
 # --- EvaluationResult compatibility with coaching -----------------------
@@ -252,7 +344,7 @@ def test_dispatch_raises_a_clear_error_for_an_unsupported_reserved_questiontype(
 def test_evaluationresult_isCorrect_feeds_coaching_service_unchanged() -> None:
     """
     coaching_service.decide() takes only (is_correct, attempt_number) - a
-    richer EvaluationResult (from either evaluator) must compose with it
+    richer EvaluationResult (from any evaluator) must compose with it
     exactly as the old bare Evaluation did, with zero coaching_service
     changes.
     """
@@ -261,3 +353,13 @@ def test_evaluationresult_isCorrect_feeds_coaching_service_unchanged() -> None:
 
     assert coach.nextAction.value == "NEXT_QUESTION"
     assert ui.canTryAgain is False
+
+
+def test_single_choice_evaluationresult_feeds_coaching_service_unchanged() -> None:
+    correct_result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-b", attemptNumber=1))
+    coach, ui = coaching_service.decide(correct_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "NEXT_QUESTION"
+
+    wrong_result = evaluation_service.evaluate(SINGLE_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
+    coach, ui = coaching_service.decide(wrong_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "TRY_AGAIN"

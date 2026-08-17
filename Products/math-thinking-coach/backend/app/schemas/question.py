@@ -22,20 +22,36 @@ QuestionType = Literal[
 ]
 
 
+class Option(BaseModel):
+    """
+    A single_choice answer option - public by design. The option's text
+    must be shown to render the question at all; which option is correct
+    never lives here (see ResponseSpecification's own docstring).
+    """
+
+    id: str
+    text: str
+
+
 class ResponseSpecification(BaseModel):
     """
-    Deliberately minimal for Slice 1 - only the one parameter an implemented
-    evaluator actually reads (numericTolerance, consulted by the numeric
-    evaluator only). Does NOT carry the expected answer itself: Question
+    Deliberately minimal - only the parameters an implemented evaluator
+    actually reads (numericTolerance for "numeric"; options for
+    "single_choice"). Does NOT carry the expected answer itself: Question
     (and therefore ResponseSpecification) is returned by public GET routes,
     and the expected answer stays private in answer_keys.json (ADR-001) for
-    every questionType, including numeric - putting it here would leak it to
-    the client. This is a deliberate, narrower shape than the design
-    proposal's illustrative one; see the Slice 1 implementation report for
-    why acceptedAnswers/caseSensitive were dropped.
+    every questionType. For single_choice specifically: `options` (the
+    choice text) is legitimately public - a student must see the choices to
+    pick one - but *which* option is correct is never represented here or
+    anywhere else on Question; it is resolved only through
+    evaluation_service.get_expected_answer(), exactly like every other
+    type, where the private answer_keys.json value is simply the correct
+    option's id (no second answer-key mechanism). See
+    docs/Question-Response-Semantics-Design-Proposal.md Part II §B.
     """
 
     numericTolerance: float = 0.0
+    options: list[Option] | None = None
 
 
 class Question(BaseModel):

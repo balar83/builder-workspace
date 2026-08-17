@@ -1,5 +1,5 @@
 import type { AnswerCoach, AnswerEvaluation, AnswerUiState } from './answer';
-import type { Difficulty } from './question';
+import type { Difficulty, QuestionType, ResponseSpecification } from './question';
 
 export type SessionMode = 'practice' | 'test' | 'revision';
 export type RequestedDifficulty = 'Easy' | 'Medium' | 'Hard' | 'Mixed';
@@ -30,6 +30,10 @@ export interface QuestionContent {
   difficulty: Difficulty;
   hints: string[];
   solution: string;
+  // Always present on the wire (Pydantic default "short_text"/null) - see
+  // types/question.ts's Question interface for the same convention.
+  questionType: QuestionType;
+  responseSpecification: ResponseSpecification | null;
 }
 
 export interface CurrentQuestionResponse {

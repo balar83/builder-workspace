@@ -119,21 +119,43 @@ function main() {
     // own note for the full explanation.
     const answerKeysApproved = Boolean(answerKeyBank && answerKeyBank.reviewStatus === 'approved');
     const missingAnswerKeys = [];
+    const invalidAnswerKeys = [];
     const newAnswerEntries = {};
     if (approvedQuestions.length > 0) {
       for (const q of approvedQuestions) {
         const value = answerKeysApproved ? answerKeyBank.answers[q.id] : undefined;
         if (value === undefined) {
           missingAnswerKeys.push(q.id);
-        } else {
-          newAnswerEntries[q.id] = value;
+          continue;
         }
+        // Slice 2 (M2): for single_choice, the private answer-keys.json
+        // value IS the correct option's id (a plain string - no second,
+        // richer answer-key mechanism was introduced). It must resolve to
+        // one of the question's own public option ids, or every real
+        // submission would silently be marked wrong against a
+        // never-selectable "correct" answer.
+        if (q.questionType === 'single_choice') {
+          const validOptionIds = new Set(
+            (q.responseSpecification && Array.isArray(q.responseSpecification.options)
+              ? q.responseSpecification.options
+              : []
+            ).map((option) => option.id)
+          );
+          if (!validOptionIds.has(value)) {
+            invalidAnswerKeys.push(`"${q.id}": answer-keys.json value "${value}" is not one of this question's option ids`);
+            continue;
+          }
+        }
+        newAnswerEntries[q.id] = value;
       }
     }
     if (missingAnswerKeys.length > 0) {
       throw new ExportValidationError('answer-keys', [
         `${missingAnswerKeys.length} approved question(s) have no approved answer-keys.json entry: ${missingAnswerKeys.join(', ')}`,
       ]);
+    }
+    if (invalidAnswerKeys.length > 0) {
+      throw new ExportValidationError('answer-keys', invalidAnswerKeys);
     }
 
     // [4] whitelist transformation

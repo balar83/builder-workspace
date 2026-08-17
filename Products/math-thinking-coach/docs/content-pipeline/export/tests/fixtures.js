@@ -78,6 +78,38 @@ function legacyQuestionBank() {
   };
 }
 
+// Slice 2 (M2, Question & Response Semantics): a single_choice question
+// bank - options are public (student-facing text), the correct answer is
+// only ever the option id living in the separate, private answer-keys.json
+// (below), exactly like every other questionType.
+function singleChoiceQuestionBank() {
+  return {
+    topicId: 'topic-fixture',
+    reviewStatus: 'approved',
+    questions: [
+      {
+        id: 'fx-sc-q01',
+        prompt: 'Which of these is a perfect square?',
+        expectedAnswer: '16',
+        hints: ['Try squaring small whole numbers.'],
+        difficulty: 'Easy',
+        questionType: 'single_choice',
+        responseSpecification: {
+          options: [
+            { id: 'opt-a', text: '12' },
+            { id: 'opt-b', text: '16' },
+            { id: 'opt-c', text: '20' },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+function singleChoiceAnswerKeys() {
+  return { topicId: 'topic-fixture', reviewStatus: 'approved', answers: { 'fx-sc-q01': 'opt-b' } };
+}
+
 // Deep clone via JSON round-trip - fine for these plain-data fixtures, and
 // keeps each test's mutation from leaking into another test's fixture.
 function clone(value) {
@@ -133,6 +165,8 @@ module.exports = {
   validAnswerKeys,
   legacyTopic,
   legacyQuestionBank,
+  singleChoiceQuestionBank,
+  singleChoiceAnswerKeys,
   clone,
   writeChapterFixture,
 };

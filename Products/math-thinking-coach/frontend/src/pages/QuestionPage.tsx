@@ -6,11 +6,11 @@ import type { AnswerEvaluationResponse } from '../types/answer';
 import type { Chapter } from '../types/chapter';
 import type { Question } from '../types/question';
 import AnswerFeedback from '../components/AnswerFeedback';
-import AnswerInput from '../components/AnswerInput';
 import BackLink from '../components/BackLink';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
 import QuestionProgress from '../components/QuestionProgress';
+import QuestionResponseInput from '../components/QuestionResponseInput';
 import SolutionPanel from '../components/SolutionPanel';
 import './QuestionPage.css';
 
@@ -192,7 +192,13 @@ export default function QuestionPage() {
 
         <p className="question-text">{currentQuestion.question}</p>
 
-        <AnswerInput value={answer} onChange={setAnswer} onSubmit={handleAnswerSubmit} />
+        <QuestionResponseInput
+          questionType={currentQuestion.questionType}
+          responseSpecification={currentQuestion.responseSpecification}
+          value={answer}
+          onChange={setAnswer}
+          onSubmit={handleAnswerSubmit}
+        />
 
         {submitted && (
           <AnswerFeedback

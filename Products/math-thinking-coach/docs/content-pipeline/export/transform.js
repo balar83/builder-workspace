@@ -165,15 +165,34 @@ function transformQuestion(canonicalQuestion, context) {
   question.questionType = canonicalQuestion.questionType !== undefined ? canonicalQuestion.questionType : 'short_text';
   question.maxScore = canonicalQuestion.maxScore !== undefined ? canonicalQuestion.maxScore : 1.0;
 
-  // Only set when the canonical question actually opts in (only meaningful
-  // for questionType "numeric" today) - whitelist field-by-field, no spread.
+  // Only set when the canonical question actually opts in - whitelist
+  // field-by-field, no spread. numericTolerance is meaningful for "numeric"
+  // only and options for "single_choice" only, but both are always emitted
+  // together (harmless-when-irrelevant) rather than making this function
+  // branch on questionType - keeps the whitelist emission uniform instead
+  // of growing a second dispatch point here.
   if (canonicalQuestion.responseSpecification !== undefined) {
-    question.responseSpecification = {
+    const responseSpecification = {
       numericTolerance:
         canonicalQuestion.responseSpecification.numericTolerance !== undefined
           ? canonicalQuestion.responseSpecification.numericTolerance
           : 0.0,
     };
+
+    // Never reads or touches answer-keys.json here - only the question's
+    // own public option text/ids. The correct option id is resolved
+    // entirely separately, into answer_keys.json's existing private path
+    // (run.js), never into this object. This is what makes it structurally
+    // impossible for the correct answer to leak into runtime questions.json.
+    if (canonicalQuestion.responseSpecification.options !== undefined) {
+      const options = [];
+      for (const option of canonicalQuestion.responseSpecification.options) {
+        options.push({ id: option.id, text: option.text });
+      }
+      responseSpecification.options = options;
+    }
+
+    question.responseSpecification = responseSpecification;
   }
 
   // Additive, optional (Slice A1) - only set when the canonical question

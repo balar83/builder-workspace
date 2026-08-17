@@ -3,11 +3,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '../pages/QuestionPage.css';
 import './SessionQuestionPage.css';
 import AnswerFeedback from '../components/AnswerFeedback';
-import AnswerInput from '../components/AnswerInput';
 import BackLink from '../components/BackLink';
 import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
 import QuestionProgress from '../components/QuestionProgress';
+import QuestionResponseInput from '../components/QuestionResponseInput';
 import SessionCompleteSummary from '../components/SessionCompleteSummary';
 import SolutionPanel from '../components/SolutionPanel';
 import { sessionPointerService } from '../services/sessionPointerService';
@@ -357,7 +357,9 @@ export default function SessionQuestionPage() {
 
         <p className="question-text">{content.question}</p>
 
-        <AnswerInput
+        <QuestionResponseInput
+          questionType={content.questionType}
+          responseSpecification={content.responseSpecification}
           value={answer}
           onChange={setAnswer}
           onSubmit={handleSubmit}

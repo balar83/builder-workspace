@@ -6,7 +6,8 @@ from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.main import app
-from app.services import ai_evaluation_client, attempt_service, auth_service
+from app.schemas.question import Option, Question, ResponseSpecification
+from app.services import ai_evaluation_client, attempt_service, auth_service, evaluation_service, question_service
 
 client = TestClient(app)
 
@@ -61,6 +62,8 @@ def test_correct_answer_returns_next_question() -> None:
             "evaluatorId": "short_text_v1",
             "scoreBreakdown": None,
             "confidence": None,
+            "evidence": None,
+            "partResults": None,
         },
         "coach": {
             "message": "Excellent! You solved it correctly.",
@@ -89,6 +92,8 @@ def test_incorrect_first_attempt_returns_try_again() -> None:
             "evaluatorId": "short_text_v1",
             "scoreBreakdown": None,
             "confidence": None,
+            "evidence": None,
+            "partResults": None,
         },
         "coach": {
             "message": "Not quite. Try solving it once more before using a hint.",
@@ -110,6 +115,8 @@ def test_incorrect_second_attempt_returns_show_hint() -> None:
             "evaluatorId": "short_text_v1",
             "scoreBreakdown": None,
             "confidence": None,
+            "evidence": None,
+            "partResults": None,
         },
         "coach": {
             "message": "Good effort. Here's a hint to help you.",
@@ -131,6 +138,8 @@ def test_incorrect_third_attempt_returns_show_solution() -> None:
             "evaluatorId": "short_text_v1",
             "scoreBreakdown": None,
             "confidence": None,
+            "evidence": None,
+            "partResults": None,
         },
         "coach": {
             "message": "If you're still stuck, you can view the solution.",
@@ -167,6 +176,8 @@ def test_empty_answer_is_treated_as_incorrect() -> None:
         "evaluatorId": "short_text_v1",
         "scoreBreakdown": None,
         "confidence": None,
+        "evidence": None,
+        "partResults": None,
     }
     assert response.json()["coach"]["nextAction"] == "TRY_AGAIN"
 
@@ -211,6 +222,8 @@ def test_response_is_unaffected_when_shadow_evaluation_fails(
             "evaluatorId": "short_text_v1",
             "scoreBreakdown": None,
             "confidence": None,
+            "evidence": None,
+            "partResults": None,
         },
         "coach": {
             "message": "Excellent! You solved it correctly.",
@@ -312,3 +325,101 @@ def test_response_is_unaffected_when_attempt_recording_fails(monkeypatch: pytest
 
     assert response.status_code == 200
     assert response.json()["evaluation"]["isCorrect"] is True
+
+
+# --- Single-choice, full API stack (Slice 2) --------------------------------
+#
+# No real content is modified anywhere in this file. A synthetic
+# single_choice question is injected into the in-memory question_service
+# module state (and a matching entry into evaluation_service's answer keys)
+# for the duration of each test only - the exact same monkeypatch technique
+# already used throughout this suite for other module-level state - proving
+# the real route -> question_service -> evaluation_service -> coaching_service
+# chain works for single_choice without ever touching
+# docs/content-source/ or backend/app/data/*.json.
+
+SINGLE_CHOICE_QUESTION_ID = "test-single-choice-api"
+SINGLE_CHOICE_URL = f"/api/v1/questions/{SINGLE_CHOICE_QUESTION_ID}/answer"
+
+
+@pytest.fixture
+def _synthetic_single_choice_question(monkeypatch: pytest.MonkeyPatch) -> None:
+    synthetic_question = Question(
+        id=SINGLE_CHOICE_QUESTION_ID,
+        chapterId="rational-numbers",
+        question="Which of these is a perfect square?",
+        text="Which of these is a perfect square?",
+        difficulty="Easy",
+        hints=["Try squaring small whole numbers."],
+        solution="16",
+        questionType="single_choice",
+        responseSpecification=ResponseSpecification(
+            options=[
+                Option(id="opt-a", text="12"),
+                Option(id="opt-b", text="16"),
+                Option(id="opt-c", text="20"),
+            ]
+        ),
+    )
+    monkeypatch.setattr(question_service, "_questions", question_service._questions + [synthetic_question])
+    monkeypatch.setitem(evaluation_service._answer_keys, SINGLE_CHOICE_QUESTION_ID, "opt-b")
+
+
+def test_single_choice_correct_submission_returns_next_question(_synthetic_single_choice_question: None) -> None:
+    response = client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "opt-b", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["evaluation"]["isCorrect"] is True
+    assert body["evaluation"]["evaluatorId"] == "single_choice_v1"
+    assert body["coach"]["nextAction"] == "NEXT_QUESTION"
+
+
+def test_single_choice_incorrect_submission_returns_try_again(_synthetic_single_choice_question: None) -> None:
+    response = client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "opt-a", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["evaluation"]["isCorrect"] is False
+    assert body["coach"]["nextAction"] == "TRY_AGAIN"
+
+
+def test_single_choice_public_question_get_never_exposes_the_correct_option(
+    _synthetic_single_choice_question: None,
+) -> None:
+    """
+    CRITICAL SECURITY CHECK: the public GET route must return the option
+    text/ids (needed to render the question) but never anything revealing
+    which option is correct.
+    """
+    response = client.get(f"/api/v1/chapters/rational-numbers/questions/{SINGLE_CHOICE_QUESTION_ID}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["questionType"] == "single_choice"
+    options = body["responseSpecification"]["options"]
+    # All three option ids are legitimately public (a student must see every
+    # choice to pick one) - the security property is that nothing marks
+    # *which one* is correct, not that "opt-b" (an ordinary, neutral id)
+    # never appears at all.
+    assert {option["id"] for option in options} == {"opt-a", "opt-b", "opt-c"}
+    assert all(set(option.keys()) == {"id", "text"} for option in options), (
+        "an option must carry only its own id/text - no per-option correctness marker of any kind"
+    )
+
+    # No top-level field anywhere in the public response reveals which
+    # option is correct - the expected answer only ever lives in the
+    # private answer_keys.json, never in this payload.
+    assert "correctOptionId" not in body
+    assert "correctOptionIds" not in body
+    assert "answer" not in body
+    assert "expectedAnswer" not in body
+
+
+def test_single_choice_unrecognized_option_returns_incorrect_not_an_error(
+    _synthetic_single_choice_question: None,
+) -> None:
+    response = client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "not-a-real-option", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    assert response.json()["evaluation"]["isCorrect"] is False

@@ -56,16 +56,21 @@ test('loadCanonical: an unknown questionType fails structural validation', () =>
   );
 });
 
-test('loadCanonical: a reserved-but-unimplemented questionType (single_choice) is rejected, not silently exported', () => {
+test('loadCanonical: a reserved-but-unimplemented questionType (multi_choice) is rejected, not silently exported', () => {
+  // single_choice was this test's original example - it gained a real
+  // evaluator/pipeline support in Slice 2, so this now specifically needs a
+  // still-reserved type. multi_choice's own rejection is also covered by
+  // the parametrized loop below; this one stays as the detailed
+  // issue-message assertion.
   const bank = clone(validQuestionBank());
-  bank.questions[0].questionType = 'single_choice';
+  bank.questions[0].questionType = 'multi_choice';
   const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
 
   assert.throws(
     () => loadCanonical({ chapterDir, dataDir }),
     (err) => {
       assert.ok(err instanceof ExportValidationError);
-      assert.ok(err.issues.some((i) => i.includes('fx-q01') && i.includes('single_choice') && i.includes('reserved')));
+      assert.ok(err.issues.some((i) => i.includes('fx-q01') && i.includes('multi_choice') && i.includes('reserved')));
       return true;
     }
   );
