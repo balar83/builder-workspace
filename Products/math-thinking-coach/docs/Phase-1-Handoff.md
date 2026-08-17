@@ -2,6 +2,7 @@
 
 **Written:** 2026-08-07, immediately after Release 0.1.2 shipped to production.
 **Updated:** 2026-08-15, after the Curriculum Expansion Milestone (commit `fbc7eed`) — see §8, §10, §17.
+**Updated:** 2026-08-17, after Slice A1 (Structured Learning Content Foundation) closed and deployed (commit `6285263`) — see §8, §13.4, §17, §18.
 **Purpose:** let a brand-new Claude conversation continue this project with zero context loss. Read this document fully before touching code. Where anything here conflicts with what you observe in the repository, **trust the repository** — this document describes a snapshot, not a live source of truth.
 
 ---
@@ -257,6 +258,7 @@ Do not start any of these without a design/review/approval pass first — this p
 | **0.1.1** (folded into 0.1.2's commit, never shipped standalone) | Data Handling + Understanding Quadrilaterals fully authored/exported (5→42, 5→40 questions) |
 | **0.1.2** (`c414563`/`22fdcb0`/`a16788e`) | Frontend UX overhaul, production-readiness audit fixes, Vercel SPA-fallback fix, session hint/reveal-solution dead-end fix |
 | **Curriculum Expansion Milestone** (this handoff update's release, `fbc7eed`) | New chapter A Square and A Cube (40 questions, full Topic/Learn); Rational Numbers expanded 5→40 questions with a replaced 5-section Topic; Practical Geometry expanded 5→35 questions via the topic-less export path, still no Topic by design. 12 backend test files updated for Rational Numbers' content-shape change (question/topic ids, difficulty distribution — see §12.6). No frontend, evaluation, or session-architecture changes. |
+| **Slice A1 — Structured Learning Content Foundation** (`6285263`, 2026-08-17) | Additive `Topic.concepts`/`.workedExamples` (structured `Concept`/`LearningObjective`/`WorkedExample`) and `Question.objectiveIds`, alongside unchanged legacy fields. Stage 10 export pipeline gained a legacy-vs-structured migration-state discriminator so every chapter stays re-exportable through the migration window. A Square and A Cube migrated as the pilot (only chapter with structured content); the other 4 Topic-bearing chapters and Practical Geometry are unaffected. No frontend, evaluation, coaching, or Learning Session Engine changes — confirmed by empty diff and full test suite (219 backend, 112 frontend, 47 new pipeline tests, all green). Full record: `Structured-Learning-Content-Design-Proposal.md` §W. Slices A2 (frontend cutover) and A3 (legacy field removal) are approved in shape only, not started. |
 
 ---
 
@@ -266,10 +268,10 @@ Do not start any of these without a design/review/approval pass first — this p
 |---|---|
 | Frontend | https://math-thinking-coach-zeta.vercel.app/ (Vercel project renamed from `builder-workspace` to `math-thinking-coach` on 2026-08-07; old URL `builder-workspace-zeta.vercel.app` now 404s — do not use) |
 | Backend | https://math-thinking-coach-api.onrender.com |
-| Latest commit live | `fbc7eed` (Curriculum Expansion Milestone — pushed and deployed 2026-08-15) |
-| Backend health | confirmed healthy post-deploy; content confirmed live via direct API calls — 6 chapters, per-chapter question counts 44/42/40/40/40/35 (linear-equations/data-handling/understanding-quadrilaterals/squares-and-cubes/rational-numbers/practical-geometry), all matching the export exactly |
-| Frontend health | confirmed — chapter list shows all 6 chapters including "A Square and A Cube"; A Square and A Cube's chapter page (0 of 40), Learn page (full 4-section content), and first question all verified live, including a real answer submission (`225` for "What is 15 squared?") producing the correct coaching response and advancing; Rational Numbers' chapter page (0 of 40) and expanded 5-section Learn page confirmed live; Practical Geometry's chapter page (0 of 35) and Practice (question 1 of 35) confirmed live with no broken Learn link — it correctly shows "Start Learning" straight into Practice, same topic-less behavior as before this milestone, just with more questions |
-| Known live issue at time of writing | none found during this milestone's verification |
+| Latest commit live | `6285263` (Slice A1 — Structured Learning Content Foundation — pushed and deployed 2026-08-17; includes `b2e3231`, a pre-existing docs-only commit that was already sitting locally, unpushed, from before this milestone) |
+| Backend health | confirmed healthy post-deploy (`/api/v1/health`); all 6 chapters confirmed live via direct API calls with unchanged question counts (44/42/40/35/40/40 across linear-equations/data-handling/understanding-quadrilaterals/practical-geometry/rational-numbers/squares-and-cubes = 241 total); A Square and A Cube's topic confirmed serving structured `concepts`/`workedExamples` (4/4) alongside the still-populated legacy fields; the other 4 Topic-bearing chapters confirmed still serving empty `concepts`/`workedExamples` with legacy fields intact; `sc-q07` confirmed carrying `objectiveIds`, `rn-q01` confirmed `objectiveIds: null`; live answer submissions confirmed correct on both a migrated chapter (`sc-q01` → `225`, correct-answer coaching) and an unmigrated chapter (`rn-q01`, wrong-answer coaching) |
+| Frontend health | confirmed — chapter list shows all 6 chapters; A Square and A Cube's Learn page renders exactly as before A1 (legacy paragraph-splitting, no section headings — expected, A2 not started), 4 worked examples and 11 objectives all present; a full Practice submission (`225` for "What is 15 squared?") produced the correct coaching response live; Practical Geometry confirmed still topic-less ("Start Learning" straight into Practice, no broken Learn link) |
+| Known live issue at time of writing | none found during this slice's verification |
 | Test/throwaway accounts in production | one teacher + one class created by the user for smoke testing (join code `A996AX` at time of writing) — still not cleaned up, since I don't have production database access; carried over from the prior handoff, unrelated to this milestone |
 
 ---
@@ -281,6 +283,6 @@ Do not start any of these without a design/review/approval pass first — this p
 If the user's first message doesn't specify, the single most useful thing to do is:
 
 1. Run `git status` and `git log --oneline -5` to confirm this document isn't stale.
-2. Re-run backend `pytest` and frontend `vitest run` fresh — confirm 205/112 still holds.
-3. Confirm the Curriculum Expansion Milestone (`fbc7eed`) is actually live in production, per §18 — this document's own §18 may still show a deployment gap if the push/deploy decision from that milestone's closure wasn't resolved before this was written.
-4. Then ask what they want to work on. The Product Architect has flagged a pending decision between two candidate next milestones — **(A) Structured Learning Content / Topic schema improvements** vs. **(B) Answer Evaluation v2 / mathematical answer semantics** — neither approved yet; don't start either without an explicit go-ahead. §14's deferred-item order is still the fallback menu if nothing else is specified.
+2. Re-run backend `pytest` and frontend `vitest run` fresh — confirm 219/112 still holds (219, not 205: Slice A1 added 14 backend tests).
+3. Confirm Slice A1 (`6285263`) is actually live in production, per §18.
+4. Then ask what they want to work on. **Slice A1 (Structured Learning Content Foundation) is formally closed** — full record in `Structured-Learning-Content-Design-Proposal.md` §W. The Product Architect has approved the *shape* of Slice A2 (frontend cutover to the new structured Topic fields) and Slice A3 (legacy field removal) but **neither is scheduled or authorized to start** — don't begin either without an explicit go-ahead. §14's deferred-item order is still the fallback menu if nothing else is specified.
