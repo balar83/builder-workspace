@@ -64,21 +64,45 @@ test('pilot export: legacy explanation/workedExampleContent/learningObjectives a
   assert.equal(transformedTopic.learningObjectives.length, 11);
 });
 
-test('pilot export: produces exactly 40 questions, every one carrying exactly one objectiveId and no legacy "objective" field', () => {
+test('pilot export: produces exactly 52 questions, and every question from the original A1 pilot migration still carries exactly one objectiveId with no legacy "objective" field', () => {
   const { transformedQuestions } = runPilotPipeline();
-  assert.equal(transformedQuestions.length, 40);
+  assert.equal(transformedQuestions.length, 52);
+
   for (const q of transformedQuestions) {
-    assert.ok(Array.isArray(q.objectiveIds) && q.objectiveIds.length === 1, `question "${q.id}" missing exactly one objectiveId`);
     assert.equal('objective' in q, false, `question "${q.id}" still carries the legacy "objective" field`);
+  }
+
+  // "Every question carries exactly one objectiveId" was the A1 pilot
+  // migration's own invariant for the original 40 questions (sc-q01-40) -
+  // it was never a chapter-wide rule. Five questions added by the
+  // 2026-08-19 content import (sc-q41, sc-q42, sc-q43, sc-q45, sc-q46)
+  // legitimately have none: objectiveIds is optional by design
+  // (Question.objectiveIds: list[str] | None = None), and that import's
+  // own importNote documents a real, flagged content gap - three
+  // techniques (identity-based squaring, difference-of-squares,
+  // trailing-zero place-value reasoning) that this chapter's 11 learning
+  // objectives don't yet name.
+  const noObjectiveIdsExpected = new Set(['sc-q41', 'sc-q42', 'sc-q43', 'sc-q45', 'sc-q46']);
+  for (const q of transformedQuestions) {
+    if (noObjectiveIdsExpected.has(q.id)) {
+      continue;
+    }
+    assert.ok(Array.isArray(q.objectiveIds) && q.objectiveIds.length === 1, `question "${q.id}" missing exactly one objectiveId`);
   }
 });
 
 test('pilot export: pins the exact objective:N -> objectiveId mapping for a spot-checked sample of questions', () => {
   const { transformedQuestions } = runPilotPipeline();
-  const byId = Object.fromEntries(transformedQuestions.map((q) => [q.id, q.objectiveIds[0]]));
+  const spotCheckIds = ['sc-q01', 'sc-q07', 'sc-q19', 'sc-q31', 'sc-q40'];
+  const byId = Object.fromEntries(
+    transformedQuestions.filter((q) => spotCheckIds.includes(q.id)).map((q) => [q.id, q.objectiveIds[0]])
+  );
 
   // Spot-check against the original objective:N values from the
   // pre-migration file (sc-q01=1, sc-q07=4, sc-q19=8, sc-q31=9, sc-q40=11).
+  // Narrowed to exactly these five ids (2026-08-19) - this test only ever
+  // pinned these five, not every question in the file, so it shouldn't
+  // need updating again just because unrelated content is added later.
   assert.equal(byId['sc-q01'], 'obj-squares-unit-digit');
   assert.equal(byId['sc-q07'], 'obj-squares-pythagorean-triplet');
   assert.equal(byId['sc-q19'], 'obj-square-roots-smallest-multiplier');

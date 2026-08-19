@@ -2,6 +2,7 @@
   "topicId": "topic-squares-and-cubes-numbers-and-roots",
   "reviewStatus": "approved",
   "note": "Answers copied directly from stage6-questions.json's expectedAnswer field. Every question in this bank was deliberately authored to have a single short numeric or Yes/No/True/False answer, so there are no 'weak fit for exact-match' questions to flag here, unlike Linear Equations, Data Handling and Understanding Quadrilaterals.",
+  "importNote": "sc-q41-sc-q52 added 2026-08-19 (see stage6-questions.json's importNote for full provenance). single_choice keys are the correct option's id, resolved through the same private evaluation_service.get_expected_answer() path as every other type, per ADR-001 and the M2 Slice 1-4 design record — never a second answer-key mechanism.",
   "answers": {
     "sc-q01": "225",
     "sc-q02": "No",
@@ -42,6 +43,18 @@
     "sc-q37": "15",
     "sc-q38": "24",
     "sc-q39": "9 cm",
-    "sc-q40": "42"
+    "sc-q40": "42",
+    "sc-q41": "87025",
+    "sc-q42": "9025",
+    "sc-q43": "opt-p2",
+    "sc-q44": "26",
+    "sc-q45": "43",
+    "sc-q46": "4",
+    "sc-q47": "opt-5sq",
+    "sc-q48": "25",
+    "sc-q49": "125",
+    "sc-q50": "opt-yes",
+    "sc-q51": "217",
+    "sc-q52": "opt-yes"
   }
 }

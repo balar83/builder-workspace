@@ -2257,6 +2257,8 @@
     ],
     "solution": "225",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-unit-digit"
     ]
@@ -2273,6 +2275,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-unit-digit"
     ]
@@ -2289,6 +2293,8 @@
     ],
     "solution": "True",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-unit-digit"
     ]
@@ -2305,6 +2311,8 @@
     ],
     "solution": "24",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-between-squares"
     ]
@@ -2321,6 +2329,8 @@
     ],
     "solution": "7",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-odd-sum"
     ]
@@ -2337,6 +2347,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-odd-sum"
     ]
@@ -2354,6 +2366,8 @@
     ],
     "solution": "10, 24, 26",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-pythagorean-triplet"
     ]
@@ -2371,6 +2385,8 @@
     ],
     "solution": "14, 48, 50",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-pythagorean-triplet"
     ]
@@ -2387,6 +2403,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-unit-digit"
     ]
@@ -2403,6 +2421,8 @@
     ],
     "solution": "4",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-squares-unit-digit"
     ]
@@ -2419,6 +2439,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-prime-factorisation"
     ]
@@ -2435,6 +2457,8 @@
     ],
     "solution": "5",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2451,6 +2475,8 @@
     ],
     "solution": "2",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2468,6 +2494,8 @@
     ],
     "solution": "144",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2484,6 +2512,8 @@
     ],
     "solution": "14",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-prime-factorisation"
     ]
@@ -2500,6 +2530,8 @@
     ],
     "solution": "15",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-prime-factorisation"
     ]
@@ -2516,6 +2548,8 @@
     ],
     "solution": "8",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-repeated-subtraction"
     ]
@@ -2532,6 +2566,8 @@
     ],
     "solution": "22",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-estimation"
     ]
@@ -2548,6 +2584,8 @@
     ],
     "solution": "18 m",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2564,6 +2602,8 @@
     ],
     "solution": "15 cm",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2580,6 +2620,8 @@
     ],
     "solution": "900",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2596,6 +2638,8 @@
     ],
     "solution": "2",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-smallest-multiplier"
     ]
@@ -2611,6 +2655,8 @@
     ],
     "solution": "1",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-prime-factorisation"
     ]
@@ -2627,6 +2673,8 @@
     ],
     "solution": "21",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-square-roots-prime-factorisation"
     ]
@@ -2643,6 +2691,8 @@
     ],
     "solution": "216",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2659,6 +2709,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2675,6 +2727,8 @@
     ],
     "solution": "125",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2691,6 +2745,8 @@
     ],
     "solution": "No",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2707,6 +2763,8 @@
     ],
     "solution": "7",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-smallest-multiplier"
     ]
@@ -2723,6 +2781,8 @@
     ],
     "solution": "2",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-smallest-multiplier"
     ]
@@ -2739,6 +2799,8 @@
     ],
     "solution": "1729",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2755,6 +2817,8 @@
     ],
     "solution": "-64",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2771,6 +2835,8 @@
     ],
     "solution": "8",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-prime-factorisation"
     ]
@@ -2788,6 +2854,8 @@
     ],
     "solution": "121",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cubes-smallest-multiplier"
     ]
@@ -2803,6 +2871,8 @@
     ],
     "solution": "2",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
     ]
@@ -2818,6 +2888,8 @@
     ],
     "solution": "10",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
     ]
@@ -2834,6 +2906,8 @@
     ],
     "solution": "15",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
     ]
@@ -2850,6 +2924,8 @@
     ],
     "solution": "24",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
     ]
@@ -2866,6 +2942,8 @@
     ],
     "solution": "9 cm",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
     ]
@@ -2883,8 +2961,279 @@
     ],
     "solution": "42",
     "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
     "objectiveIds": [
       "obj-cube-roots-prime-factorisation"
+    ]
+  },
+  {
+    "id": "sc-q41",
+    "chapterId": "squares-and-cubes",
+    "question": "Platform 2 on a control panel displays 295². Using the identity (a − b)² = a² − 2ab + b², find the value of 295² by writing 295 as (300 − 5).",
+    "text": "Platform 2 on a control panel displays 295². Using the identity (a − b)² = a² − 2ab + b², find the value of 295² by writing 295 as (300 − 5).",
+    "difficulty": "Medium",
+    "hints": [
+      "Set a = 300 and b = 5, since 295 = 300 − 5.",
+      "Compute a² − 2ab + b²: 300² − 2(300)(5) + 5²."
+    ],
+    "solution": "87025",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1
+  },
+  {
+    "id": "sc-q42",
+    "chapterId": "squares-and-cubes",
+    "question": "Platform 1 on the same control panel displays 95². Using the same identity, find 95² by writing 95 as (100 − 5).",
+    "text": "Platform 1 on the same control panel displays 95². Using the same identity, find 95² by writing 95 as (100 − 5).",
+    "difficulty": "Easy",
+    "hints": [
+      "Set a = 100 and b = 5, since 95 = 100 − 5.",
+      "Compute a² − 2ab + b²: 100² − 2(100)(5) + 5²."
+    ],
+    "solution": "9025",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1
+  },
+  {
+    "id": "sc-q43",
+    "chapterId": "squares-and-cubes",
+    "question": "Platform 1 shows 95² and Platform 2 shows 295². Which platform's squared value is greater than 15,000?",
+    "text": "Platform 1 shows 95² and Platform 2 shows 295². Which platform's squared value is greater than 15,000?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare each squared value to 15,000 directly.",
+      "95² is under 10,000; check where 295² lands."
+    ],
+    "solution": "Platform 2 only",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-p1",
+          "text": "Platform 1 only"
+        },
+        {
+          "id": "opt-p2",
+          "text": "Platform 2 only"
+        },
+        {
+          "id": "opt-both",
+          "text": "Both platforms"
+        },
+        {
+          "id": "opt-neither",
+          "text": "Neither platform"
+        }
+      ]
+    }
+  },
+  {
+    "id": "sc-q44",
+    "chapterId": "squares-and-cubes",
+    "question": "Find √676.",
+    "text": "Find √676.",
+    "difficulty": "Easy",
+    "hints": [
+      "26² = 676 — check by estimating between 25² = 625 and 30² = 900.",
+      "Try prime-factorising 676 and pairing identical factors."
+    ],
+    "solution": "26",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-square-roots-prime-factorisation"
+    ]
+  },
+  {
+    "id": "sc-q45",
+    "chapterId": "squares-and-cubes",
+    "question": "Evaluate 22² − 21² without squaring each number separately.",
+    "text": "Evaluate 22² − 21² without squaring each number separately.",
+    "difficulty": "Medium",
+    "hints": [
+      "Use the identity a² − b² = (a − b)(a + b).",
+      "Here a = 22 and b = 21, so (a − b) = 1."
+    ],
+    "solution": "43",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1
+  },
+  {
+    "id": "sc-q46",
+    "chapterId": "squares-and-cubes",
+    "question": "How many trailing zeros does 4,100² end in?",
+    "text": "How many trailing zeros does 4,100² end in?",
+    "difficulty": "Medium",
+    "hints": [
+      "Write 4,100 as 41 × 100, and square each part separately.",
+      "100² contributes four zeros; check whether 41² adds any more."
+    ],
+    "solution": "4",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1
+  },
+  {
+    "id": "sc-q47",
+    "chapterId": "squares-and-cubes",
+    "question": "The sum 1 + 3 + 5 + 7 + 9 (the first five odd numbers) equals which of these?",
+    "text": "The sum 1 + 3 + 5 + 7 + 9 (the first five odd numbers) equals which of these?",
+    "difficulty": "Easy",
+    "hints": [
+      "The sum of the first n odd numbers always equals n².",
+      "Count how many odd numbers are being added here."
+    ],
+    "solution": "5²",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-4sq",
+          "text": "4²"
+        },
+        {
+          "id": "opt-5sq",
+          "text": "5²"
+        },
+        {
+          "id": "opt-6sq",
+          "text": "6²"
+        },
+        {
+          "id": "opt-45",
+          "text": "45"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-squares-odd-sum"
+    ]
+  },
+  {
+    "id": "sc-q48",
+    "chapterId": "squares-and-cubes",
+    "question": "A treasure chest contains 5,400 identical golden coins. The total number of coins must be a perfect cube. Find the least number by which 5,400 should be divided so that the result is a perfect cube.",
+    "text": "A treasure chest contains 5,400 identical golden coins. The total number of coins must be a perfect cube. Find the least number by which 5,400 should be divided so that the result is a perfect cube.",
+    "difficulty": "Hard",
+    "hints": [
+      "Prime-factorise 5,400 and group the factors into triples.",
+      "One prime's power won't form a complete triple — that incomplete power is exactly what you need to remove."
+    ],
+    "solution": "25",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-cubes-smallest-multiplier"
+    ]
+  },
+  {
+    "id": "sc-q49",
+    "chapterId": "squares-and-cubes",
+    "question": "Following the pattern 2³ = 8, 3³ = 27, 4³ = 64, find the next value: 5³.",
+    "text": "Following the pattern 2³ = 8, 3³ = 27, 4³ = 64, find the next value: 5³.",
+    "difficulty": "Easy",
+    "hints": [
+      "Multiply 5 × 5 × 5.",
+      "Each step in this pattern cubes the next whole number."
+    ],
+    "solution": "125",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
+  },
+  {
+    "id": "sc-q50",
+    "chapterId": "squares-and-cubes",
+    "question": "A drone hovers such that its horizontal distance from a statue is 6 m, its height above the ground is 8 m, and the straight-line distance from the statue to the drone is 10 m. Do 6, 8 and 10 form a Pythagorean triplet?",
+    "text": "A drone hovers such that its horizontal distance from a statue is 6 m, its height above the ground is 8 m, and the straight-line distance from the statue to the drone is 10 m. Do 6, 8 and 10 form a Pythagorean triplet?",
+    "difficulty": "Medium",
+    "hints": [
+      "A Pythagorean triplet (a, b, c) satisfies a² + b² = c², where c is the largest number.",
+      "Check whether 6² + 8² equals 10²."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-yes",
+          "text": "Yes"
+        },
+        {
+          "id": "opt-no",
+          "text": "No"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-squares-pythagorean-triplet"
+    ]
+  },
+  {
+    "id": "sc-q51",
+    "chapterId": "squares-and-cubes",
+    "question": "Given the pattern 4³ − 3³ = 1 + 4×3×3, 5³ − 4³ = 1 + 5×4×3, 6³ − 5³ = 1 + 6×5×3, use it to find the value of 9³ − 8³.",
+    "text": "Given the pattern 4³ − 3³ = 1 + 4×3×3, 5³ − 4³ = 1 + 5×4×3, 6³ − 5³ = 1 + 6×5×3, use it to find the value of 9³ − 8³.",
+    "difficulty": "Medium",
+    "hints": [
+      "Follow the same pattern with n = 9: 1 + 9×8×3.",
+      "Compute 9×8×3 first, then add 1."
+    ],
+    "solution": "217",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
+    ]
+  },
+  {
+    "id": "sc-q52",
+    "chapterId": "squares-and-cubes",
+    "question": "Using the same pattern, a student claims that 11³ − 10³ = 331. Is this claim correct?",
+    "text": "Using the same pattern, a student claims that 11³ − 10³ = 331. Is this claim correct?",
+    "difficulty": "Medium",
+    "hints": [
+      "Apply the pattern with n = 11: 1 + 11×10×3.",
+      "Compare your computed value to 331."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-yes",
+          "text": "Yes"
+        },
+        {
+          "id": "opt-no",
+          "text": "No"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-cubes-prime-factorisation"
     ]
   },
   {

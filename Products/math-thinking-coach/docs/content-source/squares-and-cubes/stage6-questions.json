@@ -4,6 +4,7 @@
   "expansionNote": "Authored from scratch using NCERT Ganita Prakash Class 8 Ch.1 'A Square and A Cube' (current edition) plus the prior edition's Ch.5/Ch.6 as supplementary source. 40 questions across 11 learning objectives, mixed Understand/Apply/Reason/Challenge progression per section: conceptual/definitional recall, direct prime-factorisation application, multi-step reasoning (Pythagorean triplet construction, smallest-multiplier/divisor problems), and real-world area/volume word problems. Difficulty split: 15 Easy (37.5%), 16 Medium (40%), 9 Hard (22.5%) — matches the style already used for Understanding Quadrilaterals. Every expectedAnswer is a single short value (a number, a short phrase, or Yes/No/True/False) deliberately, to stay reliably compatible with the current exact-string-match evaluator — no open-ended 'explain your reasoning' questions were included, unlike some other chapters, specifically to avoid the known evaluator brittleness documented in those chapters' answer-keys.json.",
   "objectiveMigrationNote": "Migrated 2026-08-17 for Slice A1 (Structured Learning Content Foundation, pilot chapter): the legacy integer `objective` field (an index into the pre-migration flattened cross-section objective list) was mechanically mapped to the corresponding new `objectiveIds` entry from canonical-topic.json, one-for-one, preserving the original semantic relationship exactly — no mapping was inferred or guessed. The legacy `objective` field is retired and does not appear on any question below. See docs/Structured-Learning-Content-Design-Proposal.md §I.",
   "excludedSourceItems": [],
+  "importNote": "12 questions (sc-q41-sc-q52) added 2026-08-19, sourced from a third-party school assessment (Orchids The International School, Weekly Test 8 / Capstone Assessment, Term 1 2026-27) rather than the NCERT source documents already cited above - sourceRef is null throughout, matching the author-original convention Linear Equations already established for le-q21-44. Selected only content genuinely suited to this chapter's four existing question types (short_text/numeric/single_choice/multi_choice); one source question (a matching-the-following activity pairing 4,100², 22²-21², sqrt(676) and 5² to their results/properties) used a question format this project has not implemented (matching) and was decomposed into 4 independent questions (sc-q44-sc-q47) rather than imported verbatim or forcing a new type - see each question's own content for the preserved mathematical relationship. One duplicate candidate (a source question asking for 6 cubed) was dropped entirely: sc-q25 already asks this verbatim. Two source answers were independently re-derived rather than trusted as-authored, since the source paper's own handwritten work was mathematically inconsistent with the printed question: the 'greater than 15,000' comparison (sc-q43 - correct answer is Platform 2 only, verified by direct computation) and the matching activity's own answer key (verified pairing: 4,100^2 ends in 4 zeros, 22^2-21^2=43, sqrt(676)=26, 5^2=1+3+5+7+9 - the source paper's handwritten matching did not agree with this and was not used). objectiveIds are set only where an existing learning objective in canonical-topic.json genuinely fits (obj-squares-odd-sum, obj-cubes-smallest-multiplier, obj-squares-pythagorean-triplet - clean matches; obj-square-roots-prime-factorisation and obj-cubes-prime-factorisation - following this chapter's own established loose-filing precedent for plain computation, e.g. sc-q01/sc-q24/sc-q25) and left unset for three genuinely novel techniques this chapter's 11 objectives don't yet name (identity-based squaring, difference-of-squares, place-value/trailing-zero reasoning) rather than mis-filed or invented - a real, flagged content gap, not an oversight.",
   "questions": [
     {
       "id": "sc-q01",
@@ -576,6 +577,249 @@
       ],
       "difficulty": "Hard",
       "tags": ["cube-roots", "prime-factorisation"]
+    },
+    {
+      "id": "sc-q41",
+      "sourceRef": null,
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Platform 2 on a control panel displays 295². Using the identity (a − b)² = a² − 2ab + b², find the value of 295² by writing 295 as (300 − 5).",
+      "expectedAnswer": "87025",
+      "hints": [
+        "Set a = 300 and b = 5, since 295 = 300 − 5.",
+        "Compute a² − 2ab + b²: 300² − 2(300)(5) + 5²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "algebraic-identity", "computation"],
+      "misconception": {
+        "commonWrongAnswer": "90025",
+        "why": "Forgetting the middle term (−2ab) and computing only a² + b² (300² + 5²).",
+        "remediationHint": "The identity has three terms, not two — always include −2ab between a² and b²."
+      }
+    },
+    {
+      "id": "sc-q42",
+      "sourceRef": null,
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Platform 1 on the same control panel displays 95². Using the same identity, find 95² by writing 95 as (100 − 5).",
+      "expectedAnswer": "9025",
+      "hints": [
+        "Set a = 100 and b = 5, since 95 = 100 − 5.",
+        "Compute a² − 2ab + b²: 100² − 2(100)(5) + 5²."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "algebraic-identity", "computation"],
+      "misconception": {
+        "commonWrongAnswer": "10025",
+        "why": "Forgetting the middle term (−2ab) and computing only a² + b² (100² + 5²).",
+        "remediationHint": "The identity has three terms, not two — always include −2ab between a² and b²."
+      }
+    },
+    {
+      "id": "sc-q43",
+      "sourceRef": null,
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "Platform 1 shows 95² and Platform 2 shows 295². Which platform's squared value is greater than 15,000?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-p1", "text": "Platform 1 only" },
+          { "id": "opt-p2", "text": "Platform 2 only" },
+          { "id": "opt-both", "text": "Both platforms" },
+          { "id": "opt-neither", "text": "Neither platform" }
+        ]
+      },
+      "expectedAnswer": "Platform 2 only",
+      "hints": [
+        "Compare each squared value to 15,000 directly.",
+        "95² is under 10,000; check where 295² lands."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "comparison"],
+      "misconception": {
+        "commonWrongAnswer": "Both platforms",
+        "why": "Assuming any three-digit number squared automatically exceeds 15,000, without actually computing 95² first.",
+        "remediationHint": "95² is only 9,025 — always compute before comparing, rather than estimating from the size of the base number."
+      }
+    },
+    {
+      "id": "sc-q44",
+      "sourceRef": null,
+      "objectiveIds": ["obj-square-roots-prime-factorisation"],
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Find √676.",
+      "expectedAnswer": "26",
+      "hints": [
+        "26² = 676 — check by estimating between 25² = 625 and 30² = 900.",
+        "Try prime-factorising 676 and pairing identical factors."
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "computation"]
+    },
+    {
+      "id": "sc-q45",
+      "sourceRef": null,
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Evaluate 22² − 21² without squaring each number separately.",
+      "expectedAnswer": "43",
+      "hints": [
+        "Use the identity a² − b² = (a − b)(a + b).",
+        "Here a = 22 and b = 21, so (a − b) = 1."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "difference-of-squares"]
+    },
+    {
+      "id": "sc-q46",
+      "sourceRef": null,
+      "bloomLevel": "analysis",
+      "questionType": "numeric",
+      "prompt": "How many trailing zeros does 4,100² end in?",
+      "expectedAnswer": "4",
+      "hints": [
+        "Write 4,100 as 41 × 100, and square each part separately.",
+        "100² contributes four zeros; check whether 41² adds any more."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "place-value"],
+      "misconception": {
+        "commonWrongAnswer": "2",
+        "why": "Assuming the zero count carries over unchanged from 4,100 itself instead of recomputing it for the squared value.",
+        "remediationHint": "Squaring a number with trailing zeros doubles its trailing-zero count (100 has 2 zeros; 100² = 10,000 has 4)."
+      }
+    },
+    {
+      "id": "sc-q47",
+      "sourceRef": null,
+      "objectiveIds": ["obj-squares-odd-sum"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "The sum 1 + 3 + 5 + 7 + 9 (the first five odd numbers) equals which of these?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-4sq", "text": "4²" },
+          { "id": "opt-5sq", "text": "5²" },
+          { "id": "opt-6sq", "text": "6²" },
+          { "id": "opt-45", "text": "45" }
+        ]
+      },
+      "expectedAnswer": "5²",
+      "hints": [
+        "The sum of the first n odd numbers always equals n².",
+        "Count how many odd numbers are being added here."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "odd-number-sum"],
+      "misconception": {
+        "commonWrongAnswer": "45",
+        "why": "Confusing this with the sum of the first 9 whole numbers (1+2+...+9=45) instead of adding the five odd numbers shown.",
+        "remediationHint": "Add exactly the five numbers shown (1, 3, 5, 7, 9), not a different series."
+      }
+    },
+    {
+      "id": "sc-q48",
+      "sourceRef": null,
+      "objectiveIds": ["obj-cubes-smallest-multiplier"],
+      "bloomLevel": "synthesis",
+      "questionType": "numeric",
+      "prompt": "A treasure chest contains 5,400 identical golden coins. The total number of coins must be a perfect cube. Find the least number by which 5,400 should be divided so that the result is a perfect cube.",
+      "expectedAnswer": "25",
+      "hints": [
+        "Prime-factorise 5,400 and group the factors into triples.",
+        "One prime's power won't form a complete triple — that incomplete power is exactly what you need to remove."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cubes", "smallest-divisor", "word-problem"],
+      "misconception": {
+        "commonWrongAnswer": "9",
+        "why": "Dividing by an unrelated factor instead of first prime-factorising fully and identifying the specific prime power that breaks the perfect-cube grouping.",
+        "remediationHint": "5,400 = 2³ × 3³ × 5² — only the 5² is an incomplete triple, so 25 (not any other factor) is what must go."
+      }
+    },
+    {
+      "id": "sc-q49",
+      "sourceRef": null,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Following the pattern 2³ = 8, 3³ = 27, 4³ = 64, find the next value: 5³.",
+      "expectedAnswer": "125",
+      "hints": [
+        "Multiply 5 × 5 × 5.",
+        "Each step in this pattern cubes the next whole number."
+      ],
+      "difficulty": "Easy",
+      "tags": ["cubes", "computation", "pattern"]
+    },
+    {
+      "id": "sc-q50",
+      "sourceRef": null,
+      "objectiveIds": ["obj-squares-pythagorean-triplet"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "A drone hovers such that its horizontal distance from a statue is 6 m, its height above the ground is 8 m, and the straight-line distance from the statue to the drone is 10 m. Do 6, 8 and 10 form a Pythagorean triplet?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-yes", "text": "Yes" },
+          { "id": "opt-no", "text": "No" }
+        ]
+      },
+      "expectedAnswer": "Yes",
+      "hints": [
+        "A Pythagorean triplet (a, b, c) satisfies a² + b² = c², where c is the largest number.",
+        "Check whether 6² + 8² equals 10²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "pythagorean-triplet", "verification"],
+      "misconception": {
+        "commonWrongAnswer": "No",
+        "why": "Adding 6 + 8 + 10 or comparing the numbers directly instead of checking a² + b² = c².",
+        "remediationHint": "You must square each number first, then add the two smaller squares and compare to the largest square."
+      }
+    },
+    {
+      "id": "sc-q51",
+      "sourceRef": null,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
+      "bloomLevel": "application",
+      "questionType": "numeric",
+      "prompt": "Given the pattern 4³ − 3³ = 1 + 4×3×3, 5³ − 4³ = 1 + 5×4×3, 6³ − 5³ = 1 + 6×5×3, use it to find the value of 9³ − 8³.",
+      "expectedAnswer": "217",
+      "hints": [
+        "Follow the same pattern with n = 9: 1 + 9×8×3.",
+        "Compute 9×8×3 first, then add 1."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "pattern", "difference-of-cubes"]
+    },
+    {
+      "id": "sc-q52",
+      "sourceRef": null,
+      "objectiveIds": ["obj-cubes-prime-factorisation"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "Using the same pattern, a student claims that 11³ − 10³ = 331. Is this claim correct?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-yes", "text": "Yes" },
+          { "id": "opt-no", "text": "No" }
+        ]
+      },
+      "expectedAnswer": "Yes",
+      "hints": [
+        "Apply the pattern with n = 11: 1 + 11×10×3.",
+        "Compare your computed value to 331."
+      ],
+      "difficulty": "Medium",
+      "tags": ["cubes", "pattern", "difference-of-cubes", "verification"],
+      "misconception": {
+        "commonWrongAnswer": "No",
+        "why": "Miscomputing 11×10×3 (a common multiplication slip) rather than an actual disagreement with the pattern.",
+        "remediationHint": "11×10=110, then 110×3=330, then +1=331 — the claim is correct."
+      }
     }
   ]
 }
