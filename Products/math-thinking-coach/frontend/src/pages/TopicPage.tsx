@@ -32,13 +32,16 @@ function toParagraphs(explanation: string): string[] {
 // Worked examples are exported as "problem \n\n Step 1: … \n\n answer",
 // with multiple examples separated by a --- rule. Splitting them back out
 // lets each example render as its own card with its steps as a real list.
-interface WorkedExample {
+// Named distinctly from types/topic.ts's structured `WorkedExample` (Slice
+// A1) - this is the legacy string-parsed shape, used only for chapters that
+// haven't migrated (see isStructured below).
+interface ParsedWorkedExample {
   problem: string;
   steps: string[];
   answer: string;
 }
 
-function toWorkedExamples(content: string): WorkedExample[] {
+function toWorkedExamples(content: string): ParsedWorkedExample[] {
   return content
     .split(/\n\s*---\s*\n/)
     .map((block) => block.trim())
@@ -104,10 +107,21 @@ export default function TopicPage() {
     };
   }, [topicId, retryToken]);
 
-  const paragraphs = useMemo(() => (topic ? toParagraphs(topic.explanation) : []), [topic]);
+  // Slice A2: a Topic is "structured" once it has real Concepts (Slice A1
+  // pilot: A Square and A Cube only). Every other Topic-bearing chapter's
+  // `concepts` is an empty array (backend default) until its own migration
+  // (Slice A2b, not yet authorized) - this check is what lets both shapes
+  // render correctly today without a separate migration-state field on the
+  // wire. See docs/Structured-Learning-Content-Design-Proposal.md §K/§W.
+  const isStructured = !!topic && topic.concepts.length > 0;
+
+  const paragraphs = useMemo(
+    () => (topic && !isStructured ? toParagraphs(topic.explanation) : []),
+    [topic, isStructured],
+  );
   const workedExamples = useMemo(
-    () => (topic ? toWorkedExamples(topic.workedExampleContent) : []),
-    [topic],
+    () => (topic && !isStructured ? toWorkedExamples(topic.workedExampleContent) : []),
+    [topic, isStructured],
   );
 
   if (loadError) {
@@ -170,56 +184,117 @@ export default function TopicPage() {
           </p>
         </header>
 
-        <article className="topic-explanation">
-          {paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-        </article>
+        {isStructured ? (
+          topic.concepts.map((concept) => {
+            const conceptExamples = topic.workedExamples.filter(
+              (example) => example.conceptId === concept.id,
+            );
 
-        {workedExamples.length > 0 && (
-          <section className="topic-section" aria-labelledby="worked-examples-heading">
-            <h2 id="worked-examples-heading" className="topic-section-heading">
-              Worked examples
-            </h2>
+            return (
+              <section
+                className="topic-section"
+                key={concept.id}
+                aria-labelledby={`concept-heading-${concept.id}`}
+              >
+                <h2 id={`concept-heading-${concept.id}`} className="topic-section-heading">
+                  {concept.title}
+                </h2>
 
-            {workedExamples.map((example, index) => (
-              <figure className="worked-example" key={index}>
-                <figcaption className="worked-example-label">
-                  Example {index + 1}
-                </figcaption>
+                <div className="topic-explanation">
+                  {toParagraphs(concept.body).map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
 
-                {example.problem && <p className="worked-example-problem">{example.problem}</p>}
+                {conceptExamples.map((example, index) => (
+                  <figure className="worked-example" key={example.id}>
+                    <figcaption className="worked-example-label">Example {index + 1}</figcaption>
 
-                {example.steps.length > 0 && (
-                  <ol className="worked-example-steps">
-                    {example.steps.map((step, stepIndex) => (
-                      <li key={stepIndex}>{step.replace(/^Step\s+\d+:\s*/i, '')}</li>
+                    <p className="worked-example-problem">{example.problem}</p>
+
+                    {example.steps.length > 0 && (
+                      <ol className="worked-example-steps">
+                        {example.steps.map((step, stepIndex) => (
+                          <li key={stepIndex}>{step}</li>
+                        ))}
+                      </ol>
+                    )}
+
+                    {example.finalAnswer && (
+                      <p className="worked-example-answer">
+                        <span className="worked-example-answer-label">Answer</span>
+                        {example.finalAnswer}
+                      </p>
+                    )}
+                  </figure>
+                ))}
+
+                {concept.learningObjectives.length > 0 && (
+                  <ul className="topic-objectives">
+                    {concept.learningObjectives.map((objective) => (
+                      <li key={objective.id}>{objective.text}</li>
                     ))}
-                  </ol>
+                  </ul>
                 )}
-
-                {example.answer && (
-                  <p className="worked-example-answer">
-                    <span className="worked-example-answer-label">Answer</span>
-                    {example.answer}
-                  </p>
-                )}
-              </figure>
-            ))}
-          </section>
-        )}
-
-        {topic.learningObjectives.length > 0 && (
-          <section className="topic-section" aria-labelledby="objectives-heading">
-            <h2 id="objectives-heading" className="topic-section-heading">
-              What you should be able to do
-            </h2>
-            <ul className="topic-objectives">
-              {topic.learningObjectives.map((objective) => (
-                <li key={objective}>{objective}</li>
+              </section>
+            );
+          })
+        ) : (
+          <>
+            <article className="topic-explanation">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
               ))}
-            </ul>
-          </section>
+            </article>
+
+            {workedExamples.length > 0 && (
+              <section className="topic-section" aria-labelledby="worked-examples-heading">
+                <h2 id="worked-examples-heading" className="topic-section-heading">
+                  Worked examples
+                </h2>
+
+                {workedExamples.map((example, index) => (
+                  <figure className="worked-example" key={index}>
+                    <figcaption className="worked-example-label">
+                      Example {index + 1}
+                    </figcaption>
+
+                    {example.problem && (
+                      <p className="worked-example-problem">{example.problem}</p>
+                    )}
+
+                    {example.steps.length > 0 && (
+                      <ol className="worked-example-steps">
+                        {example.steps.map((step, stepIndex) => (
+                          <li key={stepIndex}>{step.replace(/^Step\s+\d+:\s*/i, '')}</li>
+                        ))}
+                      </ol>
+                    )}
+
+                    {example.answer && (
+                      <p className="worked-example-answer">
+                        <span className="worked-example-answer-label">Answer</span>
+                        {example.answer}
+                      </p>
+                    )}
+                  </figure>
+                ))}
+              </section>
+            )}
+
+            {topic.learningObjectives.length > 0 && (
+              <section className="topic-section" aria-labelledby="objectives-heading">
+                <h2 id="objectives-heading" className="topic-section-heading">
+                  What you should be able to do
+                </h2>
+                <ul className="topic-objectives">
+                  {topic.learningObjectives.map((objective) => (
+                    <li key={objective}>{objective}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </>
         )}
 
         <div className="topic-cta">

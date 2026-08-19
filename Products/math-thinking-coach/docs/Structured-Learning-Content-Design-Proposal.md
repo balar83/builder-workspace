@@ -555,4 +555,4 @@ Confirmed in the live runtime data at closure: 4 concepts, 4 worked examples, 11
 
 ### W.7 A2/A3 status
 
-**Not started.** Both remain approved in shape only (§M/§U). Each requires its own explicit Product Architect authorization before implementation begins, per this project's established workflow.
+**A2 implemented and closed (2026-08-19).** `TopicPage.tsx`/`types/topic.ts` now render the structured `concepts`/`workedExamples` fields for any migrated chapter (A Square and A Cube, A1's sole pilot), with the pre-A1 legacy rendering kept as an explicit fallback for the 4 not-yet-migrated Topic-bearing chapters — a deliberate, confirmed deviation from this section's original "legacy-field rendering logic is deleted" wording (written before A1 had shipped and the migration-window reality was fully concrete). See `Development-Journal.md`'s 2026-08-19 (A2) entry for the full record. **A3 not started**, still gated on A2 being live-verified (done) **and** every Topic-bearing chapter completing its migration (A2b, not authorized).

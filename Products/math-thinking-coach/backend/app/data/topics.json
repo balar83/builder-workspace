@@ -17,6 +17,98 @@
       "Identify whether a set of outcomes is equally likely.",
       "Calculate the probability of an event as (favourable outcomes) / (total equally likely outcomes).",
       "Name a real-life context where probability estimates are used (e.g. exit polls, weather prediction)."
+    ],
+    "concepts": [
+      {
+        "id": "concept-dh-reading-graphs",
+        "title": "Reading graphs you already know",
+        "body": "Data is information collected about a situation, organised systematically so it can be read and compared, rather than left as a jumble of numbers. A pictograph represents that data using a picture symbol, where each symbol (or a fraction of one) stands for a fixed quantity — for example, one book symbol might mean '2 books read'. A bar graph represents the same kind of data with bars of uniform width, equally spaced, where the height of each bar is proportional to the value it represents — taller means more. A double bar graph places two related bars side by side for each category, which makes it easy to compare two data sets directly, category by category, rather than looking at two separate graphs. One detail that trips students up: if the bars in a bar graph are rearranged — say, from tallest to shortest instead of alphabetical order — the information the graph conveys does not change at all. Only the order in which it's presented changes; every bar still represents the same value it always did.",
+        "learningObjectives": [
+          {
+            "id": "obj-dh-read-graphs",
+            "text": "Read and interpret values from a pictograph, bar graph, or double bar graph."
+          },
+          {
+            "id": "obj-dh-bar-graph-reorder",
+            "text": "Explain why rearranging a bar graph's bars does not change the information it conveys."
+          }
+        ]
+      },
+      {
+        "id": "concept-dh-pie-charts",
+        "title": "Pie charts: showing parts of a whole",
+        "body": "A pie chart (or circle graph) shows how a whole is split into parts, by dividing a circle into sectors whose sizes are proportional to what they represent — a category that makes up half the data gets a sector that's half the circle. The size of each sector is measured as a central angle, calculated with one formula: central angle = (that part's fraction of the whole) × 360°, since a full circle is 360°. For example, if 'Rent' is 25% of a family's expenses, its sector's central angle is (25/100) × 360° = 90°. To construct a pie chart by hand: draw a circle and mark its centre, draw a starting radius, then use a protractor centred at that point to mark off each sector's angle in turn, moving around the circle. A related, more subtle skill is back-solving: if you're told one sector's real-world value together with its percentage (or angle) of the total, that pair gives you a unit rate — for instance, 'Rent is 25% of the budget and equals ₹5,000' tells you that 1% equals ₹200, so the whole budget (100%) is ₹20,000. That same unit rate can then be used to find the real-world value behind any other sector in the same chart.",
+        "learningObjectives": [
+          {
+            "id": "obj-dh-pie-sector-meaning",
+            "text": "Explain what a pie chart's sector size represents in relation to the whole."
+          },
+          {
+            "id": "obj-dh-central-angle-formula",
+            "text": "Calculate a sector's central angle from its fraction of the total, using (part/whole) × 360°."
+          },
+          {
+            "id": "obj-dh-construct-pie-chart",
+            "text": "Construct a pie chart from a data table using a protractor."
+          },
+          {
+            "id": "obj-dh-unit-rate-backsolve",
+            "text": "Given one sector's real-world value and percentage, find the real-world value of another sector via the unit rate."
+          }
+        ]
+      },
+      {
+        "id": "concept-dh-probability",
+        "title": "Chance and probability",
+        "body": "A random experiment is one whose result cannot be predicted or controlled in advance, even in principle — tossing a coin or throwing a die are both random experiments, but checking whether the sun will rise tomorrow is not, since that outcome is certain. Each single possible result of an experiment is called an outcome (e.g. getting 'Heads', or rolling a '4'); an event is one outcome or a whole collection of outcomes grouped together (e.g. 'rolling an even number' is the event made up of the outcomes 2, 4, and 6). Outcomes are equally likely when each one has exactly the same chance of happening — this is only true when nothing about the experiment favours one outcome over another (a fair die's six faces are equally likely; a spinner with unequal sector sizes is not). Whenever outcomes are equally likely, probability can be calculated with one formula: P(event) = (number of outcomes that make the event happen) / (total number of equally likely outcomes). Probability isn't just a classroom idea — it's used to make real-world predictions from incomplete information, such as exit polls estimating an election result from a small sample of voters, or weather forecasts estimating tomorrow's conditions from historical patterns. In both cases, the prediction is a likelihood, not a certainty.",
+        "learningObjectives": [
+          {
+            "id": "obj-dh-random-experiment",
+            "text": "Distinguish a random experiment from one with a predictable outcome."
+          },
+          {
+            "id": "obj-dh-identify-outcomes",
+            "text": "Identify the outcomes of a simple random experiment (coin toss, die throw, spinner)."
+          },
+          {
+            "id": "obj-dh-equally-likely",
+            "text": "Identify whether a set of outcomes is equally likely."
+          },
+          {
+            "id": "obj-dh-probability-formula",
+            "text": "Calculate the probability of an event as (favourable outcomes) / (total equally likely outcomes)."
+          },
+          {
+            "id": "obj-dh-probability-application",
+            "text": "Name a real-life context where probability estimates are used (e.g. exit polls, weather prediction)."
+          }
+        ]
+      }
+    ],
+    "workedExamples": [
+      {
+        "id": "dh-we-01",
+        "conceptId": "concept-dh-pie-charts",
+        "problem": "A student's weekly pocket money of ₹120 is spent as: Snacks ₹60, Books ₹30, Savings ₹30. Find the central angle of each sector in a pie chart of this data.",
+        "steps": [
+          "Find each category's fraction of the total: Snacks = 60/120 = 1/2. Books = 30/120 = 1/4. Savings = 30/120 = 1/4.",
+          "Multiply each fraction by 360° to get its central angle: Snacks = 1/2 × 360° = 180°. Books = 1/4 × 360° = 90°. Savings = 1/4 × 360° = 90°.",
+          "Check that the angles add up to 360°: 180° + 90° + 90° = 360°."
+        ],
+        "finalAnswer": "Snacks: 180°, Books: 90°, Savings: 90°."
+      },
+      {
+        "id": "dh-we-02",
+        "conceptId": "concept-dh-probability",
+        "problem": "A box has 3 red pens, 2 blue pens and 5 black pens, identical except for colour. One pen is drawn without looking. What is the probability of drawing a blue pen?",
+        "steps": [
+          "Find the total number of equally likely outcomes: 3 + 2 + 5 = 10 pens.",
+          "Count the outcomes that make the event 'drawing a blue pen': 2.",
+          "Apply the probability formula: P(blue) = (favourable outcomes) / (total outcomes) = 2/10.",
+          "Simplify the fraction: 2/10 = 1/5."
+        ],
+        "finalAnswer": "P(blue pen) = 1/5."
+      }
     ]
   },
   {
@@ -35,8 +127,101 @@
       "Reduce a linear equation containing brackets and/or multiple denominators to a simpler linear form before solving.",
       "Solve the simplified equation and check the result by substituting back into the original LHS and RHS."
     ],
-    "concepts": [],
-    "workedExamples": []
+    "concepts": [
+      {
+        "id": "concept-le-basics",
+        "title": "What is a linear equation?",
+        "body": "An equation is a statement that says two expressions are equal, written with an '=' sign — for example, 2x + 1 = 7. An expression like 2x + 1 on its own, without an equals sign, is just an expression, not an equation. A linear equation in one variable is an equation where the variable appears only to the power 1 — no x², no x³. The expression on the left of the '=' sign is called the LHS (Left Hand Side), and the expression on the right is the RHS (Right Hand Side). A solution of the equation is the value of the variable that makes the LHS exactly equal to the RHS — not every value works, only specific ones. The reason we can solve equations at all is the balancing principle: if you do the same thing to both sides of an equation — add the same number, subtract the same number, multiply or divide both sides by the same non-zero number — the two sides stay equal. Every method used to solve an equation is really just this one idea, applied step by step.",
+        "learningObjectives": [
+          {
+            "id": "obj-le-expression-vs-equation",
+            "text": "Distinguish an algebraic expression from an equation by the presence of an equality sign."
+          },
+          {
+            "id": "obj-le-identify-linear",
+            "text": "Identify whether a given one-variable expression is linear (highest power = 1)."
+          },
+          {
+            "id": "obj-le-lhs-rhs",
+            "text": "Identify the LHS and RHS of a given equation."
+          },
+          {
+            "id": "obj-le-verify-solution",
+            "text": "Verify whether a given value of the variable is a solution of a given linear equation."
+          }
+        ]
+      },
+      {
+        "id": "concept-le-transposition",
+        "title": "Solving when the variable is on both sides",
+        "body": "Sometimes the variable appears on both sides of the equation, like 4x + 5 = 2x + 17. To solve this, we want all the x terms on one side and all the plain numbers on the other. The balancing principle says we can move a term from one side to the other, as long as we flip its sign when it crosses the '=' sign — this shortcut is called transposition. Moving +2x from the right side to the left turns it into -2x there, giving 4x - 2x + 5 = 17, which simplifies to 2x + 5 = 17. From there, transpose the +5 to the right (it becomes -5): 2x = 12, so x = 6. If the equation has a fractional coefficient, like x = (4/5)(x + 10), it helps to first multiply both sides by the denominator to clear the fraction, turning it into a plain integer equation before transposing.",
+        "learningObjectives": [
+          {
+            "id": "obj-le-transposition-both-sides",
+            "text": "Solve a linear equation that has the variable on both sides using transposition."
+          },
+          {
+            "id": "obj-le-fractional-coefficient",
+            "text": "Solve a linear equation with a fractional coefficient by first clearing the denominator."
+          }
+        ]
+      },
+      {
+        "id": "concept-le-reducing",
+        "title": "Reducing equations to simpler form",
+        "body": "Some equations look more complicated because they contain brackets or several different denominators, like 2(x + 1) = (3x - 1)/2 + 3. Two steps make these manageable. First, if there are denominators, multiply every single term on both sides by their LCM (lowest common multiple) — this clears all the fractions at once, turning the equation into one with only whole numbers. Second, if there are brackets, expand them first: multiply the number outside the bracket by every term inside it, not just the first one. Once fractions are cleared and brackets are expanded, combine like terms and solve using transposition, exactly as before. However an equation was solved, always finish by checking the answer: substitute the value back into the original LHS and the original RHS separately, and confirm the two sides come out equal. This check is what actually proves the answer is correct — it's not an optional extra step.",
+        "learningObjectives": [
+          {
+            "id": "obj-le-reduce-brackets-denominators",
+            "text": "Reduce a linear equation containing brackets and/or multiple denominators to a simpler linear form before solving."
+          },
+          {
+            "id": "obj-le-check-by-substitution",
+            "text": "Solve the simplified equation and check the result by substituting back into the original LHS and RHS."
+          }
+        ]
+      }
+    ],
+    "workedExamples": [
+      {
+        "id": "le-we-01",
+        "conceptId": "concept-le-basics",
+        "problem": "Is x = 4 a solution of the equation 3x - 5 = 7?",
+        "steps": [
+          "Substitute x = 4 into the LHS: 3(4) - 5 = 12 - 5 = 7.",
+          "The RHS is 7.",
+          "Compare: LHS = 7 and RHS = 7, so LHS = RHS."
+        ],
+        "finalAnswer": "Yes — x = 4 is a solution of 3x - 5 = 7, since both sides equal 7."
+      },
+      {
+        "id": "le-we-02",
+        "conceptId": "concept-le-transposition",
+        "problem": "Solve for x: 4x + 5 = 2x + 17.",
+        "steps": [
+          "Transpose 2x from the RHS to the LHS: 4x - 2x + 5 = 17.",
+          "Simplify the LHS: 2x + 5 = 17.",
+          "Transpose 5 from the LHS to the RHS: 2x = 17 - 5 = 12.",
+          "Divide both sides by 2: x = 6.",
+          "Check: LHS = 4(6) + 5 = 29. RHS = 2(6) + 17 = 29. LHS = RHS, as required."
+        ],
+        "finalAnswer": "x = 6."
+      },
+      {
+        "id": "le-we-03",
+        "conceptId": "concept-le-reducing",
+        "problem": "Solve for x: 2(x + 1) = (3x - 1)/2 + 3.",
+        "steps": [
+          "Multiply both sides by 2 (the denominator on the RHS) to clear the fraction: 2 × 2(x+1) = 2 × [(3x-1)/2 + 3].",
+          "Simplify: 4(x + 1) = (3x - 1) + 6.",
+          "Expand the bracket on the LHS: 4x + 4 = 3x + 5.",
+          "Transpose 3x to the LHS and 4 to the RHS: 4x - 3x = 5 - 4.",
+          "Simplify: x = 1.",
+          "Check: LHS = 2(1 + 1) = 4. RHS = (3(1) - 1)/2 + 3 = 2/2 + 3 = 1 + 3 = 4. LHS = RHS, as required."
+        ],
+        "finalAnswer": "x = 1."
+      }
+    ]
   },
   {
     "id": "topic-rational-numbers-properties-and-operations",
@@ -216,6 +401,115 @@
       "State and apply the properties of a parallelogram (opposite sides, opposite angles, adjacent angles, diagonals).",
       "Distinguish a rhombus, rectangle and square by their defining extra properties (sides, angles, diagonals).",
       "Reason about the hierarchy among quadrilaterals (e.g. every square is a rectangle and a rhombus, but not vice versa)."
+    ],
+    "concepts": [
+      {
+        "id": "concept-uq-polygons-basics",
+        "title": "Polygons: curves, convexity and regularity",
+        "body": "A polygon is a simple closed figure made up entirely of line segments — 'simple' means its boundary doesn't cross itself, and 'closed' means it has no gaps. A circle or any shape with a curved edge is not a polygon, no matter how it's drawn. Polygons come in two important pairs of categories. First, convex vs. concave: a polygon is convex when every one of its interior angles is less than 180°; if even one angle is greater than 180° — a single 'caved-in' vertex — the whole polygon is concave. Second, regular vs. irregular: a polygon is regular only when it satisfies two conditions at once — all of its sides are equal in length, AND all of its angles are equal in measure. A shape that meets only one of those two conditions (like a rhombus, whose sides are all equal but whose angles usually aren't) is irregular, not regular.",
+        "learningObjectives": [
+          {
+            "id": "obj-uq-identify-polygon",
+            "text": "Distinguish a polygon (simple closed figure of line segments) from a curve that isn't one."
+          },
+          {
+            "id": "obj-uq-convex-concave",
+            "text": "Distinguish a convex polygon from a concave polygon."
+          },
+          {
+            "id": "obj-uq-regular-irregular",
+            "text": "Distinguish a regular polygon from an irregular polygon."
+          }
+        ]
+      },
+      {
+        "id": "concept-uq-angle-sum",
+        "title": "Angle sum property of a polygon",
+        "body": "Every polygon's interior angles add up to a fixed total that depends only on its number of sides: for a polygon with n sides, the sum of the interior angles is (n − 2) × 180°. A quadrilateral (n = 4) always has interior angles summing to 360°; a pentagon (n = 5) always sums to 540°; and so on. This formula also works in reverse — if you're told the angle sum, you can solve for n. Alongside this, every convex polygon has a second, even simpler rule: its exterior angles, taken one at each vertex going around in order, always add up to 360° — this is true no matter how many sides the polygon has, unlike the interior sum. At any single vertex, the interior angle and its exterior angle always add up to 180°, since together they form a straight line. For a regular polygon specifically, this gives two useful shortcuts: each exterior angle equals 360° divided by the number of sides, and each interior angle equals (n − 2) × 180° divided by the number of sides.",
+        "learningObjectives": [
+          {
+            "id": "obj-uq-angle-sum-formula",
+            "text": "Calculate the sum of the interior angles of a polygon with n sides using (n − 2) × 180°, including back-solving for n given the sum."
+          },
+          {
+            "id": "obj-uq-find-unknown-interior-angle",
+            "text": "Apply the interior angle sum property to find an unknown interior angle when the others are given."
+          },
+          {
+            "id": "obj-uq-exterior-angle-sum",
+            "text": "State and apply the exterior angle sum property (always 360°) to find an unknown exterior angle, number of sides, or related interior angle."
+          }
+        ]
+      },
+      {
+        "id": "concept-uq-trapezium-kite",
+        "title": "Trapezium and kite",
+        "body": "A trapezium is a quadrilateral with exactly one pair of parallel sides — those parallel sides are called the bases, and the two non-parallel connecting sides are called the legs. A shape with both pairs of opposite sides parallel isn't a trapezium under this definition; it belongs to the parallelogram family instead, covered next. A kite is a quadrilateral with two distinct pairs of adjacent (side-by-side) sides that are equal in length — unlike a parallelogram, where it's the opposite sides that match, a kite's matching sides are neighbors that share a vertex. A kite's diagonals have their own distinct behavior: they cross at right angles, but only one of the two diagonals is actually cut exactly in half by the other — both diagonals being bisected is a parallelogram property, not a kite property.",
+        "learningObjectives": [
+          {
+            "id": "obj-uq-trapezium-identify",
+            "text": "Identify a trapezium by its one pair of parallel sides and name its parts (bases, legs)."
+          },
+          {
+            "id": "obj-uq-kite-identify",
+            "text": "Identify a kite by its two pairs of adjacent equal sides and state its diagonal properties."
+          }
+        ]
+      },
+      {
+        "id": "concept-uq-parallelograms",
+        "title": "Parallelograms and their special cases",
+        "body": "A parallelogram is a quadrilateral where both pairs of opposite sides are parallel and equal in length. This one shape gives rise to several more properties worth knowing: opposite angles are equal to each other; two angles that are adjacent (next to each other, sharing a side) are supplementary, meaning they add up to 180°; and the two diagonals bisect each other, crossing at a point that is the exact midpoint of both. Three special parallelograms each add one extra condition on top of all of this. A rhombus is a parallelogram where all four sides are equal — its diagonals bisect each other at right angles, and each diagonal also bisects the pair of angles it passes through. A rectangle is a parallelogram where all four angles are 90° — its diagonals are equal in length, in addition to bisecting each other. A square satisfies both extra conditions simultaneously — all sides equal AND all angles 90° — which makes it both a rhombus and a rectangle at the same time, with diagonals that are equal in length AND bisect each other at right angles. Because of this, there's a one-directional hierarchy worth remembering: every square is a rectangle and a rhombus; every rectangle is a parallelogram; every rhombus is a parallelogram — but none of these relationships work in reverse. Not every rectangle is a square, and not every parallelogram is a rhombus.",
+        "learningObjectives": [
+          {
+            "id": "obj-uq-parallelogram-properties",
+            "text": "State and apply the properties of a parallelogram (opposite sides, opposite angles, adjacent angles, diagonals)."
+          },
+          {
+            "id": "obj-uq-rhombus-rectangle-square",
+            "text": "Distinguish a rhombus, rectangle and square by their defining extra properties (sides, angles, diagonals)."
+          },
+          {
+            "id": "obj-uq-quadrilateral-hierarchy",
+            "text": "Reason about the hierarchy among quadrilaterals (e.g. every square is a rectangle and a rhombus, but not vice versa)."
+          }
+        ]
+      }
+    ],
+    "workedExamples": [
+      {
+        "id": "uq-we-01",
+        "conceptId": "concept-uq-angle-sum",
+        "problem": "Three angles of a quadrilateral measure 80°, 95°, and 100°. Find the fourth angle.",
+        "steps": [
+          "The sum of the interior angles of a quadrilateral is (4 − 2) × 180° = 360°.",
+          "Add the three known angles: 80° + 95° + 100° = 275°.",
+          "Subtract from the total: 360° − 275° = 85°."
+        ],
+        "finalAnswer": "The fourth angle is 85°."
+      },
+      {
+        "id": "uq-we-02",
+        "conceptId": "concept-uq-angle-sum",
+        "problem": "Each interior angle of a regular polygon measures 156°. How many sides does the polygon have?",
+        "steps": [
+          "At each vertex, the interior and exterior angles form a linear pair: interior + exterior = 180°.",
+          "So the exterior angle = 180° − 156° = 24°.",
+          "For a regular polygon, number of sides = 360° ÷ each exterior angle.",
+          "Number of sides = 360° ÷ 24° = 15."
+        ],
+        "finalAnswer": "The polygon has 15 sides."
+      },
+      {
+        "id": "uq-we-03",
+        "conceptId": "concept-uq-parallelograms",
+        "problem": "In parallelogram PQRS, angle P = 70°. Find angle Q (adjacent to P) and angle R (opposite to P).",
+        "steps": [
+          "Adjacent angles in a parallelogram are supplementary, so angle Q = 180° − 70° = 110°.",
+          "Opposite angles in a parallelogram are equal, so angle R = angle P = 70°."
+        ],
+        "finalAnswer": "Angle Q = 110°, angle R = 70°."
+      }
     ]
   }
 ]

@@ -10,7 +10,12 @@
       "Multiply each fraction by 360° to get its central angle."
     ],
     "solution": "Winter got the most votes (150). Central angles: Summer = (90/360)×360° = 90°, Rainy = (120/360)×360° = 120°, Winter = (150/360)×360° = 150°.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-central-angle-formula"
+    ]
   },
   {
     "id": "dh-q02",
@@ -23,7 +28,12 @@
       "Multiply each colour's simplified fraction by 360° to get its angle."
     ],
     "solution": "Blue = (18/36)×360° = 180°. Green = (9/36)×360° = 90°. Red = (6/36)×360° = 60°. Yellow = (3/36)×360° = 30°. (Angles sum to 360°.)",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-central-angle-formula"
+    ]
   },
   {
     "id": "dh-q03",
@@ -36,7 +46,12 @@
       "Check your five angles add up to exactly 360°."
     ],
     "solution": "Hindi = 200°, English = 60°, Marathi = 45°, Tamil = 35°, Bengali = 20°. (Angles sum to 360°.)",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-central-angle-formula"
+    ]
   },
   {
     "id": "dh-q04",
@@ -49,7 +64,12 @@
       "Don't treat 'Head then Tail' and 'Tail then Head' as the same outcome."
     ],
     "solution": "HH, HT, TH, TT — four equally likely outcomes.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-identify-outcomes"
+    ]
   },
   {
     "id": "dh-q05",
@@ -62,7 +82,12 @@
       "Remember 1 is not a prime number — it only has one factor."
     ],
     "solution": "Prime numbers on a die are 2, 3, 5. P(prime) = 3/6 = 1/2. Not-prime numbers are 1, 4, 6. P(not prime) = 3/6 = 1/2.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q06",
@@ -75,7 +100,12 @@
       "The two probabilities should add up to 1 — use that to check your second answer."
     ],
     "solution": "Only 6 is greater than 5. P(greater than 5) = 1/6. Not greater than 5: 1,2,3,4,5. P = 5/6.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q07",
@@ -88,7 +118,12 @@
       "Write the probability as favourable outcomes over total outcomes, then simplify."
     ],
     "solution": "There are 4 aces in a deck of 52, so P(ace) = 4/52 = 1/13.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q08",
@@ -101,7 +136,12 @@
       "Probability = favourable outcomes / total outcomes."
     ],
     "solution": "P(6) = 1/10.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q09",
@@ -114,7 +154,12 @@
       "Simplify the resulting fraction."
     ],
     "solution": "Numbers less than 6: 1,2,3,4,5. P = 5/10 = 1/2.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q10",
@@ -127,7 +172,12 @@
       "Simplify the fraction to lowest terms."
     ],
     "solution": "Numbers greater than 6: 7,8,9,10. P = 4/10 = 2/5.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q11",
@@ -140,7 +190,12 @@
       "Remember 10 itself has two digits."
     ],
     "solution": "1-digit numbers: 1 through 9 (10 is 2-digit). P = 9/10.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q12",
@@ -153,7 +208,12 @@
       "'Not blue' means every sector except blue — count green and red together."
     ],
     "solution": "P(green) = 3/5. Non-blue = green + red = 4/5.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q13",
@@ -166,7 +226,12 @@
       "A probability-based prediction estimates what's likely from limited or past information — it doesn't guarantee the outcome."
     ],
     "solution": "Any correct example works, e.g.: election exit polls, or weather forecasting from historical data. Both estimate what's likely, not what's certain.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-application"
+    ]
   },
   {
     "id": "dh-q14",
@@ -179,7 +244,12 @@
       "Multiply the symbol count by the value each symbol represents (2 books)."
     ],
     "solution": "Chetan has 4 symbols × 2 books = 8 books.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
   },
   {
     "id": "dh-q15",
@@ -192,7 +262,12 @@
       "The tallest bar corresponds to the day with the most sales."
     ],
     "solution": "Thursday, 40 ice creams.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
   },
   {
     "id": "dh-q16",
@@ -205,7 +280,12 @@
       "Subtract to find by how much the higher score exceeds the lower one."
     ],
     "solution": "Science — 8B scored 74 vs 8A's 68, so 8B scored 6 marks higher.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
   },
   {
     "id": "dh-q17",
@@ -218,7 +298,12 @@
       "Find the minimum value in the table."
     ],
     "solution": "Tallest: April (45mm). Shortest: February (15mm).",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
   },
   {
     "id": "dh-q18",
@@ -231,7 +316,12 @@
       "The value a bar represents is fixed to its label, not its position."
     ],
     "solution": "No — rearranging the bars only changes how the data is displayed, not the actual values each bar represents.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-bar-graph-reorder"
+    ]
   },
   {
     "id": "dh-q19",
@@ -244,7 +334,12 @@
       "A bigger share of the total should look like a bigger piece of the circle."
     ],
     "solution": "The sector's size (its central angle) represents that category's proportion (fraction) of the total data.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-pie-sector-meaning"
+    ]
   },
   {
     "id": "dh-q20",
@@ -257,7 +352,12 @@
       "Three roughly equal fractions of a whole are each close to 1/3."
     ],
     "solution": "It tells you the three sports are liked by roughly equal proportions (close to one-third each) of the class.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-pie-sector-meaning"
+    ]
   },
   {
     "id": "dh-q21",
@@ -270,7 +370,12 @@
       "The protractor is used after you have a starting radius to measure the angle from."
     ],
     "solution": "1) Draw a circle of any convenient radius and mark its centre O. 2) Draw a radius OA. 3) Use a protractor centred at O to mark a point B such that angle AOB = 72°. 4) Draw OB and shade the sector AOB.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-construct-pie-chart"
+    ]
   },
   {
     "id": "dh-q22",
@@ -283,7 +388,12 @@
       "Multiply that 1%-value by 100 to get the total."
     ],
     "solution": "₹20,000. (25% = ₹5,000, so 100% = 5,000 × 4 = ₹20,000.)",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q23",
@@ -296,7 +406,12 @@
       "Multiply by 100 to find the total."
     ],
     "solution": "30 periods. (20% = 6 periods, so 100% = 6 × 5 = 30.)",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q24",
@@ -309,7 +424,12 @@
       "Convert the Books sector's central angle into a percentage of 360°, then apply it to the total."
     ],
     "solution": "Total sales = ₹20,000 (since 15% = ₹3,000, 1% = ₹200, 100% = ₹20,000). Books' angle 108° = 108/360 = 30% of the total, so Books = 30% × ₹20,000 = ₹6,000.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q25",
@@ -322,7 +442,12 @@
       "Compare an uncertain result with a near-certain one."
     ],
     "solution": "(a) Tossing a coin is a random experiment — its outcome cannot be predicted in advance. (b) is not random — the outcome is certain.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-random-experiment"
+    ]
   },
   {
     "id": "dh-q26",
@@ -335,7 +460,12 @@
       "A random experiment's outcome depends on chance, not a fixed, predictable rule."
     ],
     "solution": "Yes — which card is drawn cannot be predicted or controlled in advance.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-random-experiment"
+    ]
   },
   {
     "id": "dh-q27",
@@ -348,7 +478,12 @@
       "Equal sector sizes mean equal chances."
     ],
     "solution": "Yes — since the four sectors are equal in size, each colour has the same chance of the pointer landing on it.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-equally-likely"
+    ]
   },
   {
     "id": "dh-q28",
@@ -361,7 +496,12 @@
       "A larger sector means a greater chance of the pointer landing there."
     ],
     "solution": "No — since the red sector is larger, the pointer is more likely to land on red than blue, so the two outcomes are not equally likely.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-equally-likely"
+    ]
   },
   {
     "id": "dh-q29",
@@ -374,7 +514,12 @@
       "List each face as a separate outcome."
     ],
     "solution": "Head, Tail (2 outcomes).",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-identify-outcomes"
+    ]
   },
   {
     "id": "dh-q30",
@@ -387,7 +532,12 @@
       "List each face's number as a separate outcome."
     ],
     "solution": "1, 2, 3, 4, 5, 6 (6 outcomes).",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-identify-outcomes"
+    ]
   },
   {
     "id": "dh-q31",
@@ -400,7 +550,12 @@
       "Count how many are white, then form the ratio."
     ],
     "solution": "P(white) = 3/8.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q32",
@@ -413,7 +568,12 @@
       "Form the probability as boys/total, then simplify."
     ],
     "solution": "Boys = 45 - 27 = 18. P(boy) = 18/45 = 2/5.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q33",
@@ -426,7 +586,12 @@
       "Set up g/(total) = 1/4 and solve for g."
     ],
     "solution": "Green = 3, Total = 12. (g/(9+g) = 1/4 → 4g = 9+g → 3g = 9 → g = 3.) Check: 3/12 = 1/4.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q34",
@@ -439,7 +604,12 @@
       "Subtract from the total to find the coffee-preferring count."
     ],
     "solution": "Tea = (3/5)×200 = 120. Coffee = 200 - 120 = 80.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q35",
@@ -452,7 +622,12 @@
       "If one outcome has a 70% chance, the only remaining outcome takes up what's left of 100%."
     ],
     "solution": "Yes, it's a probability statement. The remaining 30% represents the chance the treatment is not effective.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-application"
+    ]
   },
   {
     "id": "dh-q36",
@@ -465,7 +640,12 @@
       "Apply the Salaries percentage to that total."
     ],
     "solution": "Total = ₹40,00,000 (since 20% = ₹8,00,000, so 100% = ₹8,00,000 × 5). Salaries = 40% × ₹40,00,000 = ₹16,00,000.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q37",
@@ -478,7 +658,12 @@
       "Set up r/(r+12) = 3/7 and cross-multiply to solve for r."
     ],
     "solution": "Red = 9, Total = 21. (r/(r+12) = 3/7 → 7r = 3r+36 → 4r=36 → r=9.) Check: 9/21 = 3/7.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
   },
   {
     "id": "dh-q38",
@@ -491,7 +676,13 @@
       "Compare the two rupee amounts, not the two percentages."
     ],
     "solution": "Family A spends ₹6,000 (20% of 30,000) vs Family B's ₹5,000 (25% of 20,000) — Family A spends more in actual rupees despite the lower percentage, because its total income is larger.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-pie-sector-meaning",
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q39",
@@ -504,7 +695,12 @@
       "That percentage difference corresponds to the 45-student difference — use it to find 100% (the total)."
     ],
     "solution": "Total = 450. (Sports − Art = 30% − 20% = 10% of total = 45 students, so total = 45 × 10 = 450.)",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-unit-rate-backsolve"
+    ]
   },
   {
     "id": "dh-q40",
@@ -517,7 +713,12 @@
       "Think about what 'equally likely' means for the corrected, equal-sized sectors."
     ],
     "solution": "It will decrease. With the enlarged sector, 6 was more likely than the others (not equally likely). Correcting the sectors to equal size restores all six outcomes as equally likely, so 6's probability drops back down to 1/6, the same as every other number.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-equally-likely"
+    ]
   },
   {
     "id": "dh-q41",
@@ -530,7 +731,12 @@
       "Compare this to rearranging bars in a bar graph — does the data itself change?"
     ],
     "solution": "No — both orderings show the same underlying data and are equally correct. The order in which categories are listed is a presentation choice; it doesn't change any of the values being represented.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-bar-graph-reorder"
+    ]
   },
   {
     "id": "dh-q42",
@@ -543,7 +749,12 @@
       "Consider why an approximate sketch wouldn't correctly represent the calculated central angles."
     ],
     "solution": "A protractor. It's needed because sector sizes must be proportional to the exact computed angles (e.g. 90°, 60°) — estimating by eye would make the sectors inaccurate and no longer truly proportional to the data.",
-    "topicId": "topic-data-handling-representation-and-probability"
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-construct-pie-chart"
+    ]
   },
   {
     "id": "le-q01",
@@ -558,7 +769,10 @@
     "solution": "x = 18. Check: LHS = 3(18) = 54, RHS = 2(18) + 18 = 54. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q02",
@@ -573,7 +787,10 @@
     "solution": "t = -1. Check: LHS = 5(-1) - 3 = -8, RHS = 3(-1) - 5 = -8. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q03",
@@ -588,7 +805,10 @@
     "solution": "x = -2. Check: LHS = 5(-2) + 9 = -1, RHS = 5 + 3(-2) = -1. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q04",
@@ -603,7 +823,10 @@
     "solution": "z = 3/2 (= 1.5). Check: LHS = 4(1.5) + 3 = 9, RHS = 6 + 2(1.5) = 9. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q05",
@@ -618,7 +841,10 @@
     "solution": "x = 5. Check: LHS = 2(5) - 1 = 9, RHS = 14 - 5 = 9. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q06",
@@ -633,7 +859,10 @@
     "solution": "x = 0. Check: LHS = 8(0) + 4 = 4, RHS = 3(0 - 1) + 7 = -3 + 7 = 4. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q07",
@@ -648,7 +877,10 @@
     "solution": "x = 40. Check: LHS = 40, RHS = (4/5)(40 + 10) = (4/5)(50) = 40. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
   },
   {
     "id": "le-q08",
@@ -663,7 +895,10 @@
     "solution": "x = 10. Check: LHS = 20/3 + 1 = 23/3, RHS = 70/15 + 3 = 14/3 + 3 = 23/3. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
   },
   {
     "id": "le-q09",
@@ -678,7 +913,10 @@
     "solution": "y = 7/3. Check: LHS = 14/3 + 5/3 = 19/3, RHS = 26/3 - 7/3 = 19/3. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
   },
   {
     "id": "le-q10",
@@ -693,7 +931,10 @@
     "solution": "m = 4/5. Check: LHS = 3(4/5) = 12/5, RHS = 5(4/5) - 8/5 = 20/5 - 8/5 = 12/5. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q11",
@@ -708,7 +949,10 @@
     "solution": "x = 27/10 (= 2.7). Check: LHS = 27/20 - 1/5 = 23/20, RHS = 27/30 + 1/4 = 23/20. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q12",
@@ -723,7 +967,10 @@
     "solution": "n = 36. Check: 36/2 - 3(36)/4 + 5(36)/6 = 18 - 27 + 30 = 21.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q13",
@@ -738,7 +985,10 @@
     "solution": "x = -5. Check: LHS = -5 + 7 - 8(-5)/3 = 2 + 40/3 = 46/3, RHS = 17/6 - 5(-5)/2 = 17/6 + 25/2 = 46/3. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q14",
@@ -753,7 +1003,10 @@
     "solution": "x = 8. Check: LHS = (8-5)/3 = 1, RHS = (8-3)/5 = 1. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q15",
@@ -768,7 +1021,10 @@
     "solution": "t = 2. Check: LHS = (6-2)/4 - (4+3)/3 = 1 - 7/3 = -4/3, RHS = 2/3 - 2 = -4/3. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q16",
@@ -783,7 +1039,10 @@
     "solution": "m = 7/5 (= 1.4). Check: LHS = 7/5 - (2/5)/2 = 7/5 - 1/5 = 6/5, RHS = 1 - (-3/5)/3 = 1 + 1/5 = 6/5. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q17",
@@ -798,7 +1057,10 @@
     "solution": "t = -2. Check: LHS = 3(-2-3) = -15, RHS = 5(2(-2)+1) = -15. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q18",
@@ -813,7 +1075,10 @@
     "solution": "y = 2/3. Check: 15(2/3-4) - 2(2/3-9) + 5(2/3+6) = -50 + 50/3 + 100/3 = -50 + 50 = 0.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q19",
@@ -828,7 +1093,10 @@
     "solution": "z = 2. Check: LHS = 3(3) - 2(7) = -5, RHS = 4(3) - 17 = -5. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q20",
@@ -843,7 +1111,10 @@
     "solution": "f = 3/5 (= 0.6). Check: LHS = 0.25(-0.6) = -0.15, RHS = 0.05(-3) = -0.15. LHS = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q21",
@@ -875,7 +1146,11 @@
           "text": "(c) xy + 1 = 0"
         }
       ]
-    }
+    },
+    "objectiveIds": [
+      "obj-le-expression-vs-equation",
+      "obj-le-identify-linear"
+    ]
   },
   {
     "id": "le-q22",
@@ -890,7 +1165,10 @@
     "solution": "LHS (Left Hand Side) = 5x - 2. RHS (Right Hand Side) = 3x + 8.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-lhs-rhs"
+    ]
   },
   {
     "id": "le-q23",
@@ -926,7 +1204,10 @@
           "text": "(d) 7 = 2x - 1"
         }
       ]
-    }
+    },
+    "objectiveIds": [
+      "obj-le-expression-vs-equation"
+    ]
   },
   {
     "id": "le-q24",
@@ -958,7 +1239,11 @@
           "text": "(c) x³ - 1 = 0"
         }
       ]
-    }
+    },
+    "objectiveIds": [
+      "obj-le-expression-vs-equation",
+      "obj-le-identify-linear"
+    ]
   },
   {
     "id": "le-q25",
@@ -973,7 +1258,10 @@
     "solution": "LHS = 9 - 2x. RHS = 5x + 2.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-lhs-rhs"
+    ]
   },
   {
     "id": "le-q26",
@@ -988,7 +1276,10 @@
     "solution": "Equation: 3x + 5 = 26. LHS = 3x + 5, RHS = 26.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-lhs-rhs"
+    ]
   },
   {
     "id": "le-q27",
@@ -1016,7 +1307,10 @@
           "text": "No"
         }
       ]
-    }
+    },
+    "objectiveIds": [
+      "obj-le-verify-solution"
+    ]
   },
   {
     "id": "le-q28",
@@ -1044,7 +1338,10 @@
           "text": "No"
         }
       ]
-    }
+    },
+    "objectiveIds": [
+      "obj-le-verify-solution"
+    ]
   },
   {
     "id": "le-q29",
@@ -1059,7 +1356,10 @@
     "solution": "The student's answer is wrong. Checking x = 5: LHS = 2(5) + 3 = 13, RHS = 15 — they don't match. Correct solution: 2x = 15 - 3 = 12, so x = 6. Check: LHS = 2(6) + 3 = 15 = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-verify-solution"
+    ]
   },
   {
     "id": "le-q30",
@@ -1074,7 +1374,11 @@
     "solution": "The mistake is in Step 1: the student expanded 5(x - 2) as 5x - 2, but it should be 5x - 10. Correct solution: 5x - 10 = 3x + 4, so 2x = 14, x = 7. Check: LHS = 5(7-2) = 25, RHS = 3(7) + 4 = 25.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-verify-solution",
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q31",
@@ -1089,7 +1393,10 @@
     "solution": "x = 6. Check: LHS = 6(6) - 7 = 29, RHS = 3(6) + 11 = 29.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q32",
@@ -1104,7 +1411,10 @@
     "solution": "y = 5. Check: LHS = 9(5) + 2 = 47, RHS = 5(5) + 22 = 47.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q33",
@@ -1119,7 +1429,10 @@
     "solution": "x = 20. Check: LHS = 15 - 2 = 13, RHS = 10 + 3 = 13.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
   },
   {
     "id": "le-q34",
@@ -1134,7 +1447,10 @@
     "solution": "x = 10. Check: LHS = 4(10-2) = 32, RHS = 2(10+6) = 32.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q35",
@@ -1149,7 +1465,10 @@
     "solution": "x = 7/3. Check: LHS = 29/9 - 2/9 = 27/9 = 3 = RHS.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q36",
@@ -1164,7 +1483,10 @@
     "solution": "x = 5.5 (= 11/2). Check: LHS = 0.5(12.5) = 6.25, RHS = 0.25(21) + 1 = 6.25.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q37",
@@ -1179,7 +1501,10 @@
     "solution": "The numbers are 16 and 21. (x + (x+5) = 37 → 2x = 32 → x = 16, and x+5 = 21.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q38",
@@ -1194,7 +1519,10 @@
     "solution": "x = 6. (5x - 4 = 26 → 5x = 30 → x = 6.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
   },
   {
     "id": "le-q39",
@@ -1209,7 +1537,10 @@
     "solution": "The integers are 16, 17, and 18. (x + (x+1) + (x+2) = 51 → 3x + 3 = 51 → x = 16.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q40",
@@ -1224,7 +1555,10 @@
     "solution": "Breadth = 8 cm, Length = 12 cm. (2(2x+4) = 40 → 4x = 32 → x = 8.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q41",
@@ -1239,7 +1573,10 @@
     "solution": "Raju is 10 years old and his father is 40. (4x+5 = 3(x+5) → x = 10.) Check: in 5 years Raju is 15, father is 45 = 3×15.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q42",
@@ -1254,7 +1591,10 @@
     "solution": "12 notes of ₹10 and 13 notes of ₹20. (10x + 20(25-x) = 380 → -10x = -120 → x = 12.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "le-q43",
@@ -1269,7 +1609,10 @@
     "solution": "x = 36. (x/4 = x/6 + 3 → 3x = 2x + 36 → x = 36.) Check: 36/4 = 9, and 36/6 + 3 = 9.",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "numeric",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
   },
   {
     "id": "le-q44",
@@ -1284,7 +1627,10 @@
     "solution": "Length = 18 cm, Width = 12 cm. (2(x + (2/3)x) = 60 → (10/3)x = 60 → x = 18.)",
     "topicId": "topic-linear-equations-one-variable",
     "questionType": "short_text",
-    "maxScore": 1
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
   },
   {
     "id": "pg-q01",
@@ -3247,7 +3593,12 @@
       "It must also be closed and 'simple' (its boundary doesn't cross itself)."
     ],
     "solution": "A simple closed figure made up entirely of line segments.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-identify-polygon"
+    ]
   },
   {
     "id": "uq-q02",
@@ -3260,7 +3611,12 @@
       "If the sides cross each other, the figure is not simple."
     ],
     "solution": "No — a polygon must be a simple closed curve, meaning its boundary must not cross itself.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-identify-polygon"
+    ]
   },
   {
     "id": "uq-q03",
@@ -3273,7 +3629,12 @@
       "At a caved-in vertex the interior angle is more than 180° — convex polygons never have this."
     ],
     "solution": "Each interior angle is less than 180°.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-convex-concave"
+    ]
   },
   {
     "id": "uq-q04",
@@ -3286,7 +3647,12 @@
       "Since 200° is greater than 180°, this vertex is 'caved in'."
     ],
     "solution": "Concave",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-convex-concave"
+    ]
   },
   {
     "id": "uq-q05",
@@ -3299,7 +3665,12 @@
       "Look for any single angle greater than 180°."
     ],
     "solution": "No, it is concave, because the 260° angle is greater than 180°.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-convex-concave"
+    ]
   },
   {
     "id": "uq-q06",
@@ -3312,7 +3683,12 @@
       "Equal sides alone is not enough if the angles differ."
     ],
     "solution": "All its sides are equal in length and all its angles are equal in measure.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-regular-irregular"
+    ]
   },
   {
     "id": "uq-q07",
@@ -3325,7 +3701,12 @@
       "Here the sides are equal — now check the angles."
     ],
     "solution": "No, because its angles are not all equal.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-regular-irregular"
+    ]
   },
   {
     "id": "uq-q08",
@@ -3338,7 +3719,12 @@
       "(4 − 2) × 180° = 2 × 180°."
     ],
     "solution": "360°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
   },
   {
     "id": "uq-q09",
@@ -3351,7 +3737,12 @@
       "(5 − 2) × 180° = 3 × 180°."
     ],
     "solution": "540°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
   },
   {
     "id": "uq-q10",
@@ -3364,7 +3755,12 @@
       "(8 − 2) × 180° = 6 × 180°."
     ],
     "solution": "1080°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
   },
   {
     "id": "uq-q11",
@@ -3377,7 +3773,12 @@
       "1260° ÷ 180° = 7, so n − 2 = 7."
     ],
     "solution": "9",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
   },
   {
     "id": "uq-q12",
@@ -3390,7 +3791,12 @@
       "Add the three known angles, then subtract that total from 360°."
     ],
     "solution": "85°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
   },
   {
     "id": "uq-q13",
@@ -3403,7 +3809,12 @@
       "Subtract 3 × 90° from 360°."
     ],
     "solution": "90°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
   },
   {
     "id": "uq-q14",
@@ -3417,7 +3828,12 @@
       "540° − (100° + 110° + 120° + 95°) = ?"
     ],
     "solution": "115°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
   },
   {
     "id": "uq-q15",
@@ -3431,7 +3847,12 @@
       "2x + 3x + 4x + 6x = 15x = 360°, so x = 24°."
     ],
     "solution": "48°, 72°, 96°, 144°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
   },
   {
     "id": "uq-q16",
@@ -3444,7 +3865,12 @@
       "It's always a full turn — 360°."
     ],
     "solution": "360°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
   },
   {
     "id": "uq-q17",
@@ -3457,7 +3883,12 @@
       "360° ÷ 9 = ?"
     ],
     "solution": "40°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
   },
   {
     "id": "uq-q18",
@@ -3470,7 +3901,12 @@
       "360° ÷ 24° = ?"
     ],
     "solution": "15",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
   },
   {
     "id": "uq-q19",
@@ -3484,7 +3920,12 @@
       "180° − 156° = 24°, then 360° ÷ 24° = ?"
     ],
     "solution": "15",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
   },
   {
     "id": "uq-q20",
@@ -3498,7 +3939,12 @@
       "6x = 180°, so x = 30°; then 360° ÷ 30° = ?"
     ],
     "solution": "12",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
   },
   {
     "id": "uq-q21",
@@ -3511,7 +3957,12 @@
       "In some regions this shape is also called a trapezoid."
     ],
     "solution": "Trapezium",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-trapezium-identify"
+    ]
   },
   {
     "id": "uq-q22",
@@ -3524,7 +3975,12 @@
       "A shape with both pairs parallel belongs to a different quadrilateral family."
     ],
     "solution": "No, because a trapezium has exactly one pair of parallel sides — this shape is a parallelogram.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-trapezium-identify"
+    ]
   },
   {
     "id": "uq-q23",
@@ -3537,7 +3993,12 @@
       "The slanted connecting sides have their own separate name."
     ],
     "solution": "bases, legs",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-trapezium-identify"
+    ]
   },
   {
     "id": "uq-q24",
@@ -3550,7 +4011,12 @@
       "In a kite, the equal sides are adjacent (next to each other), not opposite."
     ],
     "solution": "It has two distinct pairs of adjacent sides that are equal in length.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-kite-identify"
+    ]
   },
   {
     "id": "uq-q25",
@@ -3563,7 +4029,12 @@
       "Only one of the two diagonals is cut exactly in half by the other."
     ],
     "solution": "They intersect at right angles, and one diagonal bisects the other.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-kite-identify"
+    ]
   },
   {
     "id": "uq-q26",
@@ -3576,7 +4047,12 @@
       "Arrange the sides so each pair of equal length shares a common vertex."
     ],
     "solution": "The two 5 cm sides must be adjacent to each other, and the two 8 cm sides must be adjacent to each other.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-kite-identify"
+    ]
   },
   {
     "id": "uq-q27",
@@ -3589,7 +4065,12 @@
       "Both pairs of opposite sides share both properties."
     ],
     "solution": "They are parallel and equal in length.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q28",
@@ -3602,7 +4083,12 @@
       "Each pair of opposite angles has the same measure."
     ],
     "solution": "They are equal.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q29",
@@ -3615,7 +4101,12 @@
       "Their measures always add up to a straight angle."
     ],
     "solution": "They are supplementary (they add up to 180°).",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q30",
@@ -3628,7 +4119,12 @@
       "Opposite angles in a parallelogram are equal."
     ],
     "solution": "Angle B = 110°, Angle C = 70°",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q31",
@@ -3641,7 +4137,12 @@
       "The point where they cross divides each diagonal into two equal halves."
     ],
     "solution": "They bisect each other.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q32",
@@ -3655,7 +4156,12 @@
       "No calculation needed — apply the bisection property directly to PO and OR."
     ],
     "solution": "OR = 6 cm, because the diagonals of a parallelogram bisect each other, so O is the midpoint of diagonal PR.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
   },
   {
     "id": "uq-q33",
@@ -3668,7 +4174,12 @@
       "Compare the side lengths of a rhombus to a 'plain' parallelogram."
     ],
     "solution": "All four sides are equal in length.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
   },
   {
     "id": "uq-q34",
@@ -3681,7 +4192,12 @@
       "Every angle in a rectangle measures the same amount — what is it?"
     ],
     "solution": "All four angles are 90°.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
   },
   {
     "id": "uq-q35",
@@ -3694,7 +4210,12 @@
       "Compare the lengths of the two diagonals in each shape."
     ],
     "solution": "A rectangle's diagonals are equal in length (as well as bisecting each other).",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
   },
   {
     "id": "uq-q36",
@@ -3708,7 +4229,12 @@
       "Combining both special conditions at once gives the most specific quadrilateral name of all."
     ],
     "solution": "Square",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
   },
   {
     "id": "uq-q37",
@@ -3722,7 +4248,12 @@
       "List the rhombus's diagonal properties, then the rectangle's, and find the one only in the rectangle's list."
     ],
     "solution": "The diagonals are equal in length.",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
   },
   {
     "id": "uq-q38",
@@ -3735,7 +4266,12 @@
       "Check the square's defining condition (all sides equal) — does every rectangle satisfy that too?"
     ],
     "solution": "Every square is a rectangle (it has all angles 90°), but not every rectangle is a square (a rectangle need not have all sides equal).",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-quadrilateral-hierarchy"
+    ]
   },
   {
     "id": "uq-q39",
@@ -3748,7 +4284,12 @@
       "Check whether a general parallelogram automatically has all four sides equal."
     ],
     "solution": "Every rhombus is a parallelogram (opposite sides parallel and equal), but not every parallelogram is a rhombus (its sides need not all be equal).",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-quadrilateral-hierarchy"
+    ]
   },
   {
     "id": "uq-q40",
@@ -3762,6 +4303,11 @@
       "Square is a rectangle; square is a rhombus; both rectangle and rhombus are parallelograms."
     ],
     "solution": "Rectangle, rhombus, and parallelogram",
-    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties"
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-quadrilateral-hierarchy"
+    ]
   }
 ]

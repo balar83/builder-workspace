@@ -7,7 +7,7 @@
     {
       "id": "uq-q01",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 1,
+      "objectiveIds": ["obj-uq-identify-polygon"],
       "bloomLevel": "recall",
       "prompt": "What is a polygon?",
       "expectedAnswer": "A simple closed figure made up entirely of line segments.",
@@ -26,7 +26,7 @@
     {
       "id": "uq-q02",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 1,
+      "objectiveIds": ["obj-uq-identify-polygon"],
       "bloomLevel": "analysis",
       "prompt": "A shape has 5 straight sides, but its boundary crosses itself once. Is it a polygon? Why or why not?",
       "expectedAnswer": "No — a polygon must be a simple closed curve, meaning its boundary must not cross itself.",
@@ -45,7 +45,7 @@
     {
       "id": "uq-q03",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 2,
+      "objectiveIds": ["obj-uq-convex-concave"],
       "bloomLevel": "recall",
       "prompt": "What is true of every interior angle of a convex polygon?",
       "expectedAnswer": "Each interior angle is less than 180°.",
@@ -64,7 +64,7 @@
     {
       "id": "uq-q04",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 2,
+      "objectiveIds": ["obj-uq-convex-concave"],
       "bloomLevel": "application",
       "prompt": "A polygon has one interior angle measuring 200°. Is this polygon convex or concave?",
       "expectedAnswer": "Concave",
@@ -83,7 +83,7 @@
     {
       "id": "uq-q05",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 2,
+      "objectiveIds": ["obj-uq-convex-concave"],
       "bloomLevel": "analysis",
       "prompt": "A hexagon has interior angles 100°, 110°, 120°, 130°, 140°, and 260°. Is this hexagon convex? Explain.",
       "expectedAnswer": "No, it is concave, because the 260° angle is greater than 180°.",
@@ -102,7 +102,7 @@
     {
       "id": "uq-q06",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 3,
+      "objectiveIds": ["obj-uq-regular-irregular"],
       "bloomLevel": "recall",
       "prompt": "What makes a polygon 'regular'?",
       "expectedAnswer": "All its sides are equal in length and all its angles are equal in measure.",
@@ -121,7 +121,7 @@
     {
       "id": "uq-q07",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
-      "objective": 3,
+      "objectiveIds": ["obj-uq-regular-irregular"],
       "bloomLevel": "analysis",
       "prompt": "A quadrilateral has all four sides equal in length, but its angles are 80°, 100°, 80°, 100°. Is it a regular polygon?",
       "expectedAnswer": "No, because its angles are not all equal.",
@@ -140,7 +140,7 @@
     {
       "id": "uq-q08",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 4,
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "recall",
       "prompt": "What is the sum of the interior angles of a quadrilateral?",
       "expectedAnswer": "360°",
@@ -159,7 +159,7 @@
     {
       "id": "uq-q09",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 4,
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "recall",
       "prompt": "What is the sum of the interior angles of a pentagon (5 sides)?",
       "expectedAnswer": "540°",
@@ -178,7 +178,7 @@
     {
       "id": "uq-q10",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 4,
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "application",
       "prompt": "What is the sum of the interior angles of an octagon (8 sides)?",
       "expectedAnswer": "1080°",
@@ -197,7 +197,7 @@
     {
       "id": "uq-q11",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 4,
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "application",
       "prompt": "A polygon's interior angles sum to 1260°. How many sides does it have?",
       "expectedAnswer": "9",
@@ -216,7 +216,7 @@
     {
       "id": "uq-q12",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
       "bloomLevel": "application",
       "prompt": "Three angles of a quadrilateral are 80°, 95°, and 100°. Find the fourth angle.",
       "expectedAnswer": "85°",
@@ -235,7 +235,7 @@
     {
       "id": "uq-q13",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
       "bloomLevel": "application",
       "prompt": "In a quadrilateral, three angles are equal to 90° each, and the fourth is unknown. Find the fourth angle.",
       "expectedAnswer": "90°",
@@ -254,7 +254,7 @@
     {
       "id": "uq-q14",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
       "bloomLevel": "analysis",
       "prompt": "In a pentagon, four angles are 100°, 110°, 120°, and 95°. Find the fifth angle.",
       "expectedAnswer": "115°",
@@ -274,7 +274,7 @@
     {
       "id": "uq-q15",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
       "bloomLevel": "analysis",
       "prompt": "A quadrilateral's angles are in the ratio 2:3:4:6. Find all four angles.",
       "expectedAnswer": "48°, 72°, 96°, 144°",
@@ -294,7 +294,7 @@
     {
       "id": "uq-q16",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 6,
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
       "bloomLevel": "recall",
       "prompt": "What is the sum of the exterior angles of any convex polygon, taken one at each vertex, in order?",
       "expectedAnswer": "360°",
@@ -313,7 +313,7 @@
     {
       "id": "uq-q17",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 6,
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
       "bloomLevel": "application",
       "prompt": "A regular polygon has 9 sides. Find the measure of each exterior angle.",
       "expectedAnswer": "40°",
@@ -332,7 +332,7 @@
     {
       "id": "uq-q18",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 6,
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
       "bloomLevel": "application",
       "prompt": "Each exterior angle of a regular polygon measures 24°. How many sides does the polygon have?",
       "expectedAnswer": "15",
@@ -351,7 +351,7 @@
     {
       "id": "uq-q19",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 6,
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
       "bloomLevel": "analysis",
       "prompt": "Each interior angle of a regular polygon measures 156°. How many sides does it have?",
       "expectedAnswer": "15",
@@ -371,7 +371,7 @@
     {
       "id": "uq-q20",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
-      "objective": 6,
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
       "bloomLevel": "analysis",
       "prompt": "A regular polygon has an interior angle that is 5 times its exterior angle. Find the number of sides.",
       "expectedAnswer": "12",
@@ -391,7 +391,7 @@
     {
       "id": "uq-q21",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 7,
+      "objectiveIds": ["obj-uq-trapezium-identify"],
       "bloomLevel": "recall",
       "prompt": "What do you call a quadrilateral with exactly one pair of parallel sides?",
       "expectedAnswer": "Trapezium",
@@ -410,7 +410,7 @@
     {
       "id": "uq-q22",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 7,
+      "objectiveIds": ["obj-uq-trapezium-identify"],
       "bloomLevel": "analysis",
       "prompt": "A quadrilateral has both pairs of opposite sides parallel. Can it be called a trapezium?",
       "expectedAnswer": "No, because a trapezium has exactly one pair of parallel sides — this shape is a parallelogram.",
@@ -429,7 +429,7 @@
     {
       "id": "uq-q23",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 7,
+      "objectiveIds": ["obj-uq-trapezium-identify"],
       "bloomLevel": "application",
       "prompt": "In a trapezium, the two parallel sides are called the ______, and the two non-parallel sides are called the ______.",
       "expectedAnswer": "bases, legs",
@@ -448,7 +448,7 @@
     {
       "id": "uq-q24",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 8,
+      "objectiveIds": ["obj-uq-kite-identify"],
       "bloomLevel": "recall",
       "prompt": "What is true about the sides of a kite?",
       "expectedAnswer": "It has two distinct pairs of adjacent sides that are equal in length.",
@@ -467,7 +467,7 @@
     {
       "id": "uq-q25",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 8,
+      "objectiveIds": ["obj-uq-kite-identify"],
       "bloomLevel": "analysis",
       "prompt": "What is true about the diagonals of a kite?",
       "expectedAnswer": "They intersect at right angles, and one diagonal bisects the other.",
@@ -486,7 +486,7 @@
     {
       "id": "uq-q26",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
-      "objective": 8,
+      "objectiveIds": ["obj-uq-kite-identify"],
       "bloomLevel": "application",
       "prompt": "A kite has sides of length 5 cm, 5 cm, 8 cm, and 8 cm. How must these sides be arranged around the kite?",
       "expectedAnswer": "The two 5 cm sides must be adjacent to each other, and the two 8 cm sides must be adjacent to each other.",
@@ -505,7 +505,7 @@
     {
       "id": "uq-q27",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "recall",
       "prompt": "What is true about the opposite sides of a parallelogram?",
       "expectedAnswer": "They are parallel and equal in length.",
@@ -524,7 +524,7 @@
     {
       "id": "uq-q28",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "recall",
       "prompt": "What is true about the opposite angles of a parallelogram?",
       "expectedAnswer": "They are equal.",
@@ -543,7 +543,7 @@
     {
       "id": "uq-q29",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "analysis",
       "prompt": "What is true about two adjacent (consecutive) angles of a parallelogram?",
       "expectedAnswer": "They are supplementary (they add up to 180°).",
@@ -562,7 +562,7 @@
     {
       "id": "uq-q30",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "application",
       "prompt": "In parallelogram ABCD, angle A = 70°. Find angle B (adjacent to A) and angle C (opposite to A).",
       "expectedAnswer": "Angle B = 110°, Angle C = 70°",
@@ -581,7 +581,7 @@
     {
       "id": "uq-q31",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "application",
       "prompt": "What is true about the diagonals of a parallelogram?",
       "expectedAnswer": "They bisect each other.",
@@ -600,7 +600,7 @@
     {
       "id": "uq-q32",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 9,
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
       "bloomLevel": "application",
       "prompt": "In parallelogram PQRS, the diagonals intersect at O. If PO = 6 cm, find OR, and explain why.",
       "expectedAnswer": "OR = 6 cm, because the diagonals of a parallelogram bisect each other, so O is the midpoint of diagonal PR.",
@@ -620,7 +620,7 @@
     {
       "id": "uq-q33",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 10,
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
       "bloomLevel": "recall",
       "prompt": "What extra property does a rhombus have that a general parallelogram does not?",
       "expectedAnswer": "All four sides are equal in length.",
@@ -639,7 +639,7 @@
     {
       "id": "uq-q34",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 10,
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
       "bloomLevel": "recall",
       "prompt": "What extra property does a rectangle have that a general parallelogram does not?",
       "expectedAnswer": "All four angles are 90°.",
@@ -658,7 +658,7 @@
     {
       "id": "uq-q35",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 10,
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
       "bloomLevel": "application",
       "prompt": "How are the diagonals of a rectangle different from the diagonals of a general parallelogram?",
       "expectedAnswer": "A rectangle's diagonals are equal in length (as well as bisecting each other).",
@@ -677,7 +677,7 @@
     {
       "id": "uq-q36",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 10,
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
       "bloomLevel": "analysis",
       "prompt": "A quadrilateral has all four sides equal AND all four angles equal to 90°. What is the most specific name for this shape?",
       "expectedAnswer": "Square",
@@ -697,7 +697,7 @@
     {
       "id": "uq-q37",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 10,
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
       "bloomLevel": "analysis",
       "prompt": "In a square, what is true about the diagonals that is NOT true of a rhombus that isn't a square?",
       "expectedAnswer": "The diagonals are equal in length.",
@@ -717,7 +717,7 @@
     {
       "id": "uq-q38",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 11,
+      "objectiveIds": ["obj-uq-quadrilateral-hierarchy"],
       "bloomLevel": "analysis",
       "prompt": "Is every square a rectangle? Is every rectangle a square? Explain.",
       "expectedAnswer": "Every square is a rectangle (it has all angles 90°), but not every rectangle is a square (a rectangle need not have all sides equal).",
@@ -736,7 +736,7 @@
     {
       "id": "uq-q39",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 11,
+      "objectiveIds": ["obj-uq-quadrilateral-hierarchy"],
       "bloomLevel": "analysis",
       "prompt": "Is every rhombus a parallelogram? Is every parallelogram a rhombus? Explain.",
       "expectedAnswer": "Every rhombus is a parallelogram (opposite sides parallel and equal), but not every parallelogram is a rhombus (its sides need not all be equal).",
@@ -755,7 +755,7 @@
     {
       "id": "uq-q40",
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
-      "objective": 11,
+      "objectiveIds": ["obj-uq-quadrilateral-hierarchy"],
       "bloomLevel": "analysis",
       "prompt": "A quadrilateral is a square. List every other quadrilateral name from this chapter that also correctly describes it.",
       "expectedAnswer": "Rectangle, rhombus, and parallelogram",
