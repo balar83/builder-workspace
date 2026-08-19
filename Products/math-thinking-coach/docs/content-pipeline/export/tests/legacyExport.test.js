@@ -1,20 +1,25 @@
-// Slice A1 corrective: end-to-end regression pin proving a real,
-// not-yet-migrated Topic-bearing chapter remains re-exportable through the
+// Slice A1 corrective: end-to-end regression pin proving a legacy
+// (not-yet-migrated) Topic shape remains fully re-exportable through the
 // real Stage 10 phases (dry-run style: no writes) - the exact operational
 // gap the Product Architect flagged after reviewing the initial A1
-// implementation. Rational Numbers is the primary case (explicitly named in
-// the corrective brief) and, as of Slice A2b-3 (2026-08-19), the *only*
-// Topic-bearing chapter left unmigrated - Linear Equations (A2b-1), Data
-// Handling (A2b-2), and Understanding Quadrilaterals (A2b-3, which had held
-// this file's "second, independent chapter" slot since A2b-1) have all since
-// migrated to structured content. The second-chapter case below was removed
-// rather than pointed at another substitute, because none exists: reusing
-// Rational Numbers under a different test name would not be independent of
-// the primary case above, and Practical Geometry has no Topic at all to
-// exercise this code path with. If a future chapter is added and stays
-// legacy for a while, or A2b-4 (Rational Numbers) is deferred indefinitely,
-// a genuine second case can be reintroduced then - see
-// Development-Journal.md's 2026-08-19 (A2b-3) entry for the full record.
+// implementation. Originally run against a real content-source chapter
+// (Rational Numbers, then the sole remaining unmigrated Topic-bearing
+// chapter); switched to the synthetic `legacyTopic()`/`legacyQuestionBank()`
+// fixture (tests/fixtures.js) when Slice A2b-4 (2026-08-19) migrated
+// Rational Numbers, leaving zero real production Topic-bearing chapters in
+// the legacy shape. This is not a new pattern: `legacyTopic()`/
+// `legacyQuestionBank()` and `writeChapterFixture()` already existed and are
+// already used the same way by loadCanonical.test.js, transform.test.js,
+// conceptReferentialValidation.test.js, and topicMigrationState.test.js -
+// this file was the one outlier still pointed at a real chapter. The legacy
+// code path itself (loadCanonical's legacy structural checks,
+// conceptReferentialValidation's 'legacy' early-return, transformTopic's
+// legacy branch) is unchanged, still real production architecture (removed
+// only in Slice A3, not authorized), and still needs exactly this kind of
+// full-pipeline-sequence proof - a synthetic fixture proves it as validly as
+// a real chapter did, and is immune to a future real chapter's content
+// drifting and silently invalidating the premise. See Development-Journal.md's
+// 2026-08-19 (A2b-4) entry for the full record.
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -27,13 +32,12 @@ const { validateConceptReferences } = require('../conceptReferentialValidation')
 const { transformTopic, transformQuestion } = require('../transform');
 const { validateAgainstRuntimeSchemas } = require('../pydanticValidate');
 const { readExisting } = require('../mergeAndWrite');
+const { legacyTopic, legacyQuestionBank, writeChapterFixture } = require('./fixtures');
 
 const repoRoot = path.resolve(__dirname, '..', '..', '..', '..');
 const backendDir = path.join(repoRoot, 'backend');
-const dataDir = path.join(backendDir, 'app', 'data');
 
-function runChapterPipeline(chapterSlug) {
-  const chapterDir = path.join(repoRoot, 'docs', 'content-source', chapterSlug);
+function runFixturePipeline({ chapterDir, dataDir }) {
   const { topic, questionBank, chapters } = loadCanonical({ chapterDir, dataDir });
   const { approvedTopic, approvedQuestions } = applyApprovalGate({ topic, questionBank });
   const existingTopics = readExisting(path.join(dataDir, 'topics.json'));
@@ -55,12 +59,16 @@ function runChapterPipeline(chapterSlug) {
   return { transformedTopic, transformedQuestions };
 }
 
-test('legacy export (rational-numbers): loads and validates without throwing - not yet migrated, must not require migration first', () => {
-  assert.doesNotThrow(() => runChapterPipeline('rational-numbers'));
+function legacyFixture() {
+  return writeChapterFixture({ canonicalTopic: legacyTopic(), questionBank: legacyQuestionBank() });
+}
+
+test('legacy export (synthetic fixture): loads and validates without throwing - a legacy Topic shape must not require migration first', () => {
+  assert.doesNotThrow(() => runFixturePipeline(legacyFixture()));
 });
 
-test('legacy export (rational-numbers): produces a topic with empty structured fields and populated legacy fields', () => {
-  const { transformedTopic } = runChapterPipeline('rational-numbers');
+test('legacy export (synthetic fixture): produces a topic with empty structured fields and populated legacy fields', () => {
+  const { transformedTopic } = runFixturePipeline(legacyFixture());
   assert.deepEqual(transformedTopic.concepts, []);
   assert.deepEqual(transformedTopic.workedExamples, []);
   assert.ok(transformedTopic.explanation.length > 0);
@@ -68,8 +76,8 @@ test('legacy export (rational-numbers): produces a topic with empty structured f
   assert.ok(transformedTopic.learningObjectives.every((o) => typeof o === 'string'));
 });
 
-test('legacy export (rational-numbers): questions have no objectiveIds and validate against the real Pydantic schemas', () => {
-  const { transformedTopic, transformedQuestions } = runChapterPipeline('rational-numbers');
+test('legacy export (synthetic fixture): questions have no objectiveIds and validate against the real Pydantic schemas', () => {
+  const { transformedTopic, transformedQuestions } = runFixturePipeline(legacyFixture());
   assert.ok(transformedQuestions.length > 0);
   assert.ok(transformedQuestions.every((q) => !('objectiveIds' in q)));
 

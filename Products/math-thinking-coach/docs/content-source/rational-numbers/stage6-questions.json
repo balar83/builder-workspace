@@ -7,7 +7,7 @@
     {
       "id": "rn-q01",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-rn-definition"],
       "bloomLevel": "recall",
       "prompt": "Is 5 a rational number?",
       "expectedAnswer": "Yes",
@@ -21,7 +21,7 @@
     {
       "id": "rn-q02",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-rn-definition"],
       "bloomLevel": "application",
       "prompt": "Write 0.5 as a rational number in the form p/q.",
       "expectedAnswer": "1/2",
@@ -35,7 +35,7 @@
     {
       "id": "rn-q03",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-rn-definition"],
       "bloomLevel": "analysis",
       "prompt": "Which of these is NOT a rational number: 3/4, the square root of 2, or -7?",
       "expectedAnswer": "the square root of 2",
@@ -49,7 +49,7 @@
     {
       "id": "rn-q04",
       "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
-      "objective": 2,
+      "objectiveIds": ["obj-rn-standard-form"],
       "bloomLevel": "application",
       "prompt": "Write 8/-12 in standard form.",
       "expectedAnswer": "-2/3",
@@ -63,7 +63,7 @@
     {
       "id": "rn-q05",
       "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
-      "objective": 2,
+      "objectiveIds": ["obj-rn-standard-form"],
       "bloomLevel": "analysis",
       "prompt": "Are -4/6 and 2/-3 equivalent rational numbers?",
       "expectedAnswer": "Yes",
@@ -77,7 +77,7 @@
     {
       "id": "rn-q06",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
-      "objective": 3,
+      "objectiveIds": ["obj-rn-closure"],
       "bloomLevel": "application",
       "prompt": "Is the sum of 2/3 and 5/7 a rational number?",
       "expectedAnswer": "Yes",
@@ -91,7 +91,7 @@
     {
       "id": "rn-q07",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
-      "objective": 3,
+      "objectiveIds": ["obj-rn-closure"],
       "bloomLevel": "recall",
       "prompt": "Rational numbers are closed under which of these operations: addition or division?",
       "expectedAnswer": "Addition",
@@ -105,7 +105,7 @@
     {
       "id": "rn-q08",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
-      "objective": 3,
+      "objectiveIds": ["obj-rn-closure"],
       "bloomLevel": "application",
       "prompt": "Find 3/4 + (-2/5).",
       "expectedAnswer": "7/20",
@@ -119,7 +119,7 @@
     {
       "id": "rn-q09",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
-      "objective": 4,
+      "objectiveIds": ["obj-rn-commutativity"],
       "bloomLevel": "analysis",
       "prompt": "Which property is illustrated by 2/3 + 5/7 = 5/7 + 2/3?",
       "expectedAnswer": "Commutativity of addition",
@@ -133,7 +133,7 @@
     {
       "id": "rn-q10",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-rn-associativity"],
       "bloomLevel": "analysis",
       "prompt": "Which property is illustrated by (1/2 + 1/3) + 1/4 = 1/2 + (1/3 + 1/4)?",
       "expectedAnswer": "Associativity of addition",
@@ -147,7 +147,7 @@
     {
       "id": "rn-q11",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
-      "objective": 4,
+      "objectiveIds": ["obj-rn-commutativity"],
       "bloomLevel": "recall",
       "prompt": "Is subtraction commutative for rational numbers?",
       "expectedAnswer": "No",
@@ -161,7 +161,7 @@
     {
       "id": "rn-q12",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-rn-associativity"],
       "bloomLevel": "application",
       "prompt": "Find (-2/5) × (3/7) × (5/6).",
       "expectedAnswer": "-1/7",
@@ -175,7 +175,7 @@
     {
       "id": "rn-q13",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
-      "objective": 5,
+      "objectiveIds": ["obj-rn-associativity"],
       "bloomLevel": "analysis",
       "prompt": "Is division associative for rational numbers?",
       "expectedAnswer": "No",
@@ -189,7 +189,7 @@
     {
       "id": "rn-q14",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.4" },
-      "objective": 6,
+      "objectiveIds": ["obj-rn-identity-elements"],
       "bloomLevel": "recall",
       "prompt": "What is the additive identity for rational numbers?",
       "expectedAnswer": "0",
@@ -202,7 +202,7 @@
     {
       "id": "rn-q15",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.5" },
-      "objective": 6,
+      "objectiveIds": ["obj-rn-identity-elements"],
       "bloomLevel": "recall",
       "prompt": "What is the multiplicative identity for rational numbers?",
       "expectedAnswer": "1",
@@ -215,7 +215,7 @@
     {
       "id": "rn-q16",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
-      "objective": 7,
+      "objectiveIds": ["obj-rn-distributivity"],
       "bloomLevel": "application",
       "prompt": "Use distributivity to find 3/4 × 2/3 + 3/4 × 1/3.",
       "expectedAnswer": "3/4",
@@ -229,7 +229,7 @@
     {
       "id": "rn-q17",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
-      "objective": 7,
+      "objectiveIds": ["obj-rn-distributivity"],
       "bloomLevel": "analysis",
       "prompt": "Which property is illustrated by 2/5 × (3/7 + 1/7) = 2/5 × 3/7 + 2/5 × 1/7?",
       "expectedAnswer": "Distributivity of multiplication over addition",
@@ -243,7 +243,7 @@
     {
       "id": "rn-q18",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
-      "objective": 7,
+      "objectiveIds": ["obj-rn-distributivity"],
       "bloomLevel": "application",
       "prompt": "Use distributivity to find 5/9 × 4/13 + 5/9 × 9/13.",
       "expectedAnswer": "5/9",
@@ -257,7 +257,7 @@
     {
       "id": "rn-q19",
       "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
-      "objective": 8,
+      "objectiveIds": ["obj-rn-additive-inverse"],
       "bloomLevel": "application",
       "prompt": "What is the additive inverse of 3/8?",
       "expectedAnswer": "-3/8",
@@ -271,7 +271,7 @@
     {
       "id": "rn-q20",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "application",
       "prompt": "What is the reciprocal of 5/9?",
       "expectedAnswer": "9/5",
@@ -285,7 +285,7 @@
     {
       "id": "rn-q21",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "application",
       "prompt": "What is the reciprocal of -7?",
       "expectedAnswer": "-1/7",
@@ -299,7 +299,7 @@
     {
       "id": "rn-q22",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "analysis",
       "prompt": "Does 0 have a reciprocal?",
       "expectedAnswer": "No",
@@ -318,7 +318,7 @@
     {
       "id": "rn-q23",
       "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
-      "objective": 8,
+      "objectiveIds": ["obj-rn-additive-inverse"],
       "bloomLevel": "application",
       "prompt": "First write -4/-9 in standard form, then find its additive inverse.",
       "expectedAnswer": "-4/9",
@@ -332,7 +332,7 @@
     {
       "id": "rn-q24",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "recall",
       "prompt": "What is the reciprocal of 1?",
       "expectedAnswer": "1",
@@ -345,7 +345,7 @@
     {
       "id": "rn-q25",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "analysis",
       "prompt": "Multiply -3/7 by its reciprocal. What do you get?",
       "expectedAnswer": "1",
@@ -359,7 +359,7 @@
     {
       "id": "rn-q26",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 10,
+      "objectiveIds": ["obj-rn-mean-method"],
       "bloomLevel": "recall",
       "prompt": "Which rational number lies exactly halfway between 0 and 1 on the number line?",
       "expectedAnswer": "1/2",
@@ -373,7 +373,7 @@
     {
       "id": "rn-q27",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between 1/4 and 1/2 using the mean method.",
       "expectedAnswer": "3/8",
@@ -387,7 +387,7 @@
     {
       "id": "rn-q28",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between 2 and 3 using the mean method.",
       "expectedAnswer": "5/2",
@@ -401,7 +401,7 @@
     {
       "id": "rn-q29",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between -1/2 and 1/2 using the mean method.",
       "expectedAnswer": "0",
@@ -415,7 +415,7 @@
     {
       "id": "rn-q30",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between 3/5 and 4/5 using the mean method.",
       "expectedAnswer": "7/10",
@@ -429,7 +429,7 @@
     {
       "id": "rn-q31",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "recall",
       "prompt": "How many rational numbers lie between any two given rational numbers?",
       "expectedAnswer": "Infinite",
@@ -443,7 +443,7 @@
     {
       "id": "rn-q32",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between -3 and -2 using the mean method.",
       "expectedAnswer": "-5/2",
@@ -457,7 +457,7 @@
     {
       "id": "rn-q33",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-rn-definition"],
       "bloomLevel": "recall",
       "prompt": "Is -7 a rational number?",
       "expectedAnswer": "Yes",
@@ -471,7 +471,7 @@
     {
       "id": "rn-q34",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
-      "objective": 1,
+      "objectiveIds": ["obj-rn-definition"],
       "bloomLevel": "application",
       "prompt": "Write 3 as a rational number with denominator 5.",
       "expectedAnswer": "15/5",
@@ -485,7 +485,7 @@
     {
       "id": "rn-q35",
       "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
-      "objective": 2,
+      "objectiveIds": ["obj-rn-standard-form"],
       "bloomLevel": "application",
       "prompt": "Simplify -18/24 to its standard form.",
       "expectedAnswer": "-3/4",
@@ -499,7 +499,7 @@
     {
       "id": "rn-q36",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
-      "objective": 3,
+      "objectiveIds": ["obj-rn-closure"],
       "bloomLevel": "application",
       "prompt": "Find the sum of 1/2, 1/3 and 1/6.",
       "expectedAnswer": "1",
@@ -513,7 +513,7 @@
     {
       "id": "rn-q37",
       "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
-      "objective": 9,
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
       "bloomLevel": "synthesis",
       "prompt": "The product of two rational numbers is -1. If one number is 4/7, what is the other?",
       "expectedAnswer": "-7/4",
@@ -527,7 +527,7 @@
     {
       "id": "rn-q38",
       "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
-      "objective": 8,
+      "objectiveIds": ["obj-rn-additive-inverse"],
       "bloomLevel": "synthesis",
       "prompt": "The sum of two rational numbers is 0. If one number is -5/9, what is the other?",
       "expectedAnswer": "5/9",
@@ -541,7 +541,7 @@
     {
       "id": "rn-q39",
       "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
-      "objective": 11,
+      "objectiveIds": ["obj-rn-between-two-rationals"],
       "bloomLevel": "application",
       "prompt": "Find a rational number between 0 and 1/5 using the mean method.",
       "expectedAnswer": "1/10",
@@ -555,7 +555,7 @@
     {
       "id": "rn-q40",
       "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
-      "objective": 4,
+      "objectiveIds": ["obj-rn-commutativity"],
       "bloomLevel": "analysis",
       "prompt": "Is 2/3 divided by 4/9 equal to 4/9 divided by 2/3?",
       "expectedAnswer": "No",
