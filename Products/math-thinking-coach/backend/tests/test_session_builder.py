@@ -59,7 +59,7 @@ def test_partial_shortfall_still_creates_a_session() -> None:
 
     session = session_builder.create_session(request, seed="fixed")
 
-    assert len(session.selectedQuestions) == 40  # all of rational-numbers' 40 questions
+    assert len(session.selectedQuestions) == 60  # all of rational-numbers' 60 questions
 
 
 def test_created_session_has_no_persisted_state_beyond_not_started() -> None:

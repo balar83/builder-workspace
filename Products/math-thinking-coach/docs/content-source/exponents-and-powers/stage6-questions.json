@@ -1,0 +1,965 @@
+{
+  "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+  "reviewStatus": "approved",
+  "expansionNote": "Authored from scratch using NCERT Class 8 Ch.10 'Exponents and Powers' (Reprint 2024-25) as the single source. 60 questions across 15 learning objectives, mixed Recall/Understand/Apply/Reason/Synthesis progression per section: evaluating negative-exponent powers, applying each of the five laws of exponents individually and in multi-step combination, solving for an unknown exponent, converting to/from standard form, and comparing/combining very large and very small numbers in real-world contexts. Difficulty split: 18 Easy (30%), 30 Medium (50%), 12 Hard (20%) - skewed toward Medium/Hard relative to earlier chapters since this content was authored for the exam-practice expansion milestone. questionType is left unset (defaults to short_text) for computed-value answers, following the majority convention already used by rational-numbers/data-handling/understanding-quadrilaterals/squares-and-cubes' original 40; questionType is only set explicitly for single_choice (8 questions) and multi_choice (1 question), where a discrete option set is pedagogically the right fit (conceptual comparisons, 'which of these' recognition checks) rather than every question being forced into free-text. All standard-form answers use a single fixed notation - 'M × 10⁻ᴺ' with a superscript exponent and one space on each side of '×' - stated explicitly in the relevant hints so students converge on the same format the exact-match evaluator expects.",
+  "questions": [
+    {
+      "id": "ep-q01",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "What is the value of 5⁻¹?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "1/5" },
+          { "id": "opt-b", "text": "-5" },
+          { "id": "opt-c", "text": "5" },
+          { "id": "opt-d", "text": "-1/5" }
+        ]
+      },
+      "expectedAnswer": "1/5",
+      "hints": [
+        "a⁻ᵐ = 1/aᵐ for any non-zero integer a.",
+        "Here a = 5 and m = 1."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "evaluation"]
+    },
+    {
+      "id": "ep-q02",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of 2⁻⁴.",
+      "expectedAnswer": "1/16",
+      "hints": [
+        "a⁻ᵐ = 1/aᵐ.",
+        "Compute 2⁴ first, then take its reciprocal."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "evaluation"]
+    },
+    {
+      "id": "ep-q03",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (-3)⁻².",
+      "expectedAnswer": "1/9",
+      "hints": [
+        "Square the base first: (-3)² = 9.",
+        "Then take the reciprocal: 1/9."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "evaluation", "negative-base"]
+    },
+    {
+      "id": "ep-q04",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (1/2)⁻³.",
+      "expectedAnswer": "8",
+      "hints": [
+        "A fraction raised to a negative exponent flips: (1/2)⁻³ = (2/1)³.",
+        "Compute 2³."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "evaluation", "fraction-base"]
+    },
+    {
+      "id": "ep-q05",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-multiplicative-inverse"],
+      "bloomLevel": "application",
+      "prompt": "Find the multiplicative inverse of 7⁻².",
+      "expectedAnswer": "49",
+      "hints": [
+        "The multiplicative inverse of a⁻ᵐ is aᵐ.",
+        "Compute 7²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["negative-exponents", "multiplicative-inverse"]
+    },
+    {
+      "id": "ep-q06",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-multiplicative-inverse"],
+      "bloomLevel": "application",
+      "prompt": "Find the multiplicative inverse of 5⁻³.",
+      "expectedAnswer": "125",
+      "hints": [
+        "The multiplicative inverse of a⁻ᵐ is aᵐ.",
+        "Compute 5³."
+      ],
+      "difficulty": "Medium",
+      "tags": ["negative-exponents", "multiplicative-inverse"]
+    },
+    {
+      "id": "ep-q07",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-multiplicative-inverse"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "What is the multiplicative inverse of 10⁻¹⁰⁰?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "10¹⁰⁰" },
+          { "id": "opt-b", "text": "10⁻¹⁰⁰" },
+          { "id": "opt-c", "text": "-10¹⁰⁰" },
+          { "id": "opt-d", "text": "0.1¹⁰⁰" }
+        ]
+      },
+      "expectedAnswer": "10¹⁰⁰",
+      "hints": [
+        "You don't need to compute the actual number — just flip the sign of the exponent.",
+        "The multiplicative inverse of a⁻ᵐ is aᵐ."
+      ],
+      "difficulty": "Hard",
+      "tags": ["negative-exponents", "multiplicative-inverse", "conceptual"],
+      "misconception": {
+        "commonWrongAnswer": "10⁻¹⁰⁰",
+        "why": "Assuming the multiplicative inverse looks the same as the original number.",
+        "remediationHint": "Multiplicative inverse means the exponent's sign flips: a⁻ᵐ's inverse is aᵐ, not itself."
+      }
+    },
+    {
+      "id": "ep-q08",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "recall",
+      "prompt": "Write 10⁻¹ as a fraction.",
+      "expectedAnswer": "1/10",
+      "hints": [
+        "10⁻¹ = 1/10¹."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "recall"]
+    },
+    {
+      "id": "ep-q09",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-expanded-form"],
+      "bloomLevel": "analysis",
+      "prompt": "In the expanded form of 1025.63 using powers of 10, what is the exponent of 10 attached to the digit 6?",
+      "expectedAnswer": "-1",
+      "hints": [
+        "Digits after the decimal point use negative powers of 10, starting from 10⁻¹ for the first (tenths) place.",
+        "The digit 6 is in the tenths place."
+      ],
+      "difficulty": "Medium",
+      "tags": ["negative-exponents", "expanded-form"]
+    },
+    {
+      "id": "ep-q10",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-expanded-form"],
+      "bloomLevel": "analysis",
+      "prompt": "In the expanded form of 1256.249 using powers of 10, what is the exponent of 10 attached to the digit 9?",
+      "expectedAnswer": "-3",
+      "hints": [
+        "The digits after the decimal point are in the tenths (10⁻¹), hundredths (10⁻²) and thousandths (10⁻³) places, in order.",
+        "The digit 9 is the third digit after the decimal point."
+      ],
+      "difficulty": "Medium",
+      "tags": ["negative-exponents", "expanded-form"]
+    },
+    {
+      "id": "ep-q11",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (-2)⁻³.",
+      "expectedAnswer": "-1/8",
+      "hints": [
+        "Cube the base first: (-2)³ = -8.",
+        "Then take the reciprocal: 1/-8."
+      ],
+      "difficulty": "Easy",
+      "tags": ["negative-exponents", "evaluation", "negative-base"]
+    },
+    {
+      "id": "ep-q12",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.2" },
+      "objectiveIds": ["obj-neg-exp-evaluate"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (-4)⁻².",
+      "expectedAnswer": "1/16",
+      "hints": [
+        "Square the base first, being careful with the sign: (-4)² = 16 (positive, since the exponent 2 is even).",
+        "Then take the reciprocal: 1/16."
+      ],
+      "difficulty": "Medium",
+      "tags": ["negative-exponents", "evaluation", "negative-base"],
+      "misconception": {
+        "commonWrongAnswer": "-1/16",
+        "why": "Assuming a negative exponent always keeps the base's sign negative in the final answer, rather than evaluating (-4)² first.",
+        "remediationHint": "The sign of the result comes from (-4)² itself — since 2 is even, (-4)² = 16 is positive, so its reciprocal 1/16 is also positive."
+      }
+    },
+    {
+      "id": "ep-q13",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product"],
+      "bloomLevel": "application",
+      "prompt": "Simplify 2⁻³ × 2⁻⁴ using the laws of exponents. What is the exponent of 2 in the simplified answer?",
+      "expectedAnswer": "-7",
+      "hints": [
+        "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+        "Add the exponents -3 and -4."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "product-law"]
+    },
+    {
+      "id": "ep-q14",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (-5)⁻⁴ × (-5)² using the laws of exponents. What is the exponent of (-5) in the simplified answer?",
+      "expectedAnswer": "-2",
+      "hints": [
+        "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+        "Add the exponents -4 and 2."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "product-law", "negative-base"]
+    },
+    {
+      "id": "ep-q15",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product"],
+      "bloomLevel": "analysis",
+      "questionType": "multi_choice",
+      "prompt": "Which of these expressions equal 5⁻²? Select all that apply.",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "5⁻⁵ × 5³" },
+          { "id": "opt-b", "text": "5² × 5⁻⁴" },
+          { "id": "opt-c", "text": "5⁻¹ × 5⁻²" },
+          { "id": "opt-d", "text": "5³ × 5⁻¹" }
+        ]
+      },
+      "expectedAnswer": "5⁻⁵ × 5³ and 5² × 5⁻⁴",
+      "hints": [
+        "Use aᵐ × aⁿ = aᵐ⁺ⁿ and add the exponents in each option.",
+        "You're looking for combinations whose exponents add up to exactly -2."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "product-law", "multi-select"]
+    },
+    {
+      "id": "ep-q16",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "Which of these equals p³ × p⁻¹⁰ in simplest exponential form?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "p⁻⁷" },
+          { "id": "opt-b", "text": "p¹³" },
+          { "id": "opt-c", "text": "p⁻¹³" },
+          { "id": "opt-d", "text": "p⁷" }
+        ]
+      },
+      "expectedAnswer": "p⁻⁷",
+      "hints": [
+        "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+        "Add the exponents 3 and -10, keeping the sign."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "product-law", "variable-base"],
+      "misconception": {
+        "commonWrongAnswer": "p¹³",
+        "why": "Adding the absolute values of the exponents (3+10) instead of combining them with their signs.",
+        "remediationHint": "3 + (-10) = -7, not 3 + 10 — always keep the negative sign attached to the exponent."
+      }
+    },
+    {
+      "id": "ep-q17",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient"],
+      "bloomLevel": "application",
+      "prompt": "Simplify 3⁷ ÷ 3⁻² using the laws of exponents. What is the exponent of 3 in the simplified answer?",
+      "expectedAnswer": "9",
+      "hints": [
+        "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+        "Subtract: 7 - (-2)."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "quotient-law"]
+    },
+    {
+      "id": "ep-q18",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "Which of these equals (-6)⁴ ÷ (-6)⁻³?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "(-6)⁷" },
+          { "id": "opt-b", "text": "(-6)¹" },
+          { "id": "opt-c", "text": "(-6)⁻⁷" },
+          { "id": "opt-d", "text": "(-6)⁻¹" }
+        ]
+      },
+      "expectedAnswer": "(-6)⁷",
+      "hints": [
+        "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+        "Subtract: 4 - (-3)."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "quotient-law", "negative-base"],
+      "misconception": {
+        "commonWrongAnswer": "(-6)¹",
+        "why": "Subtracting the exponents as 4-3, forgetting that dividing by a negative exponent flips its sign.",
+        "remediationHint": "4 - (-3) = 4 + 3 = 7, not 4 - 3."
+      }
+    },
+    {
+      "id": "ep-q19",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (4⁻⁵ ÷ 4⁻⁸) × 4⁻⁴ using the laws of exponents. What is the exponent of 4 in the fully simplified answer?",
+      "expectedAnswer": "-1",
+      "hints": [
+        "First simplify the division inside the brackets: 4⁻⁵ ÷ 4⁻⁸ = 4^(-5-(-8)).",
+        "Then multiply the result by 4⁻⁴, adding the exponents."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "quotient-law", "product-law"]
+    },
+    {
+      "id": "ep-q20",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (-8)⁻⁵ ÷ (-8)⁻⁹ using the laws of exponents. What is the exponent of (-8) in the simplified answer?",
+      "expectedAnswer": "4",
+      "hints": [
+        "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+        "Subtract: -5 - (-9)."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "quotient-law", "negative-base"]
+    },
+    {
+      "id": "ep-q21",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-power-of-power"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (2³)⁻² using the power-of-a-power law. What is the exponent of 2 in the simplified answer?",
+      "expectedAnswer": "-6",
+      "hints": [
+        "Use (aᵐ)ⁿ = aᵐⁿ.",
+        "Multiply the exponents 3 and -2."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "power-of-power"]
+    },
+    {
+      "id": "ep-q22",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-power-of-power"],
+      "bloomLevel": "application",
+      "prompt": "Express 16⁻¹ as a power with base 2. What is the exponent of 2 in the result?",
+      "expectedAnswer": "-4",
+      "hints": [
+        "Write 16 as a power of 2: 16 = 2⁴.",
+        "Apply (aᵐ)ⁿ = aᵐⁿ to (2⁴)⁻¹."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "power-of-power", "change-of-base"]
+    },
+    {
+      "id": "ep-q23",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-power-of-power"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "Which of these is equal to 25⁻³ expressed as a power with base 5?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "5⁻⁶" },
+          { "id": "opt-b", "text": "5⁻³" },
+          { "id": "opt-c", "text": "5⁻⁹" },
+          { "id": "opt-d", "text": "5⁶" }
+        ]
+      },
+      "expectedAnswer": "5⁻⁶",
+      "hints": [
+        "Write 25 as a power of 5: 25 = 5².",
+        "Apply (aᵐ)ⁿ = aᵐⁿ to (5²)⁻³."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "power-of-power", "change-of-base"],
+      "misconception": {
+        "commonWrongAnswer": "5⁻³",
+        "why": "Forgetting to multiply by the exponent already in the base (5² = 25) and just copying the -3.",
+        "remediationHint": "25 = 5², so 25⁻³ = (5²)⁻³ = 5^(2×-3) = 5⁻⁶ — the 2 from 5² must be multiplied in, not dropped."
+      }
+    },
+    {
+      "id": "ep-q24",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-power-of-power"],
+      "bloomLevel": "synthesis",
+      "prompt": "Simplify (3⁴ ÷ 3⁷)⁴ × 3⁻⁴ using the laws of exponents. What is the exponent of 3 in the fully simplified answer?",
+      "expectedAnswer": "-16",
+      "hints": [
+        "First simplify inside the brackets: 3⁴ ÷ 3⁷ = 3^(4-7).",
+        "Raise that result to the power 4 using (aᵐ)ⁿ = aᵐⁿ.",
+        "Finally multiply by 3⁻⁴, adding the exponents."
+      ],
+      "difficulty": "Hard",
+      "tags": ["laws-of-exponents", "power-of-power", "quotient-law", "multi-step"]
+    },
+    {
+      "id": "ep-q25",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (-4)⁻³ × 5⁻³ × (-5)⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+      "expectedAnswer": "100",
+      "hints": [
+        "Use aᵐ × bᵐ × cᵐ = (abc)ᵐ to combine the three bases first.",
+        "Multiply (-4) × 5 × (-5)."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "product-same-exponent"]
+    },
+    {
+      "id": "ep-q26",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Simplify 2⁻³ × 3⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+      "expectedAnswer": "6",
+      "hints": [
+        "Use aᵐ × bᵐ = (ab)ᵐ.",
+        "Multiply the two bases: 2 × 3."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "product-same-exponent"]
+    },
+    {
+      "id": "ep-q27",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-product-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (-3)⁴ × (5/3)⁴.",
+      "expectedAnswer": "625",
+      "hints": [
+        "Use aᵐ × bᵐ = (ab)ᵐ to combine the bases first.",
+        "Multiply (-3) × (5/3), then raise the result to the 4th power."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "product-same-exponent", "fraction-base"]
+    },
+    {
+      "id": "ep-q28",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (2/3)⁻². Express your answer as a fraction.",
+      "expectedAnswer": "9/4",
+      "hints": [
+        "A fraction raised to a negative exponent flips: (2/3)⁻² = (3/2)².",
+        "Square the numerator and denominator separately."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "quotient-same-exponent", "fraction-base"]
+    },
+    {
+      "id": "ep-q29",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (3/4)⁻². Express your answer as a fraction.",
+      "expectedAnswer": "16/9",
+      "hints": [
+        "Flip the fraction and make the exponent positive: (3/4)⁻² = (4/3)².",
+        "Square the numerator and denominator separately."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "quotient-same-exponent", "fraction-base"]
+    },
+    {
+      "id": "ep-q30",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-quotient-same-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (5/2)⁻³. Express your answer as a fraction.",
+      "expectedAnswer": "8/125",
+      "hints": [
+        "Flip the fraction and make the exponent positive: (5/2)⁻³ = (2/5)³.",
+        "Cube the numerator and denominator separately."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "quotient-same-exponent", "fraction-base"]
+    },
+    {
+      "id": "ep-q31",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-zero-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find the value of (5⁰ + 3⁻¹) × 3².",
+      "expectedAnswer": "12",
+      "hints": [
+        "Any non-zero base to the power 0 equals 1: 5⁰ = 1.",
+        "Add 1 + 3⁻¹ first, then multiply by 3²."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "zero-exponent"]
+    },
+    {
+      "id": "ep-q32",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-zero-exponent"],
+      "bloomLevel": "analysis",
+      "prompt": "Find the value of (3⁻¹ + 4⁻¹ + 5⁻¹)⁰.",
+      "expectedAnswer": "1",
+      "hints": [
+        "A non-zero base to the power 0 always equals 1, no matter how complicated it is.",
+        "Check only whether the expression inside the brackets is non-zero — you don't need to evaluate it."
+      ],
+      "difficulty": "Easy",
+      "tags": ["laws-of-exponents", "zero-exponent", "conceptual"]
+    },
+    {
+      "id": "ep-q33",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-mixed-simplification"],
+      "bloomLevel": "synthesis",
+      "prompt": "Simplify 2⁻³ × (2²)⁻¹ ÷ 2⁻⁵ using the laws of exponents. What is the exponent of 2 in the fully simplified answer?",
+      "expectedAnswer": "0",
+      "hints": [
+        "First simplify (2²)⁻¹ using (aᵐ)ⁿ = aᵐⁿ.",
+        "Combine with 2⁻³ using the product law, then divide by 2⁻⁵ using the quotient law."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "mixed-simplification"]
+    },
+    {
+      "id": "ep-q34",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-mixed-simplification"],
+      "bloomLevel": "application",
+      "prompt": "Simplify (2⁻¹ × 4⁻¹) ÷ 2⁻² and give your answer as a fraction.",
+      "expectedAnswer": "1/2",
+      "hints": [
+        "Evaluate 2⁻¹ and 4⁻¹ separately first, then multiply them together.",
+        "Dividing by 2⁻² is the same as multiplying by 2²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "mixed-simplification"],
+      "misconception": {
+        "commonWrongAnswer": "1/8",
+        "why": "Forgetting to divide by 2⁻² (i.e. multiply by 2²) after computing 2⁻¹ × 4⁻¹ = 1/8.",
+        "remediationHint": "Dividing by 2⁻² means multiplying by 2² = 4: 1/8 × 4 = 1/2, not just 1/8."
+      }
+    },
+    {
+      "id": "ep-q35",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-mixed-simplification"],
+      "bloomLevel": "synthesis",
+      "prompt": "Simplify {(1/4)⁻² − (1/3)⁻³} ÷ (1/5)⁻² and give your answer as a fraction.",
+      "expectedAnswer": "-11/25",
+      "hints": [
+        "Evaluate each bracket first: (1/4)⁻² = 4², (1/3)⁻³ = 3³, (1/5)⁻² = 5².",
+        "Subtract the first two results, then divide by the third."
+      ],
+      "difficulty": "Hard",
+      "tags": ["laws-of-exponents", "mixed-simplification", "multi-step"]
+    },
+    {
+      "id": "ep-q36",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-mixed-simplification"],
+      "bloomLevel": "synthesis",
+      "prompt": "Simplify (5/8)⁻⁷ × (8/5)⁻⁵ and give your answer as a fraction.",
+      "expectedAnswer": "64/25",
+      "hints": [
+        "Rewrite (8/5)⁻⁵ with base (5/8) instead: (8/5)⁻⁵ = (5/8)⁵.",
+        "Now combine with (5/8)⁻⁷ using the product law, then simplify the resulting negative exponent."
+      ],
+      "difficulty": "Hard",
+      "tags": ["laws-of-exponents", "mixed-simplification", "multi-step"]
+    },
+    {
+      "id": "ep-q37",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-solve-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find m so that (-4)^(m+1) × (-4)³ = (-4)⁹.",
+      "expectedAnswer": "5",
+      "hints": [
+        "If two powers of the same base are equal, their exponents must be equal.",
+        "Combine the left side's exponents first: (m+1) + 3, then set it equal to 9."
+      ],
+      "difficulty": "Medium",
+      "tags": ["laws-of-exponents", "solve-for-exponent"]
+    },
+    {
+      "id": "ep-q38",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.3" },
+      "objectiveIds": ["obj-law-solve-exponent"],
+      "bloomLevel": "application",
+      "prompt": "Find m for which 6^m ÷ 6⁻³ = 6⁷.",
+      "expectedAnswer": "4",
+      "hints": [
+        "If two powers of the same base are equal, their exponents must be equal.",
+        "Set m - (-3) equal to 7 and solve for m."
+      ],
+      "difficulty": "Hard",
+      "tags": ["laws-of-exponents", "solve-for-exponent"]
+    },
+    {
+      "id": "ep-q39",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "Write 0.000009 in standard form.",
+      "expectedAnswer": "9 × 10⁻⁶",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it.",
+        "0.000009 → 9, moving 6 places. Write your answer as 'M × 10⁻ᴺ', e.g. 7 × 10⁻⁶."
+      ],
+      "difficulty": "Easy",
+      "tags": ["standard-form", "small-numbers"]
+    },
+    {
+      "id": "ep-q40",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "Write 0.0025 in standard form.",
+      "expectedAnswer": "2.5 × 10⁻³",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it.",
+        "0.0025 → 2.5, moving 3 places."
+      ],
+      "difficulty": "Easy",
+      "tags": ["standard-form", "small-numbers"]
+    },
+    {
+      "id": "ep-q41",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "Write 0.000000482 in standard form.",
+      "expectedAnswer": "4.82 × 10⁻⁷",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "small-numbers"]
+    },
+    {
+      "id": "ep-q42",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "Write 0.0000045 in standard form.",
+      "expectedAnswer": "4.5 × 10⁻⁶",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "small-numbers"]
+    },
+    {
+      "id": "ep-q43",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "Write 0.00000000524 in standard form.",
+      "expectedAnswer": "5.24 × 10⁻⁹",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "small-numbers"]
+    },
+    {
+      "id": "ep-q44",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "The size of a bacteria is 0.0000005 m. Write this in standard form.",
+      "expectedAnswer": "5 × 10⁻⁷ m",
+      "hints": [
+        "Count how many places the decimal point moves right until one non-zero digit remains before it, then keep the unit."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "small-numbers", "real-world"]
+    },
+    {
+      "id": "ep-q45",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "The charge of an electron is about 0.00000000000000000016 coulomb. Write this in standard form.",
+      "expectedAnswer": "1.6 × 10⁻¹⁹ coulomb",
+      "hints": [
+        "Count how many places the decimal point must move right until it sits right after the first non-zero digit.",
+        "There are 18 zeros before the digits '16', so the first non-zero digit (1) is 19 places after the decimal point."
+      ],
+      "difficulty": "Hard",
+      "tags": ["standard-form", "small-numbers", "real-world"],
+      "misconception": {
+        "commonWrongAnswer": "1.6 × 10⁻¹⁸ coulomb",
+        "why": "Miscounting the number of zeros before the digits '16', off by one place.",
+        "remediationHint": "Carefully count each zero in groups: there are 18 zeros before the '16', placing the first significant digit 19 places after the decimal point."
+      }
+    },
+    {
+      "id": "ep-q46",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-to"],
+      "bloomLevel": "application",
+      "prompt": "1 micron is defined as 1/1,000,000 m. Write this length in standard form.",
+      "expectedAnswer": "1 × 10⁻⁶ m",
+      "hints": [
+        "First write the fraction 1/1,000,000 as a decimal.",
+        "1,000,000 = 10⁶, so 1/10⁶ = 10⁻⁶."
+      ],
+      "difficulty": "Hard",
+      "tags": ["standard-form", "small-numbers", "real-world"]
+    },
+    {
+      "id": "ep-q47",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-from"],
+      "bloomLevel": "application",
+      "prompt": "Write 5.6 × 10⁻⁶ in usual (decimal) form.",
+      "expectedAnswer": "0.0000056",
+      "hints": [
+        "Move the decimal point 6 places to the left, filling in zeros as needed."
+      ],
+      "difficulty": "Easy",
+      "tags": ["standard-form", "usual-form"]
+    },
+    {
+      "id": "ep-q48",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-from"],
+      "bloomLevel": "application",
+      "prompt": "Write 6.25 × 10⁻⁴ in usual (decimal) form.",
+      "expectedAnswer": "0.000625",
+      "hints": [
+        "Move the decimal point 4 places to the left, filling in zeros as needed."
+      ],
+      "difficulty": "Easy",
+      "tags": ["standard-form", "usual-form"]
+    },
+    {
+      "id": "ep-q49",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-from"],
+      "bloomLevel": "application",
+      "prompt": "Write 4 × 10⁻⁷ in usual (decimal) form.",
+      "expectedAnswer": "0.0000004",
+      "hints": [
+        "Move the decimal point 7 places to the left, filling in zeros as needed."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "usual-form"]
+    },
+    {
+      "id": "ep-q50",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4" },
+      "objectiveIds": ["obj-standard-form-convert-from"],
+      "bloomLevel": "application",
+      "prompt": "Write 4.05 × 10⁻⁵ in usual (decimal) form.",
+      "expectedAnswer": "0.0000405",
+      "hints": [
+        "Move the decimal point 5 places to the left, filling in zeros as needed."
+      ],
+      "difficulty": "Medium",
+      "tags": ["standard-form", "usual-form"]
+    },
+    {
+      "id": "ep-q51",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "application",
+      "prompt": "The diameter of the Sun is 1.4 × 10⁹ m and the diameter of the Earth is 1.4 × 10⁷ m. About how many times bigger is the Sun's diameter than the Earth's?",
+      "expectedAnswer": "100",
+      "hints": [
+        "Divide the two standard-form numbers; the 1.4 will cancel out.",
+        "10⁹ ÷ 10⁷ = 10^(9-7)."
+      ],
+      "difficulty": "Medium",
+      "tags": ["comparing-magnitudes", "real-world"]
+    },
+    {
+      "id": "ep-q52",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "application",
+      "prompt": "The size of a red blood cell is 7 × 10⁻⁶ m and the size of a plant cell is 1.4 × 10⁻⁵ m. About how many times smaller is the red blood cell than the plant cell?",
+      "expectedAnswer": "2",
+      "hints": [
+        "Divide the plant cell's size by the red blood cell's size.",
+        "Rewrite both with the same power of 10 first, or divide directly and simplify."
+      ],
+      "difficulty": "Medium",
+      "tags": ["comparing-magnitudes", "real-world"],
+      "misconception": {
+        "commonWrongAnswer": "0.5",
+        "why": "Dividing the red blood cell's size by the plant cell's size instead of the other way around, which answers a different question than the one asked.",
+        "remediationHint": "The question asks how many times smaller the red blood cell is than the plant cell — divide the larger (plant cell) by the smaller (red blood cell)."
+      }
+    },
+    {
+      "id": "ep-q53",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "A virus measures about 3 × 10⁻⁸ m and a bacterium measures about 3 × 10⁻⁶ m. Which statement is correct?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "The bacterium is about 100 times larger than the virus" },
+          { "id": "opt-b", "text": "The virus is about 100 times larger than the bacterium" },
+          { "id": "opt-c", "text": "They are the same size" },
+          { "id": "opt-d", "text": "The bacterium is about 1000 times larger than the virus" }
+        ]
+      },
+      "expectedAnswer": "The bacterium is about 100 times larger than the virus",
+      "hints": [
+        "Divide the larger measurement by the smaller one: (3×10⁻⁶) ÷ (3×10⁻⁸).",
+        "10⁻⁶ ÷ 10⁻⁸ = 10^(-6-(-8))."
+      ],
+      "difficulty": "Hard",
+      "tags": ["comparing-magnitudes", "real-world"]
+    },
+    {
+      "id": "ep-q54",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "Which of these two numbers is larger: 5 × 10⁻⁴ or 5 × 10⁻⁷?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "5 × 10⁻⁴" },
+          { "id": "opt-b", "text": "5 × 10⁻⁷" },
+          { "id": "opt-c", "text": "They are equal" },
+          { "id": "opt-d", "text": "Cannot be determined" }
+        ]
+      },
+      "expectedAnswer": "5 × 10⁻⁴",
+      "hints": [
+        "Compare the exponents: -4 is greater than -7.",
+        "A less negative exponent means a larger number, since the value is closer to 1."
+      ],
+      "difficulty": "Medium",
+      "tags": ["comparing-magnitudes", "conceptual"]
+    },
+    {
+      "id": "ep-q55",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "synthesis",
+      "prompt": "The average diameter of a red blood cell is 7 × 10⁻⁶ mm and the diameter of a human hair is about 7 × 10⁻² mm. About how many times thicker is a human hair than a red blood cell?",
+      "expectedAnswer": "10000",
+      "hints": [
+        "Divide the hair's diameter by the red blood cell's diameter; the 7 will cancel out.",
+        "10⁻² ÷ 10⁻⁶ = 10^(-2-(-6))."
+      ],
+      "difficulty": "Hard",
+      "tags": ["comparing-magnitudes", "real-world"]
+    },
+    {
+      "id": "ep-q56",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-magnitudes-ratio"],
+      "bloomLevel": "analysis",
+      "questionType": "single_choice",
+      "prompt": "Two numbers are written in standard form as a × 10ᵐ and b × 10ⁿ, where 1 ≤ a < 10, 1 ≤ b < 10, and m and n are integers with m > n. Which of the two numbers is always larger?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "a × 10ᵐ" },
+          { "id": "opt-b", "text": "b × 10ⁿ" },
+          { "id": "opt-c", "text": "They are always equal" },
+          { "id": "opt-d", "text": "It depends only on a and b, not on m or n" }
+        ]
+      },
+      "expectedAnswer": "a × 10ᵐ",
+      "hints": [
+        "Since m > n and both are integers, a × 10ᵐ is at least 10 times bigger than 10ⁿ on its own.",
+        "Since b is always less than 10, b × 10ⁿ can never catch up to a × 10ᵐ."
+      ],
+      "difficulty": "Hard",
+      "tags": ["comparing-magnitudes", "conceptual"]
+    },
+    {
+      "id": "ep-q57",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-add-subtract"],
+      "bloomLevel": "application",
+      "prompt": "The mass of Planet X is 3.2 × 10²³ kg and the mass of its moon is 4 × 10²¹ kg. Find their total mass, in standard form.",
+      "expectedAnswer": "3.24 × 10²³ kg",
+      "hints": [
+        "Rewrite 3.2 × 10²³ using the exponent 21 instead, so both numbers share the same power of 10.",
+        "Add the coefficients once the powers of 10 match, then renormalise back into standard form if needed."
+      ],
+      "difficulty": "Medium",
+      "tags": ["comparing-magnitudes", "addition", "real-world"]
+    },
+    {
+      "id": "ep-q58",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-add-subtract"],
+      "bloomLevel": "application",
+      "prompt": "Add 2.5 × 10⁻⁴ and 3 × 10⁻⁵. Give your answer in standard form.",
+      "expectedAnswer": "2.8 × 10⁻⁴",
+      "hints": [
+        "Rewrite 2.5 × 10⁻⁴ using the exponent -5 instead, so both numbers share the same power of 10.",
+        "Add the coefficients once the powers of 10 match, then renormalise back into standard form if needed."
+      ],
+      "difficulty": "Medium",
+      "tags": ["comparing-magnitudes", "addition"],
+      "misconception": {
+        "commonWrongAnswer": "5.5 × 10⁻⁴",
+        "why": "Adding the coefficients directly without first rewriting both numbers to share the same power of 10.",
+        "remediationHint": "2.5×10⁻⁴ and 3×10⁻⁵ have different exponents — rewrite one so both share the same power of 10 before adding: 2.5×10⁻⁴ = 25×10⁻⁵, then 25×10⁻⁵ + 3×10⁻⁵ = 28×10⁻⁵ = 2.8×10⁻⁴."
+      }
+    },
+    {
+      "id": "ep-q59",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-add-subtract"],
+      "bloomLevel": "synthesis",
+      "prompt": "The distance between the Sun and Earth is 1.5 × 10¹¹ m and the distance between the Earth and Moon is 4 × 10⁸ m. During a solar eclipse, the Moon lies directly between the Earth and the Sun. Find the distance between the Moon and the Sun at that time, in standard form.",
+      "expectedAnswer": "1.496 × 10¹¹ m",
+      "hints": [
+        "Rewrite 1.5 × 10¹¹ using the exponent 8 instead, so both distances share the same power of 10.",
+        "Subtract the Earth-Moon distance from the Sun-Earth distance, then renormalise back into standard form."
+      ],
+      "difficulty": "Hard",
+      "tags": ["comparing-magnitudes", "subtraction", "real-world"]
+    },
+    {
+      "id": "ep-q60",
+      "sourceRef": { "document": "ncert-class8-exponents-and-powers-ch10", "section": "10.4.1" },
+      "objectiveIds": ["obj-compare-add-subtract"],
+      "bloomLevel": "synthesis",
+      "prompt": "A stack contains 4 identical books, each 20 mm thick, and 4 identical paper sheets, each 0.02 mm thick. Find the total thickness of the stack in mm, and give your answer in standard form.",
+      "expectedAnswer": "8.008 × 10¹ mm",
+      "hints": [
+        "Find the total thickness of the books and the total thickness of the sheets separately, then add them.",
+        "4 × 20 mm = 80 mm, and 4 × 0.02 mm = 0.08 mm."
+      ],
+      "difficulty": "Hard",
+      "tags": ["comparing-magnitudes", "addition", "real-world"]
+    }
+  ]
+}

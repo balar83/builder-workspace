@@ -2,6 +2,7 @@
   "topicId": null,
   "reviewStatus": "approved",
   "expansionNote": "Replaces the 5 hand-seeded placeholder questions with a 35-question bank authored using the construction-specific material from the NCERT Exemplar Unit 5 'Understanding Quadrilaterals and Practical Geometry' (practical.pdf), deliberately excluding general quadrilateral-property material already covered by Understanding Quadrilaterals' own 40-question bank. No canonical-topic.json exists for this chapter (topicId is null throughout) - see stage2-topic-detection.md for the architectural reason and how this bank is merged into runtime data outside the normal Stage 10 pipeline. Difficulty split: 12 Easy (34%), 15 Medium (43%), 8 Hard (23%). All answers are single short values (a number, a short phrase, or Yes/No/True/False) to stay reliably compatible with the exact-string-match evaluator.",
+  "secondExpansionNote": "25 questions (pg-q36-pg-q60) added 2026-09-02 for the Content Expansion for Exam Practice milestone, bringing this chapter to the 60-question target. Honest scope note: this chapter's content space is narrower than the algebra/formula chapters — the 'sufficiency' fact set (minimum measurements per named quadrilateral) is largely exhausted by the original 13 questions, so this pass added only 2 more sufficiency questions, both independently verified rather than guessed (a '4 sides + 1 included angle' combination, confirmed as a legitimate 5th construction case via SAS-then-SSS reasoning; and a direct arithmetic follow-up to the existing '5 measurements' fact). No new numeric 'minimum measurement' facts were invented for shapes (kite, general trapezium) where the chapter's source material and mainstream curriculum don't state a specific count — fabricating one risked incorrect content, so that path was deliberately not taken. The volume instead concentrates in construction-application (+16: new Pythagorean-triple rectangle/rhombus/kite problems with distinct numbers and, for the kite, a genuinely different diagonal-property setup than the rhombus problems already present; parallelogram/rhombus angle problems; trapezium difference-technique problems; square/parallelogram diagonal-bisection problems) and construction-method (+4) and instruments (+3, exhausting the remaining standard geometry-box tools: divider, set squares, and the SSS congruence-rule name). All new numbers/scenarios are original and checked against the existing 35 for duplication. New difficulty split: 3 Easy, 13 Medium, 9 Hard, bringing the chapter total to 15 Easy / 28 Medium / 17 Hard (60 total). No misconception fields, matching this chapter's existing 35-question convention (none of them carry one either).",
   "excludedSourceItems": [],
   "questions": [
     {
@@ -443,6 +444,256 @@
         "A parallelogram with one 90-degree angle automatically has all four angles at 90 degrees.",
         "The two adjacent sides are different lengths (6 cm and 8 cm), so it isn't a square."
       ],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q36",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "Which instrument is used to compare or transfer lengths without measuring them in units?",
+      "expectedAnswer": "Divider",
+      "hints": ["This tool has two pointed legs, like a compass, but no pencil.", "It's opened to match one length, then used to mark off that same length elsewhere."],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q37",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "Which pair of instruments is commonly used together to draw a line parallel to a given line?",
+      "expectedAnswer": "Set squares",
+      "hints": ["These are the two flat, triangular tools in a geometry box.", "One is slid along the edge of the other to keep a fixed angle while moving across the page."],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "instruments"]
+    },
+    {
+      "id": "pg-q38",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "instruments" },
+      "bloomLevel": "recall",
+      "prompt": "In the SSS method for constructing a triangle, what does 'SSS' stand for?",
+      "expectedAnswer": "Side-Side-Side",
+      "hints": ["Each letter stands for one piece of information used to fix the triangle.", "All three pieces of information given are the same type of measurement."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q39",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "analysis",
+      "prompt": "Can a unique quadrilateral be constructed given four sides and one included angle (the angle between two adjacent given sides)?",
+      "expectedAnswer": "Yes",
+      "hints": ["The included angle lets you fix one triangle using SAS from two of the sides.", "Once that triangle is fixed, its third side becomes a known diagonal, letting you fix the second triangle with SSS from the remaining two sides."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q40",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "sufficiency" },
+      "bloomLevel": "application",
+      "prompt": "A general quadrilateral needs 5 independent measurements to be constructed uniquely. If you already know all four sides, how many more measurements (an angle or a diagonal) are needed?",
+      "expectedAnswer": "1",
+      "hints": ["Start from the total of 5 needed measurements.", "Subtract the 4 you already have (the four sides)."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "sufficiency"]
+    },
+    {
+      "id": "pg-q41",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "analysis",
+      "prompt": "In the '3 sides and 2 included angles' construction method, which triangle congruence rule (SSS, SAS, or ASA) is used to construct each of the two triangles?",
+      "expectedAnswer": "SAS",
+      "hints": ["Each triangle is built from two given sides and the angle directly between them.", "Two sides plus their included angle is exactly the SAS rule."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q42",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "analysis",
+      "prompt": "In the '2 adjacent sides and 3 angles' construction method, which triangle congruence rule is used to construct the first triangle, from the two given adjacent sides and the angle between them?",
+      "expectedAnswer": "SAS",
+      "hints": ["Two sides and the angle directly between them fix the first triangle.", "Two sides plus their included angle is exactly the SAS rule."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q43",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "analysis",
+      "prompt": "True or False: a diagonal of a general (non-special) quadrilateral always splits it into two triangles of equal area.",
+      "expectedAnswer": "False",
+      "hints": ["This equal-area property is guaranteed for a parallelogram, where a diagonal bisects the area.", "A general quadrilateral has no such guarantee — its two triangles can have different areas."],
+      "difficulty": "Easy",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q44",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-method" },
+      "bloomLevel": "recall",
+      "prompt": "In the '4 sides and 1 diagonal' construction method, does the diagonal need to connect two adjacent vertices or two opposite vertices?",
+      "expectedAnswer": "Opposite vertices",
+      "hints": ["Think about the definition of a diagonal.", "A diagonal by definition connects two non-adjacent (opposite) vertices, splitting the quadrilateral into two triangles."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-method"]
+    },
+    {
+      "id": "pg-q45",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rectangle is to be constructed with sides 9 cm and 12 cm. What is the length of each diagonal?",
+      "expectedAnswer": "15 cm",
+      "hints": ["A rectangle's diagonal, together with two adjacent sides, forms a right triangle.", "Use the Pythagorean relation: diagonal² = side² + side²."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q46",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rectangle is to be constructed with one side 7 cm and a diagonal of 25 cm. What is the length of the other side?",
+      "expectedAnswer": "24 cm",
+      "hints": ["The diagonal is the hypotenuse of a right triangle formed with the two sides.", "Use side² + side² = diagonal², i.e. 7² + x² = 25²."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q47",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with diagonals of 16 cm and 12 cm. What is the length of each side?",
+      "expectedAnswer": "10 cm",
+      "hints": ["A rhombus's diagonals bisect each other at right angles, forming four right triangles.", "Use half of each diagonal (8 cm and 6 cm) as the two legs of a right triangle, and the Pythagorean relation to find the side."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q48",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with side 17 cm and one diagonal of 16 cm. What is the length of the other diagonal?",
+      "expectedAnswer": "30 cm",
+      "hints": ["Half of the known diagonal (8 cm) is one leg of a right triangle whose hypotenuse is the side (17 cm).", "Find the other leg using the Pythagorean relation, then double it to get the full second diagonal."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q49",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A parallelogram is being constructed with one angle measuring 55 degrees. What is the measure of its adjacent angle?",
+      "expectedAnswer": "125°",
+      "hints": ["Adjacent angles in a parallelogram are supplementary — they add up to 180 degrees.", "Subtract the given angle from 180 degrees."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q50",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A parallelogram WXYZ is being constructed with angle W = 48 degrees. What is the measure of angle Y (opposite to W)?",
+      "expectedAnswer": "48°",
+      "hints": ["Opposite angles in a parallelogram are equal to each other.", "Angle Y is directly across from angle W."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q51",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A trapezium is to be constructed with parallel sides of 15 cm and 7 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+      "expectedAnswer": "8 cm",
+      "hints": ["Subtract the shorter parallel side from the longer one."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q52",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 72, 88 and 105 degrees. What is the fourth angle?",
+      "expectedAnswer": "95°",
+      "hints": ["The interior angles of any quadrilateral add up to 360 degrees.", "Add the three given angles, then subtract from 360."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q53",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 50 degrees and angle DBC = 42 degrees, what is the full angle ABC?",
+      "expectedAnswer": "92°",
+      "hints": ["Angle ABC is made up of the two smaller angles on either side of the diagonal BD.", "Add the two given angles together."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q54",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with side 6 cm and one angle of 75 degrees. What is the measure of the adjacent angle?",
+      "expectedAnswer": "105°",
+      "hints": ["A rhombus is a parallelogram, so adjacent angles are supplementary.", "Subtract the given angle from 180 degrees."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q55",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "analysis",
+      "prompt": "A kite is being constructed with two equal sides of 13 cm meeting at vertex A. The diagonal from A meets the other diagonal at right angles, at a point 5 cm from A. Find the length of the other diagonal's half at that same crossing point.",
+      "expectedAnswer": "12 cm",
+      "hints": ["The 13 cm side is the hypotenuse of a right triangle whose legs are the 5 cm segment and the half-diagonal you're finding.", "Use the Pythagorean relation: 5² + x² = 13²."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q56",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A square is to be constructed with diagonal 10 cm. What is the length of each half of the diagonal, from a vertex to the center?",
+      "expectedAnswer": "5 cm",
+      "hints": ["A square's diagonals bisect each other, just like a rhombus's.", "Divide the full diagonal length by 2."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q57",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A parallelogram is being constructed with diagonals intersecting at O. If one diagonal is 14 cm long, what is the distance from O to each end of that diagonal?",
+      "expectedAnswer": "7 cm",
+      "hints": ["A parallelogram's diagonals bisect each other at their intersection point.", "Divide the full diagonal length by 2."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q58",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "analysis",
+      "prompt": "A trapezium's construction triangle (formed from the difference of the parallel sides) has a base of 6 cm. If the longer parallel side is 11 cm, what is the length of the shorter parallel side?",
+      "expectedAnswer": "5 cm",
+      "hints": ["The construction triangle's base equals the difference between the two parallel sides.", "Subtract that base length from the longer parallel side."],
+      "difficulty": "Hard",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q59",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A square is to be constructed with perimeter 32 cm. What side length should the compass be set to?",
+      "expectedAnswer": "8 cm",
+      "hints": ["A square has 4 equal sides.", "Divide the perimeter by 4."],
+      "difficulty": "Medium",
+      "tags": ["practical-geometry", "construction-application"]
+    },
+    {
+      "id": "pg-q60",
+      "sourceRef": { "document": "ncert-exemplar-unit5", "section": "construction-application" },
+      "bloomLevel": "application",
+      "prompt": "A rhombus is to be constructed with side 25 cm and one diagonal of 48 cm. What is the length of the other diagonal?",
+      "expectedAnswer": "14 cm",
+      "hints": ["Half of the known diagonal (24 cm) is one leg of a right triangle whose hypotenuse is the side (25 cm).", "Find the other leg using the Pythagorean relation, then double it to get the full second diagonal."],
       "difficulty": "Hard",
       "tags": ["practical-geometry", "construction-application"]
     }

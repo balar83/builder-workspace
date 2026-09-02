@@ -13,7 +13,7 @@ def test_list_questions_returns_questions_for_chapter() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body) == 40
+    assert len(body) == 60
     assert all(question["chapterId"] == "rational-numbers" for question in body)
 
 

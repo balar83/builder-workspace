@@ -3,6 +3,7 @@
   "reviewStatus": "approved",
   "note": "Discovered mid-milestone: evaluation_service.evaluate() does exact-string matching against a SEPARATE, private answer_keys.json (ADR-001), not against Question.solution/canonical expectedAnswer (which is worked-explanation prose, never meant for exact match). Stage 10 export never populated this file, so every one of the 44 LE questions 500'd on submission until this artifact existed. Short answers below are hand-extracted from stage6-questions.json's expectedAnswer field, matching the terse style already used for other chapters (e.g. 'Opposite sides are parallel and equal' for understanding-quadrilaterals). Flagging honestly: le-q21 through le-q30 and le-q37 through le-q44 (MCQ-letter answers, compound LHS/RHS answers, multi-part word-problem answers) are inherently weak fits for exact-string matching — a real student could type a differently-worded but equally correct answer and be marked wrong. This is a pre-existing limitation of the exact-match evaluator (Release 0.3 'answer tolerance' is the named future fix, per LearningExperienceArchitecture.md's roadmap mapping), not something introduced or fixable here.",
   "activationNote": "M2.4 Content Activation Pilot (2026-08-17). Five keys changed from free text to private option ids, resolved through the same evaluation_service.get_expected_answer() path as every other type — no second answer-key mechanism, and option ids never appear in any public GET response: le-q21 'b' -> 'opt-b' (single_choice), le-q23 '(a) expression, (b) equation' -> 'opt-b,opt-d' (multi_choice, comma-delimited option-id convention), le-q24 'a' -> 'opt-a' (multi_choice, single-element correct set), le-q27/le-q28 'Yes' -> 'opt-yes' (single_choice, true/false modeled as a 2-option choice). This closes part of the weak-fit list flagged in the note above: le-q21/le-q23/le-q24 no longer require a student to guess a letter format, and le-q27/le-q28 are no longer defeated by typing 'yes' in lowercase against a case-sensitive exact match. The remaining weak fits named in that note (le-q22, le-q25, le-q26, le-q29, le-q30, le-q37, le-q39-le-q42, le-q44) are compound or multi-value answers and stay short_text deliberately — they are the multi_part targets, out of M2.4's scope. Every numeric key below is unchanged in value; the 28 questions now typed 'numeric' simply compare through Fraction parsing instead of string equality, which only widens what is accepted (e.g. 1.5 now matches 3/2).",
+  "secondExpansionNote": "16 keys added 2026-09-02 for le-q45-le-q60 (see stage6-questions.json's secondExpansionNote for full authoring rationale). le-q45/le-q46/le-q50 use option ids (single_choice), matching the established convention. le-q52-le-q57 and le-q60 are typed 'numeric' with a bare-fraction key, matching le-q01-le-q20's convention exactly. le-q47, le-q48, le-q49, le-q51, le-q58 and le-q59 are short_text with a terse key mirroring the exact format of their closest existing precedent (le-q47 like a plain count; le-q48 like le-q22/25's 'LHS = ..., RHS = ...'; le-q49 like le-q26's bare equation string; le-q51 like le-q29/30's 'x = N'; le-q58 like le-q37/42's 'N and M'; le-q59 like le-q41's 'Name = N, Name = N') — flagging honestly, per the note above, that these six remain weak fits for exact-string matching, same pre-existing limitation as their precedents.",
   "answers": {
     "le-q01": "18",
     "le-q02": "-1",
@@ -47,6 +48,22 @@
     "le-q41": "Raju = 10, Father = 40",
     "le-q42": "12 and 13",
     "le-q43": "36",
-    "le-q44": "Length = 18, Width = 12"
+    "le-q44": "Length = 18, Width = 12",
+    "le-q45": "opt-b",
+    "le-q46": "opt-b",
+    "le-q47": "2",
+    "le-q48": "LHS = 6x + 1, RHS = 4x - 9",
+    "le-q49": "2x - 7 = 15",
+    "le-q50": "opt-yes",
+    "le-q51": "x = 5",
+    "le-q52": "5",
+    "le-q53": "5",
+    "le-q54": "7",
+    "le-q55": "50",
+    "le-q56": "31/5",
+    "le-q57": "9",
+    "le-q58": "36 and 38",
+    "le-q59": "Son = 10, Father = 30",
+    "le-q60": "10"
   }
 }

@@ -5,6 +5,7 @@
   "objectiveMigrationNote": "Migrated 2026-08-17 for Slice A1 (Structured Learning Content Foundation, pilot chapter): the legacy integer `objective` field (an index into the pre-migration flattened cross-section objective list) was mechanically mapped to the corresponding new `objectiveIds` entry from canonical-topic.json, one-for-one, preserving the original semantic relationship exactly — no mapping was inferred or guessed. The legacy `objective` field is retired and does not appear on any question below. See docs/Structured-Learning-Content-Design-Proposal.md §I.",
   "excludedSourceItems": [],
   "importNote": "12 questions (sc-q41-sc-q52) added 2026-08-19, sourced from a third-party school assessment (Orchids The International School, Weekly Test 8 / Capstone Assessment, Term 1 2026-27) rather than the NCERT source documents already cited above - sourceRef is null throughout, matching the author-original convention Linear Equations already established for le-q21-44. Selected only content genuinely suited to this chapter's four existing question types (short_text/numeric/single_choice/multi_choice); one source question (a matching-the-following activity pairing 4,100², 22²-21², sqrt(676) and 5² to their results/properties) used a question format this project has not implemented (matching) and was decomposed into 4 independent questions (sc-q44-sc-q47) rather than imported verbatim or forcing a new type - see each question's own content for the preserved mathematical relationship. One duplicate candidate (a source question asking for 6 cubed) was dropped entirely: sc-q25 already asks this verbatim. Two source answers were independently re-derived rather than trusted as-authored, since the source paper's own handwritten work was mathematically inconsistent with the printed question: the 'greater than 15,000' comparison (sc-q43 - correct answer is Platform 2 only, verified by direct computation) and the matching activity's own answer key (verified pairing: 4,100^2 ends in 4 zeros, 22^2-21^2=43, sqrt(676)=26, 5^2=1+3+5+7+9 - the source paper's handwritten matching did not agree with this and was not used). objectiveIds are set only where an existing learning objective in canonical-topic.json genuinely fits (obj-squares-odd-sum, obj-cubes-smallest-multiplier, obj-squares-pythagorean-triplet - clean matches; obj-square-roots-prime-factorisation and obj-cubes-prime-factorisation - following this chapter's own established loose-filing precedent for plain computation, e.g. sc-q01/sc-q24/sc-q25) and left unset for three genuinely novel techniques this chapter's 11 objectives don't yet name (identity-based squaring, difference-of-squares, place-value/trailing-zero reasoning) rather than mis-filed or invented - a real, flagged content gap, not an oversight.",
+  "secondExpansionNote": "8 questions (sc-q53-sc-q60) added 2026-09-02 for the Content Expansion for Exam Practice milestone, bringing this chapter to the ~60-question target. Targeted the weakest-covered objectives identified by inventory: obj-squares-between-squares and obj-square-roots-estimation/repeated-subtraction each had only 1 question across the existing 52; this batch adds one more to obj-squares-between-squares, one more to obj-square-roots-repeated-subtraction, and two more to obj-square-roots-estimation, plus one each to obj-squares-pythagorean-triplet, obj-cube-roots-prime-factorisation, obj-cubes-smallest-multiplier and obj-squares-unit-digit for difficulty balance. All 8 are original numbers/scenarios, checked against the existing 52 for duplication. New difficulty split: 3 Easy, 3 Medium, 2 Hard, bringing the chapter total to 23 Easy / 25 Medium / 12 Hard (60 total).",
   "questions": [
     {
       "id": "sc-q01",
@@ -820,6 +821,133 @@
         "why": "Miscomputing 11×10×3 (a common multiplication slip) rather than an actual disagreement with the pattern.",
         "remediationHint": "11×10=110, then 110×3=330, then +1=331 — the claim is correct."
       }
+    },
+    {
+      "id": "sc-q53",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.3" },
+      "objectiveIds": ["obj-squares-between-squares"],
+      "bloomLevel": "application",
+      "prompt": "How many non-perfect-square numbers lie strictly between 20² and 21²?",
+      "expectedAnswer": "40",
+      "hints": [
+        "Between n² and (n+1)² there are always exactly 2n non-square numbers.",
+        "Here n = 20, so compute 2 × 20."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "between-squares"]
+    },
+    {
+      "id": "sc-q54",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.5.2" },
+      "objectiveIds": ["obj-square-roots-repeated-subtraction"],
+      "bloomLevel": "application",
+      "prompt": "Using repeated subtraction of consecutive odd numbers, find √81.",
+      "expectedAnswer": "9",
+      "hints": [
+        "Subtract 1, then 3, then 5, and so on from 81, counting each subtraction.",
+        "Stop when you reach exactly 0 — the number of subtractions is the square root."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "repeated-subtraction"]
+    },
+    {
+      "id": "sc-q55",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objectiveIds": ["obj-square-roots-estimation"],
+      "bloomLevel": "application",
+      "prompt": "Between which two consecutive whole numbers does √150 lie? Give the smaller one.",
+      "expectedAnswer": "12",
+      "hints": [
+        "Find two consecutive whole numbers whose squares fall just below and just above 150.",
+        "Try 12² and 13²."
+      ],
+      "difficulty": "Easy",
+      "tags": ["square-roots", "estimation"]
+    },
+    {
+      "id": "sc-q56",
+      "sourceRef": { "document": "ncert-class8-ganita-prakash-ch1", "section": "1.1" },
+      "objectiveIds": ["obj-square-roots-estimation"],
+      "bloomLevel": "application",
+      "prompt": "Between which two consecutive whole numbers does √300 lie? Give the smaller one.",
+      "expectedAnswer": "17",
+      "hints": [
+        "Find two consecutive whole numbers whose squares fall just below and just above 300.",
+        "Try 17² and 18²."
+      ],
+      "difficulty": "Medium",
+      "tags": ["square-roots", "estimation"]
+    },
+    {
+      "id": "sc-q57",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.4.2" },
+      "objectiveIds": ["obj-squares-pythagorean-triplet"],
+      "bloomLevel": "application",
+      "questionType": "single_choice",
+      "prompt": "Which of these is the Pythagorean triplet formed using 2m, m²−1, m²+1 with m = 9?",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "18, 80, 82" },
+          { "id": "opt-b", "text": "18, 79, 81" },
+          { "id": "opt-c", "text": "9, 80, 82" },
+          { "id": "opt-d", "text": "18, 81, 82" }
+        ]
+      },
+      "expectedAnswer": "18, 80, 82",
+      "hints": [
+        "Compute 2m, m² − 1 and m² + 1 separately for m = 9.",
+        "m² = 81, so m² − 1 = 80 and m² + 1 = 82."
+      ],
+      "difficulty": "Medium",
+      "tags": ["squares", "pythagorean-triplet"],
+      "misconception": {
+        "commonWrongAnswer": "9, 80, 82",
+        "why": "Forgetting to double m, using m itself instead of 2m as the first member of the triplet.",
+        "remediationHint": "The first member of the triplet is 2m, not m — for m = 9, that's 18, not 9."
+      }
+    },
+    {
+      "id": "sc-q58",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.3.1" },
+      "objectiveIds": ["obj-cube-roots-prime-factorisation"],
+      "bloomLevel": "application",
+      "prompt": "A cube-shaped water tank has a volume of 2197 cm³. Find the length of its edge.",
+      "expectedAnswer": "13 cm",
+      "hints": [
+        "The edge length of a cube is the cube root of its volume.",
+        "Prime factorise 2197 to find ∛2197, and don't forget the unit."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cube-roots", "volume-application"]
+    },
+    {
+      "id": "sc-q59",
+      "sourceRef": { "document": "ncert-class8-prior-ch6", "section": "6.2" },
+      "objectiveIds": ["obj-cubes-smallest-multiplier"],
+      "bloomLevel": "synthesis",
+      "prompt": "Find the smallest number by which 1536 must be divided to make it a perfect cube.",
+      "expectedAnswer": "3",
+      "hints": [
+        "Prime factorise 1536 completely — note how many times each prime factor appears.",
+        "One factor already forms a complete triple (or triples); the other appears just once and breaks the grouping.",
+        "Dividing out that single leftover factor leaves every remaining factor in a complete triple."
+      ],
+      "difficulty": "Hard",
+      "tags": ["cubes", "smallest-divisor"]
+    },
+    {
+      "id": "sc-q60",
+      "sourceRef": { "document": "ncert-class8-prior-ch5", "section": "5.2" },
+      "objectiveIds": ["obj-squares-unit-digit"],
+      "bloomLevel": "recall",
+      "prompt": "Can a perfect square number end in the digit 8?",
+      "expectedAnswer": "No",
+      "hints": [
+        "Recall which unit's digits are possible for a perfect square.",
+        "Perfect squares only ever end in 0, 1, 4, 5, 6 or 9."
+      ],
+      "difficulty": "Easy",
+      "tags": ["squares", "unit-digit-test"]
     }
   ]
 }

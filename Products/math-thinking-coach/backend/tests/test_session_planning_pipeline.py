@@ -37,7 +37,7 @@ def test_shortfall_when_requesting_more_than_the_chapter_contains() -> None:
 
     plan, outcome = session_planning_pipeline.plan_session(request, seed="fixed")
 
-    assert outcome.actualCount == 40
+    assert outcome.actualCount == 60
     assert outcome.shortfall is True
 
 

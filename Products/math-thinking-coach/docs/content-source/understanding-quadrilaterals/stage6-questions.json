@@ -2,6 +2,7 @@
   "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
   "reviewStatus": "approved",
   "expansionNote": "Authored from scratch (no prior question bank existed for this chapter beyond 5 hand-seeded placeholders). 40 questions across 11 learning objectives, targeting the same difficulty/bloom balance style as linear-equations and data-handling: conceptual/definitional recall, direct formula application, and multi-step reasoning (angle back-solving, hierarchy reasoning, property-distinguishing). Difficulty split: 15 Easy (37.5%), 17 Medium (42.5%), 8 Hard (20%) — close to Data Handling's easy-skew, reflecting that several objectives (polygon classification, shape-property recall) are foundational-recall by nature.",
+  "secondExpansionNote": "20 questions (uq-q41-uq-q60) added 2026-09-02 for the Content Expansion for Exam Practice milestone, bringing this chapter to the 60-question target. Targeted the thinnest-covered objectives from inventory (obj-uq-identify-polygon and obj-uq-regular-irregular were each at 2), while adding volume and harder multi-step application across every objective (Pythagorean-triple diagonal problems, algebraic diagonal-bisection equations, hierarchy edge cases). All new scenarios/numbers are original, checked against the existing 40 for duplication. New difficulty split: 4 Easy, 9 Medium, 7 Hard, bringing the chapter total to 19 Easy / 26 Medium / 15 Hard (60 total) — a deliberate shift toward Medium/Hard versus the original 40's Easy-leaning split, for exam practice.",
   "excludedSourceItems": [],
   "questions": [
     {
@@ -142,8 +143,16 @@
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
       "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "recall",
+      "questionType": "single_choice",
       "prompt": "What is the sum of the interior angles of a quadrilateral?",
-      "expectedAnswer": "360°",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "180°" },
+          { "id": "opt-b", "text": "360°" },
+          { "id": "opt-c", "text": "540°" }
+        ]
+      },
+      "expectedAnswer": "360° — (4 − 2) × 180° = 2 × 180° = 360°.",
       "hints": [
         "Use the formula (n − 2) × 180° with n = 4 for a quadrilateral.",
         "(4 − 2) × 180° = 2 × 180°."
@@ -152,6 +161,7 @@
       "tags": ["interior-angle-sum"],
       "misconception": {
         "commonWrongAnswer": "180°, confusing it with a triangle's angle sum.",
+        "commonWrongOptionId": "opt-a",
         "why": "The triangle's 180° angle sum is memorized first and sometimes misapplied to any polygon.",
         "remediationHint": "Each shape has its own angle sum — a quadrilateral's is 360°, found via (4 − 2) × 180°."
       }
@@ -161,8 +171,16 @@
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
       "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "recall",
+      "questionType": "single_choice",
       "prompt": "What is the sum of the interior angles of a pentagon (5 sides)?",
-      "expectedAnswer": "540°",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "360°" },
+          { "id": "opt-b", "text": "450°" },
+          { "id": "opt-c", "text": "540°" }
+        ]
+      },
+      "expectedAnswer": "540° — (5 − 2) × 180° = 3 × 180° = 540°.",
       "hints": [
         "Use the formula (n − 2) × 180° with n = 5.",
         "(5 − 2) × 180° = 3 × 180°."
@@ -171,6 +189,7 @@
       "tags": ["interior-angle-sum"],
       "misconception": {
         "commonWrongAnswer": "450°, from an arithmetic slip while applying the formula.",
+        "commonWrongOptionId": "opt-b",
         "why": "Arithmetic slips are common when applying a two-step formula quickly.",
         "remediationHint": "Compute (n − 2) first, then multiply that whole result by 180°."
       }
@@ -180,8 +199,16 @@
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
       "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "application",
+      "questionType": "single_choice",
       "prompt": "What is the sum of the interior angles of an octagon (8 sides)?",
-      "expectedAnswer": "1080°",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "1080°" },
+          { "id": "opt-b", "text": "1440°" },
+          { "id": "opt-c", "text": "900°" }
+        ]
+      },
+      "expectedAnswer": "1080° — (8 − 2) × 180° = 6 × 180° = 1080°, not 8 × 180°.",
       "hints": [
         "Use the formula (n − 2) × 180° with n = 8.",
         "(8 − 2) × 180° = 6 × 180°."
@@ -190,6 +217,7 @@
       "tags": ["interior-angle-sum"],
       "misconception": {
         "commonWrongAnswer": "1440°, by using n × 180° instead of (n − 2) × 180°.",
+        "commonWrongOptionId": "opt-b",
         "why": "Students often forget to subtract 2 before multiplying.",
         "remediationHint": "Always subtract 2 from the number of sides first, then multiply by 180°."
       }
@@ -199,8 +227,16 @@
       "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
       "objectiveIds": ["obj-uq-angle-sum-formula"],
       "bloomLevel": "application",
+      "questionType": "single_choice",
       "prompt": "A polygon's interior angles sum to 1260°. How many sides does it have?",
-      "expectedAnswer": "9",
+      "responseSpecification": {
+        "options": [
+          { "id": "opt-a", "text": "7" },
+          { "id": "opt-b", "text": "9" },
+          { "id": "opt-c", "text": "11" }
+        ]
+      },
+      "expectedAnswer": "9 sides — 1260° ÷ 180° = 7 = n − 2, so n = 7 + 2 = 9.",
       "hints": [
         "Set (n − 2) × 180° = 1260° and solve for n.",
         "1260° ÷ 180° = 7, so n − 2 = 7."
@@ -209,6 +245,7 @@
       "tags": ["interior-angle-sum"],
       "misconception": {
         "commonWrongAnswer": "7, from dividing 1260 by 180 and stopping there.",
+        "commonWrongOptionId": "opt-a",
         "why": "Students solve for (n − 2) correctly but forget to add back the 2 to get n.",
         "remediationHint": "Dividing gives you (n − 2), not n — add 2 back to find the actual number of sides."
       }
@@ -771,6 +808,228 @@
         "why": "Students stop one level up the hierarchy and forget that both rectangle and rhombus are themselves parallelograms.",
         "remediationHint": "Follow the hierarchy all the way up — since a square is a rectangle and a rhombus, and both of those are parallelograms, 'parallelogram' also correctly describes it."
       }
+    },
+    {
+      "id": "uq-q41",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
+      "objectiveIds": ["obj-uq-identify-polygon"],
+      "bloomLevel": "recall",
+      "prompt": "A shape is bounded by one continuous curved line with no straight edges at all, like an oval. Is it a polygon?",
+      "expectedAnswer": "No — a polygon's boundary must be made entirely of straight line segments; a curved boundary is never a polygon.",
+      "hints": ["Check what a polygon's sides are required to be made of.", "An oval has no straight edges at all."],
+      "difficulty": "Easy", "tags": ["polygon", "definition"],
+      "misconception": {"commonWrongAnswer": "Yes, since it is a simple closed shape.", "why": "Focusing only on 'closed' and 'simple' while forgetting the requirement that the sides be straight line segments.", "remediationHint": "A closed, non-self-crossing shape is only a polygon if its boundary is made of straight line segments — curves disqualify it entirely."}
+    },
+    {
+      "id": "uq-q42",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
+      "objectiveIds": ["obj-uq-identify-polygon"],
+      "bloomLevel": "application",
+      "prompt": "A figure has 6 straight sides and is closed, with no self-intersections. Is it a polygon? If so, what is it also called by its side count?",
+      "expectedAnswer": "Yes, it is a polygon — specifically a hexagon (a 6-sided polygon).",
+      "hints": ["Check the polygon definition: straight sides, closed, simple (non-self-crossing) — does this figure satisfy all three?", "A polygon's name often comes from its number of sides; 6 sides is a hexagon."],
+      "difficulty": "Medium", "tags": ["polygon", "definition"],
+      "misconception": {"commonWrongAnswer": "Calling it a pentagon or octagon, misremembering which side count matches which name.", "why": "Mixing up the Greek-derived prefixes for different side counts.", "remediationHint": "Hexa- means six — a hexagon always has exactly 6 sides."}
+    },
+    {
+      "id": "uq-q43",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
+      "objectiveIds": ["obj-uq-convex-concave"],
+      "bloomLevel": "application",
+      "prompt": "A polygon has interior angles of 90°, 90°, 90°, and 90°. Is this polygon necessarily convex?",
+      "expectedAnswer": "Yes — every one of its interior angles is less than 180°, which is exactly the convexity condition.",
+      "hints": ["Check each listed angle against the convex-polygon rule (every angle less than 180°).", "All four angles here are well under 180°."],
+      "difficulty": "Medium", "tags": ["convex", "concave"],
+      "misconception": {"commonWrongAnswer": "Can't be determined without seeing the actual drawn shape.", "why": "Not realizing that convexity is fully determined by checking every interior angle, with no need for a picture.", "remediationHint": "Convexity depends only on whether every interior angle is under 180° — checking the angle list is enough, no drawing required."}
+    },
+    {
+      "id": "uq-q44",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
+      "objectiveIds": ["obj-uq-regular-irregular"],
+      "bloomLevel": "analysis",
+      "prompt": "Is a rectangle that is not a square a regular polygon? Why or why not?",
+      "expectedAnswer": "No — although all its angles are equal (90° each), its sides are not all equal (length and width differ), so it fails the regularity condition.",
+      "hints": ["Regularity needs both equal sides AND equal angles.", "Check the sides of a non-square rectangle — are they all the same length?"],
+      "difficulty": "Easy", "tags": ["regular-polygon", "rectangle"],
+      "misconception": {"commonWrongAnswer": "Yes, since all its angles are equal.", "why": "Checking only the angle condition and skipping the side condition.", "remediationHint": "Both conditions must hold together — a rectangle's angles are equal, but its sides usually aren't, so it fails to be regular."}
+    },
+    {
+      "id": "uq-q45",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.2" },
+      "objectiveIds": ["obj-uq-regular-irregular"],
+      "bloomLevel": "recall",
+      "prompt": "An equilateral triangle has all three sides equal and all three angles equal (60° each). Is it a regular polygon?",
+      "expectedAnswer": "Yes — it satisfies both conditions for regularity: equal sides and equal angles.",
+      "hints": ["Check both conditions for regularity against this triangle.", "Both the side and angle conditions are satisfied here."],
+      "difficulty": "Easy", "tags": ["regular-polygon", "triangle"],
+      "misconception": {"commonWrongAnswer": "No, because regularity only applies to quadrilaterals and above.", "why": "Assuming 'regular polygon' excludes triangles, when the definition applies to any polygon, including three-sided ones.", "remediationHint": "The regular-polygon definition applies to polygons of any number of sides, including triangles."}
+    },
+    {
+      "id": "uq-q46",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
+      "bloomLevel": "recall",
+      "questionType": "single_choice",
+      "prompt": "What is the sum of the interior angles of a hexagon (6 sides)?",
+      "responseSpecification": {"options": [{"id": "opt-a", "text": "720°"}, {"id": "opt-b", "text": "900°"}, {"id": "opt-c", "text": "540°"}]},
+      "expectedAnswer": "720° — (6 − 2) × 180° = 4 × 180° = 720°.",
+      "hints": ["Use the formula (n − 2) × 180° with n = 6.", "(6 − 2) × 180° = 4 × 180°."],
+      "difficulty": "Medium", "tags": ["interior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "540°, confusing it with the pentagon's angle sum.", "commonWrongOptionId": "opt-c", "why": "Mixing up the angle sums of two nearby polygon side-counts.", "remediationHint": "Recompute directly: (6 − 2) × 180° = 4 × 180° = 720°, not the pentagon's 540°."}
+    },
+    {
+      "id": "uq-q47",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-angle-sum-formula"],
+      "bloomLevel": "application",
+      "prompt": "A polygon's interior angles sum to 1800°. How many sides does it have?",
+      "expectedAnswer": "12 sides — 1800° ÷ 180° = 10 = n − 2, so n = 10 + 2 = 12.",
+      "hints": ["Set (n − 2) × 180° = 1800° and solve for n.", "1800° ÷ 180° = 10, so n − 2 = 10 — don't forget to add 2 back."],
+      "difficulty": "Hard", "tags": ["interior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "10, from dividing 1800 by 180 and stopping there.", "why": "Solving for (n − 2) correctly but forgetting to add back the 2 to get n.", "remediationHint": "Dividing gives you (n − 2), not n — add 2 back to find the actual number of sides."}
+    },
+    {
+      "id": "uq-q48",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
+      "bloomLevel": "application",
+      "prompt": "Three angles of a quadrilateral are 65°, 85°, and 110°. Find the fourth angle.",
+      "expectedAnswer": "100°",
+      "hints": ["The four angles of a quadrilateral must add up to 360°.", "Add the three known angles, then subtract that total from 360°."],
+      "difficulty": "Medium", "tags": ["interior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "95°, from an arithmetic slip adding the three known angles.", "why": "Simple addition error when summing three two-digit angles.", "remediationHint": "Add the three angles carefully, one pair at a time: 65+85=150, then 150+110=260, then 360−260."}
+    },
+    {
+      "id": "uq-q49",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-find-unknown-interior-angle"],
+      "bloomLevel": "analysis",
+      "prompt": "In a hexagon, five angles are 110°, 120°, 130°, 140°, and 100°. Find the sixth angle.",
+      "expectedAnswer": "120°",
+      "hints": ["The sum of the interior angles of a hexagon is 720° (use (n − 2) × 180° with n = 6).", "Add the five known angles and subtract that total from 720°."],
+      "difficulty": "Hard", "tags": ["interior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "360°, applying the quadrilateral's angle sum instead of the hexagon's.", "why": "360° is the most memorized angle-sum fact and gets applied automatically without checking the number of sides.", "remediationHint": "This shape has 6 sides, so its interior angle sum is 720°, not 360°."}
+    },
+    {
+      "id": "uq-q50",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
+      "bloomLevel": "application",
+      "prompt": "A regular polygon has 10 sides. Find the measure of each exterior angle.",
+      "expectedAnswer": "36°",
+      "hints": ["For a regular polygon, each exterior angle = 360° ÷ number of sides.", "360° ÷ 10 = ?"],
+      "difficulty": "Easy", "tags": ["exterior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "10°, from dividing 10 by 360 instead of 360 by 10.", "why": "Students sometimes invert the division.", "remediationHint": "It's always 360° divided by the number of sides, not the other way around."}
+    },
+    {
+      "id": "uq-q51",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.3" },
+      "objectiveIds": ["obj-uq-exterior-angle-sum"],
+      "bloomLevel": "analysis",
+      "prompt": "A regular polygon has an interior angle that is 3 times its exterior angle. Find the number of sides.",
+      "expectedAnswer": "8",
+      "hints": ["Let the exterior angle be x, so the interior angle is 3x. Use interior + exterior = 180°.", "x + 3x = 180° gives x = 45°; then use 360° ÷ x to find the number of sides."],
+      "difficulty": "Hard", "tags": ["exterior-angle-sum", "interior-angle-sum"],
+      "misconception": {"commonWrongAnswer": "Guessing a plausible number of sides without solving x + 3x = 180° first.", "why": "Skipping the algebra step and guessing a round number instead.", "remediationHint": "Set exterior = x, interior = 3x, solve x + 3x = 180° for x first, then use 360° ÷ x."}
+    },
+    {
+      "id": "uq-q52",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
+      "objectiveIds": ["obj-uq-trapezium-identify"],
+      "bloomLevel": "recall",
+      "prompt": "In a trapezium, which pair of sides is called the 'legs'?",
+      "expectedAnswer": "The two non-parallel sides.",
+      "hints": ["The parallel sides have their own name — think about what's left over.", "The legs connect the two bases."],
+      "difficulty": "Easy", "tags": ["trapezium"],
+      "misconception": {"commonWrongAnswer": "The two parallel sides.", "why": "Mixing up 'bases' and 'legs' — the two terms sound interchangeable without a clear anchor.", "remediationHint": "The bases are the parallel sides; the legs are the two non-parallel connecting sides."}
+    },
+    {
+      "id": "uq-q53",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
+      "objectiveIds": ["obj-uq-trapezium-identify"],
+      "bloomLevel": "analysis",
+      "prompt": "A trapezium's two parallel sides measure 8 cm and 14 cm. Are its legs necessarily equal in length?",
+      "expectedAnswer": "No — a general trapezium's legs can be any length, as long as the two bases are parallel; equal legs are not required.",
+      "hints": ["The trapezium's defining condition is only about the two parallel sides.", "Nothing in the basic definition constrains the legs' lengths relative to each other."],
+      "difficulty": "Medium", "tags": ["trapezium"],
+      "misconception": {"commonWrongAnswer": "Yes, assuming a trapezium is always symmetric.", "why": "Picturing only the special, visually symmetric trapezium case rather than the general definition.", "remediationHint": "The definition of a trapezium only requires one pair of parallel sides — it doesn't require the legs to be equal or the shape to be symmetric."}
+    },
+    {
+      "id": "uq-q54",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
+      "objectiveIds": ["obj-uq-kite-identify"],
+      "bloomLevel": "recall",
+      "prompt": "Does a kite's diagonals bisect each other (both of them), the way a parallelogram's diagonals do?",
+      "expectedAnswer": "No — only one of a kite's two diagonals is bisected by the other; both being bisected is a parallelogram property, not a kite property.",
+      "hints": ["Compare a kite's diagonal properties to a parallelogram's.", "Only one diagonal in a kite is cut exactly in half."],
+      "difficulty": "Easy", "tags": ["kite", "parallelogram"],
+      "misconception": {"commonWrongAnswer": "Yes, since both shapes have diagonals that cross inside the figure.", "why": "Overgeneralizing the parallelogram's bisection property to any quadrilateral with intersecting diagonals.", "remediationHint": "Both diagonals bisecting each other is a parallelogram-specific property — a kite only guarantees this for one of its two diagonals."}
+    },
+    {
+      "id": "uq-q55",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.4" },
+      "objectiveIds": ["obj-uq-kite-identify"],
+      "bloomLevel": "application",
+      "prompt": "A kite has two pairs of adjacent equal sides: 6 cm & 6 cm, and 9 cm & 9 cm. What is the perimeter of the kite?",
+      "expectedAnswer": "30 cm",
+      "hints": ["The perimeter is the sum of all four sides.", "6 + 6 + 9 + 9 = ?"],
+      "difficulty": "Medium", "tags": ["kite"],
+      "misconception": {"commonWrongAnswer": "15 cm, adding only one of each pair instead of all four sides.", "why": "Treating the kite as if it only had two sides instead of four.", "remediationHint": "A kite has four sides total — add all four, not just one from each equal pair."}
+    },
+    {
+      "id": "uq-q56",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
+      "bloomLevel": "application",
+      "prompt": "In parallelogram WXYZ, angle W = 55°. Find angle X (adjacent to W) and angle Y (opposite to W).",
+      "expectedAnswer": "Angle X = 125°, Angle Y = 55°",
+      "hints": ["Adjacent angles in a parallelogram are supplementary.", "Opposite angles in a parallelogram are equal."],
+      "difficulty": "Medium", "tags": ["parallelogram"],
+      "misconception": {"commonWrongAnswer": "Angle X = 55°, treating all angles as equal.", "why": "Assuming a general parallelogram behaves like a rectangle with all equal angles.", "remediationHint": "Only opposite angles are equal in a general parallelogram — adjacent angles are supplementary (sum to 180°), not equal."}
+    },
+    {
+      "id": "uq-q57",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
+      "objectiveIds": ["obj-uq-parallelogram-properties"],
+      "bloomLevel": "analysis",
+      "prompt": "In parallelogram ABCD, the diagonals intersect at O. If AO = 3x − 1 and OC = x + 7, find x.",
+      "expectedAnswer": "4",
+      "hints": ["The diagonals of a parallelogram bisect each other, so AO = OC.", "Set 3x − 1 equal to x + 7 and solve for x."],
+      "difficulty": "Hard", "tags": ["parallelogram"],
+      "misconception": {"commonWrongAnswer": "Solving 3x − 1 = x + 7 incorrectly, e.g. getting x = 8 by mis-transposing a term.", "why": "Sign error while transposing terms in the linear equation.", "remediationHint": "3x − 1 = x + 7 → 3x − x = 7 + 1 → 2x = 8 → x = 4."}
+    },
+    {
+      "id": "uq-q58",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
+      "bloomLevel": "application",
+      "prompt": "A rhombus has diagonals of length 6 cm and 8 cm. What angle do the diagonals make with each other where they cross?",
+      "expectedAnswer": "90°",
+      "hints": ["Recall the special diagonal property that holds for every rhombus, regardless of the diagonal lengths.", "A rhombus's diagonals always cross at right angles."],
+      "difficulty": "Medium", "tags": ["rhombus"],
+      "misconception": {"commonWrongAnswer": "Trying to compute an angle from the 6 cm and 8 cm using a formula, instead of recalling the fixed property.", "why": "Assuming the given numbers must be used in a calculation, when the angle is fixed at 90° for any rhombus regardless of diagonal length.", "remediationHint": "A rhombus's diagonals are always perpendicular (90°) — this doesn't depend on their specific lengths."}
+    },
+    {
+      "id": "uq-q59",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
+      "objectiveIds": ["obj-uq-rhombus-rectangle-square"],
+      "bloomLevel": "analysis",
+      "prompt": "A rectangle's diagonal is 13 cm and one side is 5 cm. Using the fact that a rectangle's diagonal, together with two adjacent sides, forms a right triangle, find the length of the adjacent side.",
+      "expectedAnswer": "12 cm",
+      "hints": ["The diagonal is the hypotenuse of a right triangle formed with the two sides.", "Use the Pythagorean relation: side² + side² = diagonal², i.e. 5² + x² = 13²."],
+      "difficulty": "Hard", "tags": ["rectangle", "pythagoras-application"],
+      "misconception": {"commonWrongAnswer": "8 cm, subtracting 13 − 5 directly instead of applying the Pythagorean relation.", "why": "Treating the diagonal and side as if they combined by simple subtraction rather than the Pythagorean relation.", "remediationHint": "The diagonal is the hypotenuse of a right triangle — use 5² + x² = 13², not plain subtraction."}
+    },
+    {
+      "id": "uq-q60",
+      "sourceRef": { "document": "ncert-class8-ch3-domain-knowledge", "section": "3.5" },
+      "objectiveIds": ["obj-uq-quadrilateral-hierarchy"],
+      "bloomLevel": "analysis",
+      "prompt": "A quadrilateral has diagonals that bisect each other and are equal in length, but do NOT cross at right angles. What is the most specific name for this shape?",
+      "expectedAnswer": "Rectangle",
+      "hints": ["Bisecting diagonals alone tell you it's at least a parallelogram.", "Equal diagonals (without perpendicularity) point to one specific special parallelogram — not the one whose diagonals are always perpendicular."],
+      "difficulty": "Hard", "tags": ["hierarchy", "rectangle"],
+      "misconception": {"commonWrongAnswer": "Square, since it has two 'special' diagonal properties.", "why": "Forgetting that a square's diagonals are also perpendicular — since this shape's diagonals are explicitly not perpendicular, it can't be a square or a rhombus.", "remediationHint": "A square's diagonals are always perpendicular — since this shape's aren't, rule out square and rhombus, leaving rectangle as the most specific match."}
     }
   ]
 }

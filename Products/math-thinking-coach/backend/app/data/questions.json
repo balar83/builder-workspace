@@ -757,6 +757,1591 @@
     ]
   },
   {
+    "id": "dh-q43",
+    "chapterId": "data-handling",
+    "question": "A pictograph shows toys sold by 3 stores, where each 🧸 symbol = 5 toys: Store A ●●●, Store B ●●●●●●, Store C ●●. How many toys did Store B sell?",
+    "text": "A pictograph shows toys sold by 3 stores, where each 🧸 symbol = 5 toys: Store A ●●●, Store B ●●●●●●, Store C ●●. How many toys did Store B sell?",
+    "difficulty": "Easy",
+    "hints": [
+      "Count Store B's symbols.",
+      "Multiply the symbol count by the value each symbol represents (5 toys)."
+    ],
+    "solution": "Store B has 6 symbols × 5 toys = 30 toys.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
+  },
+  {
+    "id": "dh-q44",
+    "chapterId": "data-handling",
+    "question": "A double bar graph compares rainfall (mm) in City X and City Y: June (X: 80, Y: 95), July (X: 120, Y: 100). In which month and city was rainfall highest, and what was the value?",
+    "text": "A double bar graph compares rainfall (mm) in City X and City Y: June (X: 80, Y: 95), July (X: 120, Y: 100). In which month and city was rainfall highest, and what was the value?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare all four values: two months × two cities.",
+      "Don't stop after checking just one month."
+    ],
+    "solution": "July, City X — 120 mm, the highest of all four values shown.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-read-graphs"
+    ]
+  },
+  {
+    "id": "dh-q45",
+    "chapterId": "data-handling",
+    "question": "A bar graph of monthly expenses is redrawn with the bars sorted from smallest to largest instead of by month. Does the total expense shown change?",
+    "text": "A bar graph of monthly expenses is redrawn with the bars sorted from smallest to largest instead of by month. Does the total expense shown change?",
+    "difficulty": "Easy",
+    "hints": [
+      "Think about whether any bar's height changes when its position changes.",
+      "The total is the sum of the same values, regardless of the order they're listed in."
+    ],
+    "solution": "No — sorting the bars only changes their display order, not the value each bar represents or the total.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-bar-graph-reorder"
+    ]
+  },
+  {
+    "id": "dh-q46",
+    "chapterId": "data-handling",
+    "question": "Two students draw the same sales data as bar graphs — one uses thick bars, the other thin bars, both correctly labeled and scaled. Do the two graphs convey different information?",
+    "text": "Two students draw the same sales data as bar graphs — one uses thick bars, the other thin bars, both correctly labeled and scaled. Do the two graphs convey different information?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about what actually carries the information in a bar graph: the height, or the width?",
+      "A bar's value comes from its height (relative to the scale), not its thickness."
+    ],
+    "solution": "No — as long as both are correctly labeled and scaled, bar thickness is only a styling choice and doesn't change the information conveyed.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-bar-graph-reorder"
+    ]
+  },
+  {
+    "id": "dh-q47",
+    "chapterId": "data-handling",
+    "question": "In a pie chart, Category P's sector is exactly twice the size of Category Q's sector. What does this tell you about Category P's share of the total compared to Category Q's?",
+    "text": "In a pie chart, Category P's sector is exactly twice the size of Category Q's sector. What does this tell you about Category P's share of the total compared to Category Q's?",
+    "difficulty": "Medium",
+    "hints": [
+      "Sector size is proportional to share of the total.",
+      "Twice the sector size means twice the proportion, not necessarily twice the raw count unless you also know the total."
+    ],
+    "solution": "Category P's share of the total is exactly twice Category Q's share.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-pie-sector-meaning"
+    ]
+  },
+  {
+    "id": "dh-q48",
+    "chapterId": "data-handling",
+    "question": "A pie chart has four sectors. Three of them are known to be 90°, 60°, and 120°. Without measuring, find the fourth sector's angle.",
+    "text": "A pie chart has four sectors. Three of them are known to be 90°, 60°, and 120°. Without measuring, find the fourth sector's angle.",
+    "difficulty": "Hard",
+    "hints": [
+      "All the sectors in a pie chart must add up to 360°.",
+      "Subtract the three known angles from 360°."
+    ],
+    "solution": "90°. (360° − 90° − 60° − 120° = 90°.)",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-pie-sector-meaning"
+    ]
+  },
+  {
+    "id": "dh-q49",
+    "chapterId": "data-handling",
+    "question": "A survey of 50 people found 20 prefer tea, 15 prefer coffee, and 15 prefer juice. Find each drink's central angle in a pie chart of this data.",
+    "text": "A survey of 50 people found 20 prefer tea, 15 prefer coffee, and 15 prefer juice. Find each drink's central angle in a pie chart of this data.",
+    "difficulty": "Medium",
+    "hints": [
+      "Divide each drink's count by the total (50) to get its fraction of the whole.",
+      "Multiply each fraction by 360° to get its central angle."
+    ],
+    "solution": "Tea = (20/50)×360° = 144°. Coffee = (15/50)×360° = 108°. Juice = (15/50)×360° = 108°. (Angles sum to 360°.)",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-central-angle-formula"
+    ]
+  },
+  {
+    "id": "dh-q50",
+    "chapterId": "data-handling",
+    "question": "In a pie chart of 180 students' preferred sport, Football has a central angle of 120°. How many students prefer Football?",
+    "text": "In a pie chart of 180 students' preferred sport, Football has a central angle of 120°. How many students prefer Football?",
+    "difficulty": "Medium",
+    "hints": [
+      "Convert the central angle to a fraction of the whole circle first.",
+      "Apply that fraction to the total number of students."
+    ],
+    "solution": "60 students. (120°/360° = 1/3, and 1/3 × 180 = 60.)",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-central-angle-formula"
+    ]
+  },
+  {
+    "id": "dh-q51",
+    "chapterId": "data-handling",
+    "question": "A pie chart needs sectors of 90°, 135°, 90°, and 45°, drawn one after another around the circle. After drawing the first sector's 90° angle from the starting radius, from where do you measure the next sector's 135° angle?",
+    "text": "A pie chart needs sectors of 90°, 135°, 90°, and 45°, drawn one after another around the circle. After drawing the first sector's 90° angle from the starting radius, from where do you measure the next sector's 135° angle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Sectors are drawn sequentially, one after another around the circle.",
+      "Each new angle starts where the last sector's second radius ended."
+    ],
+    "solution": "From the radius that ended the first sector — each new sector's angle is measured from where the previous one left off, continuing around the circle.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-construct-pie-chart"
+    ]
+  },
+  {
+    "id": "dh-q52",
+    "chapterId": "data-handling",
+    "question": "Is 'measuring the boiling point of pure water at sea level' a random experiment? Why or why not?",
+    "text": "Is 'measuring the boiling point of pure water at sea level' a random experiment? Why or why not?",
+    "difficulty": "Easy",
+    "hints": [
+      "Ask whether the result can be known in advance, even in principle.",
+      "A fixed physical fact isn't a random experiment, even though it involves measurement."
+    ],
+    "solution": "No — pure water always boils at the same known temperature (100°C) at sea level, so the result is predictable, not random.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-random-experiment"
+    ]
+  },
+  {
+    "id": "dh-q53",
+    "chapterId": "data-handling",
+    "question": "Is 'the number of people who visit a particular shop tomorrow' a random experiment? Explain briefly.",
+    "text": "Is 'the number of people who visit a particular shop tomorrow' a random experiment? Explain briefly.",
+    "difficulty": "Medium",
+    "hints": [
+      "Ask whether the exact number can be known before tomorrow happens.",
+      "A general expectation (e.g. 'usually busy') is not the same as knowing the exact outcome in advance."
+    ],
+    "solution": "Yes — the exact number of visitors cannot be predicted or controlled in advance, even though a rough pattern might be expected.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-random-experiment"
+    ]
+  },
+  {
+    "id": "dh-q54",
+    "chapterId": "data-handling",
+    "question": "A spinner has three equal sectors labeled A, B and C. List all possible outcomes of one spin.",
+    "text": "A spinner has three equal sectors labeled A, B and C. List all possible outcomes of one spin.",
+    "difficulty": "Medium",
+    "hints": [
+      "Each sector on the spinner is a separate possible outcome.",
+      "List every distinct label once."
+    ],
+    "solution": "A, B, C — three equally likely outcomes.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-identify-outcomes"
+    ]
+  },
+  {
+    "id": "dh-q55",
+    "chapterId": "data-handling",
+    "question": "A bag has 4 red balls and 4 blue balls, identical apart from colour, thoroughly mixed. Are 'drawing red' and 'drawing blue' equally likely outcomes? Explain using the counts given.",
+    "text": "A bag has 4 red balls and 4 blue balls, identical apart from colour, thoroughly mixed. Are 'drawing red' and 'drawing blue' equally likely outcomes? Explain using the counts given.",
+    "difficulty": "Hard",
+    "hints": [
+      "Compare the counts of red and blue balls.",
+      "Equal counts of each colour mean an equal chance of drawing either one."
+    ],
+    "solution": "Yes — since there are equal numbers of red and blue balls (4 each), each colour has exactly the same chance of being drawn.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-equally-likely"
+    ]
+  },
+  {
+    "id": "dh-q56",
+    "chapterId": "data-handling",
+    "question": "A bag contains 6 green and 4 yellow marbles, identical apart from colour. One marble is drawn at random. Find the probability that it is NOT yellow.",
+    "text": "A bag contains 6 green and 4 yellow marbles, identical apart from colour. One marble is drawn at random. Find the probability that it is NOT yellow.",
+    "difficulty": "Medium",
+    "hints": [
+      "'Not yellow' means every colour except yellow — here that's green.",
+      "Count the green marbles over the total, then simplify."
+    ],
+    "solution": "P(not yellow) = P(green) = 6/10 = 3/5.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
+  },
+  {
+    "id": "dh-q57",
+    "chapterId": "data-handling",
+    "question": "Two dice are thrown together. What is the probability of getting a sum of 7?",
+    "text": "Two dice are thrown together. What is the probability of getting a sum of 7?",
+    "difficulty": "Hard",
+    "hints": [
+      "There are 6×6 = 36 equally likely outcome pairs when two dice are thrown.",
+      "List every pair of die values that adds up to exactly 7."
+    ],
+    "solution": "There are 36 equally likely outcome pairs. Pairs summing to 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) — 6 pairs. P(sum=7) = 6/36 = 1/6.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
+  },
+  {
+    "id": "dh-q58",
+    "chapterId": "data-handling",
+    "question": "A number is chosen at random from 1 to 20. Find the probability that the chosen number is a multiple of 3 or a multiple of 5.",
+    "text": "A number is chosen at random from 1 to 20. Find the probability that the chosen number is a multiple of 3 or a multiple of 5.",
+    "difficulty": "Hard",
+    "hints": [
+      "List the multiples of 3, then the multiples of 5, separately.",
+      "Check whether any number appears in both lists — if so, don't count it twice."
+    ],
+    "solution": "Multiples of 3: 3,6,9,12,15,18 (6 numbers). Multiples of 5: 5,10,15,20 (4 numbers). 15 is counted in both, so the union has 6+4-1 = 9 numbers. P = 9/20.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-formula"
+    ]
+  },
+  {
+    "id": "dh-q59",
+    "chapterId": "data-handling",
+    "question": "A weather app shows '80% chance of rain tomorrow.' Is this a probability statement or a certainty? What does the other 20% represent?",
+    "text": "A weather app shows '80% chance of rain tomorrow.' Is this a probability statement or a certainty? What does the other 20% represent?",
+    "difficulty": "Easy",
+    "hints": [
+      "A certainty leaves no room for a stated percentage chance.",
+      "The two percentages (rain / no rain) should add up to 100%."
+    ],
+    "solution": "It's a probability statement, not a certainty. The remaining 20% represents the chance it does NOT rain.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-application"
+    ]
+  },
+  {
+    "id": "dh-q60",
+    "chapterId": "data-handling",
+    "question": "Name one field, other than weather forecasting or elections, where probability is used to make predictions, and briefly state what is being predicted.",
+    "text": "Name one field, other than weather forecasting or elections, where probability is used to make predictions, and briefly state what is being predicted.",
+    "difficulty": "Medium",
+    "hints": [
+      "Think of a field where outcomes are uncertain but past data can estimate a likelihood.",
+      "Insurance and medical treatment outcomes are both common real-world examples."
+    ],
+    "solution": "Any correct example works, e.g.: insurance (the likelihood a customer will file a claim), or medicine (the likelihood a treatment succeeds). Both estimate a chance from limited or past information, not a certainty.",
+    "topicId": "topic-data-handling-representation-and-probability",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-dh-probability-application"
+    ]
+  },
+  {
+    "id": "ep-q01",
+    "chapterId": "exponents-and-powers",
+    "question": "What is the value of 5⁻¹?",
+    "text": "What is the value of 5⁻¹?",
+    "difficulty": "Easy",
+    "hints": [
+      "a⁻ᵐ = 1/aᵐ for any non-zero integer a.",
+      "Here a = 5 and m = 1."
+    ],
+    "solution": "1/5",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "1/5"
+        },
+        {
+          "id": "opt-b",
+          "text": "-5"
+        },
+        {
+          "id": "opt-c",
+          "text": "5"
+        },
+        {
+          "id": "opt-d",
+          "text": "-1/5"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q02",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of 2⁻⁴.",
+    "text": "Find the value of 2⁻⁴.",
+    "difficulty": "Easy",
+    "hints": [
+      "a⁻ᵐ = 1/aᵐ.",
+      "Compute 2⁴ first, then take its reciprocal."
+    ],
+    "solution": "1/16",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q03",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (-3)⁻².",
+    "text": "Find the value of (-3)⁻².",
+    "difficulty": "Easy",
+    "hints": [
+      "Square the base first: (-3)² = 9.",
+      "Then take the reciprocal: 1/9."
+    ],
+    "solution": "1/9",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q04",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (1/2)⁻³.",
+    "text": "Find the value of (1/2)⁻³.",
+    "difficulty": "Easy",
+    "hints": [
+      "A fraction raised to a negative exponent flips: (1/2)⁻³ = (2/1)³.",
+      "Compute 2³."
+    ],
+    "solution": "8",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q05",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the multiplicative inverse of 7⁻².",
+    "text": "Find the multiplicative inverse of 7⁻².",
+    "difficulty": "Medium",
+    "hints": [
+      "The multiplicative inverse of a⁻ᵐ is aᵐ.",
+      "Compute 7²."
+    ],
+    "solution": "49",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-multiplicative-inverse"
+    ]
+  },
+  {
+    "id": "ep-q06",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the multiplicative inverse of 5⁻³.",
+    "text": "Find the multiplicative inverse of 5⁻³.",
+    "difficulty": "Medium",
+    "hints": [
+      "The multiplicative inverse of a⁻ᵐ is aᵐ.",
+      "Compute 5³."
+    ],
+    "solution": "125",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-multiplicative-inverse"
+    ]
+  },
+  {
+    "id": "ep-q07",
+    "chapterId": "exponents-and-powers",
+    "question": "What is the multiplicative inverse of 10⁻¹⁰⁰?",
+    "text": "What is the multiplicative inverse of 10⁻¹⁰⁰?",
+    "difficulty": "Hard",
+    "hints": [
+      "You don't need to compute the actual number — just flip the sign of the exponent.",
+      "The multiplicative inverse of a⁻ᵐ is aᵐ."
+    ],
+    "solution": "10¹⁰⁰",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "10¹⁰⁰"
+        },
+        {
+          "id": "opt-b",
+          "text": "10⁻¹⁰⁰"
+        },
+        {
+          "id": "opt-c",
+          "text": "-10¹⁰⁰"
+        },
+        {
+          "id": "opt-d",
+          "text": "0.1¹⁰⁰"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-neg-exp-multiplicative-inverse"
+    ]
+  },
+  {
+    "id": "ep-q08",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 10⁻¹ as a fraction.",
+    "text": "Write 10⁻¹ as a fraction.",
+    "difficulty": "Easy",
+    "hints": [
+      "10⁻¹ = 1/10¹."
+    ],
+    "solution": "1/10",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q09",
+    "chapterId": "exponents-and-powers",
+    "question": "In the expanded form of 1025.63 using powers of 10, what is the exponent of 10 attached to the digit 6?",
+    "text": "In the expanded form of 1025.63 using powers of 10, what is the exponent of 10 attached to the digit 6?",
+    "difficulty": "Medium",
+    "hints": [
+      "Digits after the decimal point use negative powers of 10, starting from 10⁻¹ for the first (tenths) place.",
+      "The digit 6 is in the tenths place."
+    ],
+    "solution": "-1",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-expanded-form"
+    ]
+  },
+  {
+    "id": "ep-q10",
+    "chapterId": "exponents-and-powers",
+    "question": "In the expanded form of 1256.249 using powers of 10, what is the exponent of 10 attached to the digit 9?",
+    "text": "In the expanded form of 1256.249 using powers of 10, what is the exponent of 10 attached to the digit 9?",
+    "difficulty": "Medium",
+    "hints": [
+      "The digits after the decimal point are in the tenths (10⁻¹), hundredths (10⁻²) and thousandths (10⁻³) places, in order.",
+      "The digit 9 is the third digit after the decimal point."
+    ],
+    "solution": "-3",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-expanded-form"
+    ]
+  },
+  {
+    "id": "ep-q11",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (-2)⁻³.",
+    "text": "Find the value of (-2)⁻³.",
+    "difficulty": "Easy",
+    "hints": [
+      "Cube the base first: (-2)³ = -8.",
+      "Then take the reciprocal: 1/-8."
+    ],
+    "solution": "-1/8",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q12",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (-4)⁻².",
+    "text": "Find the value of (-4)⁻².",
+    "difficulty": "Medium",
+    "hints": [
+      "Square the base first, being careful with the sign: (-4)² = 16 (positive, since the exponent 2 is even).",
+      "Then take the reciprocal: 1/16."
+    ],
+    "solution": "1/16",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-neg-exp-evaluate"
+    ]
+  },
+  {
+    "id": "ep-q13",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify 2⁻³ × 2⁻⁴ using the laws of exponents. What is the exponent of 2 in the simplified answer?",
+    "text": "Simplify 2⁻³ × 2⁻⁴ using the laws of exponents. What is the exponent of 2 in the simplified answer?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+      "Add the exponents -3 and -4."
+    ],
+    "solution": "-7",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-product"
+    ]
+  },
+  {
+    "id": "ep-q14",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (-5)⁻⁴ × (-5)² using the laws of exponents. What is the exponent of (-5) in the simplified answer?",
+    "text": "Simplify (-5)⁻⁴ × (-5)² using the laws of exponents. What is the exponent of (-5) in the simplified answer?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+      "Add the exponents -4 and 2."
+    ],
+    "solution": "-2",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-product"
+    ]
+  },
+  {
+    "id": "ep-q15",
+    "chapterId": "exponents-and-powers",
+    "question": "Which of these expressions equal 5⁻²? Select all that apply.",
+    "text": "Which of these expressions equal 5⁻²? Select all that apply.",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ × aⁿ = aᵐ⁺ⁿ and add the exponents in each option.",
+      "You're looking for combinations whose exponents add up to exactly -2."
+    ],
+    "solution": "5⁻⁵ × 5³ and 5² × 5⁻⁴",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "multi_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "5⁻⁵ × 5³"
+        },
+        {
+          "id": "opt-b",
+          "text": "5² × 5⁻⁴"
+        },
+        {
+          "id": "opt-c",
+          "text": "5⁻¹ × 5⁻²"
+        },
+        {
+          "id": "opt-d",
+          "text": "5³ × 5⁻¹"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-law-product"
+    ]
+  },
+  {
+    "id": "ep-q16",
+    "chapterId": "exponents-and-powers",
+    "question": "Which of these equals p³ × p⁻¹⁰ in simplest exponential form?",
+    "text": "Which of these equals p³ × p⁻¹⁰ in simplest exponential form?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ × aⁿ = aᵐ⁺ⁿ.",
+      "Add the exponents 3 and -10, keeping the sign."
+    ],
+    "solution": "p⁻⁷",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "p⁻⁷"
+        },
+        {
+          "id": "opt-b",
+          "text": "p¹³"
+        },
+        {
+          "id": "opt-c",
+          "text": "p⁻¹³"
+        },
+        {
+          "id": "opt-d",
+          "text": "p⁷"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-law-product"
+    ]
+  },
+  {
+    "id": "ep-q17",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify 3⁷ ÷ 3⁻² using the laws of exponents. What is the exponent of 3 in the simplified answer?",
+    "text": "Simplify 3⁷ ÷ 3⁻² using the laws of exponents. What is the exponent of 3 in the simplified answer?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+      "Subtract: 7 - (-2)."
+    ],
+    "solution": "9",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient"
+    ]
+  },
+  {
+    "id": "ep-q18",
+    "chapterId": "exponents-and-powers",
+    "question": "Which of these equals (-6)⁴ ÷ (-6)⁻³?",
+    "text": "Which of these equals (-6)⁴ ÷ (-6)⁻³?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+      "Subtract: 4 - (-3)."
+    ],
+    "solution": "(-6)⁷",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(-6)⁷"
+        },
+        {
+          "id": "opt-b",
+          "text": "(-6)¹"
+        },
+        {
+          "id": "opt-c",
+          "text": "(-6)⁻⁷"
+        },
+        {
+          "id": "opt-d",
+          "text": "(-6)⁻¹"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-law-quotient"
+    ]
+  },
+  {
+    "id": "ep-q19",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (4⁻⁵ ÷ 4⁻⁸) × 4⁻⁴ using the laws of exponents. What is the exponent of 4 in the fully simplified answer?",
+    "text": "Simplify (4⁻⁵ ÷ 4⁻⁸) × 4⁻⁴ using the laws of exponents. What is the exponent of 4 in the fully simplified answer?",
+    "difficulty": "Medium",
+    "hints": [
+      "First simplify the division inside the brackets: 4⁻⁵ ÷ 4⁻⁸ = 4^(-5-(-8)).",
+      "Then multiply the result by 4⁻⁴, adding the exponents."
+    ],
+    "solution": "-1",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient"
+    ]
+  },
+  {
+    "id": "ep-q20",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (-8)⁻⁵ ÷ (-8)⁻⁹ using the laws of exponents. What is the exponent of (-8) in the simplified answer?",
+    "text": "Simplify (-8)⁻⁵ ÷ (-8)⁻⁹ using the laws of exponents. What is the exponent of (-8) in the simplified answer?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
+      "Subtract: -5 - (-9)."
+    ],
+    "solution": "4",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient"
+    ]
+  },
+  {
+    "id": "ep-q21",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (2³)⁻² using the power-of-a-power law. What is the exponent of 2 in the simplified answer?",
+    "text": "Simplify (2³)⁻² using the power-of-a-power law. What is the exponent of 2 in the simplified answer?",
+    "difficulty": "Easy",
+    "hints": [
+      "Use (aᵐ)ⁿ = aᵐⁿ.",
+      "Multiply the exponents 3 and -2."
+    ],
+    "solution": "-6",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-power-of-power"
+    ]
+  },
+  {
+    "id": "ep-q22",
+    "chapterId": "exponents-and-powers",
+    "question": "Express 16⁻¹ as a power with base 2. What is the exponent of 2 in the result?",
+    "text": "Express 16⁻¹ as a power with base 2. What is the exponent of 2 in the result?",
+    "difficulty": "Medium",
+    "hints": [
+      "Write 16 as a power of 2: 16 = 2⁴.",
+      "Apply (aᵐ)ⁿ = aᵐⁿ to (2⁴)⁻¹."
+    ],
+    "solution": "-4",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-power-of-power"
+    ]
+  },
+  {
+    "id": "ep-q23",
+    "chapterId": "exponents-and-powers",
+    "question": "Which of these is equal to 25⁻³ expressed as a power with base 5?",
+    "text": "Which of these is equal to 25⁻³ expressed as a power with base 5?",
+    "difficulty": "Medium",
+    "hints": [
+      "Write 25 as a power of 5: 25 = 5².",
+      "Apply (aᵐ)ⁿ = aᵐⁿ to (5²)⁻³."
+    ],
+    "solution": "5⁻⁶",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "5⁻⁶"
+        },
+        {
+          "id": "opt-b",
+          "text": "5⁻³"
+        },
+        {
+          "id": "opt-c",
+          "text": "5⁻⁹"
+        },
+        {
+          "id": "opt-d",
+          "text": "5⁶"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-law-power-of-power"
+    ]
+  },
+  {
+    "id": "ep-q24",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (3⁴ ÷ 3⁷)⁴ × 3⁻⁴ using the laws of exponents. What is the exponent of 3 in the fully simplified answer?",
+    "text": "Simplify (3⁴ ÷ 3⁷)⁴ × 3⁻⁴ using the laws of exponents. What is the exponent of 3 in the fully simplified answer?",
+    "difficulty": "Hard",
+    "hints": [
+      "First simplify inside the brackets: 3⁴ ÷ 3⁷ = 3^(4-7).",
+      "Raise that result to the power 4 using (aᵐ)ⁿ = aᵐⁿ.",
+      "Finally multiply by 3⁻⁴, adding the exponents."
+    ],
+    "solution": "-16",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-power-of-power"
+    ]
+  },
+  {
+    "id": "ep-q25",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (-4)⁻³ × 5⁻³ × (-5)⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+    "text": "Simplify (-4)⁻³ × 5⁻³ × (-5)⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+    "difficulty": "Easy",
+    "hints": [
+      "Use aᵐ × bᵐ × cᵐ = (abc)ᵐ to combine the three bases first.",
+      "Multiply (-4) × 5 × (-5)."
+    ],
+    "solution": "100",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-product-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q26",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify 2⁻³ × 3⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+    "text": "Simplify 2⁻³ × 3⁻³ and express your answer as a fraction of the form 1/n³, where n is a positive integer. Find n.",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ × bᵐ = (ab)ᵐ.",
+      "Multiply the two bases: 2 × 3."
+    ],
+    "solution": "6",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-product-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q27",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (-3)⁴ × (5/3)⁴.",
+    "text": "Find the value of (-3)⁴ × (5/3)⁴.",
+    "difficulty": "Medium",
+    "hints": [
+      "Use aᵐ × bᵐ = (ab)ᵐ to combine the bases first.",
+      "Multiply (-3) × (5/3), then raise the result to the 4th power."
+    ],
+    "solution": "625",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-product-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q28",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (2/3)⁻². Express your answer as a fraction.",
+    "text": "Find the value of (2/3)⁻². Express your answer as a fraction.",
+    "difficulty": "Easy",
+    "hints": [
+      "A fraction raised to a negative exponent flips: (2/3)⁻² = (3/2)².",
+      "Square the numerator and denominator separately."
+    ],
+    "solution": "9/4",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q29",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (3/4)⁻². Express your answer as a fraction.",
+    "text": "Find the value of (3/4)⁻². Express your answer as a fraction.",
+    "difficulty": "Medium",
+    "hints": [
+      "Flip the fraction and make the exponent positive: (3/4)⁻² = (4/3)².",
+      "Square the numerator and denominator separately."
+    ],
+    "solution": "16/9",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q30",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (5/2)⁻³. Express your answer as a fraction.",
+    "text": "Find the value of (5/2)⁻³. Express your answer as a fraction.",
+    "difficulty": "Medium",
+    "hints": [
+      "Flip the fraction and make the exponent positive: (5/2)⁻³ = (2/5)³.",
+      "Cube the numerator and denominator separately."
+    ],
+    "solution": "8/125",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-quotient-same-exponent"
+    ]
+  },
+  {
+    "id": "ep-q31",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (5⁰ + 3⁻¹) × 3².",
+    "text": "Find the value of (5⁰ + 3⁻¹) × 3².",
+    "difficulty": "Easy",
+    "hints": [
+      "Any non-zero base to the power 0 equals 1: 5⁰ = 1.",
+      "Add 1 + 3⁻¹ first, then multiply by 3²."
+    ],
+    "solution": "12",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-zero-exponent"
+    ]
+  },
+  {
+    "id": "ep-q32",
+    "chapterId": "exponents-and-powers",
+    "question": "Find the value of (3⁻¹ + 4⁻¹ + 5⁻¹)⁰.",
+    "text": "Find the value of (3⁻¹ + 4⁻¹ + 5⁻¹)⁰.",
+    "difficulty": "Easy",
+    "hints": [
+      "A non-zero base to the power 0 always equals 1, no matter how complicated it is.",
+      "Check only whether the expression inside the brackets is non-zero — you don't need to evaluate it."
+    ],
+    "solution": "1",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-zero-exponent"
+    ]
+  },
+  {
+    "id": "ep-q33",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify 2⁻³ × (2²)⁻¹ ÷ 2⁻⁵ using the laws of exponents. What is the exponent of 2 in the fully simplified answer?",
+    "text": "Simplify 2⁻³ × (2²)⁻¹ ÷ 2⁻⁵ using the laws of exponents. What is the exponent of 2 in the fully simplified answer?",
+    "difficulty": "Medium",
+    "hints": [
+      "First simplify (2²)⁻¹ using (aᵐ)ⁿ = aᵐⁿ.",
+      "Combine with 2⁻³ using the product law, then divide by 2⁻⁵ using the quotient law."
+    ],
+    "solution": "0",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-mixed-simplification"
+    ]
+  },
+  {
+    "id": "ep-q34",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (2⁻¹ × 4⁻¹) ÷ 2⁻² and give your answer as a fraction.",
+    "text": "Simplify (2⁻¹ × 4⁻¹) ÷ 2⁻² and give your answer as a fraction.",
+    "difficulty": "Medium",
+    "hints": [
+      "Evaluate 2⁻¹ and 4⁻¹ separately first, then multiply them together.",
+      "Dividing by 2⁻² is the same as multiplying by 2²."
+    ],
+    "solution": "1/2",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-mixed-simplification"
+    ]
+  },
+  {
+    "id": "ep-q35",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify {(1/4)⁻² − (1/3)⁻³} ÷ (1/5)⁻² and give your answer as a fraction.",
+    "text": "Simplify {(1/4)⁻² − (1/3)⁻³} ÷ (1/5)⁻² and give your answer as a fraction.",
+    "difficulty": "Hard",
+    "hints": [
+      "Evaluate each bracket first: (1/4)⁻² = 4², (1/3)⁻³ = 3³, (1/5)⁻² = 5².",
+      "Subtract the first two results, then divide by the third."
+    ],
+    "solution": "-11/25",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-mixed-simplification"
+    ]
+  },
+  {
+    "id": "ep-q36",
+    "chapterId": "exponents-and-powers",
+    "question": "Simplify (5/8)⁻⁷ × (8/5)⁻⁵ and give your answer as a fraction.",
+    "text": "Simplify (5/8)⁻⁷ × (8/5)⁻⁵ and give your answer as a fraction.",
+    "difficulty": "Hard",
+    "hints": [
+      "Rewrite (8/5)⁻⁵ with base (5/8) instead: (8/5)⁻⁵ = (5/8)⁵.",
+      "Now combine with (5/8)⁻⁷ using the product law, then simplify the resulting negative exponent."
+    ],
+    "solution": "64/25",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-mixed-simplification"
+    ]
+  },
+  {
+    "id": "ep-q37",
+    "chapterId": "exponents-and-powers",
+    "question": "Find m so that (-4)^(m+1) × (-4)³ = (-4)⁹.",
+    "text": "Find m so that (-4)^(m+1) × (-4)³ = (-4)⁹.",
+    "difficulty": "Medium",
+    "hints": [
+      "If two powers of the same base are equal, their exponents must be equal.",
+      "Combine the left side's exponents first: (m+1) + 3, then set it equal to 9."
+    ],
+    "solution": "5",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-solve-exponent"
+    ]
+  },
+  {
+    "id": "ep-q38",
+    "chapterId": "exponents-and-powers",
+    "question": "Find m for which 6^m ÷ 6⁻³ = 6⁷.",
+    "text": "Find m for which 6^m ÷ 6⁻³ = 6⁷.",
+    "difficulty": "Hard",
+    "hints": [
+      "If two powers of the same base are equal, their exponents must be equal.",
+      "Set m - (-3) equal to 7 and solve for m."
+    ],
+    "solution": "4",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-law-solve-exponent"
+    ]
+  },
+  {
+    "id": "ep-q39",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 0.000009 in standard form.",
+    "text": "Write 0.000009 in standard form.",
+    "difficulty": "Easy",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it.",
+      "0.000009 → 9, moving 6 places. Write your answer as 'M × 10⁻ᴺ', e.g. 7 × 10⁻⁶."
+    ],
+    "solution": "9 × 10⁻⁶",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q40",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 0.0025 in standard form.",
+    "text": "Write 0.0025 in standard form.",
+    "difficulty": "Easy",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it.",
+      "0.0025 → 2.5, moving 3 places."
+    ],
+    "solution": "2.5 × 10⁻³",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q41",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 0.000000482 in standard form.",
+    "text": "Write 0.000000482 in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it."
+    ],
+    "solution": "4.82 × 10⁻⁷",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q42",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 0.0000045 in standard form.",
+    "text": "Write 0.0000045 in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it."
+    ],
+    "solution": "4.5 × 10⁻⁶",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q43",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 0.00000000524 in standard form.",
+    "text": "Write 0.00000000524 in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it."
+    ],
+    "solution": "5.24 × 10⁻⁹",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q44",
+    "chapterId": "exponents-and-powers",
+    "question": "The size of a bacteria is 0.0000005 m. Write this in standard form.",
+    "text": "The size of a bacteria is 0.0000005 m. Write this in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Count how many places the decimal point moves right until one non-zero digit remains before it, then keep the unit."
+    ],
+    "solution": "5 × 10⁻⁷ m",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q45",
+    "chapterId": "exponents-and-powers",
+    "question": "The charge of an electron is about 0.00000000000000000016 coulomb. Write this in standard form.",
+    "text": "The charge of an electron is about 0.00000000000000000016 coulomb. Write this in standard form.",
+    "difficulty": "Hard",
+    "hints": [
+      "Count how many places the decimal point must move right until it sits right after the first non-zero digit.",
+      "There are 18 zeros before the digits '16', so the first non-zero digit (1) is 19 places after the decimal point."
+    ],
+    "solution": "1.6 × 10⁻¹⁹ coulomb",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q46",
+    "chapterId": "exponents-and-powers",
+    "question": "1 micron is defined as 1/1,000,000 m. Write this length in standard form.",
+    "text": "1 micron is defined as 1/1,000,000 m. Write this length in standard form.",
+    "difficulty": "Hard",
+    "hints": [
+      "First write the fraction 1/1,000,000 as a decimal.",
+      "1,000,000 = 10⁶, so 1/10⁶ = 10⁻⁶."
+    ],
+    "solution": "1 × 10⁻⁶ m",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-to"
+    ]
+  },
+  {
+    "id": "ep-q47",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 5.6 × 10⁻⁶ in usual (decimal) form.",
+    "text": "Write 5.6 × 10⁻⁶ in usual (decimal) form.",
+    "difficulty": "Easy",
+    "hints": [
+      "Move the decimal point 6 places to the left, filling in zeros as needed."
+    ],
+    "solution": "0.0000056",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-from"
+    ]
+  },
+  {
+    "id": "ep-q48",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 6.25 × 10⁻⁴ in usual (decimal) form.",
+    "text": "Write 6.25 × 10⁻⁴ in usual (decimal) form.",
+    "difficulty": "Easy",
+    "hints": [
+      "Move the decimal point 4 places to the left, filling in zeros as needed."
+    ],
+    "solution": "0.000625",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-from"
+    ]
+  },
+  {
+    "id": "ep-q49",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 4 × 10⁻⁷ in usual (decimal) form.",
+    "text": "Write 4 × 10⁻⁷ in usual (decimal) form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Move the decimal point 7 places to the left, filling in zeros as needed."
+    ],
+    "solution": "0.0000004",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-from"
+    ]
+  },
+  {
+    "id": "ep-q50",
+    "chapterId": "exponents-and-powers",
+    "question": "Write 4.05 × 10⁻⁵ in usual (decimal) form.",
+    "text": "Write 4.05 × 10⁻⁵ in usual (decimal) form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Move the decimal point 5 places to the left, filling in zeros as needed."
+    ],
+    "solution": "0.0000405",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-standard-form-convert-from"
+    ]
+  },
+  {
+    "id": "ep-q51",
+    "chapterId": "exponents-and-powers",
+    "question": "The diameter of the Sun is 1.4 × 10⁹ m and the diameter of the Earth is 1.4 × 10⁷ m. About how many times bigger is the Sun's diameter than the Earth's?",
+    "text": "The diameter of the Sun is 1.4 × 10⁹ m and the diameter of the Earth is 1.4 × 10⁷ m. About how many times bigger is the Sun's diameter than the Earth's?",
+    "difficulty": "Medium",
+    "hints": [
+      "Divide the two standard-form numbers; the 1.4 will cancel out.",
+      "10⁹ ÷ 10⁷ = 10^(9-7)."
+    ],
+    "solution": "100",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q52",
+    "chapterId": "exponents-and-powers",
+    "question": "The size of a red blood cell is 7 × 10⁻⁶ m and the size of a plant cell is 1.4 × 10⁻⁵ m. About how many times smaller is the red blood cell than the plant cell?",
+    "text": "The size of a red blood cell is 7 × 10⁻⁶ m and the size of a plant cell is 1.4 × 10⁻⁵ m. About how many times smaller is the red blood cell than the plant cell?",
+    "difficulty": "Medium",
+    "hints": [
+      "Divide the plant cell's size by the red blood cell's size.",
+      "Rewrite both with the same power of 10 first, or divide directly and simplify."
+    ],
+    "solution": "2",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q53",
+    "chapterId": "exponents-and-powers",
+    "question": "A virus measures about 3 × 10⁻⁸ m and a bacterium measures about 3 × 10⁻⁶ m. Which statement is correct?",
+    "text": "A virus measures about 3 × 10⁻⁸ m and a bacterium measures about 3 × 10⁻⁶ m. Which statement is correct?",
+    "difficulty": "Hard",
+    "hints": [
+      "Divide the larger measurement by the smaller one: (3×10⁻⁶) ÷ (3×10⁻⁸).",
+      "10⁻⁶ ÷ 10⁻⁸ = 10^(-6-(-8))."
+    ],
+    "solution": "The bacterium is about 100 times larger than the virus",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "The bacterium is about 100 times larger than the virus"
+        },
+        {
+          "id": "opt-b",
+          "text": "The virus is about 100 times larger than the bacterium"
+        },
+        {
+          "id": "opt-c",
+          "text": "They are the same size"
+        },
+        {
+          "id": "opt-d",
+          "text": "The bacterium is about 1000 times larger than the virus"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q54",
+    "chapterId": "exponents-and-powers",
+    "question": "Which of these two numbers is larger: 5 × 10⁻⁴ or 5 × 10⁻⁷?",
+    "text": "Which of these two numbers is larger: 5 × 10⁻⁴ or 5 × 10⁻⁷?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compare the exponents: -4 is greater than -7.",
+      "A less negative exponent means a larger number, since the value is closer to 1."
+    ],
+    "solution": "5 × 10⁻⁴",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "5 × 10⁻⁴"
+        },
+        {
+          "id": "opt-b",
+          "text": "5 × 10⁻⁷"
+        },
+        {
+          "id": "opt-c",
+          "text": "They are equal"
+        },
+        {
+          "id": "opt-d",
+          "text": "Cannot be determined"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q55",
+    "chapterId": "exponents-and-powers",
+    "question": "The average diameter of a red blood cell is 7 × 10⁻⁶ mm and the diameter of a human hair is about 7 × 10⁻² mm. About how many times thicker is a human hair than a red blood cell?",
+    "text": "The average diameter of a red blood cell is 7 × 10⁻⁶ mm and the diameter of a human hair is about 7 × 10⁻² mm. About how many times thicker is a human hair than a red blood cell?",
+    "difficulty": "Hard",
+    "hints": [
+      "Divide the hair's diameter by the red blood cell's diameter; the 7 will cancel out.",
+      "10⁻² ÷ 10⁻⁶ = 10^(-2-(-6))."
+    ],
+    "solution": "10000",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q56",
+    "chapterId": "exponents-and-powers",
+    "question": "Two numbers are written in standard form as a × 10ᵐ and b × 10ⁿ, where 1 ≤ a < 10, 1 ≤ b < 10, and m and n are integers with m > n. Which of the two numbers is always larger?",
+    "text": "Two numbers are written in standard form as a × 10ᵐ and b × 10ⁿ, where 1 ≤ a < 10, 1 ≤ b < 10, and m and n are integers with m > n. Which of the two numbers is always larger?",
+    "difficulty": "Hard",
+    "hints": [
+      "Since m > n and both are integers, a × 10ᵐ is at least 10 times bigger than 10ⁿ on its own.",
+      "Since b is always less than 10, b × 10ⁿ can never catch up to a × 10ᵐ."
+    ],
+    "solution": "a × 10ᵐ",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "a × 10ᵐ"
+        },
+        {
+          "id": "opt-b",
+          "text": "b × 10ⁿ"
+        },
+        {
+          "id": "opt-c",
+          "text": "They are always equal"
+        },
+        {
+          "id": "opt-d",
+          "text": "It depends only on a and b, not on m or n"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-compare-magnitudes-ratio"
+    ]
+  },
+  {
+    "id": "ep-q57",
+    "chapterId": "exponents-and-powers",
+    "question": "The mass of Planet X is 3.2 × 10²³ kg and the mass of its moon is 4 × 10²¹ kg. Find their total mass, in standard form.",
+    "text": "The mass of Planet X is 3.2 × 10²³ kg and the mass of its moon is 4 × 10²¹ kg. Find their total mass, in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Rewrite 3.2 × 10²³ using the exponent 21 instead, so both numbers share the same power of 10.",
+      "Add the coefficients once the powers of 10 match, then renormalise back into standard form if needed."
+    ],
+    "solution": "3.24 × 10²³ kg",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-add-subtract"
+    ]
+  },
+  {
+    "id": "ep-q58",
+    "chapterId": "exponents-and-powers",
+    "question": "Add 2.5 × 10⁻⁴ and 3 × 10⁻⁵. Give your answer in standard form.",
+    "text": "Add 2.5 × 10⁻⁴ and 3 × 10⁻⁵. Give your answer in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Rewrite 2.5 × 10⁻⁴ using the exponent -5 instead, so both numbers share the same power of 10.",
+      "Add the coefficients once the powers of 10 match, then renormalise back into standard form if needed."
+    ],
+    "solution": "2.8 × 10⁻⁴",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-add-subtract"
+    ]
+  },
+  {
+    "id": "ep-q59",
+    "chapterId": "exponents-and-powers",
+    "question": "The distance between the Sun and Earth is 1.5 × 10¹¹ m and the distance between the Earth and Moon is 4 × 10⁸ m. During a solar eclipse, the Moon lies directly between the Earth and the Sun. Find the distance between the Moon and the Sun at that time, in standard form.",
+    "text": "The distance between the Sun and Earth is 1.5 × 10¹¹ m and the distance between the Earth and Moon is 4 × 10⁸ m. During a solar eclipse, the Moon lies directly between the Earth and the Sun. Find the distance between the Moon and the Sun at that time, in standard form.",
+    "difficulty": "Hard",
+    "hints": [
+      "Rewrite 1.5 × 10¹¹ using the exponent 8 instead, so both distances share the same power of 10.",
+      "Subtract the Earth-Moon distance from the Sun-Earth distance, then renormalise back into standard form."
+    ],
+    "solution": "1.496 × 10¹¹ m",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-add-subtract"
+    ]
+  },
+  {
+    "id": "ep-q60",
+    "chapterId": "exponents-and-powers",
+    "question": "A stack contains 4 identical books, each 20 mm thick, and 4 identical paper sheets, each 0.02 mm thick. Find the total thickness of the stack in mm, and give your answer in standard form.",
+    "text": "A stack contains 4 identical books, each 20 mm thick, and 4 identical paper sheets, each 0.02 mm thick. Find the total thickness of the stack in mm, and give your answer in standard form.",
+    "difficulty": "Hard",
+    "hints": [
+      "Find the total thickness of the books and the total thickness of the sheets separately, then add them.",
+      "4 × 20 mm = 80 mm, and 4 × 0.02 mm = 0.08 mm."
+    ],
+    "solution": "8.008 × 10¹ mm",
+    "topicId": "topic-exponents-and-powers-laws-and-standard-form",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-compare-add-subtract"
+    ]
+  },
+  {
     "id": "le-q01",
     "chapterId": "linear-equations",
     "question": "Solve for x and check your result: 3x = 2x + 18",
@@ -1633,6 +3218,341 @@
     ]
   },
   {
+    "id": "le-q45",
+    "chapterId": "linear-equations",
+    "question": "Which of the following is NOT a linear equation in one variable?",
+    "text": "Which of the following is NOT a linear equation in one variable?",
+    "difficulty": "Easy",
+    "hints": [
+      "Check the highest power of the variable in each option.",
+      "A linear equation's variable must appear only to the power 1."
+    ],
+    "solution": "(b) x² - 4 = 0. It is not linear because x has power 2; both (a) and (c) are linear equations in one variable.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(a) 3y - 7 = 2"
+        },
+        {
+          "id": "opt-b",
+          "text": "(b) x² - 4 = 0"
+        },
+        {
+          "id": "opt-c",
+          "text": "(c) 5 = 2m + 1"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-le-identify-linear"
+    ]
+  },
+  {
+    "id": "le-q46",
+    "chapterId": "linear-equations",
+    "question": "Which of the following is an expression, not an equation?",
+    "text": "Which of the following is an expression, not an equation?",
+    "difficulty": "Easy",
+    "hints": [
+      "An equation always contains an equality (=) sign; an expression never does.",
+      "Check each option for the presence of an '=' sign."
+    ],
+    "solution": "(b) 7x - 3. It has no equality (=) sign, so it is an expression, not an equation. Both (a) and (c) contain an '=' sign, so they are equations.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "(a) 4x + 1 = 9"
+        },
+        {
+          "id": "opt-b",
+          "text": "(b) 7x - 3"
+        },
+        {
+          "id": "opt-c",
+          "text": "(c) 2 = x + 2"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-le-expression-vs-equation"
+    ]
+  },
+  {
+    "id": "le-q47",
+    "chapterId": "linear-equations",
+    "question": "How many different variables does the equation 3x + 2y = 12 contain?",
+    "text": "How many different variables does the equation 3x + 2y = 12 contain?",
+    "difficulty": "Medium",
+    "hints": [
+      "Count the distinct letters that appear in the equation.",
+      "x and y are two different variables, even though they appear in the same equation."
+    ],
+    "solution": "2 — the variables x and y. Since it has more than one variable, it is not a linear equation in one variable, even though each variable's power is 1.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-identify-linear"
+    ]
+  },
+  {
+    "id": "le-q48",
+    "chapterId": "linear-equations",
+    "question": "Identify the LHS and RHS of the equation 6x + 1 = 4x - 9.",
+    "text": "Identify the LHS and RHS of the equation 6x + 1 = 4x - 9.",
+    "difficulty": "Easy",
+    "hints": [
+      "LHS means the expression written to the left of the equals sign.",
+      "RHS means the expression written to the right of the equals sign."
+    ],
+    "solution": "LHS (Left Hand Side) = 6x + 1. RHS (Right Hand Side) = 4x - 9.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-lhs-rhs"
+    ]
+  },
+  {
+    "id": "le-q49",
+    "chapterId": "linear-equations",
+    "question": "Translate 'twice a number decreased by 7 equals 15' into an equation, then state its LHS and RHS.",
+    "text": "Translate 'twice a number decreased by 7 equals 15' into an equation, then state its LHS and RHS.",
+    "difficulty": "Medium",
+    "hints": [
+      "Let the unknown number be x. 'Twice a number' means 2x; 'decreased by 7' means subtract 7.",
+      "Write the full equation first, then split it at the equals sign to get LHS and RHS."
+    ],
+    "solution": "Equation: 2x - 7 = 15. LHS = 2x - 7, RHS = 15.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-lhs-rhs"
+    ]
+  },
+  {
+    "id": "le-q50",
+    "chapterId": "linear-equations",
+    "question": "Is p = 4 a solution of the equation 3p - 5 = 7?",
+    "text": "Is p = 4 a solution of the equation 3p - 5 = 7?",
+    "difficulty": "Easy",
+    "hints": [
+      "Substitute p = 4 into the LHS and simplify.",
+      "Compare the simplified LHS with the RHS."
+    ],
+    "solution": "Yes. LHS = 3(4) - 5 = 7 = RHS, so p = 4 is a solution.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-yes",
+          "text": "Yes"
+        },
+        {
+          "id": "opt-no",
+          "text": "No"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-le-verify-solution"
+    ]
+  },
+  {
+    "id": "le-q51",
+    "chapterId": "linear-equations",
+    "question": "A student solved 3x - 4 = 11 and got x = 4. Check this solution. If it is wrong, find the correct value of x.",
+    "text": "A student solved 3x - 4 = 11 and got x = 4. Check this solution. If it is wrong, find the correct value of x.",
+    "difficulty": "Medium",
+    "hints": [
+      "Substitute the student's answer, x = 4, into the original equation and see if both sides match.",
+      "If they don't match, redo the solving steps yourself: transpose 4, then divide."
+    ],
+    "solution": "The student's answer is wrong. Checking x = 4: LHS = 3(4) - 4 = 8, RHS = 11 — they don't match. Correct solution: 3x = 15, so x = 5. Check: LHS = 3(5) - 4 = 11 = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-verify-solution"
+    ]
+  },
+  {
+    "id": "le-q52",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 7x - 5 = 4x + 10",
+    "text": "Solve for x and check your result: 7x - 5 = 4x + 10",
+    "difficulty": "Easy",
+    "hints": [
+      "Transpose 4x to the left side.",
+      "Then transpose -5 to the right side and simplify."
+    ],
+    "solution": "x = 5. Check: LHS = 7(5) - 5 = 30, RHS = 4(5) + 10 = 30. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
+  },
+  {
+    "id": "le-q53",
+    "chapterId": "linear-equations",
+    "question": "Solve for y and check your result: 8y + 3 = 5y + 18",
+    "text": "Solve for y and check your result: 8y + 3 = 5y + 18",
+    "difficulty": "Easy",
+    "hints": [
+      "Transpose 5y to the left side.",
+      "Then transpose 3 to the right side and simplify."
+    ],
+    "solution": "y = 5. Check: LHS = 8(5) + 3 = 43, RHS = 5(5) + 18 = 43. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
+  },
+  {
+    "id": "le-q54",
+    "chapterId": "linear-equations",
+    "question": "Solve for m and check your result: 9m - 11 = 4m + 24",
+    "text": "Solve for m and check your result: 9m - 11 = 4m + 24",
+    "difficulty": "Medium",
+    "hints": [
+      "Transpose 4m to the left side and -11 to the right side.",
+      "Combine like terms on each side before dividing."
+    ],
+    "solution": "m = 7. Check: LHS = 9(7) - 11 = 52, RHS = 4(7) + 24 = 52. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-transposition-both-sides"
+    ]
+  },
+  {
+    "id": "le-q55",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: (3x/5) + 2 = (x/2) + 7",
+    "text": "Solve for x and check your result: (3x/5) + 2 = (x/2) + 7",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply every term by 10, the LCM of 5 and 2.",
+      "After clearing fractions: 6x + 20 = 5x + 70. Transpose from there."
+    ],
+    "solution": "x = 50. Check: LHS = 3(50)/5 + 2 = 32, RHS = 50/2 + 7 = 32. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
+  },
+  {
+    "id": "le-q56",
+    "chapterId": "linear-equations",
+    "question": "Solve for y and check your result: (y-3)/4 + (y+1)/6 = 2",
+    "text": "Solve for y and check your result: (y-3)/4 + (y+1)/6 = 2",
+    "difficulty": "Hard",
+    "hints": [
+      "Multiply every term by 12, the LCM of 4 and 6.",
+      "After clearing fractions: 3(y-3) + 2(y+1) = 24. Expand both brackets, then combine and transpose."
+    ],
+    "solution": "y = 31/5 (= 6.2). Check: LHS = (31/5-3)/4 + (31/5+1)/6 = 0.8 + 1.2 = 2. RHS = 2. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-fractional-coefficient"
+    ]
+  },
+  {
+    "id": "le-q57",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 6(x - 1) = 4(x + 3)",
+    "text": "Solve for x and check your result: 6(x - 1) = 4(x + 3)",
+    "difficulty": "Medium",
+    "hints": [
+      "Expand both brackets first.",
+      "Then transpose the variable terms to one side and the constants to the other."
+    ],
+    "solution": "x = 9. Check: LHS = 6(9-1) = 48, RHS = 4(9+3) = 48. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
+  },
+  {
+    "id": "le-q58",
+    "chapterId": "linear-equations",
+    "question": "The sum of two consecutive even numbers is 74. Find the numbers.",
+    "text": "The sum of two consecutive even numbers is 74. Find the numbers.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the smaller even number be x. The next consecutive even number is x + 2.",
+      "Add both expressions and set the sum equal to 74."
+    ],
+    "solution": "The numbers are 36 and 38. (x + (x+2) = 74 → 2x = 72 → x = 36.)",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
+  },
+  {
+    "id": "le-q59",
+    "chapterId": "linear-equations",
+    "question": "A father is 3 times as old as his son. In 10 years, the father will be twice as old as his son will be then. Find their present ages.",
+    "text": "A father is 3 times as old as his son. In 10 years, the father will be twice as old as his son will be then. Find their present ages.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the son's present age be x, so the father's present age is 3x.",
+      "In 10 years, the son will be x+10 and the father will be 3x+10 — set up the 'twice as old' relationship using these."
+    ],
+    "solution": "The son is 10 years old and the father is 30. (3x+10 = 2(x+10) → x = 10.) Check: in 10 years the son is 20 and the father is 40 = 2×20.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
+  },
+  {
+    "id": "le-q60",
+    "chapterId": "linear-equations",
+    "question": "Solve for x and check your result: 0.4(x + 5) = 0.3(x + 10)",
+    "text": "Solve for x and check your result: 0.4(x + 5) = 0.3(x + 10)",
+    "difficulty": "Medium",
+    "hints": [
+      "Multiply both sides by 10 to remove the decimals: 4(x+5) = 3(x+10).",
+      "Expand both brackets, then transpose to solve for x."
+    ],
+    "solution": "x = 10. Check: LHS = 0.4(10+5) = 6, RHS = 0.3(10+10) = 6. LHS = RHS.",
+    "topicId": "topic-linear-equations-one-variable",
+    "questionType": "numeric",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-le-reduce-brackets-denominators"
+    ]
+  },
+  {
     "id": "pg-q01",
     "chapterId": "practical-geometry",
     "question": "Which instrument is used to draw arcs and circles?",
@@ -1643,7 +3563,9 @@
       "It's the same tool used to mark off a fixed radius."
     ],
     "solution": "Compass",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q02",
@@ -1655,7 +3577,9 @@
       "This tool has markings in centimetres for measuring straight-line distances."
     ],
     "solution": "Ruler",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q03",
@@ -1668,7 +3592,9 @@
       "It's placed with its centre at the vertex of the angle."
     ],
     "solution": "Protractor",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q04",
@@ -1680,7 +3606,9 @@
       "It creates two equal smaller angles from one larger angle."
     ],
     "solution": "Angle bisector",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q05",
@@ -1692,7 +3620,9 @@
       "Think about what you set the compass to, and where you place its point."
     ],
     "solution": "Center and radius",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q06",
@@ -1705,7 +3635,9 @@
       "This is the general rule stated for quadrilaterals with no special properties."
     ],
     "solution": "5",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q07",
@@ -1718,7 +3650,9 @@
       "You need a fifth measurement (a diagonal or an angle) to fix the shape."
     ],
     "solution": "No",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q08",
@@ -1730,7 +3664,9 @@
       "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
     "solution": "Yes",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q09",
@@ -1742,7 +3678,9 @@
       "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
     "solution": "Yes",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q10",
@@ -1754,7 +3692,9 @@
       "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
     "solution": "Yes",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q11",
@@ -1766,7 +3706,9 @@
       "This is one of the four standard measurement combinations for constructing a quadrilateral."
     ],
     "solution": "Yes",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q12",
@@ -1778,7 +3720,9 @@
       "A diagonal connects two opposite vertices, cutting the quadrilateral in two."
     ],
     "solution": "2",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q13",
@@ -1791,7 +3735,9 @@
       "No angle is given directly in this method, only side lengths."
     ],
     "solution": "SSS",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q14",
@@ -1804,7 +3750,9 @@
       "Add the two given angles together."
     ],
     "solution": "75°",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q15",
@@ -1817,7 +3765,9 @@
       "Subtract the given angle from 180 degrees."
     ],
     "solution": "110°",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q16",
@@ -1830,7 +3780,9 @@
       "Use the Pythagorean relation: diagonal² = side² + side²."
     ],
     "solution": "8 cm",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q17",
@@ -1843,7 +3795,9 @@
       "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
     ],
     "solution": "5 cm",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q18",
@@ -1856,7 +3810,9 @@
       "A triangle with exactly two equal sides is isosceles."
     ],
     "solution": "Isosceles",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q19",
@@ -1869,7 +3825,9 @@
       "3 sides and 1 diagonal is not enough — the valid combination needs 2 diagonals, not 1."
     ],
     "solution": "False",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q20",
@@ -1881,7 +3839,9 @@
       "This is a standard technique for trapezium construction when the two parallel sides and the legs are known."
     ],
     "solution": "True",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q21",
@@ -1893,7 +3853,9 @@
       "Subtract the shorter parallel side from the longer one."
     ],
     "solution": "4 cm",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q22",
@@ -1906,7 +3868,9 @@
       "Without at least one length measurement, the quadrilateral could be scaled to any size."
     ],
     "solution": "No",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q23",
@@ -1918,7 +3882,9 @@
       "A rectangle's angles are already fixed at 90 degrees, but one side length alone doesn't fix the other side."
     ],
     "solution": "No",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q24",
@@ -1931,7 +3897,9 @@
       "You just need its length and its breadth."
     ],
     "solution": "2",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q25",
@@ -1943,7 +3911,9 @@
       "Two adjacent sides and the angle between them are enough to fix a parallelogram completely."
     ],
     "solution": "3",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q26",
@@ -1956,7 +3926,9 @@
       "Only one length is needed."
     ],
     "solution": "1",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q27",
@@ -1969,7 +3941,9 @@
       "Either a side and one angle, or the two diagonals, are enough."
     ],
     "solution": "2",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q28",
@@ -1982,7 +3956,9 @@
       "The fourth angle is worked out afterward, not given directly."
     ],
     "solution": "3",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q29",
@@ -1995,7 +3971,9 @@
       "Add the three given angles, then subtract from 360."
     ],
     "solution": "85°",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q30",
@@ -2007,7 +3985,9 @@
       "This is the same diagonal property that a rhombus has (a square is a special rhombus)."
     ],
     "solution": "90°",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q31",
@@ -2020,7 +4000,9 @@
       "Use the Pythagorean relation: diagonal² = side² + side²."
     ],
     "solution": "10 cm",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q32",
@@ -2033,7 +4015,9 @@
       "Use half of each diagonal as the two legs of a right triangle, and the Pythagorean relation to find the side."
     ],
     "solution": "13 cm",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q33",
@@ -2046,7 +4030,9 @@
       "Subtract the given angle from 180 degrees."
     ],
     "solution": "120°",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q34",
@@ -2059,7 +4045,9 @@
       "A quadrilateral has 4 vertices — count how many non-adjacent pairs that gives."
     ],
     "solution": "True",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "pg-q35",
@@ -2072,7 +4060,383 @@
       "The two adjacent sides are different lengths (6 cm and 8 cm), so it isn't a square."
     ],
     "solution": "Rectangle",
-    "topicId": null
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q36",
+    "chapterId": "practical-geometry",
+    "question": "Which instrument is used to compare or transfer lengths without measuring them in units?",
+    "text": "Which instrument is used to compare or transfer lengths without measuring them in units?",
+    "difficulty": "Easy",
+    "hints": [
+      "This tool has two pointed legs, like a compass, but no pencil.",
+      "It's opened to match one length, then used to mark off that same length elsewhere."
+    ],
+    "solution": "Divider",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q37",
+    "chapterId": "practical-geometry",
+    "question": "Which pair of instruments is commonly used together to draw a line parallel to a given line?",
+    "text": "Which pair of instruments is commonly used together to draw a line parallel to a given line?",
+    "difficulty": "Easy",
+    "hints": [
+      "These are the two flat, triangular tools in a geometry box.",
+      "One is slid along the edge of the other to keep a fixed angle while moving across the page."
+    ],
+    "solution": "Set squares",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q38",
+    "chapterId": "practical-geometry",
+    "question": "In the SSS method for constructing a triangle, what does 'SSS' stand for?",
+    "text": "In the SSS method for constructing a triangle, what does 'SSS' stand for?",
+    "difficulty": "Medium",
+    "hints": [
+      "Each letter stands for one piece of information used to fix the triangle.",
+      "All three pieces of information given are the same type of measurement."
+    ],
+    "solution": "Side-Side-Side",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q39",
+    "chapterId": "practical-geometry",
+    "question": "Can a unique quadrilateral be constructed given four sides and one included angle (the angle between two adjacent given sides)?",
+    "text": "Can a unique quadrilateral be constructed given four sides and one included angle (the angle between two adjacent given sides)?",
+    "difficulty": "Medium",
+    "hints": [
+      "The included angle lets you fix one triangle using SAS from two of the sides.",
+      "Once that triangle is fixed, its third side becomes a known diagonal, letting you fix the second triangle with SSS from the remaining two sides."
+    ],
+    "solution": "Yes",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q40",
+    "chapterId": "practical-geometry",
+    "question": "A general quadrilateral needs 5 independent measurements to be constructed uniquely. If you already know all four sides, how many more measurements (an angle or a diagonal) are needed?",
+    "text": "A general quadrilateral needs 5 independent measurements to be constructed uniquely. If you already know all four sides, how many more measurements (an angle or a diagonal) are needed?",
+    "difficulty": "Hard",
+    "hints": [
+      "Start from the total of 5 needed measurements.",
+      "Subtract the 4 you already have (the four sides)."
+    ],
+    "solution": "1",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q41",
+    "chapterId": "practical-geometry",
+    "question": "In the '3 sides and 2 included angles' construction method, which triangle congruence rule (SSS, SAS, or ASA) is used to construct each of the two triangles?",
+    "text": "In the '3 sides and 2 included angles' construction method, which triangle congruence rule (SSS, SAS, or ASA) is used to construct each of the two triangles?",
+    "difficulty": "Medium",
+    "hints": [
+      "Each triangle is built from two given sides and the angle directly between them.",
+      "Two sides plus their included angle is exactly the SAS rule."
+    ],
+    "solution": "SAS",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q42",
+    "chapterId": "practical-geometry",
+    "question": "In the '2 adjacent sides and 3 angles' construction method, which triangle congruence rule is used to construct the first triangle, from the two given adjacent sides and the angle between them?",
+    "text": "In the '2 adjacent sides and 3 angles' construction method, which triangle congruence rule is used to construct the first triangle, from the two given adjacent sides and the angle between them?",
+    "difficulty": "Medium",
+    "hints": [
+      "Two sides and the angle directly between them fix the first triangle.",
+      "Two sides plus their included angle is exactly the SAS rule."
+    ],
+    "solution": "SAS",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q43",
+    "chapterId": "practical-geometry",
+    "question": "True or False: a diagonal of a general (non-special) quadrilateral always splits it into two triangles of equal area.",
+    "text": "True or False: a diagonal of a general (non-special) quadrilateral always splits it into two triangles of equal area.",
+    "difficulty": "Easy",
+    "hints": [
+      "This equal-area property is guaranteed for a parallelogram, where a diagonal bisects the area.",
+      "A general quadrilateral has no such guarantee — its two triangles can have different areas."
+    ],
+    "solution": "False",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q44",
+    "chapterId": "practical-geometry",
+    "question": "In the '4 sides and 1 diagonal' construction method, does the diagonal need to connect two adjacent vertices or two opposite vertices?",
+    "text": "In the '4 sides and 1 diagonal' construction method, does the diagonal need to connect two adjacent vertices or two opposite vertices?",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about the definition of a diagonal.",
+      "A diagonal by definition connects two non-adjacent (opposite) vertices, splitting the quadrilateral into two triangles."
+    ],
+    "solution": "Opposite vertices",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q45",
+    "chapterId": "practical-geometry",
+    "question": "A rectangle is to be constructed with sides 9 cm and 12 cm. What is the length of each diagonal?",
+    "text": "A rectangle is to be constructed with sides 9 cm and 12 cm. What is the length of each diagonal?",
+    "difficulty": "Medium",
+    "hints": [
+      "A rectangle's diagonal, together with two adjacent sides, forms a right triangle.",
+      "Use the Pythagorean relation: diagonal² = side² + side²."
+    ],
+    "solution": "15 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q46",
+    "chapterId": "practical-geometry",
+    "question": "A rectangle is to be constructed with one side 7 cm and a diagonal of 25 cm. What is the length of the other side?",
+    "text": "A rectangle is to be constructed with one side 7 cm and a diagonal of 25 cm. What is the length of the other side?",
+    "difficulty": "Hard",
+    "hints": [
+      "The diagonal is the hypotenuse of a right triangle formed with the two sides.",
+      "Use side² + side² = diagonal², i.e. 7² + x² = 25²."
+    ],
+    "solution": "24 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q47",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with diagonals of 16 cm and 12 cm. What is the length of each side?",
+    "text": "A rhombus is to be constructed with diagonals of 16 cm and 12 cm. What is the length of each side?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rhombus's diagonals bisect each other at right angles, forming four right triangles.",
+      "Use half of each diagonal (8 cm and 6 cm) as the two legs of a right triangle, and the Pythagorean relation to find the side."
+    ],
+    "solution": "10 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q48",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with side 17 cm and one diagonal of 16 cm. What is the length of the other diagonal?",
+    "text": "A rhombus is to be constructed with side 17 cm and one diagonal of 16 cm. What is the length of the other diagonal?",
+    "difficulty": "Hard",
+    "hints": [
+      "Half of the known diagonal (8 cm) is one leg of a right triangle whose hypotenuse is the side (17 cm).",
+      "Find the other leg using the Pythagorean relation, then double it to get the full second diagonal."
+    ],
+    "solution": "30 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q49",
+    "chapterId": "practical-geometry",
+    "question": "A parallelogram is being constructed with one angle measuring 55 degrees. What is the measure of its adjacent angle?",
+    "text": "A parallelogram is being constructed with one angle measuring 55 degrees. What is the measure of its adjacent angle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Adjacent angles in a parallelogram are supplementary — they add up to 180 degrees.",
+      "Subtract the given angle from 180 degrees."
+    ],
+    "solution": "125°",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q50",
+    "chapterId": "practical-geometry",
+    "question": "A parallelogram WXYZ is being constructed with angle W = 48 degrees. What is the measure of angle Y (opposite to W)?",
+    "text": "A parallelogram WXYZ is being constructed with angle W = 48 degrees. What is the measure of angle Y (opposite to W)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Opposite angles in a parallelogram are equal to each other.",
+      "Angle Y is directly across from angle W."
+    ],
+    "solution": "48°",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q51",
+    "chapterId": "practical-geometry",
+    "question": "A trapezium is to be constructed with parallel sides of 15 cm and 7 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+    "text": "A trapezium is to be constructed with parallel sides of 15 cm and 7 cm. Using the difference-of-parallel-sides technique, what length is used to start the construction triangle?",
+    "difficulty": "Medium",
+    "hints": [
+      "Subtract the shorter parallel side from the longer one."
+    ],
+    "solution": "8 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q52",
+    "chapterId": "practical-geometry",
+    "question": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 72, 88 and 105 degrees. What is the fourth angle?",
+    "text": "A quadrilateral is being constructed by the '2 adjacent sides and 3 angles' method. Three of its angles are given as 72, 88 and 105 degrees. What is the fourth angle?",
+    "difficulty": "Hard",
+    "hints": [
+      "The interior angles of any quadrilateral add up to 360 degrees.",
+      "Add the three given angles, then subtract from 360."
+    ],
+    "solution": "95°",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q53",
+    "chapterId": "practical-geometry",
+    "question": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 50 degrees and angle DBC = 42 degrees, what is the full angle ABC?",
+    "text": "A quadrilateral ABCD is being constructed with diagonal BD splitting it into triangle ABD and triangle BCD. If angle ABD = 50 degrees and angle DBC = 42 degrees, what is the full angle ABC?",
+    "difficulty": "Medium",
+    "hints": [
+      "Angle ABC is made up of the two smaller angles on either side of the diagonal BD.",
+      "Add the two given angles together."
+    ],
+    "solution": "92°",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q54",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with side 6 cm and one angle of 75 degrees. What is the measure of the adjacent angle?",
+    "text": "A rhombus is to be constructed with side 6 cm and one angle of 75 degrees. What is the measure of the adjacent angle?",
+    "difficulty": "Hard",
+    "hints": [
+      "A rhombus is a parallelogram, so adjacent angles are supplementary.",
+      "Subtract the given angle from 180 degrees."
+    ],
+    "solution": "105°",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q55",
+    "chapterId": "practical-geometry",
+    "question": "A kite is being constructed with two equal sides of 13 cm meeting at vertex A. The diagonal from A meets the other diagonal at right angles, at a point 5 cm from A. Find the length of the other diagonal's half at that same crossing point.",
+    "text": "A kite is being constructed with two equal sides of 13 cm meeting at vertex A. The diagonal from A meets the other diagonal at right angles, at a point 5 cm from A. Find the length of the other diagonal's half at that same crossing point.",
+    "difficulty": "Hard",
+    "hints": [
+      "The 13 cm side is the hypotenuse of a right triangle whose legs are the 5 cm segment and the half-diagonal you're finding.",
+      "Use the Pythagorean relation: 5² + x² = 13²."
+    ],
+    "solution": "12 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q56",
+    "chapterId": "practical-geometry",
+    "question": "A square is to be constructed with diagonal 10 cm. What is the length of each half of the diagonal, from a vertex to the center?",
+    "text": "A square is to be constructed with diagonal 10 cm. What is the length of each half of the diagonal, from a vertex to the center?",
+    "difficulty": "Medium",
+    "hints": [
+      "A square's diagonals bisect each other, just like a rhombus's.",
+      "Divide the full diagonal length by 2."
+    ],
+    "solution": "5 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q57",
+    "chapterId": "practical-geometry",
+    "question": "A parallelogram is being constructed with diagonals intersecting at O. If one diagonal is 14 cm long, what is the distance from O to each end of that diagonal?",
+    "text": "A parallelogram is being constructed with diagonals intersecting at O. If one diagonal is 14 cm long, what is the distance from O to each end of that diagonal?",
+    "difficulty": "Medium",
+    "hints": [
+      "A parallelogram's diagonals bisect each other at their intersection point.",
+      "Divide the full diagonal length by 2."
+    ],
+    "solution": "7 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q58",
+    "chapterId": "practical-geometry",
+    "question": "A trapezium's construction triangle (formed from the difference of the parallel sides) has a base of 6 cm. If the longer parallel side is 11 cm, what is the length of the shorter parallel side?",
+    "text": "A trapezium's construction triangle (formed from the difference of the parallel sides) has a base of 6 cm. If the longer parallel side is 11 cm, what is the length of the shorter parallel side?",
+    "difficulty": "Hard",
+    "hints": [
+      "The construction triangle's base equals the difference between the two parallel sides.",
+      "Subtract that base length from the longer parallel side."
+    ],
+    "solution": "5 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q59",
+    "chapterId": "practical-geometry",
+    "question": "A square is to be constructed with perimeter 32 cm. What side length should the compass be set to?",
+    "text": "A square is to be constructed with perimeter 32 cm. What side length should the compass be set to?",
+    "difficulty": "Medium",
+    "hints": [
+      "A square has 4 equal sides.",
+      "Divide the perimeter by 4."
+    ],
+    "solution": "8 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
+  },
+  {
+    "id": "pg-q60",
+    "chapterId": "practical-geometry",
+    "question": "A rhombus is to be constructed with side 25 cm and one diagonal of 48 cm. What is the length of the other diagonal?",
+    "text": "A rhombus is to be constructed with side 25 cm and one diagonal of 48 cm. What is the length of the other diagonal?",
+    "difficulty": "Hard",
+    "hints": [
+      "Half of the known diagonal (24 cm) is one leg of a right triangle whose hypotenuse is the side (25 cm).",
+      "Find the other leg using the Pythagorean relation, then double it to get the full second diagonal."
+    ],
+    "solution": "14 cm",
+    "topicId": null,
+    "questionType": "short_text",
+    "maxScore": 1
   },
   {
     "id": "rn-q01",
@@ -2789,6 +5153,366 @@
     "maxScore": 1,
     "objectiveIds": [
       "obj-rn-commutativity"
+    ]
+  },
+  {
+    "id": "rn-q41",
+    "chapterId": "rational-numbers",
+    "question": "Is -3/7 a rational number?",
+    "text": "Is -3/7 a rational number?",
+    "difficulty": "Easy",
+    "hints": [
+      "A rational number is any number expressible as p/q, with q not zero.",
+      "-3/7 is already written in exactly that form."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-definition"
+    ]
+  },
+  {
+    "id": "rn-q42",
+    "chapterId": "rational-numbers",
+    "question": "Write 15/-25 in standard form.",
+    "text": "Write 15/-25 in standard form.",
+    "difficulty": "Medium",
+    "hints": [
+      "Standard form needs a positive denominator — move the negative sign to the numerator first.",
+      "Then simplify -15/25 by dividing both numbers by their greatest common factor, 5."
+    ],
+    "solution": "-3/5",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-standard-form"
+    ]
+  },
+  {
+    "id": "rn-q43",
+    "chapterId": "rational-numbers",
+    "question": "Write -36/-48 in standard form.",
+    "text": "Write -36/-48 in standard form.",
+    "difficulty": "Hard",
+    "hints": [
+      "A negative numerator over a negative denominator is a positive number — rewrite it as a positive fraction first.",
+      "Simplify 36/48 by dividing both numbers by their greatest common factor, 12."
+    ],
+    "solution": "3/4",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-standard-form"
+    ]
+  },
+  {
+    "id": "rn-q44",
+    "chapterId": "rational-numbers",
+    "question": "Is the product of -3/5 and 7/8 a rational number?",
+    "text": "Is the product of -3/5 and 7/8 a rational number?",
+    "difficulty": "Easy",
+    "hints": [
+      "Rational numbers are closed under multiplication.",
+      "The product of any two rational numbers is always another rational number."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-closure"
+    ]
+  },
+  {
+    "id": "rn-q45",
+    "chapterId": "rational-numbers",
+    "question": "Rational numbers are closed under which of these operations: subtraction or division?",
+    "text": "Rational numbers are closed under which of these operations: subtraction or division?",
+    "difficulty": "Easy",
+    "hints": [
+      "Closure means the result of the operation always stays a rational number.",
+      "Division is not closed, because division by 0 is undefined."
+    ],
+    "solution": "Subtraction",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-closure"
+    ]
+  },
+  {
+    "id": "rn-q46",
+    "chapterId": "rational-numbers",
+    "question": "Is multiplication commutative for rational numbers?",
+    "text": "Is multiplication commutative for rational numbers?",
+    "difficulty": "Easy",
+    "hints": [
+      "Commutative means the order of the two numbers doesn't affect the result.",
+      "a × b always equals b × a for rational numbers."
+    ],
+    "solution": "Yes",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-commutativity"
+    ]
+  },
+  {
+    "id": "rn-q47",
+    "chapterId": "rational-numbers",
+    "question": "Which property is illustrated by (-3/4) × (5/6) = (5/6) × (-3/4)?",
+    "text": "Which property is illustrated by (-3/4) × (5/6) = (5/6) × (-3/4)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Look at what changed between the two sides of the equation — only the order of the terms.",
+      "This property says a × b = b × a for any two rational numbers."
+    ],
+    "solution": "Commutativity of multiplication",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-commutativity"
+    ]
+  },
+  {
+    "id": "rn-q48",
+    "chapterId": "rational-numbers",
+    "question": "Find (1/2 + 1/3) + 1/6.",
+    "text": "Find (1/2 + 1/3) + 1/6.",
+    "difficulty": "Medium",
+    "hints": [
+      "Find a common denominator (6 works for all three fractions).",
+      "Add all three numerators once they share that denominator."
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-associativity"
+    ]
+  },
+  {
+    "id": "rn-q49",
+    "chapterId": "rational-numbers",
+    "question": "Is subtraction associative for rational numbers? Test with a=1, b=1/2, c=1/4 by computing (a-b)-c and a-(b-c).",
+    "text": "Is subtraction associative for rational numbers? Test with a=1, b=1/2, c=1/4 by computing (a-b)-c and a-(b-c).",
+    "difficulty": "Hard",
+    "hints": [
+      "Compute (a-b)-c = (1 - 1/2) - 1/4 first.",
+      "Then compute a-(b-c) = 1 - (1/2 - 1/4) and compare the two results."
+    ],
+    "solution": "No",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-associativity"
+    ]
+  },
+  {
+    "id": "rn-q50",
+    "chapterId": "rational-numbers",
+    "question": "Find x such that -5/9 + x = -5/9.",
+    "text": "Find x such that -5/9 + x = -5/9.",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about what the additive identity does to any rational number.",
+      "Adding 0 to any number leaves it unchanged."
+    ],
+    "solution": "0",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-identity-elements"
+    ]
+  },
+  {
+    "id": "rn-q51",
+    "chapterId": "rational-numbers",
+    "question": "Find x such that 7/11 × x = 7/11.",
+    "text": "Find x such that 7/11 × x = 7/11.",
+    "difficulty": "Medium",
+    "hints": [
+      "Think about what the multiplicative identity does to any rational number.",
+      "Multiplying any number by 1 leaves it unchanged."
+    ],
+    "solution": "1",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-identity-elements"
+    ]
+  },
+  {
+    "id": "rn-q52",
+    "chapterId": "rational-numbers",
+    "question": "Use distributivity to find 2/3 × 5/9 - 2/3 × 2/9.",
+    "text": "Use distributivity to find 2/3 × 5/9 - 2/3 × 2/9.",
+    "difficulty": "Medium",
+    "hints": [
+      "Both terms share the same factor of 2/3 — factor it out first.",
+      "Subtract what's left inside the brackets: 5/9 - 2/9."
+    ],
+    "solution": "2/9",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-distributivity"
+    ]
+  },
+  {
+    "id": "rn-q53",
+    "chapterId": "rational-numbers",
+    "question": "Use distributivity to find -5/7 × 3/11 + -5/7 × 8/11.",
+    "text": "Use distributivity to find -5/7 × 3/11 + -5/7 × 8/11.",
+    "difficulty": "Hard",
+    "hints": [
+      "Both terms share the same factor of -5/7 — factor it out first.",
+      "Add what's left inside the brackets: 3/11 + 8/11."
+    ],
+    "solution": "-5/7",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-distributivity"
+    ]
+  },
+  {
+    "id": "rn-q54",
+    "chapterId": "rational-numbers",
+    "question": "What is the additive inverse of -9/10?",
+    "text": "What is the additive inverse of -9/10?",
+    "difficulty": "Easy",
+    "hints": [
+      "The additive inverse of a number, added to that number, gives 0.",
+      "Flip the sign of -9/10."
+    ],
+    "solution": "9/10",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-additive-inverse"
+    ]
+  },
+  {
+    "id": "rn-q55",
+    "chapterId": "rational-numbers",
+    "question": "First write 6/-8 in standard form, then find its additive inverse.",
+    "text": "First write 6/-8 in standard form, then find its additive inverse.",
+    "difficulty": "Medium",
+    "hints": [
+      "Move the negative sign to the numerator, then simplify: 6/-8 = -6/8 = -3/4.",
+      "Flip the sign of that standard-form fraction to get its additive inverse."
+    ],
+    "solution": "3/4",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-additive-inverse"
+    ]
+  },
+  {
+    "id": "rn-q56",
+    "chapterId": "rational-numbers",
+    "question": "What is the reciprocal of -8/13?",
+    "text": "What is the reciprocal of -8/13?",
+    "difficulty": "Medium",
+    "hints": [
+      "The reciprocal of a fraction swaps its numerator and denominator, keeping the sign.",
+      "A number multiplied by its reciprocal always gives 1."
+    ],
+    "solution": "-13/8",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-multiplicative-inverse"
+    ]
+  },
+  {
+    "id": "rn-q57",
+    "chapterId": "rational-numbers",
+    "question": "The product of two rational numbers is 1. If one number is -6/11, what is the other?",
+    "text": "The product of two rational numbers is 1. If one number is -6/11, what is the other?",
+    "difficulty": "Hard",
+    "hints": [
+      "Two numbers whose product is 1 are reciprocals of each other.",
+      "Swap the numerator and denominator of -6/11, keeping the sign."
+    ],
+    "solution": "-11/6",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-multiplicative-inverse"
+    ]
+  },
+  {
+    "id": "rn-q58",
+    "chapterId": "rational-numbers",
+    "question": "Which rational number lies exactly halfway between -1 and 0 on the number line?",
+    "text": "Which rational number lies exactly halfway between -1 and 0 on the number line?",
+    "difficulty": "Easy",
+    "hints": [
+      "The halfway point between two numbers is their mean.",
+      "Add -1 and 0, then divide by 2."
+    ],
+    "solution": "-1/2",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-mean-method"
+    ]
+  },
+  {
+    "id": "rn-q59",
+    "chapterId": "rational-numbers",
+    "question": "Which rational number lies exactly halfway between 2/5 and 4/5 on the number line?",
+    "text": "Which rational number lies exactly halfway between 2/5 and 4/5 on the number line?",
+    "difficulty": "Medium",
+    "hints": [
+      "The halfway point between two numbers is their mean.",
+      "Add 2/5 and 4/5 (they already share a denominator), then divide by 2."
+    ],
+    "solution": "3/5",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-mean-method"
+    ]
+  },
+  {
+    "id": "rn-q60",
+    "chapterId": "rational-numbers",
+    "question": "Find two different rational numbers between 1/4 and 1/2 using the mean method twice: first find the mean of 1/4 and 1/2, then find the mean of that result and 1/2.",
+    "text": "Find two different rational numbers between 1/4 and 1/2 using the mean method twice: first find the mean of 1/4 and 1/2, then find the mean of that result and 1/2.",
+    "difficulty": "Hard",
+    "hints": [
+      "First, find the mean of 1/4 and 1/2 — that is your first new number.",
+      "Then find the mean of that new number and 1/2 — that is your second new number."
+    ],
+    "solution": "3/8 and 7/16",
+    "topicId": "topic-rational-numbers-properties-and-operations",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-rn-between-two-rationals"
     ]
   },
   {
@@ -3783,6 +6507,172 @@
     ]
   },
   {
+    "id": "sc-q53",
+    "chapterId": "squares-and-cubes",
+    "question": "How many non-perfect-square numbers lie strictly between 20² and 21²?",
+    "text": "How many non-perfect-square numbers lie strictly between 20² and 21²?",
+    "difficulty": "Easy",
+    "hints": [
+      "Between n² and (n+1)² there are always exactly 2n non-square numbers.",
+      "Here n = 20, so compute 2 × 20."
+    ],
+    "solution": "40",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-squares-between-squares"
+    ]
+  },
+  {
+    "id": "sc-q54",
+    "chapterId": "squares-and-cubes",
+    "question": "Using repeated subtraction of consecutive odd numbers, find √81.",
+    "text": "Using repeated subtraction of consecutive odd numbers, find √81.",
+    "difficulty": "Medium",
+    "hints": [
+      "Subtract 1, then 3, then 5, and so on from 81, counting each subtraction.",
+      "Stop when you reach exactly 0 — the number of subtractions is the square root."
+    ],
+    "solution": "9",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-square-roots-repeated-subtraction"
+    ]
+  },
+  {
+    "id": "sc-q55",
+    "chapterId": "squares-and-cubes",
+    "question": "Between which two consecutive whole numbers does √150 lie? Give the smaller one.",
+    "text": "Between which two consecutive whole numbers does √150 lie? Give the smaller one.",
+    "difficulty": "Easy",
+    "hints": [
+      "Find two consecutive whole numbers whose squares fall just below and just above 150.",
+      "Try 12² and 13²."
+    ],
+    "solution": "12",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-square-roots-estimation"
+    ]
+  },
+  {
+    "id": "sc-q56",
+    "chapterId": "squares-and-cubes",
+    "question": "Between which two consecutive whole numbers does √300 lie? Give the smaller one.",
+    "text": "Between which two consecutive whole numbers does √300 lie? Give the smaller one.",
+    "difficulty": "Medium",
+    "hints": [
+      "Find two consecutive whole numbers whose squares fall just below and just above 300.",
+      "Try 17² and 18²."
+    ],
+    "solution": "17",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-square-roots-estimation"
+    ]
+  },
+  {
+    "id": "sc-q57",
+    "chapterId": "squares-and-cubes",
+    "question": "Which of these is the Pythagorean triplet formed using 2m, m²−1, m²+1 with m = 9?",
+    "text": "Which of these is the Pythagorean triplet formed using 2m, m²−1, m²+1 with m = 9?",
+    "difficulty": "Medium",
+    "hints": [
+      "Compute 2m, m² − 1 and m² + 1 separately for m = 9.",
+      "m² = 81, so m² − 1 = 80 and m² + 1 = 82."
+    ],
+    "solution": "18, 80, 82",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "18, 80, 82"
+        },
+        {
+          "id": "opt-b",
+          "text": "18, 79, 81"
+        },
+        {
+          "id": "opt-c",
+          "text": "9, 80, 82"
+        },
+        {
+          "id": "opt-d",
+          "text": "18, 81, 82"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-squares-pythagorean-triplet"
+    ]
+  },
+  {
+    "id": "sc-q58",
+    "chapterId": "squares-and-cubes",
+    "question": "A cube-shaped water tank has a volume of 2197 cm³. Find the length of its edge.",
+    "text": "A cube-shaped water tank has a volume of 2197 cm³. Find the length of its edge.",
+    "difficulty": "Hard",
+    "hints": [
+      "The edge length of a cube is the cube root of its volume.",
+      "Prime factorise 2197 to find ∛2197, and don't forget the unit."
+    ],
+    "solution": "13 cm",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-cube-roots-prime-factorisation"
+    ]
+  },
+  {
+    "id": "sc-q59",
+    "chapterId": "squares-and-cubes",
+    "question": "Find the smallest number by which 1536 must be divided to make it a perfect cube.",
+    "text": "Find the smallest number by which 1536 must be divided to make it a perfect cube.",
+    "difficulty": "Hard",
+    "hints": [
+      "Prime factorise 1536 completely — note how many times each prime factor appears.",
+      "One factor already forms a complete triple (or triples); the other appears just once and breaks the grouping.",
+      "Dividing out that single leftover factor leaves every remaining factor in a complete triple."
+    ],
+    "solution": "3",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-cubes-smallest-multiplier"
+    ]
+  },
+  {
+    "id": "sc-q60",
+    "chapterId": "squares-and-cubes",
+    "question": "Can a perfect square number end in the digit 8?",
+    "text": "Can a perfect square number end in the digit 8?",
+    "difficulty": "Easy",
+    "hints": [
+      "Recall which unit's digits are possible for a perfect square.",
+      "Perfect squares only ever end in 0, 1, 4, 5, 6 or 9."
+    ],
+    "solution": "No",
+    "topicId": "topic-squares-and-cubes-numbers-and-roots",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-squares-unit-digit"
+    ]
+  },
+  {
     "id": "uq-q01",
     "chapterId": "understanding-quadrilaterals",
     "question": "What is a polygon?",
@@ -3918,10 +6808,27 @@
       "Use the formula (n − 2) × 180° with n = 4 for a quadrilateral.",
       "(4 − 2) × 180° = 2 × 180°."
     ],
-    "solution": "360°",
+    "solution": "360° — (4 − 2) × 180° = 2 × 180° = 360°.",
     "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
-    "questionType": "short_text",
+    "questionType": "single_choice",
     "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "180°"
+        },
+        {
+          "id": "opt-b",
+          "text": "360°"
+        },
+        {
+          "id": "opt-c",
+          "text": "540°"
+        }
+      ]
+    },
     "objectiveIds": [
       "obj-uq-angle-sum-formula"
     ]
@@ -3936,10 +6843,27 @@
       "Use the formula (n − 2) × 180° with n = 5.",
       "(5 − 2) × 180° = 3 × 180°."
     ],
-    "solution": "540°",
+    "solution": "540° — (5 − 2) × 180° = 3 × 180° = 540°.",
     "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
-    "questionType": "short_text",
+    "questionType": "single_choice",
     "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "360°"
+        },
+        {
+          "id": "opt-b",
+          "text": "450°"
+        },
+        {
+          "id": "opt-c",
+          "text": "540°"
+        }
+      ]
+    },
     "objectiveIds": [
       "obj-uq-angle-sum-formula"
     ]
@@ -3954,10 +6878,27 @@
       "Use the formula (n − 2) × 180° with n = 8.",
       "(8 − 2) × 180° = 6 × 180°."
     ],
-    "solution": "1080°",
+    "solution": "1080° — (8 − 2) × 180° = 6 × 180° = 1080°, not 8 × 180°.",
     "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
-    "questionType": "short_text",
+    "questionType": "single_choice",
     "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "1080°"
+        },
+        {
+          "id": "opt-b",
+          "text": "1440°"
+        },
+        {
+          "id": "opt-c",
+          "text": "900°"
+        }
+      ]
+    },
     "objectiveIds": [
       "obj-uq-angle-sum-formula"
     ]
@@ -3972,10 +6913,27 @@
       "Set (n − 2) × 180° = 1260° and solve for n.",
       "1260° ÷ 180° = 7, so n − 2 = 7."
     ],
-    "solution": "9",
+    "solution": "9 sides — 1260° ÷ 180° = 7 = n − 2, so n = 7 + 2 = 9.",
     "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
-    "questionType": "short_text",
+    "questionType": "single_choice",
     "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "7"
+        },
+        {
+          "id": "opt-b",
+          "text": "9"
+        },
+        {
+          "id": "opt-c",
+          "text": "11"
+        }
+      ]
+    },
     "objectiveIds": [
       "obj-uq-angle-sum-formula"
     ]
@@ -4503,6 +7461,383 @@
       "Square is a rectangle; square is a rhombus; both rectangle and rhombus are parallelograms."
     ],
     "solution": "Rectangle, rhombus, and parallelogram",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-quadrilateral-hierarchy"
+    ]
+  },
+  {
+    "id": "uq-q41",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A shape is bounded by one continuous curved line with no straight edges at all, like an oval. Is it a polygon?",
+    "text": "A shape is bounded by one continuous curved line with no straight edges at all, like an oval. Is it a polygon?",
+    "difficulty": "Easy",
+    "hints": [
+      "Check what a polygon's sides are required to be made of.",
+      "An oval has no straight edges at all."
+    ],
+    "solution": "No — a polygon's boundary must be made entirely of straight line segments; a curved boundary is never a polygon.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-identify-polygon"
+    ]
+  },
+  {
+    "id": "uq-q42",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A figure has 6 straight sides and is closed, with no self-intersections. Is it a polygon? If so, what is it also called by its side count?",
+    "text": "A figure has 6 straight sides and is closed, with no self-intersections. Is it a polygon? If so, what is it also called by its side count?",
+    "difficulty": "Medium",
+    "hints": [
+      "Check the polygon definition: straight sides, closed, simple (non-self-crossing) — does this figure satisfy all three?",
+      "A polygon's name often comes from its number of sides; 6 sides is a hexagon."
+    ],
+    "solution": "Yes, it is a polygon — specifically a hexagon (a 6-sided polygon).",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-identify-polygon"
+    ]
+  },
+  {
+    "id": "uq-q43",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A polygon has interior angles of 90°, 90°, 90°, and 90°. Is this polygon necessarily convex?",
+    "text": "A polygon has interior angles of 90°, 90°, 90°, and 90°. Is this polygon necessarily convex?",
+    "difficulty": "Medium",
+    "hints": [
+      "Check each listed angle against the convex-polygon rule (every angle less than 180°).",
+      "All four angles here are well under 180°."
+    ],
+    "solution": "Yes — every one of its interior angles is less than 180°, which is exactly the convexity condition.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-convex-concave"
+    ]
+  },
+  {
+    "id": "uq-q44",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Is a rectangle that is not a square a regular polygon? Why or why not?",
+    "text": "Is a rectangle that is not a square a regular polygon? Why or why not?",
+    "difficulty": "Easy",
+    "hints": [
+      "Regularity needs both equal sides AND equal angles.",
+      "Check the sides of a non-square rectangle — are they all the same length?"
+    ],
+    "solution": "No — although all its angles are equal (90° each), its sides are not all equal (length and width differ), so it fails the regularity condition.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-regular-irregular"
+    ]
+  },
+  {
+    "id": "uq-q45",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "An equilateral triangle has all three sides equal and all three angles equal (60° each). Is it a regular polygon?",
+    "text": "An equilateral triangle has all three sides equal and all three angles equal (60° each). Is it a regular polygon?",
+    "difficulty": "Easy",
+    "hints": [
+      "Check both conditions for regularity against this triangle.",
+      "Both the side and angle conditions are satisfied here."
+    ],
+    "solution": "Yes — it satisfies both conditions for regularity: equal sides and equal angles.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-regular-irregular"
+    ]
+  },
+  {
+    "id": "uq-q46",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "What is the sum of the interior angles of a hexagon (6 sides)?",
+    "text": "What is the sum of the interior angles of a hexagon (6 sides)?",
+    "difficulty": "Medium",
+    "hints": [
+      "Use the formula (n − 2) × 180° with n = 6.",
+      "(6 − 2) × 180° = 4 × 180°."
+    ],
+    "solution": "720° — (6 − 2) × 180° = 4 × 180° = 720°.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "single_choice",
+    "maxScore": 1,
+    "responseSpecification": {
+      "numericTolerance": 0,
+      "options": [
+        {
+          "id": "opt-a",
+          "text": "720°"
+        },
+        {
+          "id": "opt-b",
+          "text": "900°"
+        },
+        {
+          "id": "opt-c",
+          "text": "540°"
+        }
+      ]
+    },
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
+  },
+  {
+    "id": "uq-q47",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A polygon's interior angles sum to 1800°. How many sides does it have?",
+    "text": "A polygon's interior angles sum to 1800°. How many sides does it have?",
+    "difficulty": "Hard",
+    "hints": [
+      "Set (n − 2) × 180° = 1800° and solve for n.",
+      "1800° ÷ 180° = 10, so n − 2 = 10 — don't forget to add 2 back."
+    ],
+    "solution": "12 sides — 1800° ÷ 180° = 10 = n − 2, so n = 10 + 2 = 12.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-angle-sum-formula"
+    ]
+  },
+  {
+    "id": "uq-q48",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Three angles of a quadrilateral are 65°, 85°, and 110°. Find the fourth angle.",
+    "text": "Three angles of a quadrilateral are 65°, 85°, and 110°. Find the fourth angle.",
+    "difficulty": "Medium",
+    "hints": [
+      "The four angles of a quadrilateral must add up to 360°.",
+      "Add the three known angles, then subtract that total from 360°."
+    ],
+    "solution": "100°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
+  },
+  {
+    "id": "uq-q49",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a hexagon, five angles are 110°, 120°, 130°, 140°, and 100°. Find the sixth angle.",
+    "text": "In a hexagon, five angles are 110°, 120°, 130°, 140°, and 100°. Find the sixth angle.",
+    "difficulty": "Hard",
+    "hints": [
+      "The sum of the interior angles of a hexagon is 720° (use (n − 2) × 180° with n = 6).",
+      "Add the five known angles and subtract that total from 720°."
+    ],
+    "solution": "120°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-find-unknown-interior-angle"
+    ]
+  },
+  {
+    "id": "uq-q50",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A regular polygon has 10 sides. Find the measure of each exterior angle.",
+    "text": "A regular polygon has 10 sides. Find the measure of each exterior angle.",
+    "difficulty": "Easy",
+    "hints": [
+      "For a regular polygon, each exterior angle = 360° ÷ number of sides.",
+      "360° ÷ 10 = ?"
+    ],
+    "solution": "36°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
+  },
+  {
+    "id": "uq-q51",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A regular polygon has an interior angle that is 3 times its exterior angle. Find the number of sides.",
+    "text": "A regular polygon has an interior angle that is 3 times its exterior angle. Find the number of sides.",
+    "difficulty": "Hard",
+    "hints": [
+      "Let the exterior angle be x, so the interior angle is 3x. Use interior + exterior = 180°.",
+      "x + 3x = 180° gives x = 45°; then use 360° ÷ x to find the number of sides."
+    ],
+    "solution": "8",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-exterior-angle-sum"
+    ]
+  },
+  {
+    "id": "uq-q52",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In a trapezium, which pair of sides is called the 'legs'?",
+    "text": "In a trapezium, which pair of sides is called the 'legs'?",
+    "difficulty": "Easy",
+    "hints": [
+      "The parallel sides have their own name — think about what's left over.",
+      "The legs connect the two bases."
+    ],
+    "solution": "The two non-parallel sides.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-trapezium-identify"
+    ]
+  },
+  {
+    "id": "uq-q53",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A trapezium's two parallel sides measure 8 cm and 14 cm. Are its legs necessarily equal in length?",
+    "text": "A trapezium's two parallel sides measure 8 cm and 14 cm. Are its legs necessarily equal in length?",
+    "difficulty": "Medium",
+    "hints": [
+      "The trapezium's defining condition is only about the two parallel sides.",
+      "Nothing in the basic definition constrains the legs' lengths relative to each other."
+    ],
+    "solution": "No — a general trapezium's legs can be any length, as long as the two bases are parallel; equal legs are not required.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-trapezium-identify"
+    ]
+  },
+  {
+    "id": "uq-q54",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "Does a kite's diagonals bisect each other (both of them), the way a parallelogram's diagonals do?",
+    "text": "Does a kite's diagonals bisect each other (both of them), the way a parallelogram's diagonals do?",
+    "difficulty": "Easy",
+    "hints": [
+      "Compare a kite's diagonal properties to a parallelogram's.",
+      "Only one diagonal in a kite is cut exactly in half."
+    ],
+    "solution": "No — only one of a kite's two diagonals is bisected by the other; both being bisected is a parallelogram property, not a kite property.",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-kite-identify"
+    ]
+  },
+  {
+    "id": "uq-q55",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A kite has two pairs of adjacent equal sides: 6 cm & 6 cm, and 9 cm & 9 cm. What is the perimeter of the kite?",
+    "text": "A kite has two pairs of adjacent equal sides: 6 cm & 6 cm, and 9 cm & 9 cm. What is the perimeter of the kite?",
+    "difficulty": "Medium",
+    "hints": [
+      "The perimeter is the sum of all four sides.",
+      "6 + 6 + 9 + 9 = ?"
+    ],
+    "solution": "30 cm",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-kite-identify"
+    ]
+  },
+  {
+    "id": "uq-q56",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In parallelogram WXYZ, angle W = 55°. Find angle X (adjacent to W) and angle Y (opposite to W).",
+    "text": "In parallelogram WXYZ, angle W = 55°. Find angle X (adjacent to W) and angle Y (opposite to W).",
+    "difficulty": "Medium",
+    "hints": [
+      "Adjacent angles in a parallelogram are supplementary.",
+      "Opposite angles in a parallelogram are equal."
+    ],
+    "solution": "Angle X = 125°, Angle Y = 55°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
+  },
+  {
+    "id": "uq-q57",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "In parallelogram ABCD, the diagonals intersect at O. If AO = 3x − 1 and OC = x + 7, find x.",
+    "text": "In parallelogram ABCD, the diagonals intersect at O. If AO = 3x − 1 and OC = x + 7, find x.",
+    "difficulty": "Hard",
+    "hints": [
+      "The diagonals of a parallelogram bisect each other, so AO = OC.",
+      "Set 3x − 1 equal to x + 7 and solve for x."
+    ],
+    "solution": "4",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-parallelogram-properties"
+    ]
+  },
+  {
+    "id": "uq-q58",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A rhombus has diagonals of length 6 cm and 8 cm. What angle do the diagonals make with each other where they cross?",
+    "text": "A rhombus has diagonals of length 6 cm and 8 cm. What angle do the diagonals make with each other where they cross?",
+    "difficulty": "Medium",
+    "hints": [
+      "Recall the special diagonal property that holds for every rhombus, regardless of the diagonal lengths.",
+      "A rhombus's diagonals always cross at right angles."
+    ],
+    "solution": "90°",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
+  },
+  {
+    "id": "uq-q59",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A rectangle's diagonal is 13 cm and one side is 5 cm. Using the fact that a rectangle's diagonal, together with two adjacent sides, forms a right triangle, find the length of the adjacent side.",
+    "text": "A rectangle's diagonal is 13 cm and one side is 5 cm. Using the fact that a rectangle's diagonal, together with two adjacent sides, forms a right triangle, find the length of the adjacent side.",
+    "difficulty": "Hard",
+    "hints": [
+      "The diagonal is the hypotenuse of a right triangle formed with the two sides.",
+      "Use the Pythagorean relation: side² + side² = diagonal², i.e. 5² + x² = 13²."
+    ],
+    "solution": "12 cm",
+    "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
+    "questionType": "short_text",
+    "maxScore": 1,
+    "objectiveIds": [
+      "obj-uq-rhombus-rectangle-square"
+    ]
+  },
+  {
+    "id": "uq-q60",
+    "chapterId": "understanding-quadrilaterals",
+    "question": "A quadrilateral has diagonals that bisect each other and are equal in length, but do NOT cross at right angles. What is the most specific name for this shape?",
+    "text": "A quadrilateral has diagonals that bisect each other and are equal in length, but do NOT cross at right angles. What is the most specific name for this shape?",
+    "difficulty": "Hard",
+    "hints": [
+      "Bisecting diagonals alone tell you it's at least a parallelogram.",
+      "Equal diagonals (without perpendicularity) point to one specific special parallelogram — not the one whose diagonals are always perpendicular."
+    ],
+    "solution": "Rectangle",
     "topicId": "topic-understanding-quadrilaterals-polygons-and-properties",
     "questionType": "short_text",
     "maxScore": 1,

@@ -2,6 +2,7 @@
   "topicId": "topic-data-handling-representation-and-probability",
   "reviewStatus": "approved",
   "note": "Short answers hand-extracted from stage6-questions.json's expectedAnswer field, matching the terse style already used for other chapters (e.g. 'Opposite sides are parallel and equal' for understanding-quadrilaterals) and the precedent set in linear-equations/answer-keys.json. Compound/multi-value answers (central-angle questions dh-q01-q03 and dh-q36; two-part (a)/(b) probability questions dh-q05, dh-q06, dh-q12; ratio/count-pair answers dh-q33, dh-q34, dh-q37; the open-ended real-life-example question dh-q13; and the procedural pie-chart-construction steps dh-q21) are inherently weak fits for exact-string matching — a real student could type a differently-worded but equally correct answer and be marked wrong. This is the same pre-existing limitation of the exact-match evaluator already documented for Linear Equations, not something introduced or fixable here.",
+  "secondExpansionNote": "18 keys added 2026-09-02 for dh-q43-dh-q60 (see stage6-questions.json's secondExpansionNote for authoring rationale). Terse keys mirror the existing style throughout: multi-value answers (dh-q49) formatted like dh-q02/03; open-ended example questions (dh-q60) keyed to a single acceptable example, like dh-q13.",
   "answers": {
     "dh-q01": "Summer = 90°, Rainy = 120°, Winter = 150°",
     "dh-q02": "Blue = 180°, Green = 90°, Red = 60°, Yellow = 30°",
@@ -44,6 +45,24 @@
     "dh-q39": "450",
     "dh-q40": "Decrease",
     "dh-q41": "No",
-    "dh-q42": "Protractor"
+    "dh-q42": "Protractor",
+    "dh-q43": "30",
+    "dh-q44": "July, City X, 120",
+    "dh-q45": "No",
+    "dh-q46": "No",
+    "dh-q47": "P's share is twice Q's share",
+    "dh-q48": "90°",
+    "dh-q49": "Tea = 144°, Coffee = 108°, Juice = 108°",
+    "dh-q50": "60",
+    "dh-q51": "From the end of the previous sector's radius",
+    "dh-q52": "No",
+    "dh-q53": "Yes",
+    "dh-q54": "A, B, C",
+    "dh-q55": "Yes",
+    "dh-q56": "3/5",
+    "dh-q57": "1/6",
+    "dh-q58": "9/20",
+    "dh-q59": "Probability statement; chance it does not rain",
+    "dh-q60": "Insurance"
   }
 }

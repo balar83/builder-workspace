@@ -2,6 +2,7 @@
   "topicId": "topic-rational-numbers-properties-and-operations",
   "reviewStatus": "approved",
   "expansionNote": "Replaces the 5 hand-seeded placeholder questions with a 40-question bank authored using NCERT Class 8 Ch.1 'Rational Numbers' (prior edition) as primary source, supplemented with standard curriculum knowledge for negative/reciprocal and number-line content not present in the extracted PDF text (see stage2-topic-detection.md). Difficulty split: 15 Easy (37.5%), 16 Medium (40%), 9 Hard (22.5%). Fraction answers use a consistent standard form (reduced, positive denominator, '/' separator, e.g. '-3/4' not '3/-4' or '-0.75') to stay as reliable as possible under the exact-string-match evaluator. A small number of 'which property' questions (rn-q09, rn-q10, rn-q17) are a weaker fit for exact-match, since a student could phrase the property name slightly differently (e.g. 'commutative property' vs 'commutativity of addition') — this is the same pre-existing limitation already documented for Understanding Quadrilaterals and other chapters, not something introduced or fixable here.",
+  "secondExpansionNote": "20 questions (rn-q41-rn-q60) added 2026-09-02 for the Content Expansion for Exam Practice milestone, bringing this chapter to the 60-question target. Targeted the thinnest-covered objectives from inventory (obj-rn-mean-method was at 1, obj-rn-identity-elements at 2), while adding volume across every objective. rn-q60 (finding two distinct numbers between 1/4 and 1/2) is a weak fit for exact-match like the pre-existing rn-q09/10/17 — infinitely many valid second answers exist depending on which two numbers are averaged next — so its hints prescribe one specific, reproducible path (mean of the two endpoints, then mean of that result and the upper endpoint) so the private key matches the path a student following the hints would actually take. All new numbers are original, checked against the existing 40 for duplication, and every fraction answer keeps this chapter's standard-form convention. New difficulty split: 6 Easy, 9 Medium, 5 Hard, bringing the chapter total to 21 Easy / 25 Medium / 14 Hard (60 total).",
   "excludedSourceItems": [],
   "questions": [
     {
@@ -565,6 +566,241 @@
       ],
       "difficulty": "Hard",
       "tags": ["rational-numbers", "commutativity"]
+    },
+    {
+      "id": "rn-q41",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.1" },
+      "objectiveIds": ["obj-rn-definition"],
+      "bloomLevel": "recall",
+      "prompt": "Is -3/7 a rational number?",
+      "expectedAnswer": "Yes",
+      "hints": ["A rational number is any number expressible as p/q, with q not zero.", "-3/7 is already written in exactly that form."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "definition"]
+    },
+    {
+      "id": "rn-q42",
+      "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
+      "objectiveIds": ["obj-rn-standard-form"],
+      "bloomLevel": "application",
+      "prompt": "Write 15/-25 in standard form.",
+      "expectedAnswer": "-3/5",
+      "hints": ["Standard form needs a positive denominator — move the negative sign to the numerator first.", "Then simplify -15/25 by dividing both numbers by their greatest common factor, 5."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "standard-form"]
+    },
+    {
+      "id": "rn-q43",
+      "sourceRef": { "document": "domain-knowledge", "section": "standard-form" },
+      "objectiveIds": ["obj-rn-standard-form"],
+      "bloomLevel": "analysis",
+      "prompt": "Write -36/-48 in standard form.",
+      "expectedAnswer": "3/4",
+      "hints": ["A negative numerator over a negative denominator is a positive number — rewrite it as a positive fraction first.", "Simplify 36/48 by dividing both numbers by their greatest common factor, 12."],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "standard-form"],
+      "misconception": {
+        "commonWrongAnswer": "-3/4, keeping a negative sign from one of the two negatives.",
+        "why": "Not recognizing that a negative divided by a negative is positive, so both signs cancel rather than one surviving.",
+        "remediationHint": "Two negative signs cancel completely — -36/-48 is a positive number, equal to 36/48 simplified."
+      }
+    },
+    {
+      "id": "rn-q44",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objectiveIds": ["obj-rn-closure"],
+      "bloomLevel": "application",
+      "prompt": "Is the product of -3/5 and 7/8 a rational number?",
+      "expectedAnswer": "Yes",
+      "hints": ["Rational numbers are closed under multiplication.", "The product of any two rational numbers is always another rational number."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "closure"]
+    },
+    {
+      "id": "rn-q45",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.1" },
+      "objectiveIds": ["obj-rn-closure"],
+      "bloomLevel": "recall",
+      "prompt": "Rational numbers are closed under which of these operations: subtraction or division?",
+      "expectedAnswer": "Subtraction",
+      "hints": ["Closure means the result of the operation always stays a rational number.", "Division is not closed, because division by 0 is undefined."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "closure"]
+    },
+    {
+      "id": "rn-q46",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
+      "objectiveIds": ["obj-rn-commutativity"],
+      "bloomLevel": "recall",
+      "prompt": "Is multiplication commutative for rational numbers?",
+      "expectedAnswer": "Yes",
+      "hints": ["Commutative means the order of the two numbers doesn't affect the result.", "a × b always equals b × a for rational numbers."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "commutativity"]
+    },
+    {
+      "id": "rn-q47",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.2" },
+      "objectiveIds": ["obj-rn-commutativity"],
+      "bloomLevel": "analysis",
+      "prompt": "Which property is illustrated by (-3/4) × (5/6) = (5/6) × (-3/4)?",
+      "expectedAnswer": "Commutativity of multiplication",
+      "hints": ["Look at what changed between the two sides of the equation — only the order of the terms.", "This property says a × b = b × a for any two rational numbers."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "commutativity"]
+    },
+    {
+      "id": "rn-q48",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
+      "objectiveIds": ["obj-rn-associativity"],
+      "bloomLevel": "application",
+      "prompt": "Find (1/2 + 1/3) + 1/6.",
+      "expectedAnswer": "1",
+      "hints": ["Find a common denominator (6 works for all three fractions).", "Add all three numerators once they share that denominator."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "associativity"]
+    },
+    {
+      "id": "rn-q49",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.3" },
+      "objectiveIds": ["obj-rn-associativity"],
+      "bloomLevel": "analysis",
+      "prompt": "Is subtraction associative for rational numbers? Test with a=1, b=1/2, c=1/4 by computing (a-b)-c and a-(b-c).",
+      "expectedAnswer": "No",
+      "hints": ["Compute (a-b)-c = (1 - 1/2) - 1/4 first.", "Then compute a-(b-c) = 1 - (1/2 - 1/4) and compare the two results."],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "associativity"],
+      "misconception": {
+        "commonWrongAnswer": "Yes, assuming subtraction behaves like addition since both involve combining two numbers.",
+        "why": "Overgeneralizing addition's associativity to subtraction without actually testing a numeric example.",
+        "remediationHint": "(1 - 1/2) - 1/4 = 1/4, but 1 - (1/2 - 1/4) = 3/4 — the two groupings give different results, so subtraction is not associative."
+      }
+    },
+    {
+      "id": "rn-q50",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.4" },
+      "objectiveIds": ["obj-rn-identity-elements"],
+      "bloomLevel": "application",
+      "prompt": "Find x such that -5/9 + x = -5/9.",
+      "expectedAnswer": "0",
+      "hints": ["Think about what the additive identity does to any rational number.", "Adding 0 to any number leaves it unchanged."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "identity"]
+    },
+    {
+      "id": "rn-q51",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.5" },
+      "objectiveIds": ["obj-rn-identity-elements"],
+      "bloomLevel": "application",
+      "prompt": "Find x such that 7/11 × x = 7/11.",
+      "expectedAnswer": "1",
+      "hints": ["Think about what the multiplicative identity does to any rational number.", "Multiplying any number by 1 leaves it unchanged."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "identity"]
+    },
+    {
+      "id": "rn-q52",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
+      "objectiveIds": ["obj-rn-distributivity"],
+      "bloomLevel": "application",
+      "prompt": "Use distributivity to find 2/3 × 5/9 - 2/3 × 2/9.",
+      "expectedAnswer": "2/9",
+      "hints": ["Both terms share the same factor of 2/3 — factor it out first.", "Subtract what's left inside the brackets: 5/9 - 2/9."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "distributivity"]
+    },
+    {
+      "id": "rn-q53",
+      "sourceRef": { "document": "ncert-class8-rational-numbers-ch1", "section": "1.2.6" },
+      "objectiveIds": ["obj-rn-distributivity"],
+      "bloomLevel": "application",
+      "prompt": "Use distributivity to find -5/7 × 3/11 + -5/7 × 8/11.",
+      "expectedAnswer": "-5/7",
+      "hints": ["Both terms share the same factor of -5/7 — factor it out first.", "Add what's left inside the brackets: 3/11 + 8/11."],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "distributivity"]
+    },
+    {
+      "id": "rn-q54",
+      "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
+      "objectiveIds": ["obj-rn-additive-inverse"],
+      "bloomLevel": "application",
+      "prompt": "What is the additive inverse of -9/10?",
+      "expectedAnswer": "9/10",
+      "hints": ["The additive inverse of a number, added to that number, gives 0.", "Flip the sign of -9/10."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "additive-inverse"]
+    },
+    {
+      "id": "rn-q55",
+      "sourceRef": { "document": "domain-knowledge", "section": "additive-inverse" },
+      "objectiveIds": ["obj-rn-additive-inverse"],
+      "bloomLevel": "application",
+      "prompt": "First write 6/-8 in standard form, then find its additive inverse.",
+      "expectedAnswer": "3/4",
+      "hints": ["Move the negative sign to the numerator, then simplify: 6/-8 = -6/8 = -3/4.", "Flip the sign of that standard-form fraction to get its additive inverse."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "additive-inverse", "standard-form"]
+    },
+    {
+      "id": "rn-q56",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
+      "bloomLevel": "application",
+      "prompt": "What is the reciprocal of -8/13?",
+      "expectedAnswer": "-13/8",
+      "hints": ["The reciprocal of a fraction swaps its numerator and denominator, keeping the sign.", "A number multiplied by its reciprocal always gives 1."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "reciprocal"]
+    },
+    {
+      "id": "rn-q57",
+      "sourceRef": { "document": "domain-knowledge", "section": "reciprocal" },
+      "objectiveIds": ["obj-rn-multiplicative-inverse"],
+      "bloomLevel": "synthesis",
+      "prompt": "The product of two rational numbers is 1. If one number is -6/11, what is the other?",
+      "expectedAnswer": "-11/6",
+      "hints": ["Two numbers whose product is 1 are reciprocals of each other.", "Swap the numerator and denominator of -6/11, keeping the sign."],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "reciprocal"],
+      "misconception": {
+        "commonWrongAnswer": "11/6, dropping the negative sign while swapping numerator and denominator.",
+        "why": "Focusing only on swapping the two numbers and forgetting the sign must be preserved for the product to come out positive.",
+        "remediationHint": "The reciprocal keeps the original sign: (-6/11) × (-11/6) = 66/66 = 1, which needs both factors negative."
+      }
+    },
+    {
+      "id": "rn-q58",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objectiveIds": ["obj-rn-mean-method"],
+      "bloomLevel": "application",
+      "prompt": "Which rational number lies exactly halfway between -1 and 0 on the number line?",
+      "expectedAnswer": "-1/2",
+      "hints": ["The halfway point between two numbers is their mean.", "Add -1 and 0, then divide by 2."],
+      "difficulty": "Easy",
+      "tags": ["rational-numbers", "number-line"]
+    },
+    {
+      "id": "rn-q59",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objectiveIds": ["obj-rn-mean-method"],
+      "bloomLevel": "application",
+      "prompt": "Which rational number lies exactly halfway between 2/5 and 4/5 on the number line?",
+      "expectedAnswer": "3/5",
+      "hints": ["The halfway point between two numbers is their mean.", "Add 2/5 and 4/5 (they already share a denominator), then divide by 2."],
+      "difficulty": "Medium",
+      "tags": ["rational-numbers", "number-line"]
+    },
+    {
+      "id": "rn-q60",
+      "sourceRef": { "document": "domain-knowledge", "section": "mean-method" },
+      "objectiveIds": ["obj-rn-between-two-rationals"],
+      "bloomLevel": "synthesis",
+      "prompt": "Find two different rational numbers between 1/4 and 1/2 using the mean method twice: first find the mean of 1/4 and 1/2, then find the mean of that result and 1/2.",
+      "expectedAnswer": "3/8 and 7/16",
+      "hints": ["First, find the mean of 1/4 and 1/2 — that is your first new number.", "Then find the mean of that new number and 1/2 — that is your second new number."],
+      "difficulty": "Hard",
+      "tags": ["rational-numbers", "mean-method", "between-two-rationals"]
     }
   ]
 }

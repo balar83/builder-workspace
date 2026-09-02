@@ -28,5 +28,10 @@
     "id": "squares-and-cubes",
     "title": "A Square and A Cube",
     "description": "Squares, square roots, cubes and cube roots, and how to find them."
+  },
+  {
+    "id": "exponents-and-powers",
+    "title": "Exponents and Powers",
+    "description": "Negative exponents, laws of exponents, and standard form for very small numbers."
   }
 ]
