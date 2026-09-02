@@ -166,6 +166,34 @@ export default function TopicPage() {
   const handlePractice = () =>
     navigate(fromDashboard ? `/practice/${topic.chapterId}` : `/question/${topic.chapterId}`);
 
+  // Jump-to-section nav (UX slice: reduce forced scrolling before a
+  // returning learner can act). Reuses each concept's *existing*
+  // `concept-heading-{id}` anchor — the same id the Dashboard's per-concept
+  // "Review" deep link already targets — so this adds a way to reach that
+  // anchor from within the page itself without touching the id a single
+  // external caller depends on. Only rendered with 2+ real targets; a
+  // one-link "nav" isn't worth the visual weight.
+  const sectionLinks = isStructured
+    ? topic.concepts.map((concept) => ({ id: `concept-heading-${concept.id}`, label: concept.title }))
+    : [
+        workedExamples.length > 0 ? { id: 'worked-examples-heading', label: 'Worked examples' } : null,
+        topic.learningObjectives.length > 0
+          ? { id: 'objectives-heading', label: 'What you should be able to do' }
+          : null,
+      ].filter((link): link is { id: string; label: string } => link !== null);
+
+  // First worked example on the page (in document order) starts expanded;
+  // every later one starts collapsed. A plain closure counter, not state —
+  // React only touches the DOM `open` attribute when this computed value
+  // actually changes between renders, so a learner's own manual
+  // expand/collapse of any `<details>` survives an incidental re-render.
+  let firstExampleOpened = false;
+  const isFirstExample = () => {
+    if (firstExampleOpened) return false;
+    firstExampleOpened = true;
+    return true;
+  };
+
   return (
     <main className="container topic-page">
       <div className="content-column">
@@ -183,6 +211,26 @@ export default function TopicPage() {
             )}
           </p>
         </header>
+
+        {sectionLinks.length > 1 && (
+          <nav className="topic-section-nav" aria-label="Jump to a section">
+            <span className="topic-section-nav-label">Jump to</span>
+            <ul className="topic-section-nav-list">
+              {sectionLinks.map((link) => (
+                <li key={link.id}>
+                  <a href={`#${link.id}`}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        <div className="topic-cta topic-cta-top">
+          <button type="button" className="btn-secondary" onClick={handlePractice}>
+            Start Practice →
+          </button>
+          <p className="topic-cta-note">Already familiar with this? Jump straight to practice.</p>
+        </div>
 
         {isStructured ? (
           topic.concepts.map((concept) => {
@@ -207,34 +255,44 @@ export default function TopicPage() {
                 </div>
 
                 {conceptExamples.map((example, index) => (
-                  <figure className="worked-example" key={example.id}>
-                    <figcaption className="worked-example-label">Example {index + 1}</figcaption>
+                  <details className="worked-example" key={example.id} open={isFirstExample()}>
+                    <summary className="worked-example-summary">
+                      <span className="worked-example-label">Example {index + 1}</span>
+                    </summary>
 
-                    <p className="worked-example-problem">{example.problem}</p>
+                    <div className="worked-example-body">
+                      <p className="worked-example-problem">{example.problem}</p>
 
-                    {example.steps.length > 0 && (
-                      <ol className="worked-example-steps">
-                        {example.steps.map((step, stepIndex) => (
-                          <li key={stepIndex}>{step}</li>
-                        ))}
-                      </ol>
-                    )}
+                      {example.steps.length > 0 && (
+                        <ol className="worked-example-steps">
+                          {example.steps.map((step, stepIndex) => (
+                            <li key={stepIndex}>{step}</li>
+                          ))}
+                        </ol>
+                      )}
 
-                    {example.finalAnswer && (
-                      <p className="worked-example-answer">
-                        <span className="worked-example-answer-label">Answer</span>
-                        {example.finalAnswer}
-                      </p>
-                    )}
-                  </figure>
+                      {example.finalAnswer && (
+                        <p className="worked-example-answer">
+                          <span className="worked-example-answer-label">Answer</span>
+                          {example.finalAnswer}
+                        </p>
+                      )}
+                    </div>
+                  </details>
                 ))}
 
                 {concept.learningObjectives.length > 0 && (
-                  <ul className="topic-objectives">
-                    {concept.learningObjectives.map((objective) => (
-                      <li key={objective.id}>{objective.text}</li>
-                    ))}
-                  </ul>
+                  <details className="topic-objectives-details">
+                    <summary className="topic-objectives-summary">
+                      Learning objectives
+                      <span className="topic-objectives-count">{concept.learningObjectives.length}</span>
+                    </summary>
+                    <ul className="topic-objectives">
+                      {concept.learningObjectives.map((objective) => (
+                        <li key={objective.id}>{objective.text}</li>
+                      ))}
+                    </ul>
+                  </details>
                 )}
               </section>
             );
@@ -254,44 +312,51 @@ export default function TopicPage() {
                 </h2>
 
                 {workedExamples.map((example, index) => (
-                  <figure className="worked-example" key={index}>
-                    <figcaption className="worked-example-label">
-                      Example {index + 1}
-                    </figcaption>
+                  <details className="worked-example" key={index} open={isFirstExample()}>
+                    <summary className="worked-example-summary">
+                      <span className="worked-example-label">Example {index + 1}</span>
+                    </summary>
 
-                    {example.problem && (
-                      <p className="worked-example-problem">{example.problem}</p>
-                    )}
+                    <div className="worked-example-body">
+                      {example.problem && (
+                        <p className="worked-example-problem">{example.problem}</p>
+                      )}
 
-                    {example.steps.length > 0 && (
-                      <ol className="worked-example-steps">
-                        {example.steps.map((step, stepIndex) => (
-                          <li key={stepIndex}>{step.replace(/^Step\s+\d+:\s*/i, '')}</li>
-                        ))}
-                      </ol>
-                    )}
+                      {example.steps.length > 0 && (
+                        <ol className="worked-example-steps">
+                          {example.steps.map((step, stepIndex) => (
+                            <li key={stepIndex}>{step.replace(/^Step\s+\d+:\s*/i, '')}</li>
+                          ))}
+                        </ol>
+                      )}
 
-                    {example.answer && (
-                      <p className="worked-example-answer">
-                        <span className="worked-example-answer-label">Answer</span>
-                        {example.answer}
-                      </p>
-                    )}
-                  </figure>
+                      {example.answer && (
+                        <p className="worked-example-answer">
+                          <span className="worked-example-answer-label">Answer</span>
+                          {example.answer}
+                        </p>
+                      )}
+                    </div>
+                  </details>
                 ))}
               </section>
             )}
 
             {topic.learningObjectives.length > 0 && (
-              <section className="topic-section" aria-labelledby="objectives-heading">
-                <h2 id="objectives-heading" className="topic-section-heading">
-                  What you should be able to do
-                </h2>
-                <ul className="topic-objectives">
-                  {topic.learningObjectives.map((objective) => (
-                    <li key={objective}>{objective}</li>
-                  ))}
-                </ul>
+              <section className="topic-section">
+                <details id="objectives-heading" className="topic-objectives-details">
+                  <summary className="topic-objectives-summary">
+                    <span className="topic-section-heading topic-objectives-heading">
+                      What you should be able to do
+                    </span>
+                    <span className="topic-objectives-count">{topic.learningObjectives.length}</span>
+                  </summary>
+                  <ul className="topic-objectives">
+                    {topic.learningObjectives.map((objective) => (
+                      <li key={objective}>{objective}</li>
+                    ))}
+                  </ul>
+                </details>
               </section>
             )}
           </>
