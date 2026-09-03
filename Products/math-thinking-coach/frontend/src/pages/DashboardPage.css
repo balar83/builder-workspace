@@ -50,3 +50,20 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Progress Hub V1 - additive section below the existing chapter grid. */
+.dashboard-progress-section {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-align: left;
+}
+
+.dashboard-progress-subheading {
+  margin-top: var(--space-6);
+  font-size: var(--text-lg);
+}

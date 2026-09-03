@@ -2,7 +2,7 @@ import logging
 import os
 import sqlite3
 import threading
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission
@@ -198,3 +198,69 @@ def get_recent_question_ids(student_id: str, chapter_id: str, limit: int = 10) -
             conn.close()
 
     return [row[0] for row in rows]
+
+
+def get_recent_attempts(student_id: str, since_days: int = 8) -> list[dict]:
+    """
+    Raw (question_id, chapter_id, is_correct, created_at) rows, deliberately
+    NOT grouped by day here - created_at is server UTC only (no learner-local
+    offset is ever stored), so day-bucketing must happen client-side against
+    the browser's own local timezone (Progress Hub V1 timezone decision).
+    since_days=8 (not 7) is a deliberate one-day buffer: local calendar-day
+    boundaries can sit up to ~14h ahead of or ~12h behind UTC depending on
+    the learner's timezone, so an 8-day UTC window is guaranteed to be a
+    superset of any real local 7-day rolling window - the caller trims to
+    the exact 7 local days after bucketing.
+    """
+    cutoff = (datetime.now(UTC) - timedelta(days=since_days)).isoformat()
+    with _lock:
+        conn = _get_connection()
+        try:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                """
+                SELECT question_id, chapter_id, is_correct, created_at FROM attempts
+                WHERE student_id = ? AND created_at >= ?
+                ORDER BY created_at
+                """,
+                (student_id, cutoff),
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [dict(row) for row in rows]
+
+
+def get_chapter_activity_raw(student_id: str) -> list[dict]:
+    """
+    Lifetime, chapter-keyed aggregate for the Progress Hub - deliberately NOT
+    topic-scoped (unlike get_performance's `topic_id IS NOT NULL` filter), so
+    every chapter is included, including one with no Topic (Practical
+    Geometry). Deliberately distinct-question-counted throughout (unlike
+    get_performance's row-counting, where a retried question inflates both
+    questionsAttempted and, if eventually correct, questionsCorrect):
+    questions_correct here means "eventually solved correctly" - a question
+    counts once if ANY of its attempts in this chapter was correct, per the
+    approved V1 product definition.
+    """
+    with _lock:
+        conn = _get_connection()
+        try:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                """
+                SELECT
+                    chapter_id,
+                    COUNT(DISTINCT question_id) AS questions_attempted,
+                    COUNT(DISTINCT CASE WHEN is_correct THEN question_id END) AS questions_correct,
+                    MAX(created_at) AS last_activity_at
+                FROM attempts
+                WHERE student_id = ?
+                GROUP BY chapter_id
+                """,
+                (student_id,),
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [dict(row) for row in rows]

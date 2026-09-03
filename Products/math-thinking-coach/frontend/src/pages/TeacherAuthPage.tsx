@@ -37,7 +37,10 @@ export default function TeacherAuthPage() {
       .getCurrentUser()
       .then((user) => {
         if (!cancelled && user?.role === 'teacher') {
-          setTeacher({ name: user.name });
+          // A teacher CurrentUser always carries a real name server-side;
+          // the ?? '' only satisfies CurrentUser.name's now-nullable type
+          // (added for SelfServeLearner, which has no display name).
+          setTeacher({ name: user.name ?? '' });
         }
       })
       .catch(() => {

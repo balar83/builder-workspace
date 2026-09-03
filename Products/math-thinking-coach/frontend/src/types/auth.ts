@@ -21,5 +21,7 @@ export interface StudentProfile {
 export interface CurrentUser {
   role: UserRole;
   id: string;
-  name: string;
+  // null for a self-serve learner (SelfServeLearner has no display name to
+  // report) - existing teacher/student callers always still get a string.
+  name: string | null;
 }

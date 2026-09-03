@@ -3,16 +3,28 @@ import secrets
 import string
 import threading
 import uuid
+from datetime import UTC, datetime
 from pathlib import Path
 
 import bcrypt
 
-from app.schemas.user import ClassGroup, Student, Teacher
+from app.schemas.user import ClassGroup, SelfServeLearner, Student, Teacher
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 TEACHERS_PATH = DATA_DIR / "teachers.json"
 CLASSES_PATH = DATA_DIR / "classes.json"
 STUDENTS_PATH = DATA_DIR / "students.json"
+# Separate store on purpose - a SelfServeLearner is not a class-membership
+# record (see SelfServeLearner's own docstring). Same file-store convention
+# (_read_store/_write_store) as teachers/classes/students.
+LEARNERS_PATH = DATA_DIR / "learners.json"
+
+# Student/Teacher ids are plain uuid4().hex (32 lowercase hex chars, never
+# containing "_"). Prefixing self-serve learner ids makes the two id spaces
+# structurally disjoint - not just collision-improbable - so any future
+# lookup can tell the two apart by construction, not by hoping a 128-bit
+# random value never collides.
+_LEARNER_ID_PREFIX = "learner_"
 
 _lock = threading.Lock()
 
@@ -179,3 +191,27 @@ def get_student(student_id: str) -> Student | None:
     students = _read_store(STUDENTS_PATH)
     record = next((s for s in students if s["id"] == student_id), None)
     return Student(**record) if record else None
+
+
+def create_self_serve_learner() -> SelfServeLearner:
+    """
+    Mint-only - no credential is collected or checked, deliberately (see
+    SelfServeLearner's docstring). Callers are responsible for not calling this
+    more than once per browser/session; routes/auth.py's start route guards
+    this by checking for an existing valid session first.
+    """
+    with _lock:
+        learners = _read_store(LEARNERS_PATH)
+        learner = SelfServeLearner(
+            id=f"{_LEARNER_ID_PREFIX}{uuid.uuid4().hex}",
+            createdAt=datetime.now(UTC).isoformat(),
+        )
+        learners.append(learner.model_dump())
+        _write_store(LEARNERS_PATH, learners)
+        return learner
+
+
+def get_self_serve_learner(learner_id: str) -> SelfServeLearner | None:
+    learners = _read_store(LEARNERS_PATH)
+    record = next((item for item in learners if item["id"] == learner_id), None)
+    return SelfServeLearner(**record) if record else None

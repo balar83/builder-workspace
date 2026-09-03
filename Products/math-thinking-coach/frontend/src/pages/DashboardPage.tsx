@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ChapterActivityList from '../components/ChapterActivityList';
 import ChapterPerformanceCard from '../components/ChapterPerformanceCard';
+import DailyActivityChart from '../components/DailyActivityChart';
 import ResumeBanner from '../components/ResumeBanner';
+import { activityService } from '../services/activityService';
 import { authService } from '../services/authService';
+import { buildDailyActivity } from '../services/dailyActivity';
 import { performanceService } from '../services/performanceService';
 import { questionService } from '../services/questionService';
 import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
+import type { ChapterActivity } from '../types/activity';
 import type { Chapter } from '../types/chapter';
 import type { TopicPerformance } from '../types/performance';
 import type { SessionPointer } from '../types/sessionPointer';
@@ -25,6 +30,12 @@ interface DashboardData {
   studentName: string;
   chapters: ChapterWithPerformance[];
   resume?: { pointer: SessionPointer; chapterTitle: string };
+  // Progress Hub V1 (additive): dailyActivity is built client-side from the
+  // raw, un-bucketed recentAttempts the backend returns - the backend
+  // deliberately does no day-grouping (timezone decision), so this must
+  // happen here, against the browser's own local calendar days.
+  dailyActivity: ReturnType<typeof buildDailyActivity>;
+  chapterActivity: ChapterActivity[];
 }
 
 // GET /performance/me is keyed by topicId, not chapterId (attempt_service
@@ -32,10 +43,11 @@ interface DashboardData {
 // looking up that chapter's topic first. Only chapters with a Topic can ever
 // show a performance badge; chapters without one legitimately never will.
 async function loadDashboard(): Promise<DashboardData> {
-  const [user, chapters, performanceList] = await Promise.all([
+  const [user, chapters, performanceList, activity] = await Promise.all([
     authService.getCurrentUser(),
     questionService.getChapters(),
     performanceService.getMyPerformance(),
+    activityService.getMyActivity(),
   ]);
 
   const topicsPerChapter = await Promise.all(
@@ -56,6 +68,10 @@ async function loadDashboard(): Promise<DashboardData> {
     studentName: user?.name ?? '',
     chapters: chaptersWithPerformance,
     resume,
+    // Bucketed here, client-side, against the browser's own local calendar
+    // days - the backend's recentAttempts is deliberately raw/un-bucketed.
+    dailyActivity: buildDailyActivity(activity.recentAttempts),
+    chapterActivity: activity.chapterActivity,
   };
 }
 
@@ -163,6 +179,19 @@ export default function DashboardPage() {
           />
         ))}
       </div>
+
+      {/* Progress Hub V1: additive section, doesn't disturb the chapter
+          grid above. Activity (questions practiced) is the primary signal
+          throughout; correctness is shown only as smaller, secondary text -
+          this is a practice-consistency view, not a score report. */}
+      <section className="dashboard-progress-section">
+        <h2>Your Progress</h2>
+        <p className="tagline">The last 7 days of practice.</p>
+        <DailyActivityChart days={data.dailyActivity} />
+
+        <h3 className="dashboard-progress-subheading">By Chapter</h3>
+        <ChapterActivityList chapters={data.chapterActivity} />
+      </section>
     </main>
   );
 }

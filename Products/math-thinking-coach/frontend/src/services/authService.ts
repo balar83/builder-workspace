@@ -87,6 +87,24 @@ async function loginStudent(
   return response.json();
 }
 
+// Establishes a self-serve learner session (no class/teacher relationship).
+// The backend route is itself idempotent - it returns the existing identity
+// unchanged if the caller already holds a valid student-role session - but a
+// caller here should still check getCurrentUser() first and only call this
+// when it resolves to undefined, per the approved "no appropriate session ->
+// create; existing session -> preserve" flow. No page currently calls this;
+// wiring a real entry point is a separate, deferred product decision.
+async function startLearner(): Promise<CurrentUser> {
+  const response = await fetch(`${API_BASE_URL}/auth/learner/start`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response, 'Failed to start learner session'));
+  }
+  return response.json();
+}
+
 async function logout(): Promise<void> {
   await fetch(`${API_BASE_URL}/auth/logout`, {
     method: 'POST',
@@ -113,6 +131,7 @@ export const authService = {
   createClass,
   joinClass,
   loginStudent,
+  startLearner,
   logout,
   getCurrentUser,
 };

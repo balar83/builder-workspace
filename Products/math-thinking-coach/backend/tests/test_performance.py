@@ -63,3 +63,136 @@ def test_performance_returns_the_logged_in_students_own_data() -> None:
         assert len(body) == 1
         assert body[0]["topicId"] == "topic-a"
         assert body[0]["questionsAttempted"] == 1
+
+
+# --- /performance/me/activity (Progress Hub V1) -----------------------------
+
+
+def test_activity_requires_a_student_session() -> None:
+    response = client.get("/api/v1/performance/me/activity")
+
+    assert response.status_code == 401
+
+
+def test_teacher_session_cannot_read_student_activity() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher6@example.com", "password": "correct-horse", "name": "T"},
+        )
+
+        response = session_client.get("/api/v1/performance/me/activity")
+
+        assert response.status_code == 401
+
+
+def test_activity_returns_the_logged_in_students_own_data_with_the_expected_shape() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher7@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section D"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Dev", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-a", difficulty="Easy", is_correct=True, attempt_number=1,
+        )
+
+        response = student_client.get("/api/v1/performance/me/activity")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert set(body.keys()) == {"recentAttempts", "chapterActivity"}
+
+        assert len(body["recentAttempts"]) == 1
+        assert set(body["recentAttempts"][0].keys()) == {"questionId", "chapterId", "isCorrect", "createdAt"}
+        assert body["recentAttempts"][0]["questionId"] == "rn-q01"
+
+        # Every curriculum chapter is listed, not just ones with activity
+        # (approved V1 UX decision) - 7 real chapters, only one of which
+        # (rational-numbers) has a real attempt here.
+        assert len(body["chapterActivity"]) == 7
+        assert set(body["chapterActivity"][0].keys()) == {
+            "chapterId", "chapterTitle", "questionsAttempted",
+            "questionsCorrect", "accuracy", "lastActivityAt",
+        }
+        rational_numbers = next(c for c in body["chapterActivity"] if c["chapterId"] == "rational-numbers")
+        assert rational_numbers["questionsAttempted"] == 1
+
+        zero_activity_chapter = next(c for c in body["chapterActivity"] if c["chapterId"] == "practical-geometry")
+        assert zero_activity_chapter["questionsAttempted"] == 0
+        assert zero_activity_chapter["questionsCorrect"] == 0
+        assert zero_activity_chapter["accuracy"] == 0.0
+        assert zero_activity_chapter["lastActivityAt"] is None
+
+
+def test_activity_lists_all_curriculum_chapters_zero_filled_for_a_student_with_no_attempts() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher8@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section E"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Ela", "pin": "1234"},
+        )
+
+        response = student_client.get("/api/v1/performance/me/activity")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert body["recentAttempts"] == []
+        assert len(body["chapterActivity"]) == 7
+        assert all(c["questionsAttempted"] == 0 for c in body["chapterActivity"])
+        assert all(c["lastActivityAt"] is None for c in body["chapterActivity"])
+        assert {c["chapterId"] for c in body["chapterActivity"]} == {
+            "rational-numbers", "linear-equations", "understanding-quadrilaterals",
+            "practical-geometry", "data-handling", "squares-and-cubes", "exponents-and-powers",
+        }
+
+
+def test_existing_performance_and_concept_contracts_are_unchanged_by_the_new_activity_endpoint() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher9@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section F"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Fahim", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="le-q01", chapter_id="linear-equations",
+            topic_id="topic-linear-equations-one-variable", difficulty="Easy",
+            is_correct=True, attempt_number=1,
+        )
+
+        performance_response = student_client.get("/api/v1/performance/me")
+        concepts_response = student_client.get("/api/v1/performance/me/concepts")
+
+        assert performance_response.status_code == 200
+        assert set(performance_response.json()[0].keys()) == {
+            "topicId", "questionsAttempted", "questionsCorrect",
+            "accuracy", "currentStreak", "mastered",
+        }
+        assert concepts_response.status_code == 200
+        assert set(concepts_response.json()[0].keys()) == {
+            "conceptId", "conceptTitle", "topicId", "chapterId",
+            "questionsAttempted", "questionsCorrect", "accuracy",
+        }

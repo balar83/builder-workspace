@@ -69,7 +69,28 @@ class StudentPublic(BaseModel):
     displayName: str
 
 
+class SelfServeLearner(BaseModel):
+    """
+    Minimal, transitional base identity for a learner with no class/teacher
+    relationship (Option 3 of the approved identity-shape analysis). Deliberately
+    thin: no password/PIN/email - nothing to authenticate against, since identity
+    continuity for this slice comes from the signed session cookie alone (see
+    ADR-004's SessionMiddleware). Persisted (not just cookie-held) so a real row
+    exists for any future recovery/linking mechanism to attach to. Stored
+    separately from Student on purpose - it is not a class-membership record and
+    must never be conflated with one. Id is namespaced ("learner_" prefix,
+    reusing uuid4().hex) so it is structurally, not just probabilistically,
+    disjoint from Student/Teacher ids (plain uuid4().hex, never containing "_").
+    """
+
+    id: str
+    createdAt: str
+
+
 class CurrentUser(BaseModel):
     role: Literal["teacher", "student"]
     id: str
-    name: str
+    # Optional: a SelfServeLearner has no display name to report (no join-time
+    # name collection exists for it). Existing teacher/student callers are
+    # unaffected - both still always populate this.
+    name: str | None = None
