@@ -77,4 +77,35 @@ describe('ChapterPerformanceCard', () => {
 
     expect(mockNavigate).toHaveBeenCalledWith('/topic/topic-linear-equations?from=dashboard');
   });
+
+  // Self-Serve Learning Loop V1, Slice 1: discoverability CTA into Revision.
+  describe('weak-area Revision CTA', () => {
+    it('shows no CTA when there is no weak-topic evidence', () => {
+      render(<ChapterPerformanceCard chapter={chapter} hasWeakEvidence={false} />);
+
+      expect(screen.queryByRole('button', { name: 'Practise your weak areas' })).toBeNull();
+    });
+
+    it('shows no CTA when hasWeakEvidence is not provided at all', () => {
+      render(<ChapterPerformanceCard chapter={chapter} />);
+
+      expect(screen.queryByRole('button', { name: 'Practise your weak areas' })).toBeNull();
+    });
+
+    it('shows the CTA when genuine weak-topic evidence exists', () => {
+      render(<ChapterPerformanceCard chapter={chapter} hasWeakEvidence={true} />);
+
+      expect(screen.getByRole('button', { name: 'Practise your weak areas' })).toBeInTheDocument();
+    });
+
+    it('navigates into Start Practice with Revision preselected via navigation state', () => {
+      render(<ChapterPerformanceCard chapter={chapter} hasWeakEvidence={true} />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Practise your weak areas' }));
+
+      expect(mockNavigate).toHaveBeenCalledWith('/practice/linear-equations', {
+        state: { presetMode: 'revision' },
+      });
+    });
+  });
 });

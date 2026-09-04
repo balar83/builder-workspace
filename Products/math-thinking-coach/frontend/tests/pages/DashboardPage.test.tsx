@@ -137,4 +137,61 @@ describe('DashboardPage', () => {
 
     expect(await screen.findByText('No chapters practiced yet.')).toBeInTheDocument();
   });
+
+  // Self-Serve Learning Loop V1, Slice 1: the weak-topic CTA must appear
+  // only for genuine weak-topic evidence (accuracy below threshold, not
+  // mastered) - not merely "attempted" or "not perfect."
+  describe('weak-area Revision CTA wiring', () => {
+    it('shows the CTA for a chapter whose topic accuracy is below the weak-topic threshold', async () => {
+      setUpDefaultMocks();
+      vi.mocked(questionService.getTopics).mockResolvedValue([
+        { id: 'topic-rn', chapterId: 'rational-numbers', title: 'RN', concepts: [] } as never,
+      ]);
+      vi.mocked(performanceService.getMyPerformance).mockResolvedValue([
+        {
+          topicId: 'topic-rn',
+          questionsAttempted: 4,
+          questionsCorrect: 1,
+          accuracy: 0.25,
+          currentStreak: 0,
+          mastered: false,
+        },
+      ]);
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByRole('button', { name: 'Practise your weak areas' })).toBeInTheDocument();
+    });
+
+    it('does not show the CTA for a chapter with high accuracy', async () => {
+      setUpDefaultMocks();
+      vi.mocked(questionService.getTopics).mockResolvedValue([
+        { id: 'topic-rn', chapterId: 'rational-numbers', title: 'RN', concepts: [] } as never,
+      ]);
+      vi.mocked(performanceService.getMyPerformance).mockResolvedValue([
+        {
+          topicId: 'topic-rn',
+          questionsAttempted: 4,
+          questionsCorrect: 4,
+          accuracy: 1,
+          currentStreak: 4,
+          mastered: true,
+        },
+      ]);
+
+      render(<DashboardPage />);
+
+      await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 });
+      expect(screen.queryByRole('button', { name: 'Practise your weak areas' })).toBeNull();
+    });
+
+    it('does not show the CTA for a chapter with no recorded performance yet', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 });
+      expect(screen.queryByRole('button', { name: 'Practise your weak areas' })).toBeNull();
+    });
+  });
 });

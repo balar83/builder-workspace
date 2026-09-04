@@ -13,14 +13,27 @@ export interface ChapterPerformanceCardProps {
   // from the anonymous chapter page, so a logged-in student could never
   // see the teaching content at all.
   topicId?: string;
+  // Self-Serve Learning Loop V1, Slice 1: true only when this chapter's
+  // topic meets the same weak-topic definition the Revision engine itself
+  // uses (learning_context_service.WEAK_ACCURACY_THRESHOLD) - the caller
+  // (DashboardPage) computes this from data it already fetches. Undefined/
+  // false renders no CTA at all - never a placeholder for "not weak yet."
+  hasWeakEvidence?: boolean;
 }
 
 export default function ChapterPerformanceCard({
   chapter,
   performance,
   topicId,
+  hasWeakEvidence,
 }: ChapterPerformanceCardProps) {
   const navigate = useNavigate();
+
+  // Deep-links into the existing Start Practice configuration flow with
+  // Revision preselected (StartPracticePage reads this via navigation
+  // state) - reuses that page/form entirely, no parallel session path.
+  const practiseWeakAreas = () =>
+    navigate(`/practice/${chapter.id}`, { state: { presetMode: 'revision' } });
 
   return (
     <div className="chapter-card chapter-performance-card">
@@ -56,6 +69,15 @@ export default function ChapterPerformanceCard({
         >
           Start Practice
         </button>
+        {hasWeakEvidence && (
+          <button
+            type="button"
+            className="btn-secondary chapter-revision-button"
+            onClick={practiseWeakAreas}
+          >
+            Practise your weak areas
+          </button>
+        )}
       </div>
     </div>
   );

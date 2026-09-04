@@ -18,7 +18,8 @@
 }
 
 .chapter-learn-button,
-.start-practice-button {
+.start-practice-button,
+.chapter-revision-button {
   min-height: var(--control-height);
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);

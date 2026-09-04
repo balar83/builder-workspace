@@ -17,6 +17,18 @@ import type { TopicPerformance } from '../types/performance';
 import type { SessionPointer } from '../types/sessionPointer';
 import './DashboardPage.css';
 
+// Self-Serve Learning Loop V1, Slice 1: mirrors
+// learning_context_service.WEAK_ACCURACY_THRESHOLD exactly - deliberately
+// duplicated (not fetched from any endpoint) the same way Progress Hub V1
+// already duplicates day-bucketing logic client-side rather than adding a
+// new API purely to expose one derived boolean. If the server-side
+// threshold ever changes, this constant must change with it.
+const WEAK_ACCURACY_THRESHOLD = 0.6;
+
+function isWeakTopic(performance?: TopicPerformance): boolean {
+  return !!performance && !performance.mastered && performance.accuracy < WEAK_ACCURACY_THRESHOLD;
+}
+
 interface ChapterWithPerformance {
   chapter: Chapter;
   performance?: TopicPerformance;
@@ -24,6 +36,9 @@ interface ChapterWithPerformance {
   // offer a Learn action (IA-1). The topic lookup below already happened
   // for the performance correlation; this just stops discarding its id.
   topicId?: string;
+  // Self-Serve Learning Loop V1, Slice 1: same weak-topic definition the
+  // Revision engine itself uses - see isWeakTopic above.
+  hasWeakEvidence: boolean;
 }
 
 interface DashboardData {
@@ -59,7 +74,7 @@ async function loadDashboard(): Promise<DashboardData> {
   const chaptersWithPerformance = chapters.map((chapter, index) => {
     const topics = topicsPerChapter[index];
     const performance = topics.length > 0 ? performanceByTopicId.get(topics[0].id) : undefined;
-    return { chapter, performance, topicId: topics[0]?.id };
+    return { chapter, performance, topicId: topics[0]?.id, hasWeakEvidence: isWeakTopic(performance) };
   });
 
   const resume = user?.id ? await resolveResume(user.id, chapters) : undefined;
@@ -170,12 +185,13 @@ export default function DashboardPage() {
       )}
 
       <div className="chapter-grid">
-        {data.chapters.map(({ chapter, performance, topicId }) => (
+        {data.chapters.map(({ chapter, performance, topicId, hasWeakEvidence }) => (
           <ChapterPerformanceCard
             key={chapter.id}
             chapter={chapter}
             performance={performance}
             topicId={topicId}
+            hasWeakEvidence={hasWeakEvidence}
           />
         ))}
       </div>

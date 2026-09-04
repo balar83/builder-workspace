@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import BackLink from '../components/BackLink';
 import SessionModeSelector, { type SessionConfig } from '../components/SessionModeSelector';
 import { authService } from '../services/authService';
@@ -7,6 +7,7 @@ import { questionService } from '../services/questionService';
 import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type { Chapter } from '../types/chapter';
+import type { SessionMode } from '../types/session';
 import './StartPracticePage.css';
 
 const DEFAULT_CONFIG: SessionConfig = {
@@ -16,12 +17,28 @@ const DEFAULT_CONFIG: SessionConfig = {
   timeLimitMinutes: 15,
 };
 
+// Self-Serve Learning Loop V1, Slice 1: a Dashboard CTA ("Practise your weak
+// areas") can deep-link here with a preselected mode via navigation state -
+// the exact same mechanism this page already uses when it navigates onward
+// to /session/:sessionId with a shortfallMessage. This reuses the existing
+// configuration form/flow rather than bypassing it: the learner still sees
+// and can change every field, just starting from Revision instead of the
+// generic default.
+interface StartPracticeNavigationState {
+  presetMode?: SessionMode;
+}
+
 export default function StartPracticePage() {
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const presetMode = (location.state as StartPracticeNavigationState | null)?.presetMode;
 
   const [chapter, setChapter] = useState<Chapter | undefined>(undefined);
-  const [config, setConfig] = useState<SessionConfig>(DEFAULT_CONFIG);
+  const [config, setConfig] = useState<SessionConfig>(
+    presetMode ? { ...DEFAULT_CONFIG, mode: presetMode } : DEFAULT_CONFIG,
+  );
   const [maxQuestionCount, setMaxQuestionCount] = useState<number | undefined>(undefined);
   const [validationError, setValidationError] = useState('');
   const [submitError, setSubmitError] = useState('');
