@@ -8,6 +8,7 @@ import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
 import QuestionProgress from '../components/QuestionProgress';
 import QuestionResponseInput from '../components/QuestionResponseInput';
+import RemediationPanel from '../components/RemediationPanel';
 import SessionCompleteSummary from '../components/SessionCompleteSummary';
 import SolutionPanel from '../components/SolutionPanel';
 import { sessionPointerService } from '../services/sessionPointerService';
@@ -410,6 +411,12 @@ export default function SessionQuestionPage() {
         )}
 
         <HintPanel hints={content.hints} currentHintIndex={currentHintIndex} />
+        {feedback?.remediation && (
+          <RemediationPanel
+            why={feedback.remediation.why}
+            remediationHint={feedback.remediation.remediationHint}
+          />
+        )}
         {showSolution && <SolutionPanel solution={content.solution} />}
 
         {questionEnded && (

@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from app.schemas.answer import Coach, EvaluationResult, UiState
+from app.schemas.answer import Coach, EvaluationResult, RemediationFeedback, UiState
 from app.schemas.question import Difficulty, QuestionType, ResponseSpecification
 
 Mode = Literal["practice", "test", "revision"]
@@ -222,6 +222,11 @@ class SubmitSessionAnswerResponse(BaseModel):
     evaluation: EvaluationResult
     coach: Coach
     ui: UiState
+    # Additive, optional (Self-Serve Learning Loop V1, Slice 5). Threads the
+    # same field answers.py's AnswerEvaluationResponse carries - see
+    # answer_service._build_remediation for the eligibility rule; the
+    # session flow applies it identically, no separate gating logic.
+    remediation: RemediationFeedback | None = None
     position: int
     totalCount: int
     sessionStatus: SessionStatus

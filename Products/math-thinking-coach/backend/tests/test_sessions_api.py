@@ -4,7 +4,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.services import attempt_service, auth_service, session_store
+from app.schemas.question import Question, QuestionRemediation
+from app.services import attempt_service, auth_service, evaluation_service, question_service, session_store
 
 client = TestClient(app)
 
@@ -291,3 +292,103 @@ def test_session_summary_reports_no_time_limit_for_practice_mode() -> None:
 
     assert summary.status_code == 200
     assert summary.json()["timeLimitMinutes"] is None
+
+
+# --- Self-Serve Learning Loop V1, Slice 5: remediation threaded through the
+# session answer response --------------------------------------------------
+#
+# session_builder's real selection is randomized over the whole chapter
+# pool, so a session is built directly here (session_store.insert_session)
+# with a single synthetic, remediation-carrying question at position 0 -
+# the same "inject synthetic state, drive the real route" technique
+# test_answers.py already uses for its single_choice tests - proving the
+# real GET current-question / POST answer route pair, not session_builder's
+# selection logic (already covered elsewhere).
+
+
+def _seed_single_question_session(student_id: str, question: Question) -> str:
+    from datetime import datetime, timezone
+
+    from app.schemas.session import LearningSession, SelectedQuestion, SessionPlan, SessionState
+    from app.services import session_store
+
+    now = datetime.now(timezone.utc).isoformat()
+    session_id = f"test-session-{question.id}"
+    session_store.insert_session(
+        LearningSession(
+            sessionId=session_id,
+            studentId=student_id,
+            chapterId=question.chapterId,
+            plan=SessionPlan(
+                planId=session_id,
+                studentId=student_id,
+                chapterId=question.chapterId,
+                mode="practice",
+                difficultyDistribution={"Easy": 1, "Medium": 0, "Hard": 0},
+                questionTypes=None,
+                targetCount=1,
+                timeLimitMinutes=None,
+                weakConceptTopicIds=[],
+                seed="test-seed",
+            ),
+            selectedQuestions=[
+                SelectedQuestion(position=0, questionId=question.id, difficulty=question.difficulty, type=None)
+            ],
+            state=SessionState(
+                status="not_started",
+                currentPosition=0,
+                attemptsOnCurrentQuestion=0,
+                correctCount=0,
+                hintsUsedTotal=0,
+                startedAt=None,
+                lastActivityAt=now,
+                completedAt=None,
+            ),
+            createdAt=now,
+        )
+    )
+    return session_id
+
+
+@pytest.fixture
+def _synthetic_session_question_with_remediation(monkeypatch: pytest.MonkeyPatch) -> Question:
+    question = Question(
+        id="test-remediation-session-api",
+        chapterId="rational-numbers",
+        question="What is -2 + 5?",
+        text="What is -2 + 5?",
+        difficulty="Easy",
+        hints=["Think of a number line."],
+        solution="3",
+        remediation=QuestionRemediation(
+            why="Students often mix up the sign.",
+            remediationHint="Check the sign before combining terms.",
+        ),
+    )
+    monkeypatch.setattr(question_service, "_questions", question_service._questions + [question])
+    monkeypatch.setitem(evaluation_service._answer_keys, question.id, "3")
+    return question
+
+
+def test_session_answer_response_exposes_remediation_when_eligible(
+    _synthetic_session_question_with_remediation: Question,
+) -> None:
+    question = _synthetic_session_question_with_remediation
+    student = _student_client()
+    student_id = student.get("/api/v1/auth/me").json()["id"]
+    session_id = _seed_single_question_session(student_id, question)
+
+    student.get(f"/api/v1/sessions/{session_id}/current-question")
+    first = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": "wrong"})
+    assert first.status_code == 200
+    assert first.json()["remediation"] is None  # first wrong attempt: TRY_AGAIN, not yet eligible
+
+    second = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": "wrong"})
+
+    assert second.status_code == 200
+    body = second.json()
+    assert body["coach"]["nextAction"] == "SHOW_HINT"
+    assert body["remediation"] == {
+        "why": "Students often mix up the sign.",
+        "remediationHint": "Check the sign before combining terms.",
+    }

@@ -206,6 +206,29 @@ function transformQuestion(canonicalQuestion, context) {
     question.objectiveIds = objectiveIds;
   }
 
+  // Additive, optional (Self-Serve Learning Loop V1, Slice 5) - only set
+  // when the canonical question actually carries authored `misconception`
+  // content. Authored coverage is uneven across chapters today (some
+  // fully authored, some barely at all) - this whitelist preserves that
+  // reality exactly, never fabricating a value for a question that has
+  // none. `why`/`remediationHint` are always present together on a real
+  // canonical `misconception` object; `commonWrongOptionId` is present
+  // only for some single_choice questions with one specific authored
+  // distractor. `commonWrongAnswer` is deliberately NOT carried through -
+  // it's an authoring/matching aid, not learner-facing content (see
+  // answer_service.py's remediation-eligibility rule for how
+  // commonWrongOptionId is actually used).
+  if (canonicalQuestion.misconception !== undefined) {
+    const remediation = {
+      why: canonicalQuestion.misconception.why,
+      remediationHint: canonicalQuestion.misconception.remediationHint,
+    };
+    if (canonicalQuestion.misconception.commonWrongOptionId !== undefined) {
+      remediation.commonWrongOptionId = canonicalQuestion.misconception.commonWrongOptionId;
+    }
+    question.remediation = remediation;
+  }
+
   return question;
 }
 

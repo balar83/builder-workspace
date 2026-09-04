@@ -96,3 +96,66 @@ test('transformQuestion: omits objectiveIds entirely when the canonical question
   );
   assert.equal('objectiveIds' in result, false);
 });
+
+// --- Self-Serve Learning Loop V1, Slice 5: remediation ---------------------
+
+test('transformQuestion: maps authored misconception to a runtime remediation object, including commonWrongOptionId when present', () => {
+  const result = transformQuestion(
+    {
+      id: 'q1', prompt: 'P?', expectedAnswer: 'A', hints: [], difficulty: 'Easy',
+      misconception: {
+        commonWrongAnswer: 'wrong text',
+        why: 'Why this is wrong.',
+        remediationHint: 'Do this instead.',
+        commonWrongOptionId: 'opt-a',
+      },
+    },
+    { chapterId: 'fixture-chapter', topicId: 'topic-fixture' }
+  );
+
+  assert.deepEqual(result.remediation, {
+    why: 'Why this is wrong.',
+    remediationHint: 'Do this instead.',
+    commonWrongOptionId: 'opt-a',
+  });
+});
+
+test('transformQuestion: maps authored misconception without commonWrongOptionId (no per-distractor data)', () => {
+  const result = transformQuestion(
+    {
+      id: 'q1', prompt: 'P?', expectedAnswer: 'A', hints: [], difficulty: 'Easy',
+      misconception: {
+        commonWrongAnswer: 'wrong text',
+        why: 'Why this is wrong.',
+        remediationHint: 'Do this instead.',
+      },
+    },
+    { chapterId: 'fixture-chapter', topicId: 'topic-fixture' }
+  );
+
+  assert.deepEqual(result.remediation, {
+    why: 'Why this is wrong.',
+    remediationHint: 'Do this instead.',
+  });
+  assert.equal('commonWrongOptionId' in result.remediation, false);
+});
+
+test('transformQuestion: never carries commonWrongAnswer through - authoring/matching aid, not learner-facing content', () => {
+  const result = transformQuestion(
+    {
+      id: 'q1', prompt: 'P?', expectedAnswer: 'A', hints: [], difficulty: 'Easy',
+      misconception: { commonWrongAnswer: 'wrong text', why: 'Why.', remediationHint: 'Hint.' },
+    },
+    { chapterId: 'fixture-chapter', topicId: 'topic-fixture' }
+  );
+
+  assert.equal('commonWrongAnswer' in result.remediation, false);
+});
+
+test('transformQuestion: omits remediation entirely when the canonical question has no authored misconception (uneven-coverage regression pin)', () => {
+  const result = transformQuestion(
+    { id: 'q1', prompt: 'P?', expectedAnswer: 'A', hints: [], difficulty: 'Easy' },
+    { chapterId: 'fixture-chapter', topicId: 'topic-fixture' }
+  );
+  assert.equal('remediation' in result, false);
+});

@@ -54,6 +54,27 @@ class ResponseSpecification(BaseModel):
     options: list[Option] | None = None
 
 
+class QuestionRemediation(BaseModel):
+    """
+    Self-Serve Learning Loop V1, Slice 5. Static authored remediation
+    content (canonical `misconception` field, Stage 10 export's
+    transformQuestion) - present only for the currently uneven subset of
+    questions with authored content, never fabricated for the rest.
+    `why`/`remediationHint` are always present together. commonWrongOptionId
+    is present only for some single_choice questions with one specific
+    authored distractor - answer_service.py uses it for an exact-match
+    check against the learner's actual submission; its absence, or a
+    submission that doesn't match it, doesn't disqualify remediation from
+    being shown generically - see that module's own eligibility rule for
+    the exact semantics. Deliberately does NOT carry commonWrongAnswer - an
+    authoring/matching aid, not learner-facing content.
+    """
+
+    why: str
+    remediationHint: str
+    commonWrongOptionId: str | None = None
+
+
 class Question(BaseModel):
     id: str
     chapterId: str
@@ -74,3 +95,12 @@ class Question(BaseModel):
     questionType: QuestionType = "short_text"
     responseSpecification: ResponseSpecification | None = None
     maxScore: float = 1.0
+    # Additive, optional (Self-Serve Learning Loop V1, Slice 5). Present on
+    # the full Question model (same public-exposure precedent as `solution`
+    # itself, already returned by the public GET /chapters/.../questions
+    # routes) - answer_service.py reads it from the already-loaded Question
+    # to build the answer response's own, separate `remediation` field; it
+    # is deliberately NOT propagated into session.py's QuestionContent
+    # (the pre-answer, hand-curated question-serving shape), which already
+    # doesn't propagate every Question field either.
+    remediation: QuestionRemediation | None = None

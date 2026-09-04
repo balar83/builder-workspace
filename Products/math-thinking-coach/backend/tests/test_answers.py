@@ -70,6 +70,7 @@ def test_correct_answer_returns_next_question() -> None:
             "nextAction": "NEXT_QUESTION",
         },
         "ui": {"canTryAgain": False, "canRevealSolution": False, "hintLevel": 0},
+        "remediation": None,
     }
 
 
@@ -100,6 +101,7 @@ def test_incorrect_first_attempt_returns_try_again() -> None:
             "nextAction": "TRY_AGAIN",
         },
         "ui": {"canTryAgain": True, "canRevealSolution": False, "hintLevel": 0},
+        "remediation": None,
     }
 
 
@@ -123,6 +125,7 @@ def test_incorrect_second_attempt_returns_show_hint() -> None:
             "nextAction": "SHOW_HINT",
         },
         "ui": {"canTryAgain": True, "canRevealSolution": False, "hintLevel": 1},
+        "remediation": None,
     }
 
 
@@ -146,6 +149,7 @@ def test_incorrect_third_attempt_returns_show_solution() -> None:
             "nextAction": "SHOW_SOLUTION",
         },
         "ui": {"canTryAgain": False, "canRevealSolution": True, "hintLevel": 2},
+        "remediation": None,
     }
 
 
@@ -230,6 +234,7 @@ def test_response_is_unaffected_when_shadow_evaluation_fails(
             "nextAction": "NEXT_QUESTION",
         },
         "ui": {"canTryAgain": False, "canRevealSolution": False, "hintLevel": 0},
+        "remediation": None,
     }
 
 
@@ -423,3 +428,56 @@ def test_single_choice_unrecognized_option_returns_incorrect_not_an_error(
 
     assert response.status_code == 200
     assert response.json()["evaluation"]["isCorrect"] is False
+
+
+# --- Self-Serve Learning Loop V1, Slice 5: remediation API contract --------
+
+
+@pytest.fixture
+def _synthetic_question_with_remediation(monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.schemas.question import QuestionRemediation
+
+    question = Question(
+        id="test-remediation-answer-api",
+        chapterId="rational-numbers",
+        question="What is -2 + 5?",
+        text="What is -2 + 5?",
+        difficulty="Easy",
+        hints=["Think of a number line."],
+        solution="3",
+        remediation=QuestionRemediation(
+            why="Students often mix up the sign.",
+            remediationHint="Check the sign before combining terms.",
+        ),
+    )
+    monkeypatch.setattr(question_service, "_questions", question_service._questions + [question])
+    monkeypatch.setitem(evaluation_service._answer_keys, question.id, "3")
+
+
+def test_answer_api_exposes_remediation_when_eligible(
+    _synthetic_question_with_remediation: None,
+) -> None:
+    url = "/api/v1/questions/test-remediation-answer-api/answer"
+
+    response = client.post(url, json={"submission": {"answer": "wrong", "attemptNumber": 2}})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["coach"]["nextAction"] == "SHOW_HINT"
+    assert body["remediation"] == {
+        "why": "Students often mix up the sign.",
+        "remediationHint": "Check the sign before combining terms.",
+    }
+
+
+def test_answer_api_omits_remediation_when_not_yet_eligible(
+    _synthetic_question_with_remediation: None,
+) -> None:
+    url = "/api/v1/questions/test-remediation-answer-api/answer"
+
+    response = client.post(url, json={"submission": {"answer": "wrong", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["coach"]["nextAction"] == "TRY_AGAIN"
+    assert body["remediation"] is None

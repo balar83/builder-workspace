@@ -11,6 +11,7 @@ import DifficultyBadge from '../components/DifficultyBadge';
 import HintPanel from '../components/HintPanel';
 import QuestionProgress from '../components/QuestionProgress';
 import QuestionResponseInput from '../components/QuestionResponseInput';
+import RemediationPanel from '../components/RemediationPanel';
 import SolutionPanel from '../components/SolutionPanel';
 import './QuestionPage.css';
 
@@ -235,6 +236,12 @@ export default function QuestionPage() {
         )}
 
         <HintPanel hints={currentQuestion.hints} currentHintIndex={currentHintIndex} />
+        {evaluation?.remediation && (
+          <RemediationPanel
+            why={evaluation.remediation.why}
+            remediationHint={evaluation.remediation.remediationHint}
+          />
+        )}
         {showSolution && <SolutionPanel solution={currentQuestion.solution} />}
 
         {questionEnded && (

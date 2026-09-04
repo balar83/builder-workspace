@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.schemas.question import Question
+from app.schemas.question import Question, QuestionRemediation
 from app.services import question_service
 
 client = TestClient(app)
@@ -84,3 +84,53 @@ def test_get_question_objective_ids_is_null_for_a_legacy_shaped_question(
 
     assert response.status_code == 200
     assert response.json()["objectiveIds"] is None
+
+
+# --- Self-Serve Learning Loop V1, Slice 5: runtime remediation --------------
+
+
+def test_question_schema_accepts_authored_remediation() -> None:
+    question = Question(
+        id="q-fixture-remediation",
+        chapterId="rational-numbers",
+        question="Fixture prompt?",
+        text="Fixture prompt?",
+        difficulty="Easy",
+        hints=["Fixture hint."],
+        solution="Fixture solution.",
+        remediation=QuestionRemediation(
+            why="Why this is wrong.",
+            remediationHint="Do this instead.",
+            commonWrongOptionId="opt-a",
+        ),
+    )
+
+    assert question.remediation is not None
+    assert question.remediation.why == "Why this is wrong."
+    assert question.remediation.commonWrongOptionId == "opt-a"
+
+
+def test_question_schema_defaults_remediation_to_none_when_absent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Uneven authored coverage regression pin: a question with no authored
+    misconception content must expose remediation as None, both on the
+    model default and through the public GET route.
+    """
+    question = Question(
+        id="q-fixture-no-remediation",
+        chapterId="rational-numbers",
+        question="Fixture prompt?",
+        text="Fixture prompt?",
+        difficulty="Easy",
+        hints=["Fixture hint."],
+        solution="Fixture solution.",
+    )
+    assert question.remediation is None
+
+    monkeypatch.setattr(question_service, "_questions", question_service._questions + [question])
+    response = client.get("/api/v1/chapters/rational-numbers/questions/q-fixture-no-remediation")
+
+    assert response.status_code == 200
+    assert response.json()["remediation"] is None

@@ -106,7 +106,25 @@ class UiState(BaseModel):
     hintLevel: int
 
 
+class RemediationFeedback(BaseModel):
+    """
+    Self-Serve Learning Loop V1, Slice 5. A new top-level sibling to
+    evaluation/coach/ui on AnswerEvaluationResponse - deliberately NOT
+    folded into EvaluationResult (the evaluator's own correctness output,
+    never a place for static authored content) or into Coach (the
+    pedagogical next-action decision, not content). See answer_service.py's
+    _build_remediation for the exact eligibility rule this represents:
+    present only for a wrong answer, once the coaching ladder has reached
+    SHOW_HINT or SHOW_SOLUTION (never on the first TRY_AGAIN), and only
+    when the question has authored remediation at all.
+    """
+
+    why: str
+    remediationHint: str
+
+
 class AnswerEvaluationResponse(BaseModel):
     evaluation: EvaluationResult
     coach: Coach
     ui: UiState
+    remediation: RemediationFeedback | None = None

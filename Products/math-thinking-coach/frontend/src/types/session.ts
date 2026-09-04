@@ -1,4 +1,4 @@
-import type { AnswerCoach, AnswerEvaluation, AnswerUiState } from './answer';
+import type { AnswerCoach, AnswerEvaluation, AnswerRemediation, AnswerUiState } from './answer';
 import type { Difficulty, QuestionType, ResponseSpecification } from './question';
 
 export type SessionMode = 'practice' | 'test' | 'revision';
@@ -71,6 +71,10 @@ export interface SubmitSessionAnswerResponse {
   evaluation: AnswerEvaluation;
   coach: AnswerCoach;
   ui: AnswerUiState;
+  // Self-Serve Learning Loop V1, Slice 5: same field/semantics as
+  // AnswerEvaluationResponse.remediation (types/answer.ts) - the session
+  // flow threads it through identically, no separate gating.
+  remediation: AnswerRemediation | null;
   position: number;
   totalCount: number;
   sessionStatus: SessionStatus;

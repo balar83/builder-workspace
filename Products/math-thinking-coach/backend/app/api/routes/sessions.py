@@ -106,6 +106,7 @@ def submit_session_answer(
         evaluation=result.evaluation.evaluation,
         coach=result.evaluation.coach,
         ui=result.evaluation.ui,
+        remediation=result.evaluation.remediation,
         position=result.session.state.currentPosition,
         totalCount=len(result.session.selectedQuestions),
         sessionStatus=result.session.state.status,
