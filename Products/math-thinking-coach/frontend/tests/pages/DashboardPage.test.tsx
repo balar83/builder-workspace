@@ -39,6 +39,12 @@ vi.mock('../../src/services/recoveryService', () => ({
   },
 }));
 
+vi.mock('../../src/services/mistakeService', () => ({
+  mistakeService: {
+    getMyMistakes: vi.fn(),
+  },
+}));
+
 vi.mock('../../src/services/sessionPointerService', () => ({
   sessionPointerService: {
     getActiveSessionFor: vi.fn(),
@@ -55,10 +61,12 @@ vi.mock('../../src/services/sessionService', () => ({
 import DashboardPage from '../../src/pages/DashboardPage';
 import { activityService } from '../../src/services/activityService';
 import { authService } from '../../src/services/authService';
+import { mistakeService } from '../../src/services/mistakeService';
 import { performanceService } from '../../src/services/performanceService';
 import { questionService } from '../../src/services/questionService';
 import { recoveryService } from '../../src/services/recoveryService';
 import { sessionPointerService } from '../../src/services/sessionPointerService';
+import type { UnresolvedMistake } from '../../src/types/mistake';
 import type { RecoveryMetric, RecoveryMetricsResponse } from '../../src/types/recovery';
 
 const chapter = { id: 'rational-numbers', title: 'Rational Numbers', description: 'D' };
@@ -86,6 +94,7 @@ function setUpDefaultMocks() {
   vi.mocked(sessionPointerService.getActiveSessionFor).mockReturnValue(undefined);
   vi.mocked(activityService.getMyActivity).mockResolvedValue({ recentAttempts: [], chapterActivity: [] });
   vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue(NO_EVIDENCE_RECOVERY);
+  vi.mocked(mistakeService.getMyMistakes).mockResolvedValue([]);
 }
 
 describe('DashboardPage', () => {
@@ -255,6 +264,71 @@ describe('DashboardPage', () => {
       expect(await screen.findByText('No practice in the last 7 days.')).toBeInTheDocument();
       // Only the lifetime block's rate renders.
       expect(screen.getAllByText('75%')).toHaveLength(1);
+    });
+  });
+
+  // Self-Serve Learning Loop V1, Slice 6b: GET /performance/me/mistakes
+  // integrated into the existing "Your Progress" section as a "Needs
+  // Practice" list - there is no infrastructure to practice one exact
+  // missed question, so navigation must always target /practice/:chapterId
+  // and copy must never promise the exact question will be served again.
+  describe('mistakes wiring', () => {
+    const mistake: UnresolvedMistake = {
+      questionId: 'rn-q01',
+      chapterId: 'rational-numbers',
+      chapterTitle: 'Rational Numbers',
+      topicId: 'topic-rational-numbers-properties-and-operations',
+      lastAttemptAt: '2026-09-01T10:00:00.000Z',
+    };
+
+    it('renders the additive "Needs Practice" subsection', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 });
+      expect(screen.getByRole('heading', { name: 'Needs Practice' })).toBeInTheDocument();
+    });
+
+    it('shows an explicit positive empty state when there are no unresolved mistakes', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText('No unresolved mistakes.')).toBeInTheDocument();
+    });
+
+    it('renders an unresolved mistake with its chapter title, exactly as the backend returned it', async () => {
+      setUpDefaultMocks();
+      vi.mocked(mistakeService.getMyMistakes).mockResolvedValue([mistake]);
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText(/^Last attempted/)).toBeInTheDocument();
+    });
+
+    it('offers only an honest chapter-level practice action, never exact-question language', async () => {
+      setUpDefaultMocks();
+      vi.mocked(mistakeService.getMyMistakes).mockResolvedValue([mistake]);
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByRole('button', { name: 'Practice this chapter' })).toBeInTheDocument();
+      expect(screen.queryByText(/fix this mistake/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/retry this question/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/this exact question/i)).not.toBeInTheDocument();
+    });
+
+    it('navigates to the chapter-level practice route, never a question-specific route', async () => {
+      setUpDefaultMocks();
+      vi.mocked(mistakeService.getMyMistakes).mockResolvedValue([mistake]);
+
+      render(<DashboardPage />);
+
+      const button = await screen.findByRole('button', { name: 'Practice this chapter' });
+      button.click();
+
+      expect(mockNavigate).toHaveBeenCalledWith('/practice/rational-numbers');
     });
   });
 

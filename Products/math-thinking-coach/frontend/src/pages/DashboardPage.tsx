@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import ChapterActivityList from '../components/ChapterActivityList';
 import ChapterPerformanceCard from '../components/ChapterPerformanceCard';
 import DailyActivityChart from '../components/DailyActivityChart';
+import MistakeList from '../components/MistakeList';
 import RecoveryMetricsSummary from '../components/RecoveryMetricsSummary';
 import ResumeBanner from '../components/ResumeBanner';
 import { activityService } from '../services/activityService';
 import { authService } from '../services/authService';
 import { buildDailyActivity } from '../services/dailyActivity';
+import { mistakeService } from '../services/mistakeService';
 import { performanceService } from '../services/performanceService';
 import { questionService } from '../services/questionService';
 import { recoveryService } from '../services/recoveryService';
@@ -15,6 +17,7 @@ import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type { ChapterActivity } from '../types/activity';
 import type { Chapter } from '../types/chapter';
+import type { UnresolvedMistake } from '../types/mistake';
 import type { TopicPerformance } from '../types/performance';
 import type { RecoveryMetricsResponse } from '../types/recovery';
 import type { SessionPointer } from '../types/sessionPointer';
@@ -59,6 +62,10 @@ interface DashboardData {
   // RecoveryMetricsSummary; chapters is fetched but deliberately not
   // rendered yet (compact aggregate summary only for this first version).
   recovery: RecoveryMetricsResponse;
+  // Self-Serve Learning Loop V1, Slice 6b: GET /performance/me/mistakes,
+  // unmodified - "unresolved" is entirely backend-determined
+  // (mistake_service.py); this is never recomputed or filtered further here.
+  mistakes: UnresolvedMistake[];
 }
 
 // GET /performance/me is keyed by topicId, not chapterId (attempt_service
@@ -66,12 +73,13 @@ interface DashboardData {
 // looking up that chapter's topic first. Only chapters with a Topic can ever
 // show a performance badge; chapters without one legitimately never will.
 async function loadDashboard(): Promise<DashboardData> {
-  const [user, chapters, performanceList, activity, recovery] = await Promise.all([
+  const [user, chapters, performanceList, activity, recovery, mistakes] = await Promise.all([
     authService.getCurrentUser(),
     questionService.getChapters(),
     performanceService.getMyPerformance(),
     activityService.getMyActivity(),
     recoveryService.getMyRecoveryMetrics(),
+    mistakeService.getMyMistakes(),
   ]);
 
   const topicsPerChapter = await Promise.all(
@@ -97,6 +105,7 @@ async function loadDashboard(): Promise<DashboardData> {
     dailyActivity: buildDailyActivity(activity.recentAttempts),
     chapterActivity: activity.chapterActivity,
     recovery,
+    mistakes,
   };
 }
 
@@ -230,6 +239,15 @@ export default function DashboardPage() {
           recent={data.recovery.recent.recovery}
           hasRecentActivity={data.recovery.hasRecentActivity}
         />
+
+        {/* Self-Serve Learning Loop V1, Slice 6b: additive list of
+            GET /performance/me/mistakes - there is no infrastructure to
+            practice one exact missed question, so MistakeList's own action
+            is honestly chapter-level ("Practice this chapter" ->
+            /practice/:chapterId), never a promise that the exact question
+            will be served again. See MistakeList's own docstring. */}
+        <h3 className="dashboard-progress-subheading">Needs Practice</h3>
+        <MistakeList mistakes={data.mistakes} />
       </section>
     </main>
   );

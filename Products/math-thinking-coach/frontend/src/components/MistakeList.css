@@ -1,0 +1,42 @@
+.mistake-list-empty {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.mistake-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mistake-list-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.mistake-list-item:last-child {
+  border-bottom: none;
+}
+
+.mistake-list-title {
+  font-weight: var(--weight-medium);
+  color: var(--color-text-strong);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.mistake-list-last {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.mistake-list-practice-link {
+  font-size: var(--text-sm);
+}
