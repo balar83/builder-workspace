@@ -452,50 +452,325 @@ def test_record_attempt_for_answer_persists_provenance_as_standalone() -> None:
     assert _read_provenance("q1") == ["standalone"]
 
 
-def test_schema_evolution_does_not_retroactively_add_new_columns_to_an_existing_database() -> None:
-    """
-    Documents a real, verified limitation rather than asserting a false
-    safety guarantee. attempt_service's only schema-application mechanism is
-    `CREATE TABLE IF NOT EXISTS` (see _SCHEMA, run on every _get_connection()
-    call) - which is a no-op against a table that already exists, since
-    SQLite checks table existence only, never column parity. A real,
-    persisted runtime.db whose attempts table was created before this
-    column existed would NOT gain it merely by deploying this slice's code;
-    the next INSERT referencing it raises exactly as reproduced below. Every
-    prior additive column on this table (hints_used, session_id,
-    session_mode, time_taken_seconds, misconception_tag) shares this same
-    gap - not new, not fixed here (a real migration mechanism is out of this
-    slice's explicit "smallest additive change" scope) - pinned down as a
-    test so it stays a conscious, visible fact rather than a silent
-    assumption the next column addition could repeat unknowingly.
-    """
-    pre_provenance_schema = """
-    CREATE TABLE IF NOT EXISTS attempts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id TEXT NOT NULL,
-        question_id TEXT NOT NULL,
-        chapter_id TEXT NOT NULL,
-        topic_id TEXT,
-        difficulty TEXT NOT NULL,
-        question_type TEXT,
-        session_id TEXT,
-        session_mode TEXT,
-        is_correct INTEGER NOT NULL,
-        attempt_number INTEGER NOT NULL,
-        hints_used INTEGER NOT NULL DEFAULT 0,
-        time_taken_seconds REAL,
-        misconception_tag TEXT,
-        created_at TEXT NOT NULL
-    );
-    """
+# --- schema compatibility (Self-Serve Learning Loop V1, Slice 2.5) ---------
+#
+# Two real historical schema shapes, reproduced exactly (verified against
+# git history - Milestone B's original commit c615618 for the original
+# shape; the pre-provenance shape is this table's state with
+# submitted_option_id already present but before Slice 2 added provenance).
+# _ensure_schema must safely upgrade either one, in place, preserving every
+# existing row exactly.
+
+_ORIGINAL_SCHEMA = """
+CREATE TABLE IF NOT EXISTS attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id TEXT NOT NULL,
+    question_id TEXT NOT NULL,
+    chapter_id TEXT NOT NULL,
+    topic_id TEXT,
+    difficulty TEXT NOT NULL,
+    question_type TEXT,
+    session_id TEXT,
+    session_mode TEXT,
+    is_correct INTEGER NOT NULL,
+    attempt_number INTEGER NOT NULL,
+    hints_used INTEGER NOT NULL DEFAULT 0,
+    time_taken_seconds REAL,
+    misconception_tag TEXT,
+    created_at TEXT NOT NULL
+);
+"""
+
+_PRE_PROVENANCE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id TEXT NOT NULL,
+    question_id TEXT NOT NULL,
+    chapter_id TEXT NOT NULL,
+    topic_id TEXT,
+    difficulty TEXT NOT NULL,
+    question_type TEXT,
+    session_id TEXT,
+    session_mode TEXT,
+    is_correct INTEGER NOT NULL,
+    attempt_number INTEGER NOT NULL,
+    hints_used INTEGER NOT NULL DEFAULT 0,
+    submitted_option_id TEXT,
+    time_taken_seconds REAL,
+    misconception_tag TEXT,
+    created_at TEXT NOT NULL
+);
+"""
+
+_ALL_CURRENT_COLUMNS = {
+    "id", "student_id", "question_id", "chapter_id", "topic_id", "difficulty",
+    "question_type", "session_id", "session_mode", "is_correct", "attempt_number",
+    "hints_used", "submitted_option_id", "time_taken_seconds", "misconception_tag",
+    "provenance", "created_at",
+}
+
+
+def _table_columns() -> set[str]:
     conn = sqlite3.connect(attempt_service.DB_PATH)
     try:
-        conn.executescript(pre_provenance_schema)
+        return {row[1] for row in conn.execute("PRAGMA table_info(attempts)")}
     finally:
         conn.close()
 
-    with pytest.raises(sqlite3.OperationalError, match="provenance"):
-        attempt_service.record_attempt(
-            student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
-            difficulty="Easy", is_correct=True, attempt_number=1,
+
+def _seed_old_row(schema: str, **overrides) -> None:
+    """Inserts one row directly, under a given historical schema, bypassing record_attempt entirely."""
+    values = {
+        "student_id": "student-old", "question_id": "old-q1", "chapter_id": "c1",
+        "topic_id": "topic-a", "difficulty": "Easy", "question_type": None,
+        "session_id": None, "session_mode": None, "is_correct": 1, "attempt_number": 1,
+        "hints_used": 0, "time_taken_seconds": None, "misconception_tag": None,
+        "created_at": "2026-01-01T00:00:00+00:00",
+    }
+    if "submitted_option_id" in schema:
+        values["submitted_option_id"] = None
+    values.update(overrides)
+
+    columns = list(values.keys())
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.executescript(schema)
+        conn.execute(
+            f"INSERT INTO attempts ({', '.join(columns)}) VALUES ({', '.join('?' * len(columns))})",
+            tuple(values[c] for c in columns),
         )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def test_fresh_database_has_every_current_column() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert _table_columns() == _ALL_CURRENT_COLUMNS
+
+
+def test_ensure_schema_adds_provenance_to_a_database_missing_only_provenance() -> None:
+    _seed_old_row(_PRE_PROVENANCE_SCHEMA)
+
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="new-q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="standalone",
+    )
+
+    assert _table_columns() == _ALL_CURRENT_COLUMNS
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = {row["question_id"]: row for row in conn.execute("SELECT * FROM attempts")}
+    finally:
+        conn.close()
+    # The pre-existing row is untouched, and never backfilled.
+    assert rows["old-q1"]["provenance"] is None
+    assert rows["old-q1"]["student_id"] == "student-old"
+    assert rows["old-q1"]["is_correct"] == 1
+    # The new write, made after the upgrade, is a full current-shape write.
+    assert rows["new-q1"]["provenance"] == "standalone"
+
+
+def test_ensure_schema_adds_multiple_missing_columns_to_the_original_schema() -> None:
+    """
+    The very first schema this table ever had (Milestone B, commit
+    c615618) - missing both submitted_option_id and provenance. Writes
+    through record_attempt (provenance only - submitted_option_id isn't one
+    of its parameters; that's a separate, unrelated write-path concern, not
+    part of what _ensure_schema owns) plus a direct SQL write, to prove the
+    column itself exists and is writable independently of any particular
+    caller's parameter surface.
+    """
+    _seed_old_row(_ORIGINAL_SCHEMA)
+
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="new-q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="session",
+    )
+
+    assert _table_columns() == _ALL_CURRENT_COLUMNS
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.execute("UPDATE attempts SET submitted_option_id = ? WHERE question_id = ?", ("opt-a", "new-q1"))
+        conn.commit()
+        conn.row_factory = sqlite3.Row
+        rows = {row["question_id"]: row for row in conn.execute("SELECT * FROM attempts")}
+    finally:
+        conn.close()
+    assert rows["old-q1"]["submitted_option_id"] is None
+    assert rows["old-q1"]["provenance"] is None
+    assert rows["old-q1"]["chapter_id"] == "c1"
+    assert rows["new-q1"]["submitted_option_id"] == "opt-a"
+    assert rows["new-q1"]["provenance"] == "session"
+
+
+def test_ensure_schema_preserves_every_existing_row_exactly_during_upgrade() -> None:
+    """
+    The explicit preservation guarantee: several rows under the original
+    schema, each with distinct values, all survive the upgrade unchanged -
+    same count, same values, same order - with only the new columns reading
+    NULL on them.
+    """
+    for i in range(3):
+        _seed_old_row(
+            _ORIGINAL_SCHEMA if i == 0 else "",  # only the first insert needs to run executescript
+            question_id=f"old-q{i}", is_correct=(i % 2), attempt_number=i + 1,
+        )
+
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="trigger-upgrade", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT * FROM attempts WHERE question_id LIKE 'old-q%' ORDER BY question_id"
+        ).fetchall()
+    finally:
+        conn.close()
+
+    assert len(rows) == 3
+    for i, row in enumerate(rows):
+        assert row["question_id"] == f"old-q{i}"
+        assert row["is_correct"] == (i % 2)
+        assert row["attempt_number"] == i + 1
+        assert row["submitted_option_id"] is None
+        assert row["provenance"] is None
+
+
+def test_ensure_schema_is_a_no_op_on_a_fully_current_database() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="standalone",
+    )
+    columns_before = _table_columns()
+
+    # A second, independent call against an already-current database.
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q2", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="session",
+    )
+
+    assert _table_columns() == columns_before == _ALL_CURRENT_COLUMNS
+    assert _read_provenance("q1") == ["standalone"]
+
+
+def test_ensure_schema_is_idempotent_across_repeated_calls() -> None:
+    _seed_old_row(_ORIGINAL_SCHEMA)
+
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        for _ in range(5):
+            attempt_service._ensure_schema(conn)
+    finally:
+        conn.close()
+
+    assert _table_columns() == _ALL_CURRENT_COLUMNS
+    # Still exactly one row - repeated calls never duplicate or touch data.
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        count = conn.execute("SELECT COUNT(*) FROM attempts").fetchone()[0]
+    finally:
+        conn.close()
+    assert count == 1
+
+
+class _InjectedFailureConnection:
+    """
+    Duck-typed proxy around a real sqlite3.Connection - sqlite3.Connection
+    is a C-extension type and cannot be monkeypatched directly (it raises
+    "cannot set 'execute' attribute of immutable type"), so _ensure_schema's
+    two exact dependencies (execute/commit) are proxied instead, forcing one
+    specific ALTER TABLE statement to fail with a chosen error - exactly
+    what a real concurrent-process race, or a real I/O failure, would
+    produce. _ensure_schema only ever calls .execute()/.commit() on its
+    conn parameter, so this is a faithful substitute, not a shortcut.
+    """
+
+    def __init__(self, real_conn: sqlite3.Connection, trigger_prefix: str, error_message: str) -> None:
+        self._real_conn = real_conn
+        self._trigger_prefix = trigger_prefix
+        self._error_message = error_message
+
+    def execute(self, sql, *args, **kwargs):
+        if sql.strip().upper().startswith(self._trigger_prefix):
+            raise sqlite3.OperationalError(self._error_message)
+        return self._real_conn.execute(sql, *args, **kwargs)
+
+    def commit(self) -> None:
+        self._real_conn.commit()
+
+
+def test_ensure_schema_swallows_a_concurrent_duplicate_column_race() -> None:
+    """
+    Reproduces the exact race two processes could hit: both see a column
+    missing via PRAGMA, both attempt ALTER TABLE ADD COLUMN, and the loser's
+    statement fails with "duplicate column name" purely because the winner
+    already succeeded a moment earlier. That specific failure must be
+    treated as convergence (the column exists either way), not an error.
+    """
+    _seed_old_row(_PRE_PROVENANCE_SCHEMA)
+
+    real_conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        racing_conn = _InjectedFailureConnection(
+            real_conn, "ALTER TABLE ATTEMPTS ADD COLUMN PROVENANCE", "duplicate column name: provenance"
+        )
+        attempt_service._ensure_schema(racing_conn)  # must not raise, even though its own ALTER "lost" the race
+    finally:
+        real_conn.close()
+
+    # This synthetic scenario has no real second process, so the column
+    # genuinely isn't present yet after this one call alone - proving the
+    # swallow doesn't crash is the point. A subsequent real call (the next
+    # request against this file) still converges correctly, exactly as a
+    # real race's loser would via its own next connection.
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="after-race", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="standalone",
+    )
+    assert _table_columns() == _ALL_CURRENT_COLUMNS
+    assert _read_provenance("after-race") == ["standalone"]
+
+
+def test_ensure_schema_reraises_a_genuine_operational_error_unrelated_to_the_race() -> None:
+    """
+    The duplicate-column swallow must be narrow: _ensure_schema itself still
+    propagates any other OperationalError (e.g. a real disk/IO failure) -
+    not silently absorbed just because it happened during an ALTER TABLE.
+    """
+    _seed_old_row(_PRE_PROVENANCE_SCHEMA)
+
+    real_conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        failing_conn = _InjectedFailureConnection(
+            real_conn, "ALTER TABLE ATTEMPTS ADD COLUMN PROVENANCE", "disk I/O error"
+        )
+        with pytest.raises(sqlite3.OperationalError, match="disk I/O error"):
+            attempt_service._ensure_schema(failing_conn)
+    finally:
+        real_conn.close()
+
+
+def test_schema_evolution_now_safely_upgrades_an_existing_database_and_writes_succeed() -> None:
+    """
+    Supersedes this test's own pre-Slice-2.5 version, which asserted the
+    write raised OperationalError - that was a true, verified limitation at
+    the time (see git history), not a desired behavior. Slice 2.5 fixes it;
+    this proves the fix rather than the limitation it replaced.
+    """
+    _seed_old_row(_PRE_PROVENANCE_SCHEMA)
+
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert _read_provenance("q1") == [None]  # this student's own new row, no provenance passed

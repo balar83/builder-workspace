@@ -32,13 +32,15 @@ _SCHEMA = """
 -- IMPORTANT, applies to every column in this table, not just this one:
 -- CREATE TABLE IF NOT EXISTS is a no-op against a table that already
 -- exists - SQLite checks table existence only, never column parity. This
--- statement does NOT retroactively add a new column to a real, persisted
--- runtime.db whose attempts table was created under an older version of
--- this schema (verified empirically while adding provenance). Every prior
--- additive column here carries the same latent gap; no migration mechanism
--- (e.g. PRAGMA table_info + conditional ALTER TABLE) exists in this
--- codebase today. Out of scope to fix here - flagged for a deliberate
--- decision before this is relied upon against a real persisted database.
+-- statement alone does NOT retroactively add a new column to a real,
+-- persisted runtime.db whose attempts table was created under an older
+-- version of this schema (verified empirically while adding provenance).
+-- Self-Serve Learning Loop V1, Slice 2.5 closes this gap: see
+-- _ADDITIVE_COLUMNS/_ensure_schema below, called right after this script on
+-- every _get_connection() - an idempotent PRAGMA table_info(attempts) +
+-- conditional ALTER TABLE ADD COLUMN, deliberately not a generic migration
+-- framework (no schema-version table, no backfill - see that function's
+-- own docstring for exactly what it guarantees).
 CREATE TABLE IF NOT EXISTS attempts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id TEXT NOT NULL,
@@ -61,10 +63,59 @@ CREATE INDEX IF NOT EXISTS idx_attempts_student_topic ON attempts(student_id, to
 """
 
 
+# Self-Serve Learning Loop V1, Slice 2.5: every column ever added to
+# `attempts` after its original creation (Milestone B, commit c615618 -
+# every other current column, including session_id/session_mode/hints_used/
+# time_taken_seconds/misconception_tag, was already present in that very
+# first schema and needs no entry here). CREATE TABLE IF NOT EXISTS above
+# cannot retroactively add a column to a table that already exists (see
+# _SCHEMA's own comment) - _ensure_schema below closes that gap. Nullable
+# declarations only, deliberately: ALTER TABLE ADD COLUMN cannot express a
+# bare NOT NULL without a DEFAULT, and every column added post-creation has
+# always been optional data anyway. Append-only - never remove an entry
+# once shipped, even once every real database has picked it up, since a
+# database that's been offline since before this column existed must still
+# converge correctly on its next write.
+_ADDITIVE_COLUMNS: list[tuple[str, str]] = [
+    ("submitted_option_id", "TEXT"),
+    ("provenance", "TEXT"),
+]
+
+
+def _ensure_schema(conn: sqlite3.Connection) -> None:
+    """
+    Idempotent and safe against a table created under any prior version of
+    _SCHEMA (or the current one). Reads PRAGMA table_info to see what
+    actually exists on THIS file, then ALTERs in only what's missing -
+    never touches an existing column or any existing row. Historical rows
+    are never rewritten or backfilled: a newly-added column simply reads
+    back NULL for every row that predates it, exactly like SQLite's own
+    default behavior for a column added to a table with existing rows.
+
+    Concurrency: a second process racing to add the same column between
+    this function's own PRAGMA check and its ALTER TABLE call would fail
+    with "duplicate column name" - not a real error, just proof the column
+    already exists either way, which is exactly the end state this
+    function is trying to reach. Treated as successful convergence. Any
+    other OperationalError is a genuine failure and re-raised.
+    """
+    existing_columns = {row[1] for row in conn.execute("PRAGMA table_info(attempts)")}
+    for column_name, declaration in _ADDITIVE_COLUMNS:
+        if column_name in existing_columns:
+            continue
+        try:
+            conn.execute(f"ALTER TABLE attempts ADD COLUMN {column_name} {declaration}")
+        except sqlite3.OperationalError as exc:
+            if "duplicate column name" not in str(exc):
+                raise
+    conn.commit()
+
+
 def _get_connection() -> sqlite3.Connection:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.executescript(_SCHEMA)
+    _ensure_schema(conn)
     return conn
 
 
