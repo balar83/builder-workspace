@@ -3,17 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import ChapterActivityList from '../components/ChapterActivityList';
 import ChapterPerformanceCard from '../components/ChapterPerformanceCard';
 import DailyActivityChart from '../components/DailyActivityChart';
+import RecoveryMetricsSummary from '../components/RecoveryMetricsSummary';
 import ResumeBanner from '../components/ResumeBanner';
 import { activityService } from '../services/activityService';
 import { authService } from '../services/authService';
 import { buildDailyActivity } from '../services/dailyActivity';
 import { performanceService } from '../services/performanceService';
 import { questionService } from '../services/questionService';
+import { recoveryService } from '../services/recoveryService';
 import { sessionPointerService } from '../services/sessionPointerService';
 import { sessionService } from '../services/sessionService';
 import type { ChapterActivity } from '../types/activity';
 import type { Chapter } from '../types/chapter';
 import type { TopicPerformance } from '../types/performance';
+import type { RecoveryMetricsResponse } from '../types/recovery';
 import type { SessionPointer } from '../types/sessionPointer';
 import './DashboardPage.css';
 
@@ -51,6 +54,11 @@ interface DashboardData {
   // happen here, against the browser's own local calendar days.
   dailyActivity: ReturnType<typeof buildDailyActivity>;
   chapterActivity: ChapterActivity[];
+  // Self-Serve Learning Loop V1, Slice 6a: the full response, unmodified -
+  // DashboardPage renders lifetime/recent/hasRecentActivity directly via
+  // RecoveryMetricsSummary; chapters is fetched but deliberately not
+  // rendered yet (compact aggregate summary only for this first version).
+  recovery: RecoveryMetricsResponse;
 }
 
 // GET /performance/me is keyed by topicId, not chapterId (attempt_service
@@ -58,11 +66,12 @@ interface DashboardData {
 // looking up that chapter's topic first. Only chapters with a Topic can ever
 // show a performance badge; chapters without one legitimately never will.
 async function loadDashboard(): Promise<DashboardData> {
-  const [user, chapters, performanceList, activity] = await Promise.all([
+  const [user, chapters, performanceList, activity, recovery] = await Promise.all([
     authService.getCurrentUser(),
     questionService.getChapters(),
     performanceService.getMyPerformance(),
     activityService.getMyActivity(),
+    recoveryService.getMyRecoveryMetrics(),
   ]);
 
   const topicsPerChapter = await Promise.all(
@@ -87,6 +96,7 @@ async function loadDashboard(): Promise<DashboardData> {
     // days - the backend's recentAttempts is deliberately raw/un-bucketed.
     dailyActivity: buildDailyActivity(activity.recentAttempts),
     chapterActivity: activity.chapterActivity,
+    recovery,
   };
 }
 
@@ -207,6 +217,19 @@ export default function DashboardPage() {
 
         <h3 className="dashboard-progress-subheading">By Chapter</h3>
         <ChapterActivityList chapters={data.chapterActivity} />
+
+        {/* Self-Serve Learning Loop V1, Slice 6a: additive, compact aggregate
+            summary of GET /performance/me/recovery - lifetime/recent only,
+            no per-chapter breakdown (deferred to a later slice, see
+            RecoveryMetricsSummary's own docstring). Every value rendered is
+            backend-provided; nothing here recomputes accuracy, recovery
+            rate, or sample sufficiency. */}
+        <h3 className="dashboard-progress-subheading">Recovering from Mistakes</h3>
+        <RecoveryMetricsSummary
+          lifetime={data.recovery.lifetime.recovery}
+          recent={data.recovery.recent.recovery}
+          hasRecentActivity={data.recovery.hasRecentActivity}
+        />
       </section>
     </main>
   );

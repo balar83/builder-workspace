@@ -1,0 +1,35 @@
+.recovery-metrics-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.recovery-metrics-window {
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+.recovery-metrics-window-title {
+  margin-bottom: var(--space-1);
+}
+
+.recovery-metric-empty,
+.recovery-metric-insufficient {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.recovery-metric-rate {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.recovery-metric-percent {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+
+.recovery-metric-counts {
+  color: var(--color-text-muted);
+}

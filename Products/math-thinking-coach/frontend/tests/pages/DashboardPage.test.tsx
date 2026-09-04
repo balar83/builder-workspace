@@ -33,6 +33,12 @@ vi.mock('../../src/services/activityService', () => ({
   },
 }));
 
+vi.mock('../../src/services/recoveryService', () => ({
+  recoveryService: {
+    getMyRecoveryMetrics: vi.fn(),
+  },
+}));
+
 vi.mock('../../src/services/sessionPointerService', () => ({
   sessionPointerService: {
     getActiveSessionFor: vi.fn(),
@@ -51,9 +57,25 @@ import { activityService } from '../../src/services/activityService';
 import { authService } from '../../src/services/authService';
 import { performanceService } from '../../src/services/performanceService';
 import { questionService } from '../../src/services/questionService';
+import { recoveryService } from '../../src/services/recoveryService';
 import { sessionPointerService } from '../../src/services/sessionPointerService';
+import type { RecoveryMetric, RecoveryMetricsResponse } from '../../src/types/recovery';
 
 const chapter = { id: 'rational-numbers', title: 'Rational Numbers', description: 'D' };
+
+const NO_EVIDENCE_METRIC: RecoveryMetric = { recovered: 0, initiallyWrong: 0, rate: null, sufficientSample: false };
+const NO_EVIDENCE_ACCURACY = { correct: 0, attempted: 0, accuracy: null };
+const NO_EVIDENCE_WINDOW = {
+  firstAttemptAccuracy: NO_EVIDENCE_ACCURACY,
+  eventualAccuracy: NO_EVIDENCE_ACCURACY,
+  recovery: NO_EVIDENCE_METRIC,
+};
+const NO_EVIDENCE_RECOVERY: RecoveryMetricsResponse = {
+  lifetime: NO_EVIDENCE_WINDOW,
+  recent: NO_EVIDENCE_WINDOW,
+  hasRecentActivity: false,
+  chapters: [],
+};
 
 function setUpDefaultMocks() {
   vi.mocked(authService.getCurrentUser).mockResolvedValue({ role: 'student', id: 'learner_1', name: null });
@@ -63,6 +85,7 @@ function setUpDefaultMocks() {
   vi.mocked(performanceService.getMyConceptPerformance).mockResolvedValue([]);
   vi.mocked(sessionPointerService.getActiveSessionFor).mockReturnValue(undefined);
   vi.mocked(activityService.getMyActivity).mockResolvedValue({ recentAttempts: [], chapterActivity: [] });
+  vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue(NO_EVIDENCE_RECOVERY);
 }
 
 describe('DashboardPage', () => {
@@ -136,6 +159,103 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
 
     expect(await screen.findByText('No chapters practiced yet.')).toBeInTheDocument();
+  });
+
+  // Self-Serve Learning Loop V1, Slice 6a: GET /performance/me/recovery
+  // integrated into the existing "Your Progress" section - compact
+  // aggregate only, no per-chapter breakdown. Every value asserted here is
+  // the exact backend-shaped input, proving the page renders it directly
+  // rather than recomputing anything.
+  describe('recovery metrics wiring', () => {
+    it('renders the additive "Recovering from Mistakes" subsection', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 });
+      expect(screen.getByRole('heading', { name: 'Recovering from Mistakes' })).toBeInTheDocument();
+    });
+
+    it('shows an explicit no-evidence state for a learner with no wrong first attempts yet, never a 0%', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      expect(await screen.findAllByText('No wrong first attempts yet.')).toHaveLength(1);
+      expect(screen.queryByText(/0%/)).not.toBeInTheDocument();
+    });
+
+    it('shows counts and an explicit insufficient-evidence message without fabricating a rate', async () => {
+      setUpDefaultMocks();
+      const insufficient: RecoveryMetric = { recovered: 1, initiallyWrong: 2, rate: null, sufficientSample: false };
+      vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue({
+        lifetime: { ...NO_EVIDENCE_WINDOW, recovery: insufficient },
+        recent: NO_EVIDENCE_WINDOW,
+        hasRecentActivity: false,
+        chapters: [],
+      });
+
+      render(<DashboardPage />);
+
+      expect(
+        await screen.findByText('1 of 2 recovered so far — not enough evidence yet for a reliable rate.'),
+      ).toBeInTheDocument();
+    });
+
+    it('shows the real recovery rate and underlying counts once the sample is sufficient', async () => {
+      setUpDefaultMocks();
+      const sufficient: RecoveryMetric = { recovered: 3, initiallyWrong: 4, rate: 0.75, sufficientSample: true };
+      vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue({
+        lifetime: { ...NO_EVIDENCE_WINDOW, recovery: sufficient },
+        recent: NO_EVIDENCE_WINDOW,
+        hasRecentActivity: false,
+        chapters: [],
+      });
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText('75%')).toBeInTheDocument();
+      expect(screen.getByText('(3 of 4)')).toBeInTheDocument();
+    });
+
+    it('distinguishes lifetime from recent as two independently rendered windows', async () => {
+      setUpDefaultMocks();
+      const lifetimeSufficient: RecoveryMetric = { recovered: 3, initiallyWrong: 4, rate: 0.75, sufficientSample: true };
+      const recentInsufficient: RecoveryMetric = { recovered: 1, initiallyWrong: 1, rate: null, sufficientSample: false };
+      vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue({
+        lifetime: { ...NO_EVIDENCE_WINDOW, recovery: lifetimeSufficient },
+        recent: { ...NO_EVIDENCE_WINDOW, recovery: recentInsufficient },
+        hasRecentActivity: true,
+        chapters: [],
+      });
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText('75%')).toBeInTheDocument();
+      expect(
+        screen.getByText('1 of 1 recovered so far — not enough evidence yet for a reliable rate.'),
+      ).toBeInTheDocument();
+    });
+
+    it('shows an explicit no-recent-activity message when hasRecentActivity is false, never an apparently current recent metric', async () => {
+      setUpDefaultMocks();
+      const lifetimeSufficient: RecoveryMetric = { recovered: 3, initiallyWrong: 4, rate: 0.75, sufficientSample: true };
+      vi.mocked(recoveryService.getMyRecoveryMetrics).mockResolvedValue({
+        lifetime: { ...NO_EVIDENCE_WINDOW, recovery: lifetimeSufficient },
+        // Non-zero recent counts, deliberately - hasRecentActivity: false
+        // must still win, proving the page trusts that explicit signal over
+        // inferring "recent" from the metric's own field values.
+        recent: { ...NO_EVIDENCE_WINDOW, recovery: lifetimeSufficient },
+        hasRecentActivity: false,
+        chapters: [],
+      });
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText('No practice in the last 7 days.')).toBeInTheDocument();
+      // Only the lifetime block's rate renders.
+      expect(screen.getAllByText('75%')).toHaveLength(1);
+    });
   });
 
   // Self-Serve Learning Loop V1, Slice 1: the weak-topic CTA must appear
