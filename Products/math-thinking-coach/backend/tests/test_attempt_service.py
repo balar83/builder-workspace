@@ -774,3 +774,87 @@ def test_schema_evolution_now_safely_upgrades_an_existing_database_and_writes_su
     )
 
     assert _read_provenance("q1") == [None]  # this student's own new row, no provenance passed
+
+
+# --- get_latest_attempt_per_question (Self-Serve Learning Loop V1, Slice 3) -
+
+
+def test_get_latest_attempt_per_question_is_empty_for_a_student_with_no_attempts() -> None:
+    assert attempt_service.get_latest_attempt_per_question("student-1") == []
+
+
+def test_get_latest_attempt_per_question_returns_one_row_per_question() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q2", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=False, attempt_number=1,
+    )
+
+    rows = attempt_service.get_latest_attempt_per_question("student-1")
+
+    assert {row["question_id"] for row in rows} == {"q1", "q2"}
+
+
+def test_get_latest_attempt_per_question_picks_the_row_with_the_highest_id_not_the_latest_timestamp() -> None:
+    """
+    Ordering must rely on attempt id (the table's own monotonic sequence),
+    never created_at - two rows are inserted with an intentionally
+    contradictory timestamp (the earlier-id row carries the LATER
+    timestamp) to prove id, not created_at, decides which one is "latest."
+    """
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.executescript(attempt_service._SCHEMA)
+        conn.execute(
+            """
+            INSERT INTO attempts (student_id, question_id, chapter_id, topic_id, difficulty, is_correct, attempt_number, created_at)
+            VALUES ('student-1', 'q1', 'c1', 'topic-a', 'Easy', 0, 1, '2026-06-01T00:00:00+00:00')
+            """
+        )
+        conn.execute(
+            """
+            INSERT INTO attempts (student_id, question_id, chapter_id, topic_id, difficulty, is_correct, attempt_number, created_at)
+            VALUES ('student-1', 'q1', 'c1', 'topic-a', 'Easy', 1, 2, '2026-01-01T00:00:00+00:00')
+            """
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    rows = attempt_service.get_latest_attempt_per_question("student-1")
+
+    assert len(rows) == 1
+    assert rows[0]["is_correct"] == 1  # the higher-id row, despite its earlier timestamp
+    assert rows[0]["attempt_number"] == 2
+
+
+def test_get_latest_attempt_per_question_is_scoped_to_the_requesting_student() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert attempt_service.get_latest_attempt_per_question("student-2") == []
+
+
+def test_get_latest_attempt_per_question_groups_across_sessions_and_provenance() -> None:
+    """Session/provenance are irrelevant to grouping - same question_id groups together regardless."""
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=False, attempt_number=1,
+        session_id="session-a", session_mode="practice", provenance="session",
+    )
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+        provenance="standalone",
+    )
+
+    rows = attempt_service.get_latest_attempt_per_question("student-1")
+
+    assert len(rows) == 1
+    assert rows[0]["is_correct"] == 1
+    assert rows[0]["provenance"] == "standalone"

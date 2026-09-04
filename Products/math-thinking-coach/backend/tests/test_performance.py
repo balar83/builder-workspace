@@ -196,3 +196,153 @@ def test_existing_performance_and_concept_contracts_are_unchanged_by_the_new_act
             "conceptId", "conceptTitle", "topicId", "chapterId",
             "questionsAttempted", "questionsCorrect", "accuracy",
         }
+
+
+# --- /performance/me/mistakes (Self-Serve Learning Loop V1, Slice 3) -------
+
+
+def test_mistakes_requires_a_student_session() -> None:
+    response = client.get("/api/v1/performance/me/mistakes")
+
+    assert response.status_code == 401
+
+
+def test_teacher_session_cannot_read_student_mistakes() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher10@example.com", "password": "correct-horse", "name": "T"},
+        )
+
+        response = session_client.get("/api/v1/performance/me/mistakes")
+
+        assert response.status_code == 401
+
+
+def test_mistakes_returns_only_the_logged_in_students_own_unresolved_mistakes() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher11@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section G"}).json()["code"]
+
+    with TestClient(app) as student_a, TestClient(app) as student_b:
+        student_a.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Gita", "pin": "1234"},
+        )
+        student_a_id = student_a.get("/api/v1/auth/me").json()["id"]
+        student_b.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Hari", "pin": "1234"},
+        )
+
+        attempt_service.record_attempt(
+            student_id=student_a_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-a", difficulty="Easy", is_correct=False, attempt_number=1,
+        )
+
+        response_a = student_a.get("/api/v1/performance/me/mistakes")
+        response_b = student_b.get("/api/v1/performance/me/mistakes")
+
+        assert response_a.status_code == 200
+        assert len(response_a.json()) == 1
+        assert response_a.json()[0]["questionId"] == "rn-q01"
+
+        assert response_b.status_code == 200
+        assert response_b.json() == []
+
+
+def test_mistakes_response_shape() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher12@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section H"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Iqbal", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-rational-numbers-properties-and-operations", difficulty="Easy",
+            is_correct=False, attempt_number=1,
+        )
+
+        response = student_client.get("/api/v1/performance/me/mistakes")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert len(body) == 1
+        assert set(body[0].keys()) == {"questionId", "chapterId", "chapterTitle", "topicId", "lastAttemptAt"}
+        assert body[0]["chapterId"] == "rational-numbers"
+        assert body[0]["chapterTitle"] == "Rational Numbers"
+
+
+def test_a_resolved_question_does_not_appear_in_mistakes() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher13@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section I"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Jaya", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-a", difficulty="Easy", is_correct=False, attempt_number=1,
+        )
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-a", difficulty="Easy", is_correct=True, attempt_number=2,
+        )
+
+        response = student_client.get("/api/v1/performance/me/mistakes")
+
+        assert response.status_code == 200
+        assert response.json() == []
+
+
+def test_existing_performance_and_activity_contracts_are_unchanged_by_the_new_mistakes_endpoint() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher14@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section J"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Kabir", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="le-q01", chapter_id="linear-equations",
+            topic_id="topic-linear-equations-one-variable", difficulty="Easy",
+            is_correct=True, attempt_number=1,
+        )
+
+        performance_response = student_client.get("/api/v1/performance/me")
+        activity_response = student_client.get("/api/v1/performance/me/activity")
+
+        assert performance_response.status_code == 200
+        assert set(performance_response.json()[0].keys()) == {
+            "topicId", "questionsAttempted", "questionsCorrect",
+            "accuracy", "currentStreak", "mastered",
+        }
+        assert activity_response.status_code == 200
+        assert set(activity_response.json().keys()) == {"recentAttempts", "chapterActivity"}

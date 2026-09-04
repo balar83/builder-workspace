@@ -305,6 +305,42 @@ def get_recent_attempts(student_id: str, since_days: int = 8) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+def get_latest_attempt_per_question(student_id: str) -> list[dict]:
+    """
+    One row per question_id this student has ever attempted - the row with
+    the maximum (most recent, monotonic) id, i.e. their single latest
+    attempt on that question. Ordered by `id`, deliberately not
+    `created_at`: `id` is the table's own monotonic autoincrement sequence,
+    immune to same-timestamp collisions `created_at` could in principle hit.
+
+    Session-agnostic and provenance-agnostic by construction: grouping is
+    purely by question_id, matching "attempt is atomic evidence" (Self-Serve
+    Learning Loop V1) - a question attempted once standalone and once inside
+    a session groups as one question, not two, and which session (if any)
+    produced the latest attempt is irrelevant to this read.
+    """
+    with _lock:
+        conn = _get_connection()
+        try:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                """
+                SELECT a.* FROM attempts a
+                INNER JOIN (
+                    SELECT question_id, MAX(id) AS latest_id
+                    FROM attempts
+                    WHERE student_id = ?
+                    GROUP BY question_id
+                ) latest ON a.question_id = latest.question_id AND a.id = latest.latest_id
+                """,
+                (student_id,),
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [dict(row) for row in rows]
+
+
 def get_chapter_activity_raw(student_id: str) -> list[dict]:
     """
     Lifetime, chapter-keyed aggregate for the Progress Hub - deliberately NOT

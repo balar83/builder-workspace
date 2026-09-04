@@ -53,3 +53,31 @@ class ActivityResponse(BaseModel):
 
     recentAttempts: list[AttemptActivityRecord]
     chapterActivity: list[ChapterActivity]
+
+
+class UnresolvedMistake(BaseModel):
+    """
+    Self-Serve Learning Loop V1, Slice 3 - GET /performance/me/mistakes.
+    "Still worth fixing," not a lifetime mistake log: a question whose most
+    recent attempt (by attempt id, not timestamp) was incorrect. A question
+    recovered by any later correct attempt is excluded entirely, however
+    many times it was wrong before that - see mistake_service.py for the
+    exact grouping rule. Session-agnostic and provenance-agnostic by
+    construction; deliberately not a generic diagnosis shape - just enough
+    for a learner to see and act on one unresolved question.
+
+    chapterId/chapterTitle/topicId reflect the question's CURRENT content
+    (question_service.get_question_by_id), not what was recorded on the
+    attempt row at the time - a retagged/re-chaptered question shows where
+    it lives today. Falls back to the attempt row's own denormalized
+    chapter_id/topic_id only if the question no longer resolves at all
+    (removed from content since); chapterTitle then falls back to the raw
+    chapter_id, mirroring activity_service's identical unknown-chapter
+    fallback.
+    """
+
+    questionId: str
+    chapterId: str
+    chapterTitle: str
+    topicId: str | None
+    lastAttemptAt: str
