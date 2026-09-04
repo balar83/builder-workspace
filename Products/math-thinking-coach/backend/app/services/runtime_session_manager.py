@@ -124,6 +124,7 @@ def _record_attempt(session, selected, submission, evaluation) -> None:
             question_type=selected.type,
             session_id=session.sessionId,
             session_mode=session.plan.mode,
+            provenance="session",
         )
     except Exception:
         logger.warning(

@@ -1,3 +1,4 @@
+import sqlite3
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -402,3 +403,32 @@ def test_submit_answer_records_a_session_linked_attempt() -> None:
     assert len(performance) == 1
     assert performance[0]["questionsAttempted"] == 1
     assert performance[0]["questionsCorrect"] == 1
+
+
+# --- provenance (Self-Serve Learning Loop V1, Slice 2) ----------------------
+
+
+def _read_provenance(question_id: str) -> list[str | None]:
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT provenance FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["provenance"] for row in rows]
+
+
+def test_session_flow_persists_provenance_as_session() -> None:
+    """
+    Every session-originated attempt (this module's only write path,
+    _record_attempt) is stamped provenance="session" - distinct from, and
+    alongside, session_mode which already carries the session's actual mode.
+    """
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    rsm.submit_answer(session.sessionId, "student-1", 0, ANSWERS[selected.questionId])
+
+    assert _read_provenance(selected.questionId) == ["session"]

@@ -384,3 +384,118 @@ def test_get_chapter_activity_raw_is_scoped_to_the_requesting_student() -> None:
     )
 
     assert attempt_service.get_chapter_activity_raw("student-2") == []
+
+
+# --- provenance (Self-Serve Learning Loop V1, Slice 2) ----------------------
+#
+# Write-only, same technique as _read_submitted_option_id above: no read
+# path exposes provenance in this slice (explicitly out of scope - no
+# provenance-based analytics/UI yet), so these read the column directly.
+
+
+def _read_provenance(question_id: str) -> list[str | None]:
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT provenance FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["provenance"] for row in rows]
+
+
+def test_record_attempt_defaults_provenance_to_none() -> None:
+    """
+    No caller is required to pass provenance - a row written without it
+    (the same shape every historical, pre-Slice-2 row has) stays NULL, never
+    a fabricated guess. Directly covers "historical rows can legitimately
+    remain NULL."
+    """
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert _read_provenance("q1") == [None]
+
+
+def test_record_attempt_persists_provenance_when_given() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, provenance="standalone",
+    )
+
+    assert _read_provenance("q1") == ["standalone"]
+
+
+def test_record_attempt_for_answer_persists_provenance_as_standalone() -> None:
+    """
+    The standalone /questions/{id}/answer write path (record_attempt_for_answer)
+    always stamps provenance="standalone" - unconditionally, regardless of
+    question type or correctness, distinct from session_mode which this path
+    never sets at all.
+    """
+    question = Question(
+        id="q1", chapterId="c1", question="2+2", text="2+2", difficulty="Easy",
+        hints=[], solution="4", topicId="topic-a",
+    )
+    submission = AnswerSubmission(answer="4", attemptNumber=1)
+    response = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(isCorrect=True, score=1.0, maxScore=1.0, evaluatorId="short_text_v1"),
+        coach=Coach(message="Great job!", nextAction=NextAction.NEXT_QUESTION),
+        ui=UiState(canTryAgain=False, canRevealSolution=False, hintLevel=0),
+    )
+
+    attempt_service.record_attempt_for_answer("student-1", question, submission, response)
+
+    assert _read_provenance("q1") == ["standalone"]
+
+
+def test_schema_evolution_does_not_retroactively_add_new_columns_to_an_existing_database() -> None:
+    """
+    Documents a real, verified limitation rather than asserting a false
+    safety guarantee. attempt_service's only schema-application mechanism is
+    `CREATE TABLE IF NOT EXISTS` (see _SCHEMA, run on every _get_connection()
+    call) - which is a no-op against a table that already exists, since
+    SQLite checks table existence only, never column parity. A real,
+    persisted runtime.db whose attempts table was created before this
+    column existed would NOT gain it merely by deploying this slice's code;
+    the next INSERT referencing it raises exactly as reproduced below. Every
+    prior additive column on this table (hints_used, session_id,
+    session_mode, time_taken_seconds, misconception_tag) shares this same
+    gap - not new, not fixed here (a real migration mechanism is out of this
+    slice's explicit "smallest additive change" scope) - pinned down as a
+    test so it stays a conscious, visible fact rather than a silent
+    assumption the next column addition could repeat unknowingly.
+    """
+    pre_provenance_schema = """
+    CREATE TABLE IF NOT EXISTS attempts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id TEXT NOT NULL,
+        question_id TEXT NOT NULL,
+        chapter_id TEXT NOT NULL,
+        topic_id TEXT,
+        difficulty TEXT NOT NULL,
+        question_type TEXT,
+        session_id TEXT,
+        session_mode TEXT,
+        is_correct INTEGER NOT NULL,
+        attempt_number INTEGER NOT NULL,
+        hints_used INTEGER NOT NULL DEFAULT 0,
+        time_taken_seconds REAL,
+        misconception_tag TEXT,
+        created_at TEXT NOT NULL
+    );
+    """
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.executescript(pre_provenance_schema)
+    finally:
+        conn.close()
+
+    with pytest.raises(sqlite3.OperationalError, match="provenance"):
+        attempt_service.record_attempt(
+            student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+            difficulty="Easy", is_correct=True, attempt_number=1,
+        )

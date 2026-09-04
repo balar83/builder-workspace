@@ -20,6 +20,25 @@ DB_PATH = DATA_DIR / "runtime.db"
 _lock = threading.Lock()
 
 _SCHEMA = """
+-- provenance (Self-Serve Learning Loop V1, Slice 2): nullable, distinct
+-- from session_mode on purpose - session_mode names WHICH session mode an
+-- attempt belongs to (practice/test/revision) and is only ever set for
+-- session-originated attempts; provenance instead names WHICH WRITE PATH
+-- recorded the attempt at all ("session" vs "standalone"), set on every new
+-- attempt regardless of mode. Historical rows predate this column and stay
+-- NULL forever - never backfilled, per this slice's explicit scope. See
+-- CREATE TABLE IF NOT EXISTS's own limitation note below.
+--
+-- IMPORTANT, applies to every column in this table, not just this one:
+-- CREATE TABLE IF NOT EXISTS is a no-op against a table that already
+-- exists - SQLite checks table existence only, never column parity. This
+-- statement does NOT retroactively add a new column to a real, persisted
+-- runtime.db whose attempts table was created under an older version of
+-- this schema (verified empirically while adding provenance). Every prior
+-- additive column here carries the same latent gap; no migration mechanism
+-- (e.g. PRAGMA table_info + conditional ALTER TABLE) exists in this
+-- codebase today. Out of scope to fix here - flagged for a deliberate
+-- decision before this is relied upon against a real persisted database.
 CREATE TABLE IF NOT EXISTS attempts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id TEXT NOT NULL,
@@ -35,6 +54,7 @@ CREATE TABLE IF NOT EXISTS attempts (
     hints_used INTEGER NOT NULL DEFAULT 0,
     time_taken_seconds REAL,
     misconception_tag TEXT,
+    provenance TEXT,
     created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_attempts_student_topic ON attempts(student_id, topic_id);
@@ -63,6 +83,7 @@ def record_attempt(
     hints_used: int = 0,
     time_taken_seconds: float | None = None,
     misconception_tag: str | None = None,
+    provenance: str | None = None,
 ) -> None:
     with _lock:
         conn = _get_connection()
@@ -72,8 +93,8 @@ def record_attempt(
                 INSERT INTO attempts (
                     student_id, question_id, chapter_id, topic_id, difficulty, question_type,
                     session_id, session_mode, is_correct, attempt_number, hints_used,
-                    time_taken_seconds, misconception_tag, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    time_taken_seconds, misconception_tag, provenance, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     student_id,
@@ -89,6 +110,7 @@ def record_attempt(
                     hints_used,
                     time_taken_seconds,
                     misconception_tag,
+                    provenance,
                     datetime.now(UTC).isoformat(),
                 ),
             )
@@ -117,6 +139,7 @@ def record_attempt_for_answer(
             difficulty=question.difficulty,
             is_correct=evaluation.evaluation.isCorrect,
             attempt_number=submission.attemptNumber,
+            provenance="standalone",
         )
     except Exception:
         logger.warning(
