@@ -346,3 +346,127 @@ def test_existing_performance_and_activity_contracts_are_unchanged_by_the_new_mi
         }
         assert activity_response.status_code == 200
         assert set(activity_response.json().keys()) == {"recentAttempts", "chapterActivity"}
+
+
+# --- /performance/me/recovery (Self-Serve Learning Loop V1, Slice 4) -------
+
+
+def test_recovery_requires_a_student_session() -> None:
+    response = client.get("/api/v1/performance/me/recovery")
+
+    assert response.status_code == 401
+
+
+def test_teacher_session_cannot_read_student_recovery_metrics() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher15@example.com", "password": "correct-horse", "name": "T"},
+        )
+
+        response = session_client.get("/api/v1/performance/me/recovery")
+
+        assert response.status_code == 401
+
+
+def test_recovery_returns_only_the_logged_in_students_own_data() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher16@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section K"}).json()["code"]
+
+    with TestClient(app) as student_a, TestClient(app) as student_b:
+        student_a.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Leela", "pin": "1234"},
+        )
+        student_a_id = student_a.get("/api/v1/auth/me").json()["id"]
+        student_b.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Mohan", "pin": "1234"},
+        )
+
+        attempt_service.record_attempt(
+            student_id=student_a_id, question_id="rn-q01", chapter_id="rational-numbers",
+            topic_id="topic-a", difficulty="Easy", is_correct=True, attempt_number=1,
+        )
+
+        response_a = student_a.get("/api/v1/performance/me/recovery")
+        response_b = student_b.get("/api/v1/performance/me/recovery")
+
+        assert response_a.status_code == 200
+        assert response_a.json()["lifetime"]["firstAttemptAccuracy"]["attempted"] == 1
+
+        assert response_b.status_code == 200
+        assert response_b.json()["lifetime"]["firstAttemptAccuracy"]["attempted"] == 0
+        assert response_b.json()["lifetime"]["firstAttemptAccuracy"]["accuracy"] is None
+
+
+def test_recovery_response_contract_and_insufficient_evidence_semantics() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher17@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section L"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Nasrin", "pin": "1234"},
+        )
+
+        response = student_client.get("/api/v1/performance/me/recovery")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert set(body.keys()) == {"lifetime", "recent", "hasRecentActivity", "chapters"}
+        assert set(body["lifetime"].keys()) == {"firstAttemptAccuracy", "eventualAccuracy", "recovery"}
+        assert set(body["lifetime"]["firstAttemptAccuracy"].keys()) == {"correct", "attempted", "accuracy"}
+        assert set(body["lifetime"]["recovery"].keys()) == {"recovered", "initiallyWrong", "rate", "sufficientSample"}
+        assert set(body["chapters"][0].keys()) == {"chapterId", "chapterTitle", "lifetime", "recent", "hasRecentActivity"}
+
+        # A fresh learner: explicit insufficient-evidence, never a fake 0%.
+        assert body["lifetime"]["firstAttemptAccuracy"]["attempted"] == 0
+        assert body["lifetime"]["firstAttemptAccuracy"]["accuracy"] is None
+        assert body["lifetime"]["recovery"]["rate"] is None
+        assert body["lifetime"]["recovery"]["sufficientSample"] is False
+        assert body["hasRecentActivity"] is False
+        # Every curriculum chapter is listed, matching the Progress Hub's
+        # chapter-first framing, even with zero evidence.
+        assert len(body["chapters"]) == 7
+
+
+def test_existing_performance_and_mistakes_contracts_are_unchanged_by_the_new_recovery_endpoint() -> None:
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "teacher18@example.com", "password": "correct-horse", "name": "T"},
+        )
+        class_code = session_client.post("/api/v1/auth/teacher/classes", json={"name": "Section M"}).json()["code"]
+
+    with TestClient(app) as student_client:
+        student_client.post(
+            "/api/v1/auth/student/join",
+            json={"classCode": class_code, "displayName": "Omar", "pin": "1234"},
+        )
+        student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+        attempt_service.record_attempt(
+            student_id=student_id, question_id="le-q01", chapter_id="linear-equations",
+            topic_id="topic-linear-equations-one-variable", difficulty="Easy",
+            is_correct=True, attempt_number=1,
+        )
+
+        performance_response = student_client.get("/api/v1/performance/me")
+        mistakes_response = student_client.get("/api/v1/performance/me/mistakes")
+
+        assert performance_response.status_code == 200
+        assert set(performance_response.json()[0].keys()) == {
+            "topicId", "questionsAttempted", "questionsCorrect",
+            "accuracy", "currentStreak", "mastered",
+        }
+        assert mistakes_response.status_code == 200
+        assert mistakes_response.json() == []

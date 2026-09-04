@@ -341,6 +341,44 @@ def get_latest_attempt_per_question(student_id: str) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+def get_attempt_rows(student_id: str, *, since: str | None = None) -> list[dict]:
+    """
+    Raw (question_id, chapter_id, is_correct, attempt_number, created_at)
+    rows for this student, optionally scoped to created_at >= since - the
+    shared raw-evidence read behind recovery_service's accuracy/recovery
+    computations (Self-Serve Learning Loop V1, Slice 4). Deliberately
+    includes attempt_number (unlike get_recent_attempts, which doesn't need
+    it) - first-attempt and recovery semantics both require it. No chapter
+    filter: callers needing chapter-scoped metrics group this in Python,
+    the same pattern get_performance already uses for topic-scoped
+    aggregates - one query, grouped in memory, rather than one query per
+    chapter.
+    """
+    conditions = ["student_id = ?"]
+    params: list[str] = [student_id]
+    if since is not None:
+        conditions.append("created_at >= ?")
+        params.append(since)
+
+    with _lock:
+        conn = _get_connection()
+        try:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                f"""
+                SELECT question_id, chapter_id, is_correct, attempt_number, created_at
+                FROM attempts
+                WHERE {' AND '.join(conditions)}
+                ORDER BY id
+                """,
+                params,
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [dict(row) for row in rows]
+
+
 def get_chapter_activity_raw(student_id: str) -> list[dict]:
     """
     Lifetime, chapter-keyed aggregate for the Progress Hub - deliberately NOT

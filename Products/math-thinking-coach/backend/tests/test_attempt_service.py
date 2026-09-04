@@ -858,3 +858,56 @@ def test_get_latest_attempt_per_question_groups_across_sessions_and_provenance()
     assert len(rows) == 1
     assert rows[0]["is_correct"] == 1
     assert rows[0]["provenance"] == "standalone"
+
+
+# --- get_attempt_rows (Self-Serve Learning Loop V1, Slice 4) ---------------
+
+
+def test_get_attempt_rows_is_empty_for_a_student_with_no_attempts() -> None:
+    assert attempt_service.get_attempt_rows("student-1") == []
+
+
+def test_get_attempt_rows_carries_attempt_number_and_is_scoped_to_the_student() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=False, attempt_number=1,
+    )
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=2,
+    )
+    attempt_service.record_attempt(
+        student_id="student-2", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    rows = attempt_service.get_attempt_rows("student-1")
+
+    assert len(rows) == 2
+    assert [row["attempt_number"] for row in rows] == [1, 2]
+    assert [row["is_correct"] for row in rows] == [0, 1]
+
+
+def test_get_attempt_rows_since_filters_to_the_window() -> None:
+    now = datetime.now(UTC)
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.executescript(attempt_service._SCHEMA)
+        conn.execute(
+            "INSERT INTO attempts (student_id, question_id, chapter_id, topic_id, difficulty, is_correct, attempt_number, created_at) "
+            "VALUES ('student-1', 'old', 'c1', 'topic-a', 'Easy', 1, 1, ?)",
+            ((now - timedelta(days=10)).isoformat(),),
+        )
+        conn.execute(
+            "INSERT INTO attempts (student_id, question_id, chapter_id, topic_id, difficulty, is_correct, attempt_number, created_at) "
+            "VALUES ('student-1', 'new', 'c1', 'topic-a', 'Easy', 1, 1, ?)",
+            (now.isoformat(),),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    cutoff = (now - timedelta(days=1)).isoformat()
+    rows = attempt_service.get_attempt_rows("student-1", since=cutoff)
+
+    assert {row["question_id"] for row in rows} == {"new"}

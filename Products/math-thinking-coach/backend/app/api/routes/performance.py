@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from app.schemas.performance import ActivityResponse, TopicPerformance, UnresolvedMistake
-from app.services import activity_service, attempt_service, mistake_service
+from app.schemas.performance import ActivityResponse, RecoveryMetricsResponse, TopicPerformance, UnresolvedMistake
+from app.services import activity_service, attempt_service, mistake_service, recovery_service
 
 router = APIRouter()
 
@@ -28,3 +28,11 @@ def get_my_unresolved_mistakes(request: Request) -> list[UnresolvedMistake]:
         raise HTTPException(status_code=401, detail="Student login required")
 
     return mistake_service.get_unresolved_mistakes(request.session["id"])
+
+
+@router.get("/performance/me/recovery", response_model=RecoveryMetricsResponse)
+def get_my_recovery_metrics(request: Request) -> RecoveryMetricsResponse:
+    if request.session.get("role") != "student":
+        raise HTTPException(status_code=401, detail="Student login required")
+
+    return recovery_service.get_recovery_metrics(request.session["id"])
