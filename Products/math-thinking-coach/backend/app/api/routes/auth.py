@@ -22,6 +22,27 @@ def _require_teacher(request: Request) -> str:
     return request.session["id"]
 
 
+def _refresh_session_lifetime(request: Request) -> None:
+    """
+    Turns the configured session max_age into a rolling inactivity window
+    instead of an absolute cap.
+
+    SessionMiddleware re-issues the cookie - resetting both the browser's
+    Max-Age and the signature timestamp its own max_age check reads - only
+    when the session is *modified*. Reading it (`session.get`) marks it
+    accessed, not modified, so before this every session expired a fixed 14
+    days after it was created, however actively it was being used.
+
+    Re-assigning the identity keys to the values they already hold is the
+    smallest touch that flips that flag: no key is added, removed or changed,
+    so the session payload and every identity semantic stay exactly what they
+    were. Called only on a *successfully resolved* identity - never on a path
+    that 401s or clears the session.
+    """
+    request.session["role"] = request.session["role"]
+    request.session["id"] = request.session["id"]
+
+
 @router.post("/auth/teacher/register", response_model=TeacherPublic)
 def register_teacher(body: TeacherRegisterRequest, request: Request) -> TeacherPublic:
     try:
@@ -133,6 +154,7 @@ def get_current_user(request: Request) -> CurrentUser:
         if teacher is None:
             request.session.clear()
             raise HTTPException(status_code=401, detail="Not logged in")
+        _refresh_session_lifetime(request)
         return CurrentUser(role="teacher", id=teacher.id, name=teacher.name)
 
     # Student-role session: try the class-connected Student store first, then
@@ -143,10 +165,12 @@ def get_current_user(request: Request) -> CurrentUser:
     # even if both stores happened to be searched.
     student = auth_service.get_student(user_id)
     if student is not None:
+        _refresh_session_lifetime(request)
         return CurrentUser(role="student", id=student.id, name=student.displayName)
 
     learner = auth_service.get_self_serve_learner(user_id)
     if learner is not None:
+        _refresh_session_lifetime(request)
         return CurrentUser(role="student", id=learner.id, name=None)
 
     request.session.clear()

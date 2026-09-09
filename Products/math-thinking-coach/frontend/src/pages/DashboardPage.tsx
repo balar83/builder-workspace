@@ -49,6 +49,13 @@ interface ChapterWithPerformance {
 
 interface DashboardData {
   studentName: string;
+  // Boundary 1 (P2): true only for a self-serve learner. Uses the "learner_"
+  // id namespace, which auth_service.py documents as structurally - not just
+  // probabilistically - disjoint from Student/Teacher ids (plain uuid4().hex,
+  // never containing "_"). A class-connected student reaching this same
+  // Dashboard is false, and their logout is left exactly as it was: they can
+  // sign back in with their class code, name and PIN, so nothing is lost.
+  isSelfServe: boolean;
   chapters: ChapterWithPerformance[];
   resume?: { pointer: SessionPointer; chapterTitle: string };
   // Progress Hub V1 (additive): dailyActivity is built client-side from the
@@ -98,6 +105,7 @@ async function loadDashboard(): Promise<DashboardData> {
 
   return {
     studentName: user?.name ?? '',
+    isSelfServe: user?.id.startsWith('learner_') ?? false,
     chapters: chaptersWithPerformance,
     resume,
     // Bucketed here, client-side, against the browser's own local calendar
@@ -142,9 +150,26 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | undefined>(undefined);
   const [loadError, setLoadError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
+  // Boundary 1 (P2): only ever true for a self-serve learner - see the gate in
+  // handleLogout below.
+  const [confirmingLogout, setConfirmingLogout] = useState(false);
 
-  const handleLogout = () => {
+  const performLogout = () => {
     authService.logout().finally(() => navigate('/'));
+  };
+
+  // A self-serve learner has no credential to sign back in with (there is no
+  // learner login route - identity comes from the session cookie alone), so
+  // clearing that session is irreversible for them in a way it simply is not
+  // for a class student or a teacher. The action itself is unchanged and still
+  // offered; it just stops being one unannounced click away from destroying
+  // the only route back to their own practice history.
+  const handleLogout = () => {
+    if (data?.isSelfServe) {
+      setConfirmingLogout(true);
+      return;
+    }
+    performLogout();
   };
 
   useEffect(() => {
@@ -198,6 +223,28 @@ export default function DashboardPage() {
           Log out
         </button>
       </div>
+
+      {/* Boundary 1 (P2): shown only for a self-serve learner, for whom
+          logging out is irreversible - the honest wording matters more than
+          the control, so it says plainly what is lost rather than hedging.
+          Cancel leaves the learner authenticated and changes nothing. */}
+      {confirmingLogout && (
+        <section className="form-panel" aria-live="polite">
+          <h2>Log out?</h2>
+          <p>
+            Your practice history is saved to this browser only. There is no way to sign back in
+            and reach it again, so logging out means starting fresh next time.
+          </p>
+          <div className="button-group">
+            <button type="button" onClick={performLogout}>
+              Log out anyway
+            </button>
+            <button type="button" className="btn-secondary" onClick={() => setConfirmingLogout(false)}>
+              Cancel
+            </button>
+          </div>
+        </section>
+      )}
 
       {data.resume && (
         <ResumeBanner chapterTitle={data.resume.chapterTitle} sessionId={data.resume.pointer.sessionId} />

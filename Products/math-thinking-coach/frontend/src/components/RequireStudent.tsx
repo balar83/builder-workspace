@@ -23,8 +23,16 @@ export default function RequireStudent({ children }: { children: ReactNode }) {
         if (user?.role === 'student') {
           setState('authorized');
         } else {
+          // Boundary 1 (A2/P1): renders in place instead of redirecting to
+          // /student/join. That redirect sent a self-serve learner whose
+          // identity had expired — a routine event, not an exceptional one —
+          // into a class-join form asking for a class code they have never
+          // had, with no self-serve option on it. Class joining stays
+          // reachable from its own deliberate entry point on Home; it is
+          // never an involuntary recovery path for a lost learner identity.
+          // Deliberately does NOT mint a new identity here: a route guard is
+          // the wrong place to silently create a learner.
           setState('unauthorized');
-          navigate('/student/join', { replace: true });
         }
       })
       // getCurrentUser resolves to undefined for a clean 401, so reaching
@@ -44,7 +52,27 @@ export default function RequireStudent({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [navigate, retryToken]);
+  }, [retryToken]);
+
+  // Deliberately kept distinct from 'unreachable' below: "we can't confirm
+  // who you are" and "we can't reach the server at all" are different facts
+  // and need different copy — the latter can honestly promise the learner's
+  // progress is safe, this one cannot.
+  if (state === 'unauthorized') {
+    return (
+      <main className="container">
+        <h1>We couldn&apos;t find your progress</h1>
+        <p className="page-lead">
+          This can happen if you haven&apos;t practised for a while, or if you&apos;re using a
+          different browser or device. You can keep learning from the home page — new practice
+          will be saved here.
+        </p>
+        <div className="button-group">
+          <button onClick={() => navigate('/')}>Go to Home</button>
+        </div>
+      </main>
+    );
+  }
 
   if (state === 'unreachable') {
     return (

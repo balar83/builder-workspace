@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const mockNavigate = vi.fn();
@@ -386,6 +386,87 @@ describe('DashboardPage', () => {
 
       await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 });
       expect(screen.queryByRole('button', { name: 'Practise your weak areas' })).toBeNull();
+    });
+  });
+
+  // Boundary 1 (P2). A self-serve learner has no credential to sign back in
+  // with - there is no learner login route, identity comes from the session
+  // cookie alone - so clearing that session is irreversible for them in a way
+  // it is not for a class student or a teacher. The control is deliberately
+  // kept, not removed; it just stops being one unannounced click away from
+  // destroying the only route back to their own practice history.
+  describe('logout', () => {
+    const CLASS_STUDENT = { role: 'student' as const, id: '4c1848ed058b48e8be53de22690ed3ee', name: 'Asha' };
+
+    it('still offers Log out to a self-serve learner', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByRole('button', { name: 'Log out' })).toBeInTheDocument();
+    });
+
+    it('requires explicit confirmation before logging a self-serve learner out', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Log out' }));
+
+      expect(screen.getByRole('heading', { name: 'Log out?' })).toBeInTheDocument();
+      expect(authService.logout).not.toHaveBeenCalled();
+    });
+
+    it('states plainly that the identity cannot be recovered afterwards', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Log out' }));
+
+      expect(screen.getByText(/no way to sign back in and reach it again/i)).toBeInTheDocument();
+    });
+
+    it('leaves the learner authenticated and unchanged when the confirmation is cancelled', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Log out' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+      expect(screen.queryByRole('heading', { name: 'Log out?' })).toBeNull();
+      expect(authService.logout).not.toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    it('performs the existing, unchanged logout once confirmed', async () => {
+      setUpDefaultMocks();
+      vi.mocked(authService.logout).mockResolvedValue(undefined);
+
+      render(<DashboardPage />);
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Log out' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Log out anyway' }));
+
+      expect(authService.logout).toHaveBeenCalledTimes(1);
+      await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/'));
+    });
+
+    // A class-connected student can sign back in with their class code, name
+    // and PIN, so nothing is lost - their logout must stay exactly as it was.
+    it('logs a class-connected student out immediately, with no confirmation step', async () => {
+      setUpDefaultMocks();
+      vi.mocked(authService.getCurrentUser).mockResolvedValue(CLASS_STUDENT);
+      vi.mocked(authService.logout).mockResolvedValue(undefined);
+
+      render(<DashboardPage />);
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Log out' }));
+
+      expect(screen.queryByRole('heading', { name: 'Log out?' })).toBeNull();
+      expect(authService.logout).toHaveBeenCalledTimes(1);
+      await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/'));
     });
   });
 });

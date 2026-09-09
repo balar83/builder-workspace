@@ -292,3 +292,91 @@ def test_existing_student_teacher_and_content_flows_are_unaffected() -> None:
 
     chapters_response = client.get("/api/v1/chapters")
     assert chapters_response.status_code == 200
+
+
+# --- Boundary 1 (A3): session durability -------------------------------------
+# The 14-day lifetime was previously inherited implicitly from Starlette's own
+# default AND was absolute: SessionMiddleware re-issues the cookie only when the
+# session is *modified*, and every ordinary request merely reads it, so a
+# learner practising daily was still evicted on day 15. These cover the
+# explicit configuration and the rolling-window behaviour that replaced it.
+
+
+def test_session_cookie_carries_the_configured_fourteen_day_max_age() -> None:
+    response = client.post("/api/v1/auth/learner/start")
+
+    set_cookie = response.headers["set-cookie"]
+    assert "session=" in set_cookie
+    assert f"Max-Age={14 * 24 * 60 * 60}" in set_cookie
+
+
+def test_authenticated_activity_refreshes_the_session_expiry() -> None:
+    """
+    The rolling window itself: a plain authenticated read must re-issue the
+    cookie. Before this, GET /auth/me sent no Set-Cookie at all, so the
+    original 14 days ran down regardless of how actively the learner used the
+    product.
+    """
+    with TestClient(app) as session_client:
+        session_client.post("/api/v1/auth/learner/start")
+
+        me_response = session_client.get("/api/v1/auth/me")
+
+        assert me_response.status_code == 200
+        refreshed = me_response.headers.get("set-cookie")
+        assert refreshed is not None, "GET /auth/me must re-issue the session cookie"
+        assert f"Max-Age={14 * 24 * 60 * 60}" in refreshed
+
+
+def test_refreshing_preserves_the_identity_rather_than_replacing_it() -> None:
+    """The refresh must not mint, swap or otherwise disturb the identity."""
+    with TestClient(app) as session_client:
+        started = session_client.post("/api/v1/auth/learner/start").json()
+
+        first = session_client.get("/api/v1/auth/me").json()
+        second = session_client.get("/api/v1/auth/me").json()
+
+        assert started["id"] == first["id"] == second["id"]
+        assert first == second
+
+
+def test_refresh_introduces_no_second_cookie_or_identity_mechanism() -> None:
+    """
+    Security invariant for Boundary 1: identity continues to resolve from the
+    one signed, HttpOnly, server-issued session cookie and nothing else - no
+    companion cookie, no token, no client-supplied identifier.
+    """
+    with TestClient(app) as session_client:
+        session_client.post("/api/v1/auth/learner/start")
+        me_response = session_client.get("/api/v1/auth/me")
+
+        assert set(session_client.cookies.keys()) == {"session"}
+        set_cookie = me_response.headers["set-cookie"]
+        assert "httponly" in set_cookie.lower()
+
+
+def test_teacher_activity_also_rolls_but_still_expires_when_idle() -> None:
+    """
+    One SessionMiddleware serves every population, so the teacher session rolls
+    too. That is deliberate and is the reason the window was NOT lengthened to
+    a long absolute lifetime: an idle session of any role still expires 14 days
+    after last use.
+    """
+    with TestClient(app) as session_client:
+        session_client.post(
+            "/api/v1/auth/teacher/register",
+            json={"email": "rolling@example.com", "password": "correct-horse", "name": "R"},
+        )
+
+        me_response = session_client.get("/api/v1/auth/me")
+
+        assert me_response.json()["role"] == "teacher"
+        assert f"Max-Age={14 * 24 * 60 * 60}" in me_response.headers["set-cookie"]
+
+
+def test_unauthenticated_request_is_not_issued_a_session_cookie() -> None:
+    """A 401 must never hand out or refresh a session."""
+    response = client.get("/api/v1/auth/me")
+
+    assert response.status_code == 401
+    assert "set-cookie" not in response.headers

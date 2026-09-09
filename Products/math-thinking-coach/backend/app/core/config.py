@@ -26,6 +26,15 @@ class Settings:
     # Vercel + Render) is cross-site and needs "none" here, paired with
     # SESSION_HTTPS_ONLY=true — browsers reject SameSite=None without Secure.
     session_cookie_samesite: str = os.getenv("SESSION_COOKIE_SAMESITE", "lax").lower()
+    # Was previously left unset, inheriting Starlette's own 14-day default. Now
+    # explicit, because it is a product decision rather than a framework
+    # accident: 14 days as a rolling inactivity window (routes/auth.py's
+    # get_current_user re-issues the cookie on routine authenticated activity),
+    # not a 14-day absolute cap. Deliberately NOT lengthened to a long absolute
+    # lifetime - one SessionMiddleware serves teachers, class students and
+    # self-serve learners alike, so this value is also a teacher's session
+    # lifetime; an idle session of any role still expires 14 days after last use.
+    session_max_age_seconds: int = int(os.getenv("SESSION_MAX_AGE_SECONDS", str(14 * 24 * 60 * 60)))
 
 
 settings = Settings()
