@@ -1,0 +1,48 @@
+{
+  "milestone_id": "EXAMPLE",
+  "schema_version": 1,
+  "created_at": "2026-09-16T14:02:11Z",
+  "baseline": {
+    "sha": "8187e98a1f2c9d4e5b6a7c8d9e0f1a2b3c4d5e6f",
+    "branch": "main",
+    "timestamp": "2026-09-16T14:02:11Z"
+  },
+  "scope": "Products/math-thinking-coach",
+  "protected_pre_existing": [
+    {
+      "path": "Products/math-thinking-coach/backend/app/services/concept_performance_service.py",
+      "rename_from": null,
+      "kind": "untracked",
+      "git_status": "??",
+      "is_binary": false,
+      "patch_sha256": null,
+      "content_sha256": "9f2c1a...ab31",
+      "mtime": "2026-09-15T22:10:03Z (SUPPORTING EVIDENCE -- NOT AUTHORITATIVE)"
+    },
+    {
+      "path": "Products/math-thinking-coach/backend/app/api/routes/performance.py",
+      "rename_from": null,
+      "kind": "tracked-modified",
+      "git_status": " M",
+      "is_binary": false,
+      "patch_sha256": "1a4e77...d0",
+      "content_sha256": "44bb21...9c",
+      "mtime": "2026-09-15T21:58:40Z (SUPPORTING EVIDENCE -- NOT AUTHORITATIVE)"
+    }
+  ],
+  "expected_files": {
+    "implementation": [
+      "Products/math-thinking-coach/backend/app/services/concept_performance_service.py",
+      "Products/math-thinking-coach/backend/app/api/routes/performance.py"
+    ],
+    "tests": [
+      "Products/math-thinking-coach/backend/tests/test_concept_performance_service.py"
+    ],
+    "documentation": [
+      "Products/math-thinking-coach/docs/PROJECT_STATUS.md"
+    ]
+  },
+  "acknowledgements": [],
+  "notes": "Illustrative example only -- not a real milestone manifest. See .milestones/README.md.",
+  "immutable_fields_sha256": "this-value-is-not-real-recompute-if-you-hand-edit-this-file"
+}
