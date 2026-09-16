@@ -65,6 +65,27 @@ Activated the M2.1–M2.3 evaluators against real content for the first time: Li
 ### Content import — Squares and Cubes test questions (2026-08-19, commit `a071335`)
 Squares and Cubes expanded 40 → 52 questions via the existing Stage 10 pipeline. Content-only. See `Development-Journal.md`'s 2026-08-19 entry.
 
+### Slice A2 + A2b — Structured Content Migration, all Topic-bearing chapters (commits `51a05fe`/`d7890cc`, between 2026-08-19 and 2026-09-02)
+**Backfilled 2026-09-02 — missing from this log until found via `git log` during the Product Strategy Documentation Alignment pass.** Slice A2: `TopicPage.tsx` cut over to render `topic.concepts` directly (legacy paragraph-splitting kept only as an unused fallback). A2b: Linear Equations, Data Handling, Understanding Quadrilaterals (`51a05fe`) and Rational Numbers (`d7890cc`, the final chapter) migrated onto structured `Topic.concepts`, joining the Slice A1 pilot (Squares and Cubes). All 6 Topic-bearing chapters now carry structured content — confirmed by reading `backend/app/data/topics.json` directly. Slice A3 (removing the now-redundant legacy fields) remains undone. See `Phase-1-Handoff.md` §8's corrected note.
+
+### Content expansion — Exponents and Powers + 6 chapters to 420 total (2026-09-02, commit `112ace7`)
+New chapter Exponents and Powers added; all 7 chapters normalized to 60 questions each (420 total, up from 253). Content-only, via the existing Stage 10 pipeline.
+
+### Chapter lesson-page UX slice (2026-09-02, commit `44b98b7`)
+TopicPage: top-of-page "Start Practice" shortcut CTA (alongside the unchanged end-of-lesson one) + progressive-disclosure worked examples, with a minimal regression test. Explicitly scoped to exclude self-serve access changes, Revision/Review-incorrect features, teacher dashboard, GenAI/agents, and a full E2E framework.
+
+### Self-Serve Learning Loop V1, Slices 1–6b + hardening (2026-09-03 to 2026-09-09, commits `2335c8a`…`8187e98`, 9 commits)
+**Backfilled 2026-09-16** — missing from this log until this release-preparation pass found the gap via `git log`. Self-serve learner identity, Progress Hub V1, Revision discoverability, attempt provenance tagging, Wrong-Answer Review, Recovery/Improvement Metrics, Runtime Remediation, both metrics and mistake-review on the Dashboard, and a `RequireStudent`/auth hardening pass. See `Development-Journal.md`'s 2026-09-16 backfill entry for the per-commit breakdown.
+
+### M3 — `multi_part` question type (2026-09-16 release, exactly `le-q25`/`le-q37`/`le-q40`)
+New `multi_part` questionType, per-part evaluation (`short_text`/`numeric` parts only, all parts must be correct for overall correctness), `MultiPartInput` frontend component, content-pipeline validation. Closes item 7 below. **This item had no prior authorization record in this file, `Development-Journal.md`, or an ADR before the 2026-09-16 release decision** — see `Question-Response-Semantics-Design-Proposal.md`'s closing note for the reconciliation.
+
+### D1 — concept-level performance (2026-09-16 release)
+New read-time per-concept accuracy rollup (`concept_performance_service.py`, `GET /performance/me/concepts`, Dashboard breakdown), built on Slice A1's `Question.objectiveIds`/`Topic.concepts`. Not previously named anywhere in this backlog — added to this file for the first time as part of the 2026-09-16 release decision.
+
+### Attempt telemetry enrichment + mastery activation (2026-09-16 release)
+Closes item 4 below: real `hintsUsed` now reaches `attempts.hints_used`; new `attempts.submitted_option_id` column. Activates the pre-existing `mastered = streak >= 3` rule's `hints_used == 0` clause: a correct answer after a hint no longer advances the streak. Explicit product decision made as part of this release.
+
 *Note: this numbering reflects what was actually built. An earlier draft of this backlog had different titles under 008/009 — this file is the corrected, authoritative history.*
 
 ---
@@ -87,16 +108,29 @@ Per `AI-Builder-OS/DOCUMENTATION_STANDARDS.md`, this file tracks **approved futu
 
 ---
 
-## Recommended Next: Documentation & Architecture Reconciliation, then A2
+## Recommended Next (superseded 2026-09-02 — see below)
+
+*This section (below) is retained as a superseded historical record — items 2 and 3 (Slice A2/A2b) have since shipped (see the "Completed" entry above), which is exactly why this section needed replacing rather than silent editing. Current recommended sequence is in the new section that follows.*
 
 As of M2.4 (commit `2e0205d`) and the Squares & Cubes content import (commit `a071335`), production is verified at: 267/267 backend, 134/134 frontend, 88/88 Stage 10 pipeline; Linear Equations at 3 single_choice/2 multi_choice/28 numeric/11 short_text; Squares & Cubes at 52 questions. The agreed forward sequence:
 
 1. **Documentation & Architecture Reconciliation** — reconcile `Backlog.md`/`Roadmap.md`/`PROJECT_STATUS.md`/`Development-Journal.md`/`Phase-1-Handoff.md`/`Release-Notes.md` against the verified state above and write [ADR-008](ADR/ADR-008-question-response-evaluation-architecture.md) for the evaluator-registry architecture. This item.
-2. **Slice A2 — TopicPage structured-content cutover.** `TopicPage.tsx`/`types/topic.ts` consume `topic.concepts` instead of the legacy joined string, for the one already-migrated pilot chapter (A Square and A Cube, Slice A1).
-3. **A2b — migrate remaining 4 Topic-bearing chapters** (Linear Equations, Data Handling, Understanding Quadrilaterals, Rational Numbers) onto the structured `Topic.concepts` shape.
-4. **Attempt telemetry enrichment** — populate the already-existing-but-unused `attempts.hints_used`/`.time_taken_seconds`/`.question_type` columns (`Question-Response-Semantics-Design-Proposal.md` Part II §O.5).
+2. ~~**Slice A2 — TopicPage structured-content cutover.**~~ Done, `51a05fe`.
+3. ~~**A2b — migrate remaining 4 Topic-bearing chapters**~~ Done, `51a05fe`/`d7890cc`.
+4. ~~**Attempt telemetry enrichment**~~ Done, 2026-09-16 release (`hintsUsed`/`submitted_option_id` — `time_taken_seconds`/`.question_type` remain unpopulated). See "Completed" above.
 5. **Product fork decision + small deferred fixes** — `Phase-1-Handoff.md` §13's remaining items (name-length limits, "list my classes" endpoint).
 6. **Either deterministic misconception coaching or teacher/classroom adoption** — a Product Architect decision between the two paths, not both.
-7. **Later: M3 `multi_part`** — the evaluator for `le-q25`/`le-q37`/`le-q40`-style compound-answer questions (`Question-Response-Semantics-Design-Proposal.md` §M item 3).
+7. ~~**Later: M3 `multi_part`**~~ Done, 2026-09-16 release, scoped to exactly `le-q25`/`le-q37`/`le-q40`. See "Completed" above.
 
-None of items 2–7 are authorized to start until their own design/review/approval pass, per this project's established workflow. Shadow Mode continues accumulating real evaluations unchanged since Feature 015, independent of this sequence.
+---
+
+## Recommended Next (current, 2026-09-02 — per `Roadmap.md`'s North Star Capability Model)
+
+The 2026-09-02 Product Strategy Documentation Alignment reset the product's strategic framing (`Product-Vision.md`) and, as a byproduct of reconciling docs against actual repo state, surfaced that A2/A2b (above) and the content expansion to 420 questions (`112ace7`) had shipped without their own documentation pass. That gap is now closed. Going forward, treat `Roadmap.md`'s **North Star Capability Model** section as the authoritative source for next-priority items — it supersedes this file's own prioritization for anything at the capability/product level. As of this writing, per that section:
+
+1. ~~**Near-term, highest leverage: expose existing authored misconception content.**~~ **Done — discovered 2026-09-16, not previously reconciled here.** This item is exactly what Self-Serve Slice 5 "Runtime Remediation" (`fef9b6d`, 2026-09-04) already shipped: `commonWrongAnswer`/`why`/`remediationHint` now flow through the whitelist transform to `backend/app/data/questions.json` and render via `RemediationPanel` on both `QuestionPage.tsx` and `SessionQuestionPage.tsx`. This section named it as the lead recommendation for over two weeks after it had already shipped — another instance of the same documentation-lag pattern as the 9-commit Self-Serve backfill itself.
+2. **Blocked on a product-owner decision, not effort: the two-engine (anonymous vs. class-joined) split.** This is the concrete shape of the gap against the Common Product Model's one-engine target — see `ProductArchitecture.md` §1a. Not authorized to start; needs an explicit decision on whether/how to unify onto the more-capable authenticated-track engine without requiring a class.
+3. ~~Attempt telemetry enrichment~~ and ~~M3 `multi_part`~~ are also now done, both as part of the 2026-09-16 release — see "Completed" above. The small deferred Phase 1 fixes (`Phase-1-Handoff.md` §13) remain the one still-open, valid, lower-priority candidate from the superseded list.
+4. **Explicitly not started, and not authorized by this reset:** any of the 9 deferred non-goals in `Product-Vision.md` (autonomous AI agents, general chatbot, sophisticated adaptive/mastery engine, full competitive-exam framework, large teacher dashboard, full parent portal, large-scale AI question generation, full custom-question ingestion pipeline).
+
+None of the above is authorized to start until its own design/review/approval pass, per this project's established workflow (`Phase-1-Handoff.md` §16). Shadow Mode continues accumulating real evaluations unchanged since Feature 015, independent of this sequence.

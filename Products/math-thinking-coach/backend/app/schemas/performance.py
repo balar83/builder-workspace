@@ -10,6 +10,26 @@ class TopicPerformance(BaseModel):
     mastered: bool
 
 
+class ConceptPerformance(BaseModel):
+    """
+    Read-time aggregate only (D1) - no persistence, no mastery semantics.
+    "Recent accuracy on questions covering this idea", nothing stronger:
+    intentionally has no streak/mastered fields, unlike TopicPerformance -
+    see concept_performance_service.py for the cross-concept attribution
+    rule this is built from. A concept with zero attempts is simply absent
+    from the response, mirroring how get_performance already omits a topic
+    with no attempts - never represented as 0% here either.
+    """
+
+    conceptId: str
+    conceptTitle: str
+    topicId: str
+    chapterId: str
+    questionsAttempted: int
+    questionsCorrect: int
+    accuracy: float
+
+
 class AttemptActivityRecord(BaseModel):
     """
     One raw attempt row, timestamp preserved as-is (server UTC) - the

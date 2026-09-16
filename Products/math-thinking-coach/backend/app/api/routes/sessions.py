@@ -96,7 +96,9 @@ def submit_session_answer(
     student_id = _require_student(request)
 
     try:
-        result = runtime_session_manager.submit_answer(session_id, student_id, body.position, body.answer)
+        result = runtime_session_manager.submit_answer(
+            session_id, student_id, body.position, body.answer, body.hintsUsed
+        )
     except runtime_session_manager.SessionNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except runtime_session_manager.SessionNotSubmittableError as exc:

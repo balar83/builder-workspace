@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import BackLink from '../components/BackLink';
+import { ensureLearnerSession } from '../services/ensureLearnerSession';
 import { questionService } from '../services/questionService';
 import type { Topic } from '../types/topic';
 import './TopicPage.css';
@@ -72,6 +73,12 @@ export default function TopicPage() {
   const [notFound, setNotFound] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
+  // Second, deliberately distinct Practice entry point (approved slice):
+  // establishes/reuses a learner identity, then hands off into the existing
+  // Session engine - a separate path from handlePractice below, which keeps
+  // routing to the unmodified, zero-configuration QuestionPage flow.
+  const [sessionEntryLoading, setSessionEntryLoading] = useState(false);
+  const [sessionEntryError, setSessionEntryError] = useState('');
 
   // Set when the student arrives from the authenticated Dashboard (IA-1):
   // it decides whether "Start Practice" continues into a configured
@@ -165,6 +172,26 @@ export default function TopicPage() {
   const backLabel = fromDashboard ? 'Dashboard' : 'Chapter';
   const handlePractice = () =>
     navigate(fromDashboard ? `/practice/${topic.chapterId}` : `/question/${topic.chapterId}`);
+
+  // Second Practice entry point (approved slice): for a learner who arrived
+  // here directly (not via Dashboard - that case already routes handlePractice
+  // above into the Session engine), this establishes/reuses identity first,
+  // then hands off into the exact same /practice/:chapterId route a
+  // class-connected student already uses. RequireStudent's existing
+  // role === "student" check needs no change - by the time it runs, a valid
+  // session already exists. Does not navigate on failure, so a network error
+  // never lands the learner on a session that can't load.
+  const handlePracticeSession = async () => {
+    setSessionEntryError('');
+    setSessionEntryLoading(true);
+    try {
+      await ensureLearnerSession();
+      navigate(`/practice/${topic.chapterId}`);
+    } catch {
+      setSessionEntryError("We couldn't start a practice session. Check your connection and try again.");
+      setSessionEntryLoading(false);
+    }
+  };
 
   // Jump-to-section nav (UX slice: reduce forced scrolling before a
   // returning learner can act). Reuses each concept's *existing*
@@ -367,6 +394,31 @@ export default function TopicPage() {
             Start Practice →
           </button>
           <p className="topic-cta-note">Put this lesson into practice with guided questions.</p>
+
+          {/* Only offered on a direct visit - a learner who arrived via
+              Dashboard already gets the Session engine from the button
+              above, so a second, identical-looking option here would just
+              be confusing, not additive. */}
+          {!fromDashboard && (
+            <>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handlePracticeSession}
+                disabled={sessionEntryLoading}
+              >
+                {sessionEntryLoading ? 'Starting…' : 'Start a Tracked Practice Session →'}
+              </button>
+              <p className="topic-cta-note">
+                Choose your difficulty and question count, and see your progress over time.
+              </p>
+              {sessionEntryError && (
+                <p className="form-error" aria-live="polite">
+                  {sessionEntryError}
+                </p>
+              )}
+            </>
+          )}
         </div>
       </div>
     </main>

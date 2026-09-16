@@ -11,7 +11,7 @@ const path = require('node:path');
 const { loadCanonical, ExportValidationError } = require('../loadCanonical');
 const { transformQuestion } = require('../transform');
 const { validateAgainstRuntimeSchemas } = require('../pydanticValidate');
-const { validQuestionBank, clone, writeChapterFixture } = require('./fixtures');
+const { validQuestionBank, multiPartQuestionBank, multiPartAnswerKeys, clone, writeChapterFixture } = require('./fixtures');
 
 const repoRoot = path.resolve(__dirname, '..', '..', '..', '..');
 const backendDir = path.join(repoRoot, 'backend');
@@ -76,7 +76,10 @@ test('loadCanonical: a reserved-but-unimplemented questionType (fill_blank) is r
   );
 });
 
-for (const reserved of ['fill_blank', 'matching', 'multi_part']) {
+// single_choice/multi_choice were this loop's original examples too, then
+// multi_part gained real evaluator/pipeline support (M3) - both moved out
+// the same way, leaving only the types that are still genuinely reserved.
+for (const reserved of ['fill_blank', 'matching']) {
   test(`loadCanonical: reserved questionType "${reserved}" is also rejected`, () => {
     const bank = clone(validQuestionBank());
     bank.questions[0].questionType = reserved;
@@ -85,6 +88,109 @@ for (const reserved of ['fill_blank', 'matching', 'multi_part']) {
     assert.throws(() => loadCanonical({ chapterDir, dataDir }), ExportValidationError);
   });
 }
+
+// --- loadCanonical.js: structural validation for multi_part (M3) -----------
+
+test('loadCanonical: a multi_part question with a well-formed parts array loads without issues', () => {
+  const { chapterDir, dataDir } = writeChapterFixture({
+    questionBank: multiPartQuestionBank(),
+    answerKeys: multiPartAnswerKeys(),
+  });
+
+  assert.doesNotThrow(() => loadCanonical({ chapterDir, dataDir }));
+});
+
+test('loadCanonical: a multi_part question with no parts array is rejected', () => {
+  const bank = clone(multiPartQuestionBank());
+  delete bank.questions[0].responseSpecification;
+  const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
+
+  assert.throws(
+    () => loadCanonical({ chapterDir, dataDir }),
+    (err) => {
+      assert.ok(err instanceof ExportValidationError);
+      assert.ok(err.issues.some((i) => i.includes('fx-mp-q01') && i.includes('no non-empty responseSpecification.parts')));
+      return true;
+    }
+  );
+});
+
+test('loadCanonical: a multi_part question with an empty parts array is rejected', () => {
+  const bank = clone(multiPartQuestionBank());
+  bank.questions[0].responseSpecification.parts = [];
+  const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
+
+  assert.throws(() => loadCanonical({ chapterDir, dataDir }), ExportValidationError);
+});
+
+test('loadCanonical: a multi_part question with duplicate part ids is rejected', () => {
+  const bank = clone(multiPartQuestionBank());
+  bank.questions[0].responseSpecification.parts[1].id = 'lhs';
+  const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
+
+  assert.throws(
+    () => loadCanonical({ chapterDir, dataDir }),
+    (err) => {
+      assert.ok(err instanceof ExportValidationError);
+      assert.ok(err.issues.some((i) => i.includes('duplicate part id')));
+      return true;
+    }
+  );
+});
+
+test('loadCanonical: a multi_part part naming an unsupported questionType (e.g. single_choice) is rejected', () => {
+  const bank = clone(multiPartQuestionBank());
+  bank.questions[0].responseSpecification.parts[1].questionType = 'single_choice';
+  const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
+
+  assert.throws(
+    () => loadCanonical({ chapterDir, dataDir }),
+    (err) => {
+      assert.ok(err instanceof ExportValidationError);
+      assert.ok(err.issues.some((i) => i.includes('does not support')));
+      return true;
+    }
+  );
+});
+
+test('loadCanonical: nested multi_part (a part whose own questionType is multi_part) is rejected', () => {
+  const bank = clone(multiPartQuestionBank());
+  bank.questions[0].responseSpecification.parts[1].questionType = 'multi_part';
+  const { chapterDir, dataDir } = writeChapterFixture({ questionBank: bank });
+
+  assert.throws(() => loadCanonical({ chapterDir, dataDir }), ExportValidationError);
+});
+
+// --- transform.js: multi_part parts / derived maxScore emission (M3) -------
+
+test('transformQuestion: multi_part parts are emitted field-by-field, in order', () => {
+  const result = transformQuestion(multiPartQuestionBank().questions[0], {
+    chapterId: 'fixture-chapter',
+    topicId: 'topic-fixture',
+  });
+
+  assert.deepEqual(result.responseSpecification.parts, [
+    { id: 'lhs', prompt: 'LHS (left-hand side)', questionType: 'short_text', responseSpecification: null, maxScore: 1.0, objectiveIds: null },
+    { id: 'rhs', prompt: 'RHS (right-hand side)', questionType: 'short_text', responseSpecification: null, maxScore: 1.0, objectiveIds: null },
+  ]);
+});
+
+test('transformQuestion: a multi_part question\'s maxScore is derived as the sum of its parts\' maxScore, not independently authored', () => {
+  const canonical = multiPartQuestionBank().questions[0];
+  canonical.maxScore = 99; // must be ignored - the sum of parts (1.0 + 1.0) wins
+  const result = transformQuestion(canonical, { chapterId: 'fixture-chapter', topicId: 'topic-fixture' });
+
+  assert.equal(result.maxScore, 2.0);
+});
+
+test('transformQuestion: a multi_part part\'s own explicit maxScore contributes to the derived total', () => {
+  const canonical = multiPartQuestionBank().questions[0];
+  canonical.responseSpecification.parts[0].maxScore = 2.0;
+  canonical.responseSpecification.parts[1].maxScore = 3.0;
+  const result = transformQuestion(canonical, { chapterId: 'fixture-chapter', topicId: 'topic-fixture' });
+
+  assert.equal(result.maxScore, 5.0);
+});
 
 // --- transform.js: questionType / maxScore / responseSpecification emission ---
 
@@ -157,6 +263,20 @@ test('end-to-end: a synthetic numeric question round-trips through load + transf
   const { questionBank: loaded } = loadCanonical({ chapterDir, dataDir });
   const transformed = transformQuestion(loaded.questions[0], { chapterId: 'fixture-chapter', topicId: 'topic-fixture' });
 
+  const result = validateAgainstRuntimeSchemas({ backendDir, chapters: [], topics: [], questions: [transformed] });
+  assert.equal(result.valid, true, JSON.stringify(result.errors));
+});
+
+test('end-to-end: a synthetic multi_part question round-trips through load + transform + real Pydantic validation', () => {
+  const { chapterDir, dataDir } = writeChapterFixture({
+    questionBank: multiPartQuestionBank(),
+    answerKeys: multiPartAnswerKeys(),
+  });
+
+  const { questionBank: loaded } = loadCanonical({ chapterDir, dataDir });
+  const transformed = transformQuestion(loaded.questions[0], { chapterId: 'fixture-chapter', topicId: 'topic-fixture' });
+
+  assert.equal(transformed.maxScore, 2.0);
   const result = validateAgainstRuntimeSchemas({ backendDir, chapters: [], topics: [], questions: [transformed] });
   assert.equal(result.valid, true, JSON.stringify(result.errors));
 });

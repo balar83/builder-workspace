@@ -61,10 +61,13 @@ export type CurrentQuestionResult =
 
 // No attemptNumber field, deliberately - ADR-007's invariant is that the
 // server always derives it (SessionState.attemptsOnCurrentQuestion + 1);
-// a client-supplied value is not part of this contract at all.
+// a client-supplied value is not part of this contract at all. hintsUsed
+// is different: it's a client-observed fact (currentHintIndex) with no
+// server-side equivalent, so it IS sent, the same way `answer` is.
 export interface SubmitSessionAnswerRequest {
   position: number;
   answer: string;
+  hintsUsed: number;
 }
 
 export interface SubmitSessionAnswerResponse {

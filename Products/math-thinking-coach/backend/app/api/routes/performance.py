@@ -1,7 +1,13 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from app.schemas.performance import ActivityResponse, RecoveryMetricsResponse, TopicPerformance, UnresolvedMistake
-from app.services import activity_service, attempt_service, mistake_service, recovery_service
+from app.schemas.performance import (
+    ActivityResponse,
+    ConceptPerformance,
+    RecoveryMetricsResponse,
+    TopicPerformance,
+    UnresolvedMistake,
+)
+from app.services import activity_service, attempt_service, concept_performance_service, mistake_service, recovery_service
 
 router = APIRouter()
 
@@ -12,6 +18,14 @@ def get_my_performance(request: Request) -> list[dict]:
         raise HTTPException(status_code=401, detail="Student login required")
 
     return attempt_service.get_performance(request.session["id"])
+
+
+@router.get("/performance/me/concepts", response_model=list[ConceptPerformance])
+def get_my_concept_performance(request: Request) -> list[ConceptPerformance]:
+    if request.session.get("role") != "student":
+        raise HTTPException(status_code=401, detail="Student login required")
+
+    return concept_performance_service.get_concept_performance(request.session["id"])
 
 
 @router.get("/performance/me/activity", response_model=ActivityResponse)

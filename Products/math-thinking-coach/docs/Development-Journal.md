@@ -1,5 +1,50 @@
 # Development Journal
 
+## 2026-09-16 (Release preparation — Self-Serve continuation, M3 multi-part, D1 concept performance, telemetry/mastery)
+
+*Backfilled at commit time — reconstructed from `git diff`/test names, not from a real-time record, since this work accumulated uncommitted across an unknown number of prior sessions before this release pass. Where intent isn't self-evident from the diff, it's stated as inferred, not asserted as fact.*
+
+Four workstreams sat uncommitted in the working tree after the 2026-09-03/04/09 Self-Serve commits (below): a continuation of Self-Serve itself, a new `multi_part` question type ("M3"), a new per-concept performance rollup ("D1"), and telemetry columns (`hints_used`, `submitted_option_id`) that activate a previously-inert mastery rule. None of the three newer workstreams (M3, D1, telemetry) had any prior entry in this journal, `Backlog.md`, or an ADR — a read-only release-readiness assessment on 2026-09-16 flagged this explicitly rather than inferring an authorization that couldn't be verified from the repository. **This entry records the current, present decision to release all four, made 2026-09-16** — it does not claim any of the three were authorized earlier than this.
+
+### What shipped
+
+**Self-Serve continuation** — `QuestionPage.tsx` gained lazy learner-identity establishment (`ensureLearnerIdentity`, called only on first answer submission, never from viewing the page) and a solution-reveal dead-end fix (`canRevealSolution`, matching `SessionQuestionPage.tsx`'s existing fix); `TopicPage.tsx` gained a second Practice entry point ("Start a Tracked Practice Session") for a learner arriving directly (not via Dashboard); `questionService.ts`'s anonymous-flow `submitAnswer` fetch gained `credentials: 'include'`, without which the identity cookie `ensureLearnerIdentity` sets was never actually sent to the backend.
+
+**M3 — `multi_part` question type**: `Question.responseSpecification.parts` (new `QuestionPart` schema), a new `_evaluate_multi_part` evaluator (`"|"`-delimited positional per-part answers, `short_text`/`numeric` parts only, overall `isCorrect` requires every part correct), a new `MultiPartInput` frontend component, and content-pipeline validation (`loadCanonical.js`'s `validateMultiPartParts`). Scope is exactly three already-live questions retyped from `short_text`: `le-q25` (LHS/RHS), `le-q37` (smaller/larger number), `le-q40` (length/breadth) — each `maxScore` doubled 1→2 to match. No other question was touched, and no part type beyond `short_text`/`numeric` is supported.
+
+**D1 — concept-level performance**: a new `concept_performance_service.py` (read-time join: attempt → `question.objectiveIds` → `Concept` → `Topic`, no persistence, no mastery semantics), a new `GET /performance/me/concepts` route, and a per-concept accuracy breakdown surfaced on the Dashboard's `ChapterPerformanceCard`. Built entirely on Slice A1's already-shipped `Question.objectiveIds`/`Topic.concepts` — no schema changes required.
+
+**Telemetry/mastery**: `AnswerSubmission.hintsUsed`/`SubmitSessionAnswerRequest.hintsUsed` now carry the real client-side hint count (previously always defaulted to 0 and never actually sent); a new `attempts.submitted_option_id` column (write-only, no read path yet). Together these activate `attempt_service.get_performance`'s pre-existing `mastered = streak >= 3` rule's `hints_used == 0` clause, which was inert until now. **Explicit product decision, made as part of this release**: a correct answer given after using a hint no longer counts toward a mastery streak; a correct answer given without hints continues to. This reverses the design doc's earlier "not yet authorized" note for these columns (`Question-Response-Semantics-Design-Proposal.md` §N) — see that document's own closing note for the reconciliation.
+
+### Verification summary
+See `PROJECT_STATUS.md`'s "Last Verified" entry for this date for exact test counts and the manual-validation record — not duplicated here to avoid the two documents drifting out of sync.
+
+### Implementation notes
+- `QuestionPage.tsx` and its test file, and `test_attempt_service.py`, each mixed two of the above workstreams in the same file (identity+solution-reveal vs. telemetry; D1's `get_question_outcomes` vs. telemetry's `submitted_option_id`). Split into separate, behavior-preserving commits at release time so history stays legible per workstream — see the release commit list below.
+- The backfilled nature of this entry is itself a process gap worth naming plainly: three material workstreams reached a releasable, fully-tested state without a single line in this journal until the release-readiness assessment surfaced it. No process change is prescribed here beyond naming it.
+
+## 2026-09-03 to 2026-09-09 (Self-Serve Learning Loop V1, Slices 1–6b + hardening)
+
+*Backfilled 2026-09-16, during release preparation — this journal had no entry for any of these 9 commits until this pass found the gap via `git log`. Reconstructed from commit diffs/messages/dates, not a real-time record.*
+
+Nine commits, 2026-09-03 through 2026-09-09, building the self-serve (non-class-connected) learner experience end to end:
+
+- `2335c8a` (09-03) — self-serve learner identity (`SelfServeLearner`) and Progress Hub V1: daily activity tracking (`activity_service.py`, `ChapterActivityList`/`DailyActivityChart`), extending `auth.py`/`attempt_service.py`.
+- `929df82` (09-04) — Slice 1: Revision discoverability + verification (Dashboard/`ChapterPerformanceCard`/`StartPracticePage` wiring).
+- `781f87a` (09-04) — Slice 2: attempt provenance semantics (tagging which flow/mode produced an attempt).
+- `30c76e8` (09-04) — Slice 2.5: attempt database schema compatibility (a same-day follow-up fixing schema-shape issues Slice 2 exposed).
+- `597a979` (09-04) — Slice 3: Wrong-Answer Review (`mistake_service.py`, unresolved-mistake tracking).
+- `8df8a5b` (09-04) — Slice 4: Recovery and Improvement Metrics (`recovery_service.py`).
+- `fef9b6d` (09-04) — Slice 5: Runtime Remediation (`RemediationPanel`, exposing `commonWrongAnswer`/`why`/`remediationHint` through the API into both `QuestionPage.tsx` and `SessionQuestionPage.tsx`).
+- `82b3783` (09-04) — Slice 6a: Recovery Metrics surfaced on the Dashboard (`RecoveryMetricsSummary`).
+- `60eb2c7` (09-04) — Slice 6b: Wrong-Answer Review surfaced on the Dashboard (`MistakeList`).
+- `8187e98` (09-09) — hardening pass: `RequireStudent` guard and `auth.py`/`config.py` changes, five days after Slice 6b.
+
+Each commit's own test files (`test_self_serve_learner.py`, `test_activity_service.py`, `test_mistake_service.py`, `test_recovery_service.py`, and the corresponding frontend `*.test.tsx`/`*.test.ts` files) landed in the same commit as its functional code throughout — unlike the workstreams above, none of these needed a release-time split.
+
+### Implementation notes
+This backfill cannot reconstruct decisions, alternatives considered, or verification detail that wasn't captured in the commit diffs themselves — unlike every other entry in this journal, which was written at or near implementation time. Treat the summary above as a factual index of what shipped and when, not a substitute for a real-time record.
+
 ## 2026-08-19 (A2b-4 — Structured Content Migration: Rational Numbers — FINAL chapter)
 
 *Content-authoring only, fourth and final chapter migrated. Same mechanical process as Linear Equations (A2b-1), Data Handling (A2b-2), and Understanding Quadrilaterals (A2b-3). No renderer, evaluator, schema, or Stage 10 code change. This closes the Structured Learning Content migration phase: all five Topic-bearing chapters are now structured, and zero real production Topic-bearing chapters remain on the legacy path.*

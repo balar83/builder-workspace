@@ -216,6 +216,13 @@ class SessionTerminalResponse(BaseModel):
 class SubmitSessionAnswerRequest(BaseModel):
     position: int
     answer: str
+    # Additive, defaults to 0. Unlike attemptNumber (deliberately NOT
+    # accepted from the client - ADR-007's invariant is the server always
+    # derives it), hints revealed is a client-observed fact with no
+    # server-side equivalent to derive it from instead, so it's accepted
+    # here the same way `answer` itself already is. Feeds
+    # attempts.hints_used via runtime_session_manager._record_attempt.
+    hintsUsed: int = 0
 
 
 class SubmitSessionAnswerResponse(BaseModel):

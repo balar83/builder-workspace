@@ -1,3 +1,4 @@
+import sqlite3
 from pathlib import Path
 
 import pytest
@@ -267,6 +268,84 @@ def test_submit_answer_request_has_no_attempt_number_field() -> None:
 
     assert response.status_code == 200
     assert response.json()["ui"]["hintLevel"] == 0  # correct-answer response, unaffected by the extra field
+
+
+def _read_hints_used(question_id: str) -> list[int]:
+    # Same rationale as test_answers.py's identical helper: get_performance()
+    # only exposes hints_used indirectly via mastery/streak arithmetic -
+    # reading the column directly proves the raw value actually persisted.
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT hints_used FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["hints_used"] for row in rows]
+
+
+def test_hints_used_is_persisted_on_session_answer() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 1}
+    ).json()["sessionId"]
+    question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+
+    response = student.post(
+        f"/api/v1/sessions/{session_id}/answer",
+        json={"position": 0, "answer": ANSWERS[question["id"]], "hintsUsed": 3},
+    )
+
+    assert response.status_code == 200
+    assert _read_hints_used(question["id"]) == [3]
+
+
+def test_three_correct_session_answers_after_hints_do_not_produce_mastery() -> None:
+    """
+    Session-flow counterpart to test_answers.py's identical proof - the
+    defect and its fix are per-write-path (runtime_session_manager's
+    _record_attempt vs. attempt_service.record_attempt_for_answer), so both
+    real endpoints need their own end-to-end regression.
+    """
+    student = _student_client()
+    student_id = student.get("/api/v1/auth/me").json()["id"]
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 3}
+    ).json()["sessionId"]
+
+    for position in range(3):
+        question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+        response = student.post(
+            f"/api/v1/sessions/{session_id}/answer",
+            json={"position": position, "answer": ANSWERS[question["id"]], "hintsUsed": 1},
+        )
+        assert response.status_code == 200
+
+    performance = attempt_service.get_performance(student_id)
+    assert performance[0]["questionsCorrect"] == 3
+    assert performance[0]["currentStreak"] == 0
+    assert performance[0]["mastered"] is False
+
+
+def test_three_correct_session_answers_without_hints_still_produce_mastery() -> None:
+    student = _student_client()
+    student_id = student.get("/api/v1/auth/me").json()["id"]
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 3}
+    ).json()["sessionId"]
+
+    for position in range(3):
+        question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+        response = student.post(
+            f"/api/v1/sessions/{session_id}/answer",
+            json={"position": position, "answer": ANSWERS[question["id"]]},
+        )
+        assert response.status_code == 200
+
+    performance = attempt_service.get_performance(student_id)
+    assert performance[0]["currentStreak"] == 3
+    assert performance[0]["mastered"] is True
 
 
 def test_session_summary_reports_time_limit_for_test_mode() -> None:

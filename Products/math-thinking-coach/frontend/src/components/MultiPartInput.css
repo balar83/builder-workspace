@@ -1,0 +1,11 @@
+.multi-part-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.multi-part-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}

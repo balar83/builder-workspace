@@ -1,7 +1,7 @@
 import pytest
 
 from app.schemas.answer import AnswerSubmission
-from app.schemas.question import Option, Question, ResponseSpecification
+from app.schemas.question import Option, Question, QuestionPart, ResponseSpecification
 from app.services import coaching_service, evaluation_service
 
 QUESTION = Question(
@@ -96,6 +96,68 @@ MULTI_CHOICE_QUESTION = Question(
     ),
 )
 
+# M3: mirrors the real le-q25 shape (two short_text-typed, labeled parts -
+# an algebraic LHS/RHS expression each) - not the real question id/content,
+# a fixture, same convention as every other synthetic question above.
+MULTI_PART_ALGEBRA_QUESTION = Question(
+    id="test-multi-part-algebra",
+    chapterId="fixture-chapter",
+    question="Identify the LHS and RHS of the equation 9 - 2x = 5x + 2.",
+    text="Identify the LHS and RHS of the equation 9 - 2x = 5x + 2.",
+    difficulty="Easy",
+    hints=[],
+    solution="LHS = 9 - 2x. RHS = 5x + 2.",
+    questionType="multi_part",
+    maxScore=2.0,
+    responseSpecification=ResponseSpecification(
+        parts=[
+            QuestionPart(id="lhs", prompt="LHS (left-hand side)", questionType="short_text"),
+            QuestionPart(id="rhs", prompt="RHS (right-hand side)", questionType="short_text"),
+        ]
+    ),
+)
+
+# M3: mirrors the real le-q37 shape (two numeric, order-fixed parts - "the
+# smaller number" then "the larger number", not interchangeable).
+MULTI_PART_NUMERIC_QUESTION = Question(
+    id="test-multi-part-numeric",
+    chapterId="fixture-chapter",
+    question="A number is 5 more than another number, and their sum is 37. Find the two numbers.",
+    text="A number is 5 more than another number, and their sum is 37. Find the two numbers.",
+    difficulty="Medium",
+    hints=[],
+    solution="The numbers are 16 and 21.",
+    questionType="multi_part",
+    maxScore=2.0,
+    responseSpecification=ResponseSpecification(
+        parts=[
+            QuestionPart(id="smaller", prompt="The smaller number", questionType="numeric"),
+            QuestionPart(id="larger", prompt="The larger number", questionType="numeric"),
+        ]
+    ),
+)
+
+MULTI_PART_UNSUPPORTED_PART_TYPE_QUESTION = Question(
+    id="test-multi-part-unsupported-part-type",
+    chapterId="fixture-chapter",
+    question="A synthetic multi-part question with one part of a type this evaluator doesn't implement.",
+    text="A synthetic multi-part question with one part of a type this evaluator doesn't implement.",
+    difficulty="Easy",
+    hints=[],
+    solution="n/a",
+    questionType="multi_part",
+    maxScore=2.0,
+    responseSpecification=ResponseSpecification(
+        parts=[
+            QuestionPart(id="p1", prompt="A numeric part", questionType="numeric"),
+            # "matching" has no evaluator at all (still reserved) - a genuine
+            # unsupported part type, distinct from Decision 3's narrower
+            # "M3 only implements short_text/numeric part comparison" scope.
+            QuestionPart(id="p2", prompt="An unsupported part", questionType="matching"),
+        ]
+    ),
+)
+
 UNSUPPORTED_TYPE_QUESTION = Question(
     id="test-unsupported-type",
     chapterId="fixture-chapter",
@@ -131,6 +193,13 @@ def _synthetic_answer_keys(monkeypatch: pytest.MonkeyPatch) -> None:
     # comma-delimited string convention the submission itself uses - still a
     # plain string value, answer_keys.json's dict[str, str] shape unchanged.
     monkeypatch.setitem(evaluation_service._answer_keys, MULTI_CHOICE_QUESTION.id, "opt-a,opt-b,opt-d")
+    # M3: the private multi_part answer key is one "|"-delimited string,
+    # positional per QuestionPart order - the same "single opaque string,
+    # parsed only by its own evaluator" convention multi_choice's
+    # comma-delimited value already established.
+    monkeypatch.setitem(evaluation_service._answer_keys, MULTI_PART_ALGEBRA_QUESTION.id, "9 - 2x|5x + 2")
+    monkeypatch.setitem(evaluation_service._answer_keys, MULTI_PART_NUMERIC_QUESTION.id, "16|21")
+    monkeypatch.setitem(evaluation_service._answer_keys, MULTI_PART_UNSUPPORTED_PART_TYPE_QUESTION.id, "4|a-2, b-1")
 
 
 # --- Backward compatibility: legacy (default) short_text behavior ---------
@@ -466,6 +535,213 @@ def test_multi_choice_with_no_options_at_all_is_incorrect_not_a_crash() -> None:
     assert result.isCorrect is False
 
 
+# --- Multi-part evaluator (M3) -----------------------------------------------
+
+
+def test_multi_part_all_parts_correct_is_marked_correct() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+    assert result.evaluatorId == "multi_part_v1"
+
+
+def test_multi_part_all_parts_incorrect_is_marked_incorrect_with_zero_score() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="wrong lhs|wrong rhs", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+
+
+def test_multi_part_one_correct_one_incorrect_is_marked_incorrect_with_partial_score() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|not the rhs", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.score == 1.0
+    assert result.maxScore == 2.0
+
+
+def test_multi_part_aggregate_score_and_maxscore_sum_across_parts() -> None:
+    correct = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+
+    assert correct.score == 2.0
+    assert correct.maxScore == 2.0
+
+
+def test_multi_part_result_carries_one_partresult_per_part_in_order() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|not the rhs", attemptNumber=1)
+    )
+
+    assert result.partResults is not None
+    assert [p.partId for p in result.partResults] == ["lhs", "rhs"]
+    assert result.partResults[0].isCorrect is True
+    assert result.partResults[0].score == 1.0
+    assert result.partResults[0].maxScore == 1.0
+    assert result.partResults[0].evaluatorId == "short_text_v1"
+    assert result.partResults[1].isCorrect is False
+    assert result.partResults[1].score == 0.0
+
+
+def test_multi_part_does_not_populate_scorebreakdown() -> None:
+    """
+    scoreBreakdown stays reserved for a future single-response rubric
+    evaluator (design doc §C's correction) - multi-part decomposition is a
+    different axis and must only ever populate partResults.
+    """
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+
+    assert result.scoreBreakdown is None
+
+
+def test_multi_part_malformed_submission_with_wrong_part_count_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+    assert result.evidence is not None
+    assert "exactly 2 part" in result.evidence
+
+
+def test_multi_part_submission_with_too_many_parts_is_incorrect_with_evidence() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2|extra", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.evidence is not None
+
+
+def test_multi_part_empty_submission_is_incorrect_and_not_a_crash() -> None:
+    result = evaluation_service.evaluate(MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 0.0
+
+
+def test_multi_part_unsupported_part_questiontype_fails_that_part_safely() -> None:
+    """
+    Decision 3's scope: M3 only implements short_text/numeric part
+    comparison. A part naming any other (still-reserved) questionType must
+    fail safe to incorrect for that one part, never crash the request.
+    """
+    result = evaluation_service.evaluate(
+        MULTI_PART_UNSUPPORTED_PART_TYPE_QUESTION, AnswerSubmission(answer="4|a-2, b-1", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.partResults is not None
+    assert result.partResults[0].isCorrect is True  # the numeric part still evaluates correctly
+    assert result.partResults[1].isCorrect is False  # the unsupported "matching" part fails safe
+    assert result.partResults[1].evaluatorId == "multi_part_v1"
+
+
+def test_multi_part_with_no_parts_configured_is_incorrect_not_a_crash() -> None:
+    # Defensive: Stage 10 already refuses to export a multi_part question
+    # with no parts, but the evaluator must not crash if one somehow
+    # reaches it (e.g. a directly-constructed Question) - mirrors single_
+    # choice/multi_choice's own "no options" defensive tests.
+    malformed_question = MULTI_PART_ALGEBRA_QUESTION.model_copy(update={"responseSpecification": None})
+    result = evaluation_service.evaluate(malformed_question, AnswerSubmission(answer="anything", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+def test_multi_part_duplicate_part_ids_do_not_crash_the_evaluator() -> None:
+    """
+    Stage 10 already refuses to export a multi_part question with duplicate
+    part ids (loadCanonical.js), but the evaluator itself must not assume
+    uniqueness - each part is evaluated independently and positionally, so
+    a duplicate id simply produces two PartEvaluationResult entries sharing
+    a partId, never a crash or a silently-dropped part.
+    """
+    duplicate_id_question = MULTI_PART_ALGEBRA_QUESTION.model_copy(
+        update={
+            "responseSpecification": ResponseSpecification(
+                parts=[
+                    QuestionPart(id="lhs", prompt="LHS", questionType="short_text"),
+                    QuestionPart(id="lhs", prompt="RHS", questionType="short_text"),
+                ]
+            )
+        }
+    )
+    result = evaluation_service.evaluate(
+        duplicate_id_question, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+
+    assert len(result.partResults) == 2
+    assert result.isCorrect is True
+
+
+# --- Numeric normalization within multi_part (le-q37 style) ----------------
+
+
+def test_multi_part_numeric_part_accepts_equivalent_numeric_forms() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_NUMERIC_QUESTION, AnswerSubmission(answer="16.0|21", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+
+
+def test_multi_part_numeric_part_rejects_wrong_value() -> None:
+    result = evaluation_service.evaluate(MULTI_PART_NUMERIC_QUESTION, AnswerSubmission(answer="17|21", attemptNumber=1))
+
+    assert result.isCorrect is False
+    assert result.score == 1.0
+
+
+def test_multi_part_order_is_fixed_swapped_parts_are_incorrect() -> None:
+    """
+    Decision 2: multi_part uses positional/identified parts, never
+    unordered-set matching. le-q37's two numbers are order-fixed (smaller,
+    then larger) - submitting them the other way round must not be
+    silently accepted as a permutation match.
+    """
+    result = evaluation_service.evaluate(MULTI_PART_NUMERIC_QUESTION, AnswerSubmission(answer="21|16", attemptNumber=1))
+
+    assert result.isCorrect is False
+    # Both parts individually fail (each compared against the wrong
+    # position's expected value) - not "correct but reordered".
+    assert result.score == 0.0
+
+
+# --- Exact string behavior for algebra expression parts (le-q25 style) -----
+
+
+def test_multi_part_short_text_part_is_exact_match_only_no_algebra_equivalence() -> None:
+    """
+    Decision 3: no symbolic algebra parser, no mathematical-equivalence
+    acceptance beyond what short_text already does. "9-2x" (no spaces) is
+    algebraically identical to "9 - 2x" but must still be marked wrong,
+    exactly like today's short_text evaluator would for any other question.
+    """
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9-2x|5x + 2", attemptNumber=1)
+    )
+
+    assert result.isCorrect is False
+    assert result.partResults[0].isCorrect is False
+    assert result.partResults[1].isCorrect is True
+
+
+def test_multi_part_short_text_part_tolerates_surrounding_whitespace() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="  9 - 2x  |  5x + 2  ", attemptNumber=1)
+    )
+
+    assert result.isCorrect is True
+
+
 # --- Evaluator dispatch ------------------------------------------------------
 
 
@@ -489,6 +765,13 @@ def test_dispatch_selects_the_multi_choice_evaluator_for_multi_choice_questionty
         MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a,opt-b,opt-d", attemptNumber=1)
     )
     assert result.evaluatorId == "multi_choice_v1"
+
+
+def test_dispatch_selects_the_multi_part_evaluator_for_multi_part_questiontype() -> None:
+    result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+    assert result.evaluatorId == "multi_part_v1"
 
 
 def test_dispatch_raises_a_clear_error_for_an_unsupported_reserved_questiontype() -> None:
@@ -533,3 +816,23 @@ def test_multi_choice_evaluationresult_feeds_coaching_service_unchanged() -> Non
     wrong_result = evaluation_service.evaluate(MULTI_CHOICE_QUESTION, AnswerSubmission(answer="opt-a", attemptNumber=1))
     coach, ui = coaching_service.decide(wrong_result.isCorrect, attempt_number=1)
     assert coach.nextAction.value == "TRY_AGAIN"
+
+
+def test_multi_part_evaluationresult_feeds_coaching_service_unchanged() -> None:
+    """
+    Even a partially-correct multi_part result (one part right, one wrong)
+    must feed coaching_service exactly like any other incorrect answer -
+    isCorrect stays the single boolean contract coaching_service reads;
+    partial-credit detail (score/partResults) is never consulted here.
+    """
+    partial_result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|not the rhs", attemptNumber=1)
+    )
+    coach, ui = coaching_service.decide(partial_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "TRY_AGAIN"
+
+    correct_result = evaluation_service.evaluate(
+        MULTI_PART_ALGEBRA_QUESTION, AnswerSubmission(answer="9 - 2x|5x + 2", attemptNumber=1)
+    )
+    coach, ui = coaching_service.decide(correct_result.isCorrect, attempt_number=1)
+    assert coach.nextAction.value == "NEXT_QUESTION"

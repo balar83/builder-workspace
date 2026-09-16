@@ -425,6 +425,12 @@ Per the brief, restated as a checklist:
 
 ---
 
+### Post-implementation note — pilot chapter deviation (added 2026-08-19, M2 Documentation & Architecture Reconciliation)
+
+§26 and §27 item 2 above propose Squares and Cubes as the `numeric` pilot chapter, pending Product Architect sign-off. The actual M2.4 implementation (`2e0205d`, 2026-08-17) piloted `numeric` — together with `single_choice`/`multi_choice`, by then also implemented — in **Linear Equations** instead. Per `Development-Journal.md`'s 2026-08-17 (M2.4) entry: *"The pilot landed in Linear Equations rather than the originally-proposed Squares and Cubes because Linear Equations is where the documented brittleness actually lives."* §26/§27 above are retained unmodified as the original design record; this note is the reconciliation of that record against what shipped. No other claim in §1–§27 is affected — the pilot-chapter choice was the one open decision this document left to implementation-time sign-off.
+
+---
+
 ## Appendix: Architectural Questions A–Q, answered
 
 | # | Question | Answer | Where |
@@ -446,3 +452,383 @@ Per the brief, restated as a checklist:
 | O | How does this prepare for adaptive learning? | Richer signals become structurally possible (`maxScore`/`score`/`evaluatorId`); no adaptive logic built. | §20 |
 | P | How does this prepare for teacher-generated content? | Stable canonical vocabulary (`questionType`/`responseSpecification`) for a future extraction pipeline to target, through the same approval gate. | §21 |
 | Q | How does this remain extensible beyond Class 8 Math? | Audited field-by-field; only the `numeric` evaluator's comparison algorithm is math-specific, correctly so. | §22 |
+
+---
+
+# Part II — M2 Slice 2+ and Future Architecture
+
+**Status:** Design only, as of when this section was written. M2 Slice 1 (`e41670a`) is closed and unaffected by this section. No implementation code, canonical content, runtime data, or frontend file was changed to produce this section. Written per explicit Product Architect directive to protect the broader product roadmap architecturally before authorizing Slice 2.
+**Method:** Every claim about current code below was re-verified against the repository during this pass, not carried over from memory of earlier design work — see the closing report for the exact files re-inspected.
+**Update (2026-08-19, M2 Documentation & Architecture Reconciliation):** `single_choice` (M2 Slice 2, `87e8414`) and `multi_choice` (M2 Slice 3, `e120a1d`) — named in §M as the "next candidate" and recommended sequence — have since shipped and closed, followed by M2.4's content-activation pilot (`2e0205d`). §M and §N's inline "IMPLEMENTED" annotations reflect that. The "Design only" status above describes this section's content *at the time it was written*, before either slice existed — it is not a live status flag and has not been updated to "Implemented," since Part II as a whole is a design document, not a status tracker; individual capabilities' current status is §N's table, not this banner. The remainder of Part II not marked IMPLEMENTED in §N (`multi_part`, `fill_blank`/`match_following`, richer `EvaluationResult` fields, and everything under "Then, separately, as their own milestones" in §M) is still design-only, not implemented, as of this update.
+
+This section does not re-litigate anything already decided in Part I (§1–§27) or its Appendix. It extends the same model forward, and where it finds Slice 1's shape genuinely insufficient for what's coming, it says so explicitly (per your instruction not to treat Slice 1 as automatically final) — without implementing any of it.
+
+---
+
+## A. Question type model
+
+**`questionType` should remain a simple string enum/registry key — not a class-hierarchy taxonomy.** The six requested types (`short_text`, `numeric`, MCQ, `fill_blank`, `match_following`, `multi_part`) are a small, closed, known vocabulary; the axis that actually varies per type is *payload shape* (§B), not *taxonomic behavior*. A formal taxonomy (base classes, capability flags, subtyping) would be solving a problem this vocabulary doesn't have — six known strings and a dict lookup (§D) is the correct, minimum mechanism, and it already proved out in Slice 1 with two types. `QuestionType` stays a `Literal[...]`, extended with new string values one at a time as each ships, exactly as Slice 1 already reserved five unimplemented values.
+
+**MCQ needs to split into two real types, not stay one**, matching what the original taxonomy already named separately: `single_choice` (pick exactly one) and `multi_choice` (select all that apply) have genuinely different evaluation semantics (§B) — collapsing them into one "MCQ" type would immediately reintroduce a branch inside the evaluator. Both existed as separate reserved values since Slice 1; nothing changes here except confirming the taxonomy was already right.
+
+**Minimum structural need per type** (shape detail in §B; this is the *what*, not the *how*):
+
+| Type | What must be public (rendering) | What must stay private (correctness) |
+|---|---|---|
+| `short_text` | prompt only | expected answer(s) — unchanged from Slice 1 |
+| `numeric` | prompt + tolerance | expected numeric value — unchanged from Slice 1 |
+| `single_choice` | prompt + option list (text) | which option id is correct |
+| `multi_choice` | prompt + option list (text) | which option id(s) are correct + partial-credit policy |
+| `fill_blank` | prompt with blank markers | per-blank expected answer(s) |
+| `match_following` | prompt + both item lists (text) | the correct pairing |
+| `multi_part` | prompt + each part's own public shape (recursive) | each part's own private answer (recursive) |
+
+**Future types that should NOT yet be implemented**, named explicitly so they aren't accidentally reached for later without their own design pass: `true_false` (deliberately *not* a separate type — model it as a 2-option `single_choice`, since a dedicated type would be redundant with no new capability); open-ended/essay free response (needs rubric or AI evaluation, both explicitly deferred, §B/§C); symbolic/algebraic equivalence response (needs a real symbolic-math dependency decision, already deferred in Part I §6/§10/§23); diagram/geometry-construction response (named in the product's own north-star vision, no representation designed here at all); ordered-step/sequencing questions (distinct from matching — arranging items into a correct order — not in the currently authorized list, not designed here).
+
+---
+
+## B. Response Specification
+
+The central discipline carried forward from Slice 1's ADR-001 correction, now generalized and named explicitly as a **three-way split** that every future type must respect:
+
+1. **Public question metadata** — returned by `GET /chapters/{id}/questions` and `GET /chapters/{id}/questions/{id}`. Includes the prompt, `questionType`, `difficulty`, `hints`, `objectiveIds`, `maxScore`, and — new insight this section adds — **the public *shape* of a valid response for types where the response-shape itself must be rendered**: an MCQ's option *text* (a student must see the choices to choose one), a matching question's both item lists (must see all items to pair them), a multi-part question's per-part prompts and structure. None of this reveals *which* option/pairing is correct.
+2. **Student response (submission)** — what a student actually sends. Evolves from today's flat `AnswerSubmission.answer: str` into a `questionType`-discriminated shape (below). This is the field that requires new frontend input widgets (§E) — it did not need to change in Slice 1 only because both `short_text` and `numeric` happen to fit naturally into "one string."
+3. **Private expected-answer/evaluation data** — extends today's `answer_keys.json` (currently `{questionId: str}`). Never returned by any GET route, resolved only at evaluation time, exactly as ADR-001 already establishes. This is where "which option is correct," "the correct pairing," and "each blank's accepted answer(s)" all live.
+
+**The insight worth stating plainly:** Slice 1's correction (§5 above) discovered that for `short_text`/`numeric`, the *entire* expected value had to move to bucket 3. For choice-based and matching types, only *half* the information is private — the options/items themselves are legitimately public (bucket 1), and only the *correctness mapping* is private (bucket 3). Every future `ResponseSpecification` addition must be evaluated against this three-way split before it's written, not assumed safe by analogy to Slice 1.
+
+**Proposed future shapes (design only, none built):**
+
+```
+ResponseSpecification (public, discriminated by questionType):
+
+  short_text:  { }                          # unchanged — zero tunable params today;
+                                              # a future case-insensitivity/alternate-forms
+                                              # knob is plausible but evidence-gated, not
+                                              # designed further here (Part I §5's ruling stands)
+  numeric:     { numericTolerance: float }   # unchanged from Slice 1
+
+  single_choice:  { options: list[{id: str, text: str}] }
+  multi_choice:   { options: list[{id: str, text: str}] }   # IMPLEMENTED, M2 Slice 3 — identical
+                                                               # shape to single_choice's own options;
+                                                               # no partialCreditMode field was added
+                                                               # (Slice 3 authorized all-or-nothing
+                                                               # exact-set scoring only — see the
+                                                               # correction below)
+  fill_blank:     { blankIds: list[str] }    # positions/count only — the prompt text itself
+                                               # carries the markers (e.g. "{{blank1}}")
+  match_following:{ leftItems: list[{id, text}], rightItems: list[{id, text}] }
+  multi_part:     { parts: list[QuestionPart] }   # see §G — recursive, self-similar
+
+QuestionPart (public, one per multi_part sub-question):
+  id: str
+  prompt: str
+  questionType: QuestionType
+  responseSpecification: ResponseSpecification | None
+  maxScore: float
+  objectiveIds: list[str] | None    # inherits the parent Question's when unset
+```
+
+```
+ResponseSubmission (student response, discriminated by questionType):
+
+  short_text / numeric:  { answer: str }             # unchanged from Slice 1
+  single_choice:          { selectedOptionId: str }
+  multi_choice:            { answer: str }   # IMPLEMENTED, M2 Slice 3 — corrected from the
+                                               # `selectedOptionIds: list[str]` originally
+                                               # sketched here. No new AnswerSubmission/session
+                                               # field was introduced: selected option ids are
+                                               # joined into the SAME comma-delimited string
+                                               # convention (e.g. "optA,optC,optD") that
+                                               # short_text/numeric/single_choice already share,
+                                               # parsed only inside the multi_choice evaluator.
+  fill_blank:              { blankAnswers: dict[str, str] }   # blankId -> submitted text
+  match_following:         { pairs: list[{leftId: str, rightId: str}] }
+  multi_part:              { partResponses: dict[str, ResponseSubmission] }  # partId -> recursive
+```
+
+```
+Private answer-key entry (answer_keys.json value, discriminated by questionType — currently always str):
+
+  short_text / numeric:  "expected string"                          # unchanged from Slice 1
+  single_choice:          { correctOptionId: str }
+  multi_choice:            "optA,optC,optD"   # IMPLEMENTED, M2 Slice 3 — corrected from the
+                                                # `{correctOptionIds: list[str]}` originally
+                                                # sketched here. Stays a plain string —
+                                                # answer_keys.json's dict[str, str] shape is
+                                                # unchanged — using the same comma-delimited
+                                                # option-id convention as the submission above,
+                                                # opaque to everything except the multi_choice
+                                                # evaluator.
+  fill_blank:              { blankAnswers: dict[str, list[str]] }    # blankId -> accepted forms
+  match_following:         { correctPairs: list[{leftId, rightId}] }
+  multi_part:              { parts: dict[str, <this same union, recursively>] }   # partId -> answer
+```
+
+**Case sensitivity:** confirmed not genuinely required yet, restated from Part I §5 — and choice/matching types sidestep the question entirely by design, since they compare **opaque stable ids**, never option/item *text*. Case sensitivity only becomes a live question for `short_text`/`fill_blank`, and only once real content demonstrates a need (evidence-gated, not designed further here).
+
+**Marks/weights:** `maxScore` (Slice 1) is sufficient at the whole-question level and needs no change. Per-part marks are `QuestionPart.maxScore` (above), summed into the parent's `maxScore` — no separate "weight" concept needed.
+
+**Partial credit / all-or-nothing — RESOLVED, M2 Slice 3:** `single_choice` is inherently all-or-nothing (exactly one right answer). The `partialCreditMode` field sketched in an earlier draft of this section is retired: Slice 3's Product Architect authorization settled the `multi_choice` policy question without a field — exact-set equality, all-or-nothing, no partial credit, no per-option weighting, no negative marking. A `proportional` mode remains a plausible future direction but is not designed, flagged, or reserved by any field today; if ever wanted, it would be a new, separately-authorized capability, not a dormant switch already sitting in the schema.
+
+**Future rubric support:** kept genuinely separate and later than everything else in this section — scoring partial credit *within one free-text answer* (e.g. "method=2, reasoning=1") is fundamentally different from multi-part decomposition (§G gives real, deterministic partial credit without a rubric at all) and likely needs AI assistance to be practical for open-ended text. Not designed further here; named in §N as deliberately deferred.
+
+---
+
+## C. Assessment / marking semantics — critique of the current `EvaluationResult`
+
+Per your explicit instruction to critically assess, not just extend:
+
+| Field | Verdict | Reasoning |
+|---|---|---|
+| `maxScore: float` | **Sufficient, keep as-is.** | Already exactly "out of what" at the whole-question level; nothing in this design changes its meaning. |
+| `evaluatorId: str` | **Sufficient, keep as-is.** | Already a stable, versioned identifier; the seam for AI evaluators (§J) needs nothing more. |
+| `scoreBreakdown: list[ScoreComponent] \| None` | **Should be restructured, not simply reused, when multi-part ships.** | See below — this is the one genuine correction this section makes. |
+| `confidence: float \| None` | **Sufficient as designed; extend later, don't change now.** | The "deterministic evaluators must leave it `None`" rule (Part I §8, Question K) still holds. Once multi-part *and* AI evaluation coexist, a per-part confidence becomes meaningful — that's a property of a future `PartEvaluationResult` (below), not a reason to change the parent field now. |
+| *(new)* "reason/evidence for evaluation" | **Missing, should be added when it has a producer.** | Not present in `EvaluationResult` at all today. Shadow Mode's existing (experimental, unused-in-production) `AIEvaluation.explanation: str` is a real, already-built precedent for exactly this — nothing needs inventing, just naming the eventual production field the same way. |
+
+**The genuine correction:** `scoreBreakdown`'s current shape — a flat list of `{component, maxScore, earnedScore}` — was designed in Part I with *within-one-answer rubric decomposition* in mind ("method"/"reasoning"/"calculation"). Multi-part decomposition (§G) is a **different axis**: it's "N independent sub-questions, each with its own evaluator result," not "N named pieces of credit within one answer." Conflating them into one field would be a mistake — a multi-part result needs `partResults: list[PartEvaluationResult]` (each a near-complete `EvaluationResult` for that part, keyed by `partId`), kept **separate** from `scoreBreakdown` (which stays reserved for a future single-response rubric evaluator). Proposed future shape, not built now:
+
+```
+EvaluationResult (proposed future shape — NOT implemented in Slice 1 or this design):
+  isCorrect: bool          # for multi_part: True only if every part is correct — keeps
+                             # coaching_service's existing binary contract untouched (§H)
+  score: float
+  maxScore: float
+  evaluatorId: str
+  confidence: float | None = None
+  evidence: str | None = None                              # NEW — mirrors AIEvaluation.explanation
+  partResults: list[PartEvaluationResult] | None = None      # NEW — multi-part decomposition
+  scoreBreakdown: list[ScoreComponent] | None = None          # kept, scope narrowed to within-answer rubric only
+
+PartEvaluationResult (proposed, not built):
+  partId: str
+  isCorrect: bool
+  score: float
+  maxScore: float
+  evaluatorId: str
+  confidence: float | None = None
+```
+
+This is a proposed **future** evolution requiring its own approval when multi-part is actually authorized (§M) — not a retroactive change to Slice 1's shipped schema, and not implemented by this document.
+
+---
+
+## D. Evaluator architecture
+
+**The registry (`_EVALUATORS: dict[str, Callable]`) remains appropriate and needs no structural redesign** for MCQ/fill_blank/matching/multi_part — this is a direct, verified answer, not an assumption. Each new type is still a plain function `(question, submission) -> EvaluationResult`, added to the same dict; the dispatch mechanism (`evaluate()`'s one lookup) is unchanged regardless of how many entries exist.
+
+**The one real design question `multi_part` raises:** its evaluator must call *other* evaluators recursively — for each `QuestionPart`, resolve `_EVALUATORS[part.questionType]` and invoke it against a synthesized part-shaped input, then aggregate into `partResults` (§C) and sum `score`/`maxScore`. This is natural composition — the SAME dict, called recursively, not a second dispatch mechanism — and is a good validation that the registry pattern scales to the hardest case (multi-part) without needing to be redesigned.
+
+**`AnswerSubmission` becomes a discriminated union** (§B's `ResponseSubmission`) once any type beyond `short_text`/`numeric` ships — evaluator function *signatures* stay `(question, submission) -> EvaluationResult`; only `submission`'s type gets richer. No change to the dispatch mechanism itself.
+
+**Module organization:** the evaluators stay plain functions inside `evaluation_service.py`, unchanged, until roughly the third or fourth evaluator is added — at that point splitting into a dedicated `evaluators.py` (still plain functions, no classes, matching this project's service-module convention) becomes a reasonable, low-risk readability improvement to bundle into whichever slice adds that evaluator. Not needed today; named so it isn't forgotten as unplanned scope creep later.
+
+**If/elif avoidance confirmed:** no new dispatch point is introduced anywhere, including inside `multi_part`'s recursion — it reuses the one existing dict.
+
+---
+
+## E. Frontend architecture
+
+**Design:** a `questionType`-keyed response-component registry on the frontend, mirroring the backend evaluator registry — e.g. `RESPONSE_COMPONENTS: Record<QuestionType, ComponentType<ResponseInputProps>>`. `QuestionPage.tsx` and `SessionQuestionPage.tsx` would each render **one** generic `<QuestionResponseInput questionType={...} responseSpecification={...} value={...} onChange={...} />` that does the registry lookup internally — neither page needs to know about any individual type, which is exactly the coupling the brief asked to avoid.
+
+- **`AnswerInput`** stays as the `short_text`/`numeric` component (already correct, unchanged) — it becomes one entry in the registry rather than the only option.
+- **Type-specific components** (future, not designed pixel-by-pixel here): `SingleChoiceInput` (radio group over `options`), `MultiChoiceInput` (checkbox group), `FillBlankInput` (inline inputs at blank positions), `MatchingInput` (paired-selection UI), `MultiPartInput` (renders each part's own registry-resolved component recursively — the same self-similar structure as the backend).
+- **Response state:** evolves from a flat `string` to a union matching `ResponseSubmission`; the shared input component owns its own internal state and emits a normalized value up via `onChange` — parent pages stay unaware of the internal shape.
+- **Validation:** type-specific (e.g. "at least one option selected," "all pairs assigned") lives *inside* each type-specific component, not in the parent pages — same coupling avoidance.
+- **Submission payload:** `AnswerSubmission`/`SubmitSessionAnswerRequest` carry the richer union instead of flat `answer: string` — a real, coordinated backend+frontend contract change, only needed once a type beyond `short_text`/`numeric` actually ships.
+- **Result rendering:** multi-part/partial-credit results need per-part feedback (e.g. "2 of 3 marks," a visual breakdown) — a genuinely new UI concept, not designed further here.
+
+**Which changes belong in Slice 2 vs later — an explicit trade-off, not a default:** Slice 1 stayed frontend-free only because a number typed into a text box is still just a string; MCQ/fill_blank/matching/multi_part all fundamentally need real input widgets for a good student experience. A stopgap exists (e.g. MCQ answered by typing the option letter into the existing free-text box) but is a materially worse experience than numeric's stopgap was, and I don't recommend it as more than a named option. **The honest options for Slice 2 are: (a) another backend-only increment if one exists that doesn't need new UI, or (b) the first slice that legitimately requires frontend work, most naturally `single_choice` (backend evaluator + minimal choice-rendering UI, bundled).** This is flagged as a decision needing your explicit sign-off (§O) rather than something this document decides.
+
+---
+
+## F. Canonical content + export pipeline
+
+Following A1's principle exactly — **canonical structured content → validated runtime projection** — restated, not redesigned:
+
+- `questionType`/`responseSpecification` already live in `stage6-questions.json` per-question (Slice 1); this continues unchanged as new types are added, each gated the same way `numeric` was: `loadCanonical.js`'s `EXPORTABLE_QUESTION_TYPES` set gains a new value **only** in the same slice that ships that type's evaluator, `ResponseSpecification` shape, and `answer_keys.json` value shape together — never partially, exactly as Slice 1's structural check already enforces for the five still-reserved types.
+- `answer_keys.json`'s per-question value evolves from always-`str` to the type-dependent union in §B — still the **single private file**, still resolved only through `evaluation_service.get_expected_answer()`-equivalent access, still never touched by `loadCanonical.js`'s existing `typeof value !== 'string'` check until that check is deliberately extended for the specific type being added.
+- **Migration of existing free-text questions** (e.g. `le-q21`, `le-q25`, `le-q37`, `le-q40`) is content-authoring work, not schema/pipeline work — re-authoring them with real `options`/multi-part structure happens deliberately, question-by-question or chapter-by-chapter, whenever a future slice chooses a pilot, mirroring A1's single-chapter pilot discipline. **Never en masse**, and not scheduled by this document.
+- **Backward compatibility:** identical principle to every prior slice — every new field additive and defaulted; zero canonical edits required for any of the 241 existing questions, ever, as a side effect of adding a new type.
+- **Determinism:** `transform.js`'s whitelist-only, field-by-field, no-spread discipline is a hard, already-established invariant — nothing in this design asks for or implies an exception to it.
+
+---
+
+## G. Multi-part questions (special attention, as requested)
+
+Concrete real targets, already identified in Part I §1/§12 and reconfirmed here: `le-q25` ("Identify the LHS and RHS of the equation..."), `le-q37`, `le-q40` — each currently packs 2 independent values into one exact-match string, already flagged as brittle in the chapter's own `answer-keys.json` note.
+
+**Structural representation** (full shapes already given in §B/§C; this section states the *composition*, which is the design-worthy part): a `multi_part` `Question` is a Question whose `responseSpecification.parts` is a list of `QuestionPart`, each of which is **structurally a smaller Question** — its own `questionType`, its own `ResponseSpecification`, its own `maxScore`, its own (optional, parent-inheriting) `objectiveIds`. This self-similarity is deliberate: it means multi-part needs **no new evaluation concept**, only recursive reuse of the same registry (§D) and the same three-way public/submission/private split (§B) at the part level.
+
+**Evaluation:** `_evaluate_multi_part` dispatches each part through `_EVALUATORS[part.questionType]`, collects one `PartEvaluationResult` per part (§C), sums `score`/`maxScore`, and sets the parent `isCorrect = all(part correct)`. Choosing "all parts correct" for the boolean (rather than "score > 0" or similar) is deliberate: it's what lets `coaching_service.decide(is_correct, attempt_number)` keep working completely unchanged (§H) even for a partially-correct multi-part submission — the richer partial-credit information rides alongside in `score`/`partResults` for whichever future consumer wants it, without coaching needing to change.
+
+**Frontend surfacing:** `MultiPartInput` (§E) renders each part via the same registry, recursively; the submission payload nests `partResponses` by `partId`; result rendering needs a genuinely new per-part feedback view, not designed pixel-by-pixel here.
+
+**Explicitly not implemented by this document:** no code, no schema change, no re-authoring of `le-q25`/`le-q37`/`le-q40`.
+
+---
+
+## H. Marking model
+
+| Real scenario | Mechanism | Status |
+|---|---|---|
+| 1-mark recall | `short_text`/`numeric`, `maxScore=1` (default), all-or-nothing | **Already fully supported today** |
+| 2/3-mark direct question | `maxScore=2` or `3`, same evaluators | **Schema-supported today** (nothing stops authoring this now — `score` is still strictly `0` or `maxScore` since neither Slice 1 evaluator does within-answer partial matching) |
+| Multi-step reasoning, one free-text answer | Future rubric/`scoreBreakdown` (§B/§C), likely AI-assisted | **Deferred, AI-adjacent** |
+| Multi-part question | `multi_part` decomposition (§G), native partial credit via `partResults` | **Designed here, not built** |
+| Exact answers | `short_text` | **Done** |
+| Numeric tolerance | `numeric` | **Done** |
+
+**Explicitly separate from mastery, restated:** `attempt_service`'s mastery rule (3 consecutive correct, no hints, most-recent-first, per `get_performance()`) operates purely on the `is_correct` boolean streak — nothing in this marking-model design touches it. A future, separately-scoped adaptive-learning milestone could make mastery score-aware (e.g. "3 consecutive fully-correct, ≥80% partial credit"), but that is explicitly not proposed, designed, or implemented here.
+
+---
+
+## I. Adaptive learning readiness
+
+**Already preserved architecturally — verified by direct inspection this pass, not assumed:**
+
+| Signal | Where it already lives | Populated today? |
+|---|---|---|
+| Objective/concept attribution | `Question.objectiveIds` (A1) | Yes, for the migrated pilot chapter |
+| Question difficulty | `Question.difficulty` | Yes, always |
+| Per-attempt correctness, topic, session, timestamp | `attempts` table (`topic_id`, `difficulty`, `session_id`, `session_mode`, `attempt_number`, `is_correct`, `created_at`) | Yes |
+| Hint usage per attempt | `attempts.hints_used` column | **No — column exists, never populated.** Confirmed: neither `record_attempt_for_answer` nor `runtime_session_manager._record_attempt` passes it; both leave it at its `0` default. |
+| Response time per attempt | `attempts.time_taken_seconds` column | **No — column exists, never populated.** Same finding as above. |
+| Question type per attempt | `attempts.question_type` column | **No — but trivially populatable now** that `Question.questionType` exists (Slice 1); not done because it wasn't authorized in this milestone. |
+| Topic-level mastery/accuracy/weak-spots | `learning_context_service.build_learning_context()` | Yes, already computed on every session-planning call |
+
+**Genuinely new architecture that would need to be preserved (not implemented) for a future milestone to build on:**
+- **Objective-level (not just topic-level) performance aggregation.** `learning_context_service` only aggregates by `topic_id` today; `attempts` has no `objective_id` column at all. A future additive `attempts.objective_id` column (nullable, mirroring `topic_id`'s existing pattern) is the natural preservation point — not added here, since it requires first deciding which of a question's (possibly several, via `objectiveIds`) objectives a given attempt should be attributed to, a real design question not resolved by this document.
+- **Score/partial-credit history.** `attempts` stores only the `is_correct` boolean today, never `score`/`maxScore`. Once partial-credit questions exist (§G/§H), "progression over time" is poorly represented by binary correctness alone — a future additive `attempts.score`/`attempts.max_score` pair is the natural preservation point.
+
+**Explicitly deliberately deferred — logic, not architecture:** any mastery-algorithm change, any adaptive question-selection logic, any student-capability model, any personalized-difficulty adjustment, anything beyond what `learning_context_service` already computes at topic level. None of this is designed further here (see §N).
+
+---
+
+## J. AI readiness
+
+What already exists, verified, that a future AI Math Thinking Coach would need: stable `objectiveIds` (A1); `questionType`/`ResponseSpecification` (Slice 1); `EvaluationResult.evaluatorId`/`.confidence` as the seam an `AIEvaluator` would plug into (Part I §19, unchanged); and — the concrete precedent worth naming explicitly — **Shadow Mode's existing `AIEvaluation{correctness, confidence, reasoning_quality, misconception_tags, explanation}` schema**, already built (ADR-002), already running out-of-band, already shaped almost exactly like what a production AI evaluator's result would need to carry. A future AI evaluator is not starting from nothing; it has a working, tested precedent sitting adjacent to the exact seam this design already reserves.
+
+What a future AI milestone would consume once §I's preservation points exist: per-student attempt history with real hint-usage/response-time/score data, per-objective (not just per-topic) performance, and misconception evidence (once `attempts.misconception_tag` — already a column, still unpopulated — is wired to the `misconception` content several chapters already author per question, an already-named-but-not-built connection from Part I §8).
+
+**No speculative AI field is proposed anywhere in this section.** Every field discussed here (`evidence`, `partResults`, a future `objective_id`/`score` on `attempts`) already has a non-AI justification from §C/§G/§H/§I — nothing is proposed "because AI will eventually want it" as the sole reason.
+
+---
+
+## K. Teacher Content Intelligence — future outline
+
+```
+Teacher upload (worksheet / PDF / lesson content / question paper)
+        ↓
+AI extraction → produces CANDIDATE content in the SAME canonical shape
+                this document already designs (Concepts, LearningObjectives,
+                Questions, ResponseSpecifications, private answer-key entries)
+                — extraction's job is to produce well-formed candidates in an
+                existing format, not invent a new one
+        ↓
+Teacher review (UI not designed here)
+        ↓
+The SAME reviewStatus approval gate hand-authored content already goes
+through (ADR-003) — no separate, weaker gate for AI-sourced content
+        ↓
+Canonical content (docs/content-source/)
+        ↓
+Stage 10 export (unchanged mechanism, §F)
+        ↓
+Runtime data
+        ↓
+Assignment/test — a new concept (a teacher selecting a subset of the
+question bank to assign); not designed here
+        ↓
+Student attempts → evaluation (existing pipeline, entirely unchanged)
+        ↓
+Learning analytics (future, §I)
+```
+
+**Guardrail, restated as a hard rule, not redesigned:** AI-generated or teacher-uploaded content enters *only* as a candidate in the canonical layer, gated by the identical approval mechanism as hand-authored content, and **never** writes to `backend/app/data/*.json` directly. This is A1's §R guardrail, unweakened and unchanged by anything in this document.
+
+Nothing about upload handling, extraction models, a review UI, or an `Assignment` entity is designed further here — this is a topology diagram, not an implementation plan.
+
+---
+
+## L. Class / subject extensibility
+
+Audited directly against the current codebase, not assumed:
+
+- `Chapter{id, title, description}` — plain strings; nothing prevents a chapter titled for a different class or subject today.
+- **There is currently no `classLevel`/`grade`/`subject` field anywhere in the schema at all** — this is a genuine gap for future multi-class/multi-subject support, but it is a *gap*, not a *hardcoded blocker*: there's no field to migrate away from, because none exists yet. A future, additive `Chapter.classLevel`/`Chapter.subject` (or a new `Course`/`Grade` entity above `Chapter`) is low-risk to add whenever actually needed — it would default to `"Class 8"`/`"Mathematics"` for all 6 existing chapters with zero conflict.
+- **The one genuine hardcoded reference found in the entire codebase:** `backend/app/experiments/ai_evaluation/../ai_evaluation_prompt.py`'s `PROMPT_TEMPLATE` opens with *"You are evaluating a Class 8 student's answer to a math question."* This is Shadow Mode's experimental, currently-unused-in-production prompt string (ADR-002) — it would need to become grade/subject-parameterized before any cross-class/cross-subject AI evaluation, but it blocks nothing today since Shadow Mode has no production influence.
+- Otherwise: A1's `Concept`/`LearningObjective`/`WorkedExample` model, this document's `Question`/`ResponseSpecification`/`EvaluationResult`/evaluator-registry model, and the content pipeline are all subject/grade-neutral by construction (Part I §22's audit already established this for Slice 1; nothing added in this Part II section reintroduces a Math/Class-8 assumption, except — correctly — the `numeric` evaluator's comparison algorithm itself, which is inherently mathematical).
+
+**No refactor is proposed** — no concrete blocker exists today that would force one. The `classLevel`/`subject` gap is named as a known, low-risk future addition, not an urgent fix.
+
+---
+
+## M. Roadmap
+
+Recommended sequence, with justification for the order (not assumed):
+
+1. **M2 Slice 1 — CLOSED.** Question & Response Semantics foundation.
+2. **Next candidate: `single_choice` (structured MCQ), backend evaluator + the first, minimal frontend response component.** Justified first among the remaining types because: it's the most-requested and most concretely evidenced in real content (`le-q21`-style questions already exist, already documented as broken); its `ResponseSpecification`/private-answer shape (§B) is the simplest of the remaining types (one selected id vs. several); and it's the type that most directly validates the frontend registry pattern (§E) other types will reuse. `multi_choice` (M2 Slice 3, **implemented**) followed exactly this path — the only real question it added beyond `single_choice`'s pattern was exact-set comparison, since Slice 3's authorization resolved the partial-credit question in §B without a policy field (all-or-nothing only).
+3. **`multi_part` + its marking model (§G/§H/§C's `partResults`).** Justified next, ahead of `fill_blank`/`match_following`, because it has the clearest, already-documented real-content need (`le-q25`/`le-q37`/`le-q40`) and because it's purely a *composition* of whatever single-question types already exist by then — the later it's built, the more types it can already recurse over.
+4. **`fill_blank`, then `match_following`.** Lower urgency — no real content currently demonstrates a concrete need for either (unlike MCQ and multi-part), so they're ordered last among the six originally-named types pending real evidence.
+5. **Richer `EvaluationResult` (the §C correction: `partResults`, `evidence`) lands together with whichever slice first needs it** (`multi_part` for `partResults`; an AI-evaluator milestone for `evidence`) — not as a standalone schema slice with no producer.
+
+**Then, separately, as their own milestones** (each needing its own design/review/approval pass, none started by this document): Adaptive Learning Foundation (§I's preservation points activated into real logic); AI-assisted Math Thinking Coach (§J, building on Shadow Mode's precedent); Teacher Content Intelligence (§K); broader class/subject expansion (§L's additive fields, whenever a real second class or subject is actually planned).
+
+---
+
+## N. Scope protection
+
+| Capability | Classification |
+|---|---|
+| `single_choice` evaluator + `ResponseSpecification`/answer-key shape (§B) | **IMPLEMENTED — M2 Slice 2** |
+| `multi_choice` evaluator + `ResponseSpecification`/answer-key shape (§B, corrected) | **IMPLEMENTED — M2 Slice 3** |
+| `multi_part` evaluator + `partResults` (§C/§G) | **IMPLEMENTED — M3, released 2026-09-16** (see closure note below; `partResults` shipped, `evidence` did not) |
+| `fill_blank`/`match_following` | DESIGN NOW / IMPLEMENT LATER (lower priority, §M) |
+| Frontend response-component registry (§E) | DESIGN NOW / IMPLEMENT LATER — first needed the moment `single_choice` ships |
+| `EvaluationResult.evidence`/`partResults` fields | DESIGN NOW / IMPLEMENT LATER — only with a real producer |
+| `attempts.objective_id`, `attempts.score`/`max_score` columns (§I) | DESIGN NOW / IMPLEMENT LATER |
+| Populating `attempts.hints_used`/`.time_taken_seconds`/`.question_type` (already-existing columns) | **`hints_used`: IMPLEMENTED — released 2026-09-16** (see closure note below). `.question_type` was already populated by an earlier, undocumented Self-Serve commit (`781f87a`, predates this release). `.time_taken_seconds` remains unpopulated. This row's "not authorized by this document" is superseded for `hints_used` only; see the note. |
+| Rubric-based within-answer partial credit (§B) | DESIGN NOW / IMPLEMENT LATER, explicitly AI-adjacent |
+| Mastery-algorithm changes, adaptive question selection, student-capability model | **DELIBERATELY DEFER** |
+| AI evaluator implementation, prompt design, model integration | **DELIBERATELY DEFER** |
+| RAG, embeddings, vector database | **DELIBERATELY DEFER** — not proposed anywhere in this document |
+| Teacher upload/extraction/review UI, `Assignment` entity | **DELIBERATELY DEFER** — topology only (§K) |
+| `Chapter.classLevel`/`.subject` fields | **DELIBERATELY DEFER** — no current requirement forces this |
+| Shadow Mode prompt generalization beyond Class 8 (§L) | **DELIBERATELY DEFER** — no production impact today |
+| Any change to `coaching_service`, `answer_service`, Learning Session Engine selection logic | **DELIBERATELY DEFER** — unchanged by every option above |
+| Any change to A1's `Concept`/`LearningObjective`/`WorkedExample`/`objectiveIds` model | **DELIBERATELY DEFER** — not revisited anywhere in this document |
+
+Nothing in this document is classified **IMPLEMENT NOW** — consistent with the instruction that this is a design-only checkpoint at the time it was written. The closure note immediately below records what has since shipped.
+
+---
+
+### Closure note — M3 `multi_part` and telemetry, released 2026-09-16
+
+**This section records the present, current-dated authorization for what actually shipped. It does not claim either capability was authorized at any earlier point — a 2026-09-16 release-readiness assessment found no record, in this document or anywhere else in the repository (ADR, `Backlog.md`, `Development-Journal.md`), of a prior authorization for either, despite code comments in `evaluation_service.py` referring to "the M3 implementation authorization's three decisions." That gap is neither resolved retroactively nor hidden — it's named here, and the authorization below is dated to when it was actually given.**
+
+**M3 `multi_part` — scope, as actually implemented:**
+- Exactly three questions, all already live in production: `le-q25` (LHS/RHS), `le-q37` (smaller/larger number), `le-q40` (length/breadth). No broader `multi_part` rollout is authorized by this closure — a future chapter/question wanting `multi_part` needs its own scoping decision, not an extension of this one.
+- **Decision 1 (submission encoding):** `AnswerSubmission` stays the existing flat `answer: str`; both the private answer-key value and the student's submission encode ordered part answers as one `"|"`-delimited string — the same "opaque delimited string" convention `multi_choice` already established with `,`. `"|"` was chosen because it appears in none of the three questions' real part answers.
+- **Decision 2 (part ordering):** parts are positional and order-fixed; no permutation/unordered-set matching.
+- **Decision 3 (algebraic-part scope):** a part's `questionType` is limited to `short_text` or `numeric` — no algebra/equivalence parser. A part naming any other type fails safe to incorrect for that part.
+- `isCorrect` is `True` only when every part is correct, keeping `coaching_service.decide()` unchanged; per-part detail rides in `EvaluationResult.partResults` (§C's proposed shape, now implemented) — `evidence` was not added, since it has no producer yet, per §C's own reasoning.
+- Content-pipeline validation (`loadCanonical.js`) rejects a `multi_part` question whose parts aren't `short_text`/`numeric`, and rejects nesting (a part that is itself `multi_part`).
+
+**Telemetry — `attempts.hints_used`, scope as actually implemented:**
+- Real client-side hint counts now reach `attempts.hints_used` via both the anonymous (`AnswerSubmission.hintsUsed`) and session (`SubmitSessionAnswerRequest.hintsUsed`) flows — previously always `0`, regardless of actual hint usage.
+- **This activates a pre-existing, previously-inert rule** in `attempt_service.get_performance` (`mastered = streak >= 3` correct answers with `hints_used == 0`). **Explicit product decision, made as part of this same 2026-09-16 release**: a correct answer given after using a hint no longer counts toward a mastery streak; a correct answer given without hints continues to. This is a real behavior change for any learner who has used hints — not merely a bug fix — and is recorded here as a deliberate, dated decision, not inferred from the code.
+- A new `attempts.submitted_option_id` column was also added (write-only; no read path yet) — unrelated to the mastery rule, captured in the same release for provenance/evidence-capture purposes.
+
+---
+
+## O. Decisions requiring Product Architect approval
+
+1. **Which candidate slice is actually next** — this document recommends `single_choice` (§M) as the next authorized implementation slice, but that recommendation itself needs your sign-off before any implementation begins.
+2. **Whether Slice 2 (whatever it is) is allowed to touch the frontend at all**, or whether one more backend-only increment should be found first (§E) — `single_choice` as recommended is the first slice in this whole initiative that would require frontend work, a real change in kind from Slices 1's zero-frontend-risk pattern.
+3. **The `EvaluationResult` restructuring proposed in §C** (`partResults` as a distinct concept from `scoreBreakdown`, plus the new `evidence` field) — a genuine critique of the shipped Slice 1 shape, not implemented, needing explicit approval before it becomes binding on whichever slice builds `multi_part`.
+4. ~~`multi_choice`'s default partial-credit policy~~ — **RESOLVED by M2 Slice 3 authorization**: all-or-nothing exact-set scoring only, no `partialCreditMode` field. A future `proportional` mode, if ever wanted, is a new decision, not a pending one.
+5. **Whether to populate the already-existing-but-unused `attempts.hints_used`/`.time_taken_seconds`/`.question_type` columns** as a small, low-risk, standalone slice ahead of the larger adaptive-learning work (§I/§N) — mechanical, but still needs authorization since it wasn't part of any closed slice yet.
+6. **Timing of the `Chapter.classLevel`/`.subject` addition** (§L) — no current requirement forces it; worth the Product Architect flagging when it becomes live rather than leaving it perpetually deferred, same posture as Part I §27's symbolic-algebra note.

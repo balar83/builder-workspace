@@ -2,7 +2,7 @@ import json
 from fractions import Fraction
 from pathlib import Path
 
-from app.schemas.answer import AnswerSubmission, EvaluationResult
+from app.schemas.answer import AnswerSubmission, EvaluationResult, PartEvaluationResult
 from app.schemas.question import Question
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -22,6 +22,18 @@ def get_expected_answer(question_id: str) -> str:
     return _answer_keys[question_id]
 
 
+def _compare_short_text_values(expected: str, submitted: str) -> bool:
+    """
+    The exact-match-after-stripping comparison itself, factored out (M3) so
+    _evaluate_multi_part can reuse the identical semantics for a
+    short_text-typed part without going through the whole-question
+    get_expected_answer(question.id) lookup, which resolves the WHOLE
+    multi-part answer key, not one part's slice of it. No behavior change
+    for _evaluate_short_text below - same two lines, just named.
+    """
+    return submitted.strip() == expected.strip()
+
+
 def _evaluate_short_text(question: Question, submission: AnswerSubmission) -> EvaluationResult:
     """
     Behavior-preserving extraction of the evaluator this project has always
@@ -30,7 +42,7 @@ def _evaluate_short_text(question: Question, submission: AnswerSubmission) -> Ev
     so this function's behavior for all 241 existing questions is unchanged.
     """
     expected_answer = get_expected_answer(question.id)
-    is_correct = submission.answer.strip() == expected_answer.strip()
+    is_correct = _compare_short_text_values(expected_answer, submission.answer)
     return EvaluationResult(
         isCorrect=is_correct,
         score=question.maxScore if is_correct else 0.0,
@@ -52,6 +64,33 @@ def _parse_number(raw: str) -> Fraction | None:
         return None
 
 
+def _compare_numeric_values(expected: str, submitted: str, tolerance: float) -> bool:
+    """
+    The Fraction-based numeric comparison itself, factored out (M3) so
+    _evaluate_multi_part can reuse the identical semantics for a
+    numeric-typed part - same fail-safe branches as _evaluate_numeric below,
+    just parameterized on the two raw strings and a tolerance instead of a
+    whole Question/AnswerSubmission pair. No behavior change for
+    _evaluate_numeric below.
+    """
+    expected_value = _parse_number(expected)
+    submitted_value = _parse_number(submitted)
+
+    if expected_value is None:
+        # Content-authoring mistake (this question is typed "numeric" but
+        # its canonical answer isn't a clean number, e.g. carries a unit) -
+        # fail safe to exact-text comparison rather than raising into the
+        # student's request.
+        return submitted.strip() == expected.strip()
+    if submitted_value is None:
+        # A non-numeric submission to a numeric question is simply wrong,
+        # not an error.
+        return False
+    if tolerance > 0:
+        return abs(float(submitted_value) - float(expected_value)) <= tolerance
+    return submitted_value == expected_value
+
+
 def _evaluate_numeric(question: Question, submission: AnswerSubmission) -> EvaluationResult:
     """
     Deterministic Fraction-based numeric comparison - not a symbolic math
@@ -61,24 +100,7 @@ def _evaluate_numeric(question: Question, submission: AnswerSubmission) -> Evalu
     """
     expected_answer = get_expected_answer(question.id)
     tolerance = question.responseSpecification.numericTolerance if question.responseSpecification else 0.0
-
-    expected_value = _parse_number(expected_answer)
-    submitted_value = _parse_number(submission.answer)
-
-    if expected_value is None:
-        # Content-authoring mistake (this question is typed "numeric" but
-        # its canonical answer isn't a clean number, e.g. carries a unit) -
-        # fail safe to exact-text comparison rather than raising into the
-        # student's request.
-        is_correct = submission.answer.strip() == expected_answer.strip()
-    elif submitted_value is None:
-        # A non-numeric submission to a numeric question is simply wrong,
-        # not an error.
-        is_correct = False
-    elif tolerance > 0:
-        is_correct = abs(float(submitted_value) - float(expected_value)) <= tolerance
-    else:
-        is_correct = submitted_value == expected_value
+    is_correct = _compare_numeric_values(expected_answer, submission.answer, tolerance)
 
     return EvaluationResult(
         isCorrect=is_correct,
@@ -193,6 +215,135 @@ def _evaluate_multi_choice(question: Question, submission: AnswerSubmission) -> 
     )
 
 
+_PART_ANSWER_DELIMITER = "|"
+
+
+def _split_part_tokens(raw: str, expected_count: int) -> list[str] | None:
+    """
+    Splits a flat, "|"-delimited multi-part string into exactly
+    expected_count trimmed tokens. Returns None (never raises) for anything
+    that doesn't split into exactly that many pieces - same fail-safe
+    posture as _parse_number/_parse_option_id_set above, so a malformed
+    submission or a content-authoring answer-key/part-count mismatch is
+    simply "incorrect", never a crash into the request.
+    """
+    tokens = raw.split(_PART_ANSWER_DELIMITER)
+    if len(tokens) != expected_count:
+        return None
+    return [token.strip() for token in tokens]
+
+
+def _evaluate_multi_part(question: Question, submission: AnswerSubmission) -> EvaluationResult:
+    """
+    M3. Decomposes a multi_part Question into its ordered
+    responseSpecification.parts and evaluates each part independently, per
+    docs/Question-Response-Semantics-Design-Proposal.md Part II §C/§G and
+    the M3 implementation authorization's three decisions:
+
+    - Decision 1 (submission encoding): AnswerSubmission stays the existing
+      flat `answer: str` - no recursive partResponses field. Both the
+      private answer_keys.json value and the student's submission encode
+      their ordered part answers as one "|"-delimited string, the same
+      "one opaque delimited string, parsed only by this evaluator"
+      convention _evaluate_multi_choice already established for its own
+      comma-delimited option-id set. "|" was chosen, not reused from
+      multi_choice's ",", because it appears in none of le-q25/le-q37/
+      le-q40's real part answers ("9 - 2x", "5x + 2", "16", "21", "12",
+      "8") - verified directly against content before this evaluator was
+      written, not assumed safe by analogy.
+    - Decision 2 (part ordering): parts are positional and order-fixed - no
+      permutation/unordered-set matching is attempted anywhere below.
+    - Decision 3 (algebraic parts): a short_text-typed part (le-q25's LHS/
+      RHS) gets exactly today's short_text comparison - strip-then-compare,
+      no algebra parser, no equivalence beyond that.
+
+    isCorrect is True only when every part is correct - this is what lets
+    coaching_service.decide(is_correct, attempt_number) keep working
+    completely unchanged even for a partially-correct multi-part
+    submission; the richer partial-credit information rides alongside in
+    score/maxScore/partResults (never scoreBreakdown, which stays reserved
+    for a future single-response rubric evaluator - design doc §C) for
+    whichever future consumer wants it.
+    """
+    parts = question.responseSpecification.parts if question.responseSpecification else None
+    if not parts:
+        # Defensive: Stage 10 already refuses to export a multi_part
+        # question with no parts, but the evaluator must not crash if one
+        # somehow reaches it (e.g. a directly-constructed Question), same
+        # posture as single_choice/multi_choice's own "no options" tests.
+        return EvaluationResult(
+            isCorrect=False,
+            score=0.0,
+            maxScore=question.maxScore,
+            evaluatorId="multi_part_v1",
+            evidence="question has no configured parts",
+        )
+
+    expected_answer = get_expected_answer(question.id)
+    expected_tokens = _split_part_tokens(expected_answer, len(parts))
+    if expected_tokens is None:
+        # Content-authoring error: the private answer key doesn't split
+        # into exactly as many "|"-delimited tokens as this question has
+        # parts. Fails safe, same posture as every other evaluator's
+        # content-authoring-mistake branch in this module.
+        return EvaluationResult(
+            isCorrect=False,
+            score=0.0,
+            maxScore=question.maxScore,
+            evaluatorId="multi_part_v1",
+            evidence="answer key does not match this question's part count",
+        )
+
+    submitted_tokens = _split_part_tokens(submission.answer, len(parts))
+    if submitted_tokens is None:
+        return EvaluationResult(
+            isCorrect=False,
+            score=0.0,
+            maxScore=question.maxScore,
+            evaluatorId="multi_part_v1",
+            evidence=f'submission must contain exactly {len(parts)} part(s) separated by "{_PART_ANSWER_DELIMITER}"',
+        )
+
+    part_results: list[PartEvaluationResult] = []
+    for part, expected_token, submitted_token in zip(parts, expected_tokens, submitted_tokens):
+        if part.questionType == "short_text":
+            is_part_correct = _compare_short_text_values(expected_token, submitted_token)
+            part_evaluator_id = "short_text_v1"
+        elif part.questionType == "numeric":
+            tolerance = part.responseSpecification.numericTolerance if part.responseSpecification else 0.0
+            is_part_correct = _compare_numeric_values(expected_token, submitted_token, tolerance)
+            part_evaluator_id = "numeric_tolerance_v1"
+        else:
+            # Not attempted by M3 (Decision 3's explicit scope) - a part
+            # naming any other questionType fails safe to incorrect for
+            # that part rather than crashing on a comparison this evaluator
+            # doesn't yet implement.
+            is_part_correct = False
+            part_evaluator_id = "multi_part_v1"
+
+        part_results.append(
+            PartEvaluationResult(
+                partId=part.id,
+                isCorrect=is_part_correct,
+                score=part.maxScore if is_part_correct else 0.0,
+                maxScore=part.maxScore,
+                evaluatorId=part_evaluator_id,
+            )
+        )
+
+    total_score = sum(result.score for result in part_results)
+    total_max_score = sum(result.maxScore for result in part_results)
+    is_correct = all(result.isCorrect for result in part_results)
+
+    return EvaluationResult(
+        isCorrect=is_correct,
+        score=total_score,
+        maxScore=total_max_score,
+        evaluatorId="multi_part_v1",
+        partResults=part_results,
+    )
+
+
 # The one dispatch point in the system (design doc §6): every consumer
 # (answer_service, runtime_session_manager, Shadow Mode) only ever sees the
 # EvaluationResult an evaluator produces, never questionType itself - no
@@ -204,17 +355,17 @@ _EVALUATORS = {
     "numeric": _evaluate_numeric,
     "single_choice": _evaluate_single_choice,
     "multi_choice": _evaluate_multi_choice,
+    "multi_part": _evaluate_multi_part,
 }
 
 
 def evaluate(question: Question, submission: AnswerSubmission) -> EvaluationResult:
     evaluator = _EVALUATORS.get(question.questionType)
     if evaluator is None:
-        # Reserved-but-unimplemented questionType (multi_choice, fill_blank,
-        # matching, multi_part) - the content pipeline (loadCanonical.js)
-        # already refuses to export a question naming one of these, so this
-        # should never occur in production; raised loudly here rather than
-        # silently guessing.
+        # Reserved-but-unimplemented questionType (fill_blank, matching) -
+        # the content pipeline (loadCanonical.js) already refuses to export
+        # a question naming one of these, so this should never occur in
+        # production; raised loudly here rather than silently guessing.
         raise ValueError(
             f'No evaluator is registered for questionType="{question.questionType}" '
             f"(question {question.id}) - this type is reserved for a future slice."

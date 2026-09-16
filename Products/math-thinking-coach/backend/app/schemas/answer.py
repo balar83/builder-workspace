@@ -13,6 +13,15 @@ class NextAction(str, Enum):
 class AnswerSubmission(BaseModel):
     answer: str
     attemptNumber: int
+    # Additive, defaults to 0 for backward compatibility with any caller
+    # that doesn't send it. Client-reported, same trust tier as `answer`
+    # itself - the anonymous flow already fully trusts a client-supplied
+    # attemptNumber for coaching purposes, and there is no server-side
+    # concept of "hints shown on this question" to derive this from
+    # instead (unlike attemptNumber in the session flow, which the server
+    # tracks itself). Feeds attempts.hints_used directly - see
+    # attempt_service.py's mastery/streak rule.
+    hintsUsed: int = 0
 
 
 class SubmitAnswerRequest(BaseModel):

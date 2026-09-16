@@ -3,6 +3,11 @@ export type NextAction = 'TRY_AGAIN' | 'SHOW_HINT' | 'SHOW_SOLUTION' | 'NEXT_QUE
 export interface AnswerSubmission {
   answer: string;
   attemptNumber: number;
+  // How many hints currentHintIndex had revealed at submission time - the
+  // existing client-side hint state, sent through so the server can
+  // finally populate attempts.hints_used (previously always 0, making the
+  // "no hints" clause of the mastery rule inert).
+  hintsUsed: number;
 }
 
 export interface AnswerEvaluation {

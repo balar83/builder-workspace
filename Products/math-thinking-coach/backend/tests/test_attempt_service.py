@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, Coach, EvaluationResult, NextAction, UiState
-from app.schemas.question import Question
+from app.schemas.question import Option, Question, ResponseSpecification
 from app.services import attempt_service
 
 
@@ -158,6 +158,32 @@ def test_get_recent_question_ids_is_empty_for_a_student_with_no_attempts() -> No
     assert attempt_service.get_recent_question_ids("student-1", "c1") == []
 
 
+def test_get_question_outcomes_is_empty_for_a_student_with_no_attempts() -> None:
+    assert attempt_service.get_question_outcomes("student-1") == []
+
+
+def test_get_question_outcomes_returns_question_id_and_correctness_pairs() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q2", chapter_id="c1", topic_id=None,
+        difficulty="Easy", is_correct=False, attempt_number=1,
+    )
+
+    assert attempt_service.get_question_outcomes("student-1") == [("q1", True), ("q2", False)]
+
+
+def test_get_question_outcomes_is_scoped_to_the_requesting_student() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert attempt_service.get_question_outcomes("student-2") == []
+
+
 def test_record_attempt_for_answer_never_raises_even_if_recording_fails(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -178,6 +204,100 @@ def test_record_attempt_for_answer_never_raises_even_if_recording_fails(
     )
 
     attempt_service.record_attempt_for_answer("student-1", question, submission, response)
+
+
+# --- submitted_option_id persistence (evidence-capture slice) --------------
+#
+# The evaluator already knew which option was submitted; only persistence
+# discarded it. No read path is added here (write-only by design) - these
+# read the column directly, the same technique test_answers.py/
+# test_sessions_api.py already use for hints_used.
+
+
+def _read_submitted_option_id(question_id: str) -> list[str | None]:
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT submitted_option_id FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["submitted_option_id"] for row in rows]
+
+
+def test_record_attempt_persists_submitted_option_id_when_given() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1, submitted_option_id="opt-b",
+    )
+
+    assert _read_submitted_option_id("q1") == ["opt-b"]
+
+
+def test_record_attempt_defaults_submitted_option_id_to_none() -> None:
+    attempt_service.record_attempt(
+        student_id="student-1", question_id="q1", chapter_id="c1", topic_id="topic-a",
+        difficulty="Easy", is_correct=True, attempt_number=1,
+    )
+
+    assert _read_submitted_option_id("q1") == [None]
+
+
+def _single_choice_question(question_id: str = "q1") -> Question:
+    return Question(
+        id=question_id, chapterId="c1", question="Which is a perfect square?",
+        text="Which is a perfect square?", difficulty="Easy", hints=[], solution="16",
+        topicId="topic-a", questionType="single_choice",
+        responseSpecification=ResponseSpecification(
+            options=[Option(id="opt-a", text="12"), Option(id="opt-b", text="16")]
+        ),
+    )
+
+
+def test_record_attempt_for_answer_persists_the_selected_option_for_a_correct_single_choice_submission() -> None:
+    question = _single_choice_question()
+    submission = AnswerSubmission(answer="opt-b", attemptNumber=1)
+    response = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(isCorrect=True, score=1.0, maxScore=1.0, evaluatorId="single_choice_v1"),
+        coach=Coach(message="Excellent!", nextAction=NextAction.NEXT_QUESTION),
+        ui=UiState(canTryAgain=False, canRevealSolution=False, hintLevel=0),
+    )
+
+    attempt_service.record_attempt_for_answer("student-1", question, submission, response)
+
+    assert _read_submitted_option_id("q1") == ["opt-b"]
+
+
+def test_record_attempt_for_answer_persists_the_selected_option_for_an_incorrect_single_choice_submission() -> None:
+    question = _single_choice_question()
+    submission = AnswerSubmission(answer="opt-a", attemptNumber=1)
+    response = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(isCorrect=False, score=0.0, maxScore=1.0, evaluatorId="single_choice_v1"),
+        coach=Coach(message="Not quite.", nextAction=NextAction.TRY_AGAIN),
+        ui=UiState(canTryAgain=True, canRevealSolution=False, hintLevel=0),
+    )
+
+    attempt_service.record_attempt_for_answer("student-1", question, submission, response)
+
+    assert _read_submitted_option_id("q1") == ["opt-a"]
+
+
+def test_record_attempt_for_answer_leaves_submitted_option_id_null_for_short_text_questions() -> None:
+    question = Question(
+        id="q1", chapterId="c1", question="2+2", text="2+2", difficulty="Easy",
+        hints=[], solution="4", topicId="topic-a",
+    )
+    submission = AnswerSubmission(answer="4", attemptNumber=1)
+    response = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(isCorrect=True, score=1.0, maxScore=1.0, evaluatorId="short_text_v1"),
+        coach=Coach(message="Great job!", nextAction=NextAction.NEXT_QUESTION),
+        ui=UiState(canTryAgain=False, canRevealSolution=False, hintLevel=0),
+    )
+
+    attempt_service.record_attempt_for_answer("student-1", question, submission, response)
+
+    assert _read_submitted_option_id("q1") == [None]
 
 
 # --- get_recent_attempts / get_chapter_activity_raw (Progress Hub V1) ------
@@ -456,10 +576,10 @@ def test_record_attempt_for_answer_persists_provenance_as_standalone() -> None:
 #
 # Two real historical schema shapes, reproduced exactly (verified against
 # git history - Milestone B's original commit c615618 for the original
-# shape; the pre-provenance shape is this table's state with
-# submitted_option_id already present but before Slice 2 added provenance).
-# _ensure_schema must safely upgrade either one, in place, preserving every
-# existing row exactly.
+# shape; the pre-provenance shape matches this table's actual state just
+# before Slice 2 added provenance, i.e. after the uncommitted
+# submitted_option_id addition). _ensure_schema must safely upgrade either
+# one, in place, preserving every existing row exactly.
 
 _ORIGINAL_SCHEMA = """
 CREATE TABLE IF NOT EXISTS attempts (
@@ -580,11 +700,11 @@ def test_ensure_schema_adds_multiple_missing_columns_to_the_original_schema() ->
     """
     The very first schema this table ever had (Milestone B, commit
     c615618) - missing both submitted_option_id and provenance. Writes
-    through record_attempt (provenance only - submitted_option_id isn't one
-    of its parameters; that's a separate, unrelated write-path concern, not
-    part of what _ensure_schema owns) plus a direct SQL write, to prove the
-    column itself exists and is writable independently of any particular
-    caller's parameter surface.
+    through record_attempt (provenance only - submitted_option_id isn't
+    exercised via record_attempt here, so this test doesn't depend on that
+    parameter's own existence, only on the column itself) plus a direct SQL
+    write, to prove the column exists and is writable independently of any
+    particular caller's parameter surface.
     """
     _seed_old_row(_ORIGINAL_SCHEMA)
 

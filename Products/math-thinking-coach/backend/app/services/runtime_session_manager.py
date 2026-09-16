@@ -72,13 +72,19 @@ def _mark_started(session: LearningSession) -> LearningSession:
     return session.model_copy(update={"state": new_state})
 
 
-def submit_answer(session_id: str, student_id: str, position: int, answer: str) -> SubmitAnswerResult:
+def submit_answer(
+    session_id: str, student_id: str, position: int, answer: str, hints_used: int = 0
+) -> SubmitAnswerResult:
     """
     The only write path. Evaluate -> record -> advance, in that order,
     under session_store's lock. attemptNumber is never accepted from the
     caller - it is always SessionState.attemptsOnCurrentQuestion + 1,
     closing the race a client-supplied value would leave open (two tabs,
-    same position, second one holding a stale attempt count).
+    same position, second one holding a stale attempt count). hints_used
+    is different: it's a client-observed fact (how many hints this
+    student revealed on this question) with no server-side equivalent to
+    derive it from instead, so - unlike attemptNumber - it's accepted from
+    the caller, the same trust tier `answer` itself already has.
     """
     session = _load_live_session(session_id, student_id)
 
@@ -92,7 +98,9 @@ def submit_answer(session_id: str, student_id: str, position: int, answer: str) 
         )
 
     selected = session.selectedQuestions[position]
-    submission = AnswerSubmission(answer=answer, attemptNumber=session.state.attemptsOnCurrentQuestion + 1)
+    submission = AnswerSubmission(
+        answer=answer, attemptNumber=session.state.attemptsOnCurrentQuestion + 1, hintsUsed=hints_used
+    )
 
     # Unchanged, ADR-001: evaluate_answer resolves the question internally
     # via question_service. This module never fetches content for
@@ -113,6 +121,12 @@ def _record_attempt(session, selected, submission, evaluation) -> None:
     # independently below, not derived from this write.
     try:
         content = content_repository.get_question_content(selected.questionId)
+        # selected.type (QuestionCandidate/SelectedQuestion.type) is always
+        # None today - content_repository never populates it (see its own
+        # docstring). content.questionType is the real, live field; reused
+        # here since content is already fetched for topic_id, same pattern
+        # as attempt_service.record_attempt_for_answer's own gate.
+        is_single_choice = content is not None and content.questionType == "single_choice"
         attempt_service.record_attempt(
             student_id=session.studentId,
             question_id=selected.questionId,
@@ -124,6 +138,8 @@ def _record_attempt(session, selected, submission, evaluation) -> None:
             question_type=selected.type,
             session_id=session.sessionId,
             session_mode=session.plan.mode,
+            hints_used=submission.hintsUsed,
+            submitted_option_id=submission.answer if is_single_choice else None,
             provenance="session",
         )
     except Exception:

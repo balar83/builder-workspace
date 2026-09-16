@@ -103,6 +103,42 @@ describe('QuestionResponseInput', () => {
     expect(screen.getByPlaceholderText('Type your answer')).toBeInTheDocument();
   });
 
+  it('renders MultiPartInput for questionType "multi_part" with real parts', () => {
+    render(
+      <QuestionResponseInput
+        questionType="multi_part"
+        responseSpecification={{
+          numericTolerance: 0,
+          options: null,
+          parts: [
+            { id: 'lhs', prompt: 'LHS', questionType: 'short_text', responseSpecification: null, maxScore: 1, objectiveIds: null },
+            { id: 'rhs', prompt: 'RHS', questionType: 'short_text', responseSpecification: null, maxScore: 1, objectiveIds: null },
+          ],
+        }}
+        value=""
+        onChange={vi.fn()}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText('LHS')).toBeInTheDocument();
+    expect(screen.getByLabelText('RHS')).toBeInTheDocument();
+  });
+
+  it('falls back to the free-text AnswerInput if multi_part has no parts (defensive, never crashes the page)', () => {
+    render(
+      <QuestionResponseInput
+        questionType="multi_part"
+        responseSpecification={null}
+        value=""
+        onChange={vi.fn()}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByPlaceholderText('Type your answer')).toBeInTheDocument();
+  });
+
   it('falls back to the free-text AnswerInput for a still-reserved questionType (e.g. matching)', () => {
     render(
       <QuestionResponseInput

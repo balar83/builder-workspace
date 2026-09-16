@@ -102,6 +102,25 @@ describe('authService', () => {
     expect(result).toEqual(currentUser);
   });
 
+  it('startLearner posts to the learner start endpoint with credentials included', async () => {
+    const learner = { role: 'student', id: 'learner_abc123', name: null };
+    mockFetchOnce(200, learner);
+
+    const result = await authService.startLearner();
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/auth/learner/start'),
+      expect.objectContaining({ method: 'POST', credentials: 'include' }),
+    );
+    expect(result).toEqual(learner);
+  });
+
+  it('startLearner throws the backend detail message on failure', async () => {
+    mockFetchOnce(500, { detail: 'Failed to start learner session' });
+
+    await expect(authService.startLearner()).rejects.toThrow('Failed to start learner session');
+  });
+
   it('logout posts to the logout endpoint with credentials included', async () => {
     mockFetchOnce(200, { ok: true });
 

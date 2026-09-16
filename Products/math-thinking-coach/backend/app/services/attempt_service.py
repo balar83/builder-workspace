@@ -20,6 +20,14 @@ DB_PATH = DATA_DIR / "runtime.db"
 _lock = threading.Lock()
 
 _SCHEMA = """
+-- submitted_option_id: nullable, populated only for single_choice attempts
+-- (see record_attempt_for_answer / runtime_session_manager._record_attempt).
+-- Carries the learner's selected option id exactly as submitted - the same
+-- id already returned publicly on every single_choice question's
+-- responseSpecification.options (ADR-001), never the correct answer itself.
+-- Write-only for now: no read path exposes it yet. Exists purely so a
+-- future observation pass can see which distractor was actually chosen,
+-- instead of only is_correct.
 -- provenance (Self-Serve Learning Loop V1, Slice 2): nullable, distinct
 -- from session_mode on purpose - session_mode names WHICH session mode an
 -- attempt belongs to (practice/test/revision) and is only ever set for
@@ -54,6 +62,7 @@ CREATE TABLE IF NOT EXISTS attempts (
     is_correct INTEGER NOT NULL,
     attempt_number INTEGER NOT NULL,
     hints_used INTEGER NOT NULL DEFAULT 0,
+    submitted_option_id TEXT,
     time_taken_seconds REAL,
     misconception_tag TEXT,
     provenance TEXT,
@@ -132,6 +141,7 @@ def record_attempt(
     session_id: str | None = None,
     session_mode: str | None = None,
     hints_used: int = 0,
+    submitted_option_id: str | None = None,
     time_taken_seconds: float | None = None,
     misconception_tag: str | None = None,
     provenance: str | None = None,
@@ -144,8 +154,8 @@ def record_attempt(
                 INSERT INTO attempts (
                     student_id, question_id, chapter_id, topic_id, difficulty, question_type,
                     session_id, session_mode, is_correct, attempt_number, hints_used,
-                    time_taken_seconds, misconception_tag, provenance, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    submitted_option_id, time_taken_seconds, misconception_tag, provenance, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     student_id,
@@ -159,6 +169,7 @@ def record_attempt(
                     int(is_correct),
                     attempt_number,
                     hints_used,
+                    submitted_option_id,
                     time_taken_seconds,
                     misconception_tag,
                     provenance,
@@ -190,6 +201,8 @@ def record_attempt_for_answer(
             difficulty=question.difficulty,
             is_correct=evaluation.evaluation.isCorrect,
             attempt_number=submission.attemptNumber,
+            hints_used=submission.hintsUsed,
+            submitted_option_id=submission.answer if question.questionType == "single_choice" else None,
             provenance="standalone",
         )
     except Exception:
@@ -248,6 +261,28 @@ def get_performance(student_id: str) -> list[dict]:
         )
 
     return results
+
+
+def get_question_outcomes(student_id: str) -> list[tuple[str, bool]]:
+    """
+    Read-only (question_id, is_correct) for every attempt by this student,
+    across all chapters/topics - unlike get_performance, not filtered to
+    topic_id IS NOT NULL, since the caller (concept_performance_service)
+    resolves concept membership itself via question.objectiveIds and must
+    see every attempt to correctly exclude only the ones with no tagged
+    objective, not every untagged-topic one.
+    """
+    with _lock:
+        conn = _get_connection()
+        try:
+            rows = conn.execute(
+                "SELECT question_id, is_correct FROM attempts WHERE student_id = ? ORDER BY id",
+                (student_id,),
+            ).fetchall()
+        finally:
+            conn.close()
+
+    return [(row[0], bool(row[1])) for row in rows]
 
 
 def get_recent_question_ids(student_id: str, chapter_id: str, limit: int = 10) -> list[str]:

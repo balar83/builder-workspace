@@ -211,6 +211,7 @@ export default function SessionQuestionPage() {
       const result = await sessionService.submitSessionAnswer(sessionId, {
         position: phase.question.position,
         answer,
+        hintsUsed: currentHintIndex,
       });
 
       if (result.type === 'ok') {

@@ -18,9 +18,10 @@ import { sessionService } from '../services/sessionService';
 import type { ChapterActivity } from '../types/activity';
 import type { Chapter } from '../types/chapter';
 import type { UnresolvedMistake } from '../types/mistake';
-import type { TopicPerformance } from '../types/performance';
+import type { ConceptPerformance, TopicPerformance } from '../types/performance';
 import type { RecoveryMetricsResponse } from '../types/recovery';
 import type { SessionPointer } from '../types/sessionPointer';
+import type { Concept } from '../types/topic';
 import './DashboardPage.css';
 
 // Self-Serve Learning Loop V1, Slice 1: mirrors
@@ -42,6 +43,11 @@ interface ChapterWithPerformance {
   // offer a Learn action (IA-1). The topic lookup below already happened
   // for the performance correlation; this just stops discarding its id.
   topicId?: string;
+  // D1: this chapter's topic's Concepts, and this student's per-concept
+  // performance scoped to just those concepts — both undefined for a
+  // chapter with no Topic (Practical Geometry), same gating as topicId.
+  concepts?: Concept[];
+  conceptPerformance?: ConceptPerformance[];
   // Self-Serve Learning Loop V1, Slice 1: same weak-topic definition the
   // Revision engine itself uses - see isWeakTopic above.
   hasWeakEvidence: boolean;
@@ -79,11 +85,14 @@ interface DashboardData {
 // aggregates per topic) - correlating a chapter to its performance requires
 // looking up that chapter's topic first. Only chapters with a Topic can ever
 // show a performance badge; chapters without one legitimately never will.
+// GET /performance/me/concepts (D1) is keyed by conceptId but also carries
+// topicId, so the same per-chapter topic lookup scopes it too.
 async function loadDashboard(): Promise<DashboardData> {
-  const [user, chapters, performanceList, activity, recovery, mistakes] = await Promise.all([
+  const [user, chapters, performanceList, conceptPerformanceList, activity, recovery, mistakes] = await Promise.all([
     authService.getCurrentUser(),
     questionService.getChapters(),
     performanceService.getMyPerformance(),
+    performanceService.getMyConceptPerformance(),
     activityService.getMyActivity(),
     recoveryService.getMyRecoveryMetrics(),
     mistakeService.getMyMistakes(),
@@ -97,8 +106,19 @@ async function loadDashboard(): Promise<DashboardData> {
 
   const chaptersWithPerformance = chapters.map((chapter, index) => {
     const topics = topicsPerChapter[index];
-    const performance = topics.length > 0 ? performanceByTopicId.get(topics[0].id) : undefined;
-    return { chapter, performance, topicId: topics[0]?.id, hasWeakEvidence: isWeakTopic(performance) };
+    const topic = topics[0];
+    const performance = topic ? performanceByTopicId.get(topic.id) : undefined;
+    const conceptPerformance = topic
+      ? conceptPerformanceList.filter((entry) => entry.topicId === topic.id)
+      : undefined;
+    return {
+      chapter,
+      performance,
+      topicId: topic?.id,
+      concepts: topic?.concepts,
+      conceptPerformance,
+      hasWeakEvidence: isWeakTopic(performance),
+    };
   });
 
   const resume = user?.id ? await resolveResume(user.id, chapters) : undefined;
@@ -251,12 +271,14 @@ export default function DashboardPage() {
       )}
 
       <div className="chapter-grid">
-        {data.chapters.map(({ chapter, performance, topicId, hasWeakEvidence }) => (
+        {data.chapters.map(({ chapter, performance, topicId, concepts, conceptPerformance, hasWeakEvidence }) => (
           <ChapterPerformanceCard
             key={chapter.id}
             chapter={chapter}
             performance={performance}
             topicId={topicId}
+            concepts={concepts}
+            conceptPerformance={conceptPerformance}
             hasWeakEvidence={hasWeakEvidence}
           />
         ))}

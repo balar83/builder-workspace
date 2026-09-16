@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { authService } from '../services/authService';
 import { progressService } from '../services/progressService';
 import { questionService } from '../services/questionService';
 import type { AnswerEvaluationResponse } from '../types/answer';
@@ -30,8 +31,36 @@ export default function QuestionPage() {
   const [submitError, setSubmitError] = useState('');
   const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [retryToken, setRetryToken] = useState(0);
+  // Set once a student-role session (self-serve or class-connected) is
+  // confirmed to exist, so identity is checked at most once per page
+  // lifetime rather than on every answer submission. Never viewing this
+  // page, or viewing it without answering, must not create an identity -
+  // this ref is only ever populated from inside ensureLearnerIdentity,
+  // which handleAnswerSubmit is the sole caller of.
+  const identityEnsuredRef = useRef(false);
 
   const currentQuestion = chapterQuestions[currentQuestionIndex];
+
+  // Establishes a self-serve learner identity lazily, on the learner's
+  // first answer submission - never merely from viewing this page. An
+  // existing valid session (self-serve or class-connected) is left
+  // untouched: getCurrentUser() resolving to a user at all means there is
+  // nothing to create. Must be awaited to completion before the answer
+  // request is sent (never fired concurrently with it), so the session
+  // cookie startLearner() sets is guaranteed present on that first
+  // credentialed request - see questionService.submitAnswer.
+  const ensureLearnerIdentity = async (): Promise<void> => {
+    if (identityEnsuredRef.current) {
+      return;
+    }
+
+    const user = await authService.getCurrentUser();
+    if (!user) {
+      await authService.startLearner();
+    }
+
+    identityEnsuredRef.current = true;
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -114,6 +143,11 @@ export default function QuestionPage() {
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   const isCorrectAnswer = evaluation?.coach.nextAction === 'NEXT_QUESTION';
   const isHintSuggested = evaluation?.coach.nextAction === 'SHOW_HINT';
+  // Gating on isAllHintsRevealed alone left a student who racked up wrong
+  // attempts without clicking every hint with no way to reveal the
+  // solution - a dead end. Matches SessionQuestionPage.tsx's own fix for
+  // the identical bug.
+  const canRevealSolution = evaluation?.ui.canRevealSolution ?? false;
   const questionEnded = isCorrectAnswer || showSolution;
 
   const handleHint = () => {
@@ -158,8 +192,19 @@ export default function QuestionPage() {
   const handleAnswerSubmit = () => {
     setSubmitted(true);
     setSubmitError('');
-    questionService
-      .submitAnswer(currentQuestion.id, { answer, attemptNumber })
+    // Identity establishment is awaited to completion (never fired
+    // concurrently with the answer request) so a fresh learner's session
+    // cookie is guaranteed set before submitAnswer sends its credentialed
+    // request - otherwise the first Attempt could race the cookie and be
+    // silently dropped server-side.
+    ensureLearnerIdentity()
+      .then(() =>
+        questionService.submitAnswer(currentQuestion.id, {
+          answer,
+          attemptNumber,
+          hintsUsed: currentHintIndex,
+        }),
+      )
       .then((result) => {
         setEvaluation(result);
         setAttemptNumber((previous) => previous + 1);
@@ -171,7 +216,10 @@ export default function QuestionPage() {
       // Previously unhandled: a failed submission left the feedback panel on
       // "Checking your answer…" permanently, with no error and no way to
       // tell that anything had gone wrong. The session flow already had this
-      // branch; the anonymous flow did not.
+      // branch; the anonymous flow did not. Covers a failed
+      // ensureLearnerIdentity() the same way - identity establishment and
+      // answer submission share one error path, matching the fact that
+      // neither should proceed without the other.
       .catch(() => {
         setSubmitted(false);
         setSubmitError("We couldn't check your answer. Check your connection and try again.");
@@ -215,7 +263,7 @@ export default function QuestionPage() {
 
         {!questionEnded && (
           <div className="question-actions">
-            {isAllHintsRevealed ? (
+            {isAllHintsRevealed || canRevealSolution ? (
               <button className="hint-button" type="button" onClick={handleSolutionReveal}>
                 Reveal Solution
               </button>

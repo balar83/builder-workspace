@@ -163,14 +163,36 @@ function transformQuestion(canonicalQuestion, context) {
   // that doesn't opt in produces exactly the runtime shape it always has.
   // See docs/Question-Response-Semantics-Design-Proposal.md §13.
   question.questionType = canonicalQuestion.questionType !== undefined ? canonicalQuestion.questionType : 'short_text';
-  question.maxScore = canonicalQuestion.maxScore !== undefined ? canonicalQuestion.maxScore : 1.0;
+
+  // M3: a multi_part question's maxScore is *derived* - the sum of its own
+  // parts' maxScore (each defaulting to 1.0) - never independently authored,
+  // per design doc Part II §B ("Per-part marks are QuestionPart.maxScore,
+  // summed into the parent's maxScore - no separate weight concept
+  // needed"). This avoids a driftable duplicate number in canonical source
+  // (the parts array is already the single source of truth for how many
+  // marks the question is worth). Every other questionType keeps the
+  // existing canonicalQuestion.maxScore-or-1.0 default, unchanged.
+  if (
+    question.questionType === 'multi_part' &&
+    canonicalQuestion.responseSpecification &&
+    Array.isArray(canonicalQuestion.responseSpecification.parts)
+  ) {
+    let partsMaxScore = 0.0;
+    for (const part of canonicalQuestion.responseSpecification.parts) {
+      partsMaxScore += part.maxScore !== undefined ? part.maxScore : 1.0;
+    }
+    question.maxScore = partsMaxScore;
+  } else {
+    question.maxScore = canonicalQuestion.maxScore !== undefined ? canonicalQuestion.maxScore : 1.0;
+  }
 
   // Only set when the canonical question actually opts in - whitelist
   // field-by-field, no spread. numericTolerance is meaningful for "numeric"
-  // only and options for "single_choice" only, but both are always emitted
-  // together (harmless-when-irrelevant) rather than making this function
-  // branch on questionType - keeps the whitelist emission uniform instead
-  // of growing a second dispatch point here.
+  // only, options for "single_choice"/"multi_choice" only, and parts for
+  // "multi_part" only, but all are always emitted together (harmless-when-
+  // irrelevant) rather than making this function branch on questionType -
+  // keeps the whitelist emission uniform instead of growing a second
+  // dispatch point here.
   if (canonicalQuestion.responseSpecification !== undefined) {
     const responseSpecification = {
       numericTolerance:
@@ -190,6 +212,26 @@ function transformQuestion(canonicalQuestion, context) {
         options.push({ id: option.id, text: option.text });
       }
       responseSpecification.options = options;
+    }
+
+    // M3: same public/private split as options above - a part's id/prompt/
+    // questionType/maxScore are all public (needed to render the input),
+    // never the expected per-part answer (that lives only inside
+    // answer_keys.json's single delimited string for the parent question
+    // id, resolved by evaluation_service._evaluate_multi_part).
+    if (canonicalQuestion.responseSpecification.parts !== undefined) {
+      const parts = [];
+      for (const part of canonicalQuestion.responseSpecification.parts) {
+        parts.push({
+          id: part.id,
+          prompt: part.prompt,
+          questionType: part.questionType,
+          responseSpecification: null,
+          maxScore: part.maxScore !== undefined ? part.maxScore : 1.0,
+          objectiveIds: part.objectiveIds !== undefined ? part.objectiveIds : null,
+        });
+      }
+      responseSpecification.parts = parts;
     }
 
     question.responseSpecification = responseSpecification;

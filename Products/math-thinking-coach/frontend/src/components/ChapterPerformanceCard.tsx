@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import '../components/ChapterCard.css';
 import './ChapterPerformanceCard.css';
 import type { Chapter } from '../types/chapter';
-import type { TopicPerformance } from '../types/performance';
+import type { ConceptPerformance, TopicPerformance } from '../types/performance';
+import type { Concept } from '../types/topic';
 
 export interface ChapterPerformanceCardProps {
   chapter: Chapter;
@@ -13,6 +14,17 @@ export interface ChapterPerformanceCardProps {
   // from the anonymous chapter page, so a logged-in student could never
   // see the teaching content at all.
   topicId?: string;
+  // D1: this chapter's topic's Concepts, for the breakdown's titles/order -
+  // present exactly when topicId is (a Topic without concepts, i.e. an
+  // unmigrated chapter, cannot occur post-A2b, but an empty array is
+  // handled the same as absent).
+  concepts?: Concept[];
+  // D1: this student's per-concept aggregates, already scoped to this
+  // chapter's concepts by the caller. A concept with no entry here has zero
+  // attempts and renders as "Not yet attempted" - never a 0% accuracy,
+  // per D1's product-meaning rule ("recent accuracy on questions covering
+  // this idea", not mastery/understanding/readiness).
+  conceptPerformance?: ConceptPerformance[];
   // Self-Serve Learning Loop V1, Slice 1: true only when this chapter's
   // topic meets the same weak-topic definition the Revision engine itself
   // uses (learning_context_service.WEAK_ACCURACY_THRESHOLD) - the caller
@@ -25,9 +37,14 @@ export default function ChapterPerformanceCard({
   chapter,
   performance,
   topicId,
+  concepts,
+  conceptPerformance,
   hasWeakEvidence,
 }: ChapterPerformanceCardProps) {
   const navigate = useNavigate();
+
+  const reviewConcept = (conceptId: string) =>
+    navigate(`/topic/${topicId}?from=dashboard#concept-heading-${conceptId}`);
 
   // Deep-links into the existing Start Practice configuration flow with
   // Revision preselected (StartPracticePage reads this via navigation
@@ -48,6 +65,30 @@ export default function ChapterPerformanceCard({
               {performance.questionsAttempted} attempted · {Math.round(performance.accuracy * 100)}% accuracy
               {performance.mastered ? ' · Mastered' : ''}
             </p>
+          )}
+
+          {topicId && concepts && concepts.length > 0 && (
+            <ul className="concept-performance-list">
+              {concepts.map((concept) => {
+                const stats = conceptPerformance?.find((row) => row.conceptId === concept.id);
+
+                return (
+                  <li key={concept.id} className="concept-performance-item">
+                    <span className="concept-performance-title">{concept.title}</span>
+                    <span className="concept-performance-stats">
+                      {stats ? `${stats.questionsCorrect}/${stats.questionsAttempted}` : 'Not yet attempted'}
+                    </span>
+                    <button
+                      type="button"
+                      className="link-button concept-review-link"
+                      onClick={() => reviewConcept(concept.id)}
+                    >
+                      Review
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
       </div>

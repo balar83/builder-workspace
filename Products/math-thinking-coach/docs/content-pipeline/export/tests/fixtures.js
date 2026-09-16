@@ -143,6 +143,38 @@ function multiChoiceAnswerKeys() {
   return { topicId: 'topic-fixture', reviewStatus: 'approved', answers: { 'fx-mc-q01': 'opt-a,opt-b,opt-d' } };
 }
 
+// M3 (multi_part): mirrors le-q25's real shape - two short_text-typed,
+// labeled parts (an algebraic LHS/RHS expression each). The private
+// answer-keys.json value is one "|"-delimited string, positional per part
+// order - the same "single opaque delimited string, parsed only by its own
+// evaluator" convention multi_choice's comma-delimited value established.
+function multiPartQuestionBank() {
+  return {
+    topicId: 'topic-fixture',
+    reviewStatus: 'approved',
+    questions: [
+      {
+        id: 'fx-mp-q01',
+        prompt: 'Identify the LHS and RHS of the equation 9 - 2x = 5x + 2.',
+        expectedAnswer: 'LHS = 9 - 2x. RHS = 5x + 2.',
+        hints: ['LHS is everything before the equals sign.'],
+        difficulty: 'Easy',
+        questionType: 'multi_part',
+        responseSpecification: {
+          parts: [
+            { id: 'lhs', prompt: 'LHS (left-hand side)', questionType: 'short_text' },
+            { id: 'rhs', prompt: 'RHS (right-hand side)', questionType: 'short_text' },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+function multiPartAnswerKeys() {
+  return { topicId: 'topic-fixture', reviewStatus: 'approved', answers: { 'fx-mp-q01': '9 - 2x|5x + 2' } };
+}
+
 // Deep clone via JSON round-trip - fine for these plain-data fixtures, and
 // keeps each test's mutation from leaking into another test's fixture.
 function clone(value) {
@@ -202,6 +234,8 @@ module.exports = {
   singleChoiceAnswerKeys,
   multiChoiceQuestionBank,
   multiChoiceAnswerKeys,
+  multiPartQuestionBank,
+  multiPartAnswerKeys,
   clone,
   writeChapterFixture,
 };

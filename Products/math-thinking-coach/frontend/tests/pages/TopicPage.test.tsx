@@ -22,9 +22,17 @@ vi.mock('../../src/services/questionService', () => ({
   },
 }));
 
+vi.mock('../../src/services/authService', () => ({
+  authService: {
+    getCurrentUser: vi.fn(),
+    startLearner: vi.fn(),
+  },
+}));
+
 import ChapterPage from '../../src/pages/ChapterPage';
 import TopicPage from '../../src/pages/TopicPage';
 import QuestionPage from '../../src/pages/QuestionPage';
+import { authService } from '../../src/services/authService';
 import { questionService } from '../../src/services/questionService';
 
 const chapter = { id: 'linear-equations', title: 'Linear Equations', description: 'Solving linear equations.' };
@@ -83,6 +91,15 @@ const question = {
 // Same three routes App.tsx wires for this journey - a deliberately narrow
 // mount (not the whole App) so this test doesn't also have to stub the
 // auth/session services the class-joined routes depend on.
+//
+// /practice/:chapterId is a bare placeholder, not the real (RequireStudent-
+// gated) StartPracticePage - this file only needs to prove TopicPage's new
+// CTA actually navigates there after establishing identity; the guarded
+// route's own behavior is out of scope here (and unmodified by this slice).
+function PracticeRoutePlaceholder() {
+  return <div>Practice session placeholder</div>;
+}
+
 function renderJourney(initialPath: string) {
   return render(
     <MemoryRouter initialEntries={[initialPath]}>
@@ -90,6 +107,7 @@ function renderJourney(initialPath: string) {
         <Route path="/chapter/:chapterId" element={<ChapterPage />} />
         <Route path="/topic/:topicId" element={<TopicPage />} />
         <Route path="/question/:chapterId" element={<QuestionPage />} />
+        <Route path="/practice/:chapterId" element={<PracticeRoutePlaceholder />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -182,5 +200,93 @@ describe('Chapter -> lesson -> practice journey (lesson-page UX slice)', () => {
     expect(examples.length).toBe(2);
     expect(examples[0].open).toBe(true);
     expect(examples[1].open).toBe(false);
+  });
+});
+
+describe('TopicPage - second Practice entry point into the Session engine (approved slice)', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('offers a distinct tracked-session CTA on a direct (non-Dashboard) visit', async () => {
+    vi.mocked(questionService.getTopic).mockResolvedValue(topic);
+
+    renderJourney('/topic/topic-linear-equations-one-variable');
+
+    await screen.findByRole('heading', { name: topic.title, level: 1 });
+
+    expect(
+      screen.getByRole('button', { name: /Start a Tracked Practice Session/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('does not offer the second CTA when arriving from Dashboard - the existing button already reaches the Session engine there', async () => {
+    vi.mocked(questionService.getTopic).mockResolvedValue(topic);
+
+    renderJourney('/topic/topic-linear-equations-one-variable?from=dashboard');
+
+    await screen.findByRole('heading', { name: topic.title, level: 1 });
+
+    expect(
+      screen.queryByRole('button', { name: /Start a Tracked Practice Session/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('establishes a fresh learner identity before navigating into the Session engine', async () => {
+    vi.mocked(questionService.getTopic).mockResolvedValue(topic);
+
+    const callOrder: string[] = [];
+    vi.mocked(authService.getCurrentUser).mockImplementation(async () => {
+      callOrder.push('getCurrentUser');
+      return undefined;
+    });
+    vi.mocked(authService.startLearner).mockImplementation(async () => {
+      callOrder.push('startLearner');
+      return { role: 'student' as const, id: 'learner_fresh', name: null };
+    });
+
+    renderJourney('/topic/topic-linear-equations-one-variable');
+    await screen.findByRole('heading', { name: topic.title, level: 1 });
+
+    fireEvent.click(screen.getByRole('button', { name: /Start a Tracked Practice Session/ }));
+
+    await screen.findByText('Practice session placeholder');
+
+    // Sequenced, not concurrent: identity is fully established (and, since
+    // none existed, created) before the route change into the Session
+    // engine ever happens.
+    expect(callOrder).toEqual(['getCurrentUser', 'startLearner']);
+  });
+
+  it('reuses an existing session without creating a duplicate learner', async () => {
+    vi.mocked(questionService.getTopic).mockResolvedValue(topic);
+    vi.mocked(authService.getCurrentUser).mockResolvedValue({
+      role: 'student',
+      id: 'existing-learner',
+      name: null,
+    });
+
+    renderJourney('/topic/topic-linear-equations-one-variable');
+    await screen.findByRole('heading', { name: topic.title, level: 1 });
+
+    fireEvent.click(screen.getByRole('button', { name: /Start a Tracked Practice Session/ }));
+
+    await screen.findByText('Practice session placeholder');
+
+    expect(authService.startLearner).not.toHaveBeenCalled();
+  });
+
+  it('shows an error and does not navigate when identity establishment fails', async () => {
+    vi.mocked(questionService.getTopic).mockResolvedValue(topic);
+    vi.mocked(authService.getCurrentUser).mockRejectedValue(new Error('network down'));
+
+    renderJourney('/topic/topic-linear-equations-one-variable');
+    await screen.findByRole('heading', { name: topic.title, level: 1 });
+
+    fireEvent.click(screen.getByRole('button', { name: /Start a Tracked Practice Session/ }));
+
+    await screen.findByText(/couldn't start a practice session/i);
+    expect(screen.queryByText('Practice session placeholder')).not.toBeInTheDocument();
   });
 });

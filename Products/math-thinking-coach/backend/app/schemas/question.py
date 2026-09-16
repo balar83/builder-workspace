@@ -33,25 +33,57 @@ class Option(BaseModel):
     text: str
 
 
+class QuestionPart(BaseModel):
+    """
+    M3 (multi_part). One sub-question within a multi_part Question -
+    structurally a smaller Question: its own id, prompt, questionType, and
+    (optional) ResponseSpecification, per
+    docs/Question-Response-Semantics-Design-Proposal.md Part II §B/§G.
+    Public - returned on GET routes so the multi-part prompt/structure can
+    be rendered; never carries the expected answer, same public/private
+    split ADR-001 established for every other type (the private, per-part
+    answer lives only inside answer_keys.json's single delimited string for
+    the parent question id - see evaluation_service._evaluate_multi_part).
+
+    objectiveIds is optional and inherits the parent Question's objectiveIds
+    when unset (design doc's Architectural Question H) - not read by
+    evaluation, only relevant to future per-objective analytics.
+    """
+
+    id: str
+    prompt: str
+    questionType: QuestionType
+    responseSpecification: "ResponseSpecification | None" = None
+    maxScore: float = 1.0
+    objectiveIds: list[str] | None = None
+
+
 class ResponseSpecification(BaseModel):
     """
     Deliberately minimal - only the parameters an implemented evaluator
     actually reads (numericTolerance for "numeric"; options for
-    "single_choice"). Does NOT carry the expected answer itself: Question
-    (and therefore ResponseSpecification) is returned by public GET routes,
-    and the expected answer stays private in answer_keys.json (ADR-001) for
-    every questionType. For single_choice specifically: `options` (the
-    choice text) is legitimately public - a student must see the choices to
-    pick one - but *which* option is correct is never represented here or
-    anywhere else on Question; it is resolved only through
-    evaluation_service.get_expected_answer(), exactly like every other
-    type, where the private answer_keys.json value is simply the correct
-    option's id (no second answer-key mechanism). See
+    "single_choice"; parts for "multi_part"). Does NOT carry the expected
+    answer itself: Question (and therefore ResponseSpecification) is
+    returned by public GET routes, and the expected answer stays private in
+    answer_keys.json (ADR-001) for every questionType. For single_choice
+    specifically: `options` (the choice text) is legitimately public - a
+    student must see the choices to pick one - but *which* option is
+    correct is never represented here or anywhere else on Question; it is
+    resolved only through evaluation_service.get_expected_answer(), exactly
+    like every other type, where the private answer_keys.json value is
+    simply the correct option's id (no second answer-key mechanism). See
     docs/Question-Response-Semantics-Design-Proposal.md Part II §B.
     """
 
     numericTolerance: float = 0.0
     options: list[Option] | None = None
+    # M3 (multi_part): the ordered list of sub-questions a multi_part
+    # Question decomposes into - see QuestionPart's own docstring. None for
+    # every other questionType.
+    parts: list[QuestionPart] | None = None
+
+
+QuestionPart.model_rebuild()
 
 
 class QuestionRemediation(BaseModel):

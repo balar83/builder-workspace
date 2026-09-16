@@ -112,7 +112,13 @@ function loadCanonicalTopic(chapterDir, issues) {
 const NAMED_QUESTION_TYPES = new Set([
   'short_text', 'numeric', 'single_choice', 'multi_choice', 'fill_blank', 'matching', 'multi_part',
 ]);
-const EXPORTABLE_QUESTION_TYPES = new Set(['short_text', 'numeric', 'single_choice', 'multi_choice']);
+const EXPORTABLE_QUESTION_TYPES = new Set(['short_text', 'numeric', 'single_choice', 'multi_choice', 'multi_part']);
+
+// M3: a multi_part part's own questionType must itself be an already-
+// exportable, non-multi_part type - nesting (a part that is itself
+// multi_part) is not supported by evaluation_service._evaluate_multi_part
+// and is rejected here rather than silently accepted and mishandled later.
+const MULTI_PART_ALLOWED_PART_TYPES = new Set(['short_text', 'numeric']);
 
 // Slice 2/3 (M2): a stable option id must be a safe, unambiguous token - not
 // empty, not containing characters that could collide across authoring
@@ -141,6 +147,38 @@ function validateChoiceOptions(question, label, issues) {
         issues.push(`${label} responseSpecification.options[${i}] has duplicate option id "${option.id}"`);
       }
       seenIds.add(option.id);
+    }
+  });
+}
+
+// M3: a part id follows the same safe-token convention as a choice option
+// id (OPTION_ID_FORMAT above) - no separate format needed, the constraint
+// (safe, unambiguous, no cross-tool/JSON-key collision risk) is identical.
+function validateMultiPartParts(question, label, issues) {
+  const spec = question.responseSpecification;
+  if (!spec || !Array.isArray(spec.parts) || spec.parts.length === 0) {
+    issues.push(`${label} has questionType "multi_part" but no non-empty responseSpecification.parts array`);
+    return;
+  }
+
+  const seenIds = new Set();
+  spec.parts.forEach((part, i) => {
+    requireFields(part, ['id', 'prompt', 'questionType'], `${label} responseSpecification.parts[${i}]`, issues);
+
+    if (typeof part.id === 'string') {
+      if (!OPTION_ID_FORMAT.test(part.id)) {
+        issues.push(`${label} responseSpecification.parts[${i}] has an invalid part id "${part.id}" (must match ${OPTION_ID_FORMAT})`);
+      }
+      if (seenIds.has(part.id)) {
+        issues.push(`${label} responseSpecification.parts[${i}] has duplicate part id "${part.id}"`);
+      }
+      seenIds.add(part.id);
+    }
+
+    if (typeof part.questionType === 'string' && !MULTI_PART_ALLOWED_PART_TYPES.has(part.questionType)) {
+      issues.push(
+        `${label} responseSpecification.parts[${i}] ("${part.id}") has questionType "${part.questionType}", which multi_part does not support - allowed part types are ${[...MULTI_PART_ALLOWED_PART_TYPES].join(', ')}`
+      );
     }
   });
 }
@@ -187,6 +225,8 @@ function loadCanonicalQuestions(chapterDir, issues) {
         );
       } else if (q.questionType === 'single_choice' || q.questionType === 'multi_choice') {
         validateChoiceOptions(q, `stage6-questions.json questions[${i}] ("${q.id}")`, issues);
+      } else if (q.questionType === 'multi_part') {
+        validateMultiPartParts(q, `stage6-questions.json questions[${i}] ("${q.id}")`, issues);
       }
     }
   });

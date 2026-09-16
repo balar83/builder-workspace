@@ -24,3 +24,37 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
 }
+
+/* D1: per-concept breakdown. Deliberately plain rows, not a second card
+   pattern — the smallest addition that fits inside the existing
+   chapter-card-main column. */
+.concept-performance-list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.concept-performance-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.concept-performance-title {
+  color: var(--color-text-secondary, inherit);
+}
+
+.concept-performance-stats {
+  white-space: nowrap;
+}
+
+.concept-review-link {
+  min-height: 0;
+  padding: 0;
+  font-size: var(--text-sm);
+}

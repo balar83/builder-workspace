@@ -4,8 +4,10 @@ from pathlib import Path
 
 import pytest
 
+from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, Coach, EvaluationResult, NextAction, UiState
+from app.schemas.question import Option, Question, ResponseSpecification
 from app.schemas.session import AssessmentRequest
-from app.services import attempt_service, runtime_session_manager as rsm
+from app.services import attempt_service, content_repository, runtime_session_manager as rsm
 from app.services import session_builder, session_store
 
 ANSWERS = {
@@ -403,6 +405,64 @@ def test_submit_answer_records_a_session_linked_attempt() -> None:
     assert len(performance) == 1
     assert performance[0]["questionsAttempted"] == 1
     assert performance[0]["questionsCorrect"] == 1
+
+
+# --- submitted_option_id persistence (evidence-capture slice) --------------
+#
+# rational-numbers (used throughout this file) is entirely short_text, so a
+# synthetic single_choice Question is injected the same way test_answers.py
+# does it - _record_attempt is exercised directly with a real session/selected
+# pair from _create(), rather than fighting session_builder's real selection
+# pool to force a single_choice question into it.
+
+
+def _read_submitted_option_id(question_id: str) -> list[str | None]:
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT submitted_option_id FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["submitted_option_id"] for row in rows]
+
+
+def test_session_flow_persists_submitted_option_id_for_a_single_choice_question(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    session = _create(question_count=1)
+    selected = session.selectedQuestions[0]
+
+    synthetic_question = Question(
+        id=selected.questionId, chapterId=session.chapterId, question="Which is a perfect square?",
+        text="Which is a perfect square?", difficulty="Easy", hints=[], solution="16",
+        topicId="topic-x", questionType="single_choice",
+        responseSpecification=ResponseSpecification(
+            options=[Option(id="opt-a", text="12"), Option(id="opt-b", text="16")]
+        ),
+    )
+    monkeypatch.setattr(content_repository, "get_question_content", lambda question_id: synthetic_question)
+
+    submission = AnswerSubmission(answer="opt-b", attemptNumber=1, hintsUsed=0)
+    evaluation = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(isCorrect=True, score=1.0, maxScore=1.0, evaluatorId="single_choice_v1"),
+        coach=Coach(message="Excellent!", nextAction=NextAction.NEXT_QUESTION),
+        ui=UiState(canTryAgain=False, canRevealSolution=False, hintLevel=0),
+    )
+
+    rsm._record_attempt(session, selected, submission, evaluation)
+
+    assert _read_submitted_option_id(selected.questionId) == ["opt-b"]
+
+
+def test_session_flow_persists_a_null_submitted_option_id_for_short_text() -> None:
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    rsm.submit_answer(session.sessionId, "student-1", 0, ANSWERS[selected.questionId])
+
+    assert _read_submitted_option_id(selected.questionId) == [None]
 
 
 # --- provenance (Self-Serve Learning Loop V1, Slice 2) ----------------------

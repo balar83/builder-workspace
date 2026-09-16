@@ -60,8 +60,14 @@ async function submitAnswer(
   questionId: string,
   submission: AnswerSubmission,
 ): Promise<AnswerEvaluationResponse> {
+  // credentials: 'include' is required so a self-serve learner's (or a
+  // class-connected student's) session cookie is actually sent - without
+  // it, request.session on the backend is always empty for this call,
+  // regardless of whether a valid identity exists client-side. Matches the
+  // pattern already used by sessionService.ts/authService.ts.
   const response = await fetch(`${API_BASE_URL}/questions/${questionId}/answer`, {
     method: 'POST',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ submission }),
   });

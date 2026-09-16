@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from pathlib import Path
 
 import pytest
@@ -316,6 +317,88 @@ def test_answer_is_recorded_when_a_student_is_logged_in() -> None:
     assert performance[0]["questionsCorrect"] == 1
 
 
+def _read_hints_used(question_id: str) -> list[int]:
+    # Correctness Integrity slice: attempt_service.get_performance() only
+    # exposes hints_used indirectly (via the mastery/streak arithmetic) -
+    # reading the column directly is the only way to prove the raw value
+    # actually persisted, without adding any new production read path.
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT hints_used FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["hints_used"] for row in rows]
+
+
+def test_hints_used_defaults_to_zero_when_omitted() -> None:
+    student_client = _join_as_student()
+
+    response = student_client.post(
+        QUESTION_URL,
+        json={"submission": {"answer": "Yes", "attemptNumber": 1}},
+    )
+
+    assert response.status_code == 200
+    assert _read_hints_used(QUESTION_ID) == [0]
+
+
+def test_hints_used_is_persisted_when_submitted() -> None:
+    student_client = _join_as_student()
+
+    response = student_client.post(
+        QUESTION_URL,
+        json={"submission": {"answer": "Yes", "attemptNumber": 1, "hintsUsed": 2}},
+    )
+
+    assert response.status_code == 200
+    assert _read_hints_used(QUESTION_ID) == [2]
+
+
+def test_three_correct_answers_after_hints_do_not_produce_mastery() -> None:
+    """
+    The exact defect this slice fixes: previously every attempt persisted
+    hints_used=0 regardless of real hint usage, so 3 correct-after-hint
+    answers in a row silently satisfied "3 consecutive correct, no hints"
+    (LearningExperienceArchitecture.md §3) and reported mastered=True.
+    """
+    student_client = _join_as_student()
+    student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+    for attempt_number in range(1, 4):
+        response = student_client.post(
+            QUESTION_URL,
+            json={"submission": {"answer": "Yes", "attemptNumber": attempt_number, "hintsUsed": 1}},
+        )
+        assert response.status_code == 200
+
+    performance = attempt_service.get_performance(student_id)
+    assert performance[0]["questionsCorrect"] == 3
+    assert performance[0]["currentStreak"] == 0
+    assert performance[0]["mastered"] is False
+
+
+def test_three_correct_answers_without_hints_still_produce_mastery() -> None:
+    # Companion positive control, via the real endpoint (not just the
+    # attempt_service unit tests) - proves the fix doesn't regress the
+    # already-correct no-hints path.
+    student_client = _join_as_student()
+    student_id = student_client.get("/api/v1/auth/me").json()["id"]
+
+    for attempt_number in range(1, 4):
+        response = student_client.post(
+            QUESTION_URL,
+            json={"submission": {"answer": "Yes", "attemptNumber": attempt_number}},
+        )
+        assert response.status_code == 200
+
+    performance = attempt_service.get_performance(student_id)
+    assert performance[0]["currentStreak"] == 3
+    assert performance[0]["mastered"] is True
+
+
 def test_response_is_unaffected_when_attempt_recording_fails(monkeypatch: pytest.MonkeyPatch) -> None:
     def explode(*args, **kwargs) -> None:
         raise RuntimeError("attempt recording is down")
@@ -428,6 +511,84 @@ def test_single_choice_unrecognized_option_returns_incorrect_not_an_error(
 
     assert response.status_code == 200
     assert response.json()["evaluation"]["isCorrect"] is False
+
+
+# --- submitted_option_id persistence (evidence-capture slice) --------------
+#
+# The evaluator already knows which option was submitted; only persistence
+# was discarding it (is_correct survived, the selected option did not).
+# These prove the new column, not a new capability - no read path, coaching
+# behavior, or public response shape changes anywhere in this section.
+
+
+def _read_submitted_option_id(question_id: str) -> list[str | None]:
+    # Same technique as _read_hints_used above: no production read path
+    # exposes this column yet (write-only by design, see attempt_service.py's
+    # schema comment) - reading it directly is the only way to prove it
+    # persisted.
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT submitted_option_id FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["submitted_option_id"] for row in rows]
+
+
+def test_single_choice_correct_submission_persists_the_selected_option_id(
+    _synthetic_single_choice_question: None,
+) -> None:
+    student_client = _join_as_student()
+
+    response = student_client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "opt-b", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    assert _read_submitted_option_id(SINGLE_CHOICE_QUESTION_ID) == ["opt-b"]
+
+
+def test_single_choice_incorrect_submission_persists_the_selected_option_id(
+    _synthetic_single_choice_question: None,
+) -> None:
+    student_client = _join_as_student()
+
+    response = student_client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "opt-a", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    assert _read_submitted_option_id(SINGLE_CHOICE_QUESTION_ID) == ["opt-a"]
+
+
+def test_short_text_submission_persists_a_null_submitted_option_id() -> None:
+    student_client = _join_as_student()
+
+    response = student_client.post(
+        QUESTION_URL,
+        json={"submission": {"answer": "Yes", "attemptNumber": 1}},
+    )
+
+    assert response.status_code == 200
+    assert _read_submitted_option_id(QUESTION_ID) == [None]
+
+
+def test_single_choice_answer_response_never_exposes_submitted_option_id(
+    _synthetic_single_choice_question: None,
+) -> None:
+    """
+    CRITICAL SECURITY CHECK: submitted_option_id is persistence-only. The
+    HTTP response returned to the client must not echo it back or expose any
+    field derived from persistence - only the existing evaluation/coach/ui
+    contract.
+    """
+    student_client = _join_as_student()
+
+    response = student_client.post(SINGLE_CHOICE_URL, json={"submission": {"answer": "opt-b", "attemptNumber": 1}})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert set(body.keys()) == {"evaluation", "coach", "ui", "remediation"}
+    assert "submittedOptionId" not in body["evaluation"]
+    assert body["evaluation"]["evidence"] is None
 
 
 # --- Self-Serve Learning Loop V1, Slice 5: remediation API contract --------
