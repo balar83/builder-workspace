@@ -56,6 +56,8 @@ Starts at `http://localhost:8000`. Swagger docs at `http://localhost:8000/docs`;
 
 `--reload` watches for file changes — the standard way to run this during development. Omit it for anything long-running (see `Deployment-Guide.md`).
 
+**Working-directory note:** the default `DATA_DIR=app/data` in `.env` is a relative path, resolved against the backend process's actual working directory at runtime — not against this file's location. The `cd backend` workflow above resolves it to `backend/app/data`, as intended. Starting the backend a different way that doesn't `cd` into `backend/` first (for example, via a repo-root launch config that invokes the venv Python directly) resolves the same relative path against the repository root instead, producing a second, unintended `<repo-root>/app/data/runtime.db`. If you need the database location to be deterministic regardless of how the backend is launched, either use the `cd backend` workflow above or set `DATA_DIR` to an absolute path.
+
 ## 4. Running the frontend
 
 From `frontend/`:
