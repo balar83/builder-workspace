@@ -10,6 +10,24 @@
 
 See [`Product-Vision.md`](Product-Vision.md) — the single source of truth for mission, target audience, long-term vision, product principles, coaching-vs-assessment philosophy, curriculum integrity, and extensibility principles. This file (`ProductArchitecture.md`) covers *how* the system is built; `Product-Vision.md` covers *why* it exists and what it optimizes for. Do not duplicate principles here — if it belongs in both, it's drifted.
 
+**Updated 2026-09-02 (Product Strategy Reset):** `Product-Vision.md`'s Common Product Model — one **Learner → Content → Attempt → Evidence → Intervention → Assessment → Result** engine underneath every context — is the architectural target this document's technical record should be read against from here forward. §1a immediately below states the current gap against that target explicitly; the rest of this document is otherwise unchanged in structure, updated only where a section's content directly bears on the reset.
+
+## 1a. Current architecture vs. the target common model
+
+**Target** (per `Product-Vision.md`): one engine. Self-directed, teacher/parent, and institutional/class contexts differ only in who controls the experience, who controls assessment, and who needs result visibility — not in which code path they run.
+
+**Current (as shipped):** three tracks, not two — Self-Serve Learning Loop V1 (2026-09-03 to 2026-09-09) added a middle path between the two originally described here:
+
+| | Anonymous track | Self-serve (tracked) track | Authenticated (class) track |
+|---|---|---|---|
+| Entry | `/chapter/:id` → `/question/:chapterId`, no identity ever established | Same entry points, but an explicit learner action (e.g. a "Start Practice"/"Start a Tracked Practice Session" CTA) lazily calls `ensureLearnerSession()`, minting a `SelfServeLearner` identity | Class join code → `/dashboard` → `/practice/:id` → `/session/:id` |
+| Progress storage | `localStorage` only (`progressService`/`progressStore`, §6) | Server-side (`runtime.db`), same tables/services as the authenticated track | Server-side (`runtime.db`, ADR-005/006/007) |
+| Modes | None — one flat pass through the full question bank | Practice / Revision / Test, difficulty filter, question count, time limit — same Learning Session Engine (§17–18) as the authenticated track | Practice / Revision / Test, difficulty filter, question count, time limit |
+| Resume | Per-chapter position only | Real session resume via a Dashboard banner | Real session resume via a Dashboard banner |
+| Weak-area targeting, Mastery, Test mode | Not reachable | Reachable — no class-membership gate anywhere in the session path (Self-Serve Learning Loop V1, Slice 1) | Reachable |
+
+The self-serve track shares the authenticated track's actual engine (`session_builder`/`session_planning_pipeline`, the Learning Session Engine) rather than being a third implementation — both `Student` and `SelfServeLearner` resolve under the same `role="student"` session contract (`GET /auth/me`), and `/performance/me*` routes gate on that role alone, not on class membership. What remains structurally separate is narrower than originally scoped here: a visitor who never triggers `ensureLearnerSession()` (pure anonymous browsing) still gets only the `localStorage`-only flat pass-through, with no weak-area targeting, Mastery, Revision, Wrong-Answer Review, or Test mode. **Do not build a third system to close that remaining gap** — see `Roadmap.md`'s North Star Capability Model for what (if anything) is scoped around converting anonymous browsing itself into a self-serve session automatically; not decided here.
+
 ---
 
 # 2. Technology Stack
@@ -176,21 +194,33 @@ This mirrors the backend's own pattern — a service function in front of a priv
 
 ```
 Chapter (id, title, description)
-   ├── Topic (id, chapterId, title, explanation, workedExampleContent, learningObjectives[])   — optional, per chapter
+   ├── Topic (id, chapterId, title, concepts[] (id, title, body, learningObjectives[]), workedExamples[],
+   │          explanation, workedExampleContent, learningObjectives[])   — optional, per chapter
    └── Question (id, chapterId, question, text, difficulty, hints[], solution, topicId?)
 ```
 
-Three levels for chapters that have been migrated onto the content pipeline; two levels (Chapter → Question, no Topic) for chapters that haven't. As of Features 018–021 (2026-07-27): **Linear Equations** has a Topic and 44 questions, all tagged `topicId`. **Rational Numbers** has a Topic (hand-seeded before the pipeline existed, not pipeline output) and its original 5 questions, all tagged `topicId`. **Data Handling, Practical Geometry, Understanding Quadrilaterals** have no Topic and their original 5 questions each, `topicId: null`. `Question.topicId` is optional specifically so this partial-migration state is representable without a schema break.
+**Corrected 2026-09-02** (this diagram previously showed only the pre-Slice-A1 legacy fields — stale and misleading as written): `Topic.concepts`/`.workedExamples` are the structured shape `TopicPage.tsx` actually renders today (`isStructured = topic.concepts.length > 0`); `explanation`/`workedExampleContent`/`learningObjectives` are the legacy flat-string fields, kept alongside for now and used only as a fallback when `concepts` is empty (no chapter currently hits that fallback — see below). Full structured-content history and the A1/A2/A3 slicing rationale: `Structured-Learning-Content-Design-Proposal.md` — but note that document's own top-of-file status line ("A2 and A3 are approved in shape only; neither is scheduled or started") is now stale too; trust this paragraph and §8's confirmation below over that line until that document is corrected directly.
+
+**All 6 Topic-bearing chapters carry structured `concepts`** (3–5 each), confirmed 2026-09-02 by reading `backend/app/data/topics.json` directly — Slice A2 (frontend cutover) and A2b (migrating every chapter) are both complete (commits `51a05fe`/`d7890cc`), not future work. Slice A3 (removing the now-redundant legacy fields) has not been done.
+
+Three levels for chapters that have been migrated onto the content pipeline; two levels (Chapter → Question, no Topic) for chapters that haven't. **The per-chapter migration snapshot below is stale as of 2026-07-27** and kept only as a historical record of the state Features 018–021 shipped into — see `README.md` for current chapter/question/Topic counts (all 7 chapters have since been expanded and structured; commit `112ace7`), rather than trusting the numbers in this paragraph: **Linear Equations** had a Topic and 44 questions, all tagged `topicId`. **Rational Numbers** had a Topic (hand-seeded before the pipeline existed, not pipeline output) and its original 5 questions, all tagged `topicId`. **Data Handling, Practical Geometry, Understanding Quadrilaterals** had no Topic and their original 5 questions each, `topicId: null`. `Question.topicId` is optional specifically so this partial-migration state is representable without a schema break.
 
 There is still no Board, Class, or Subject entity anywhere in the data model or the code. "Class 8 CBSE Math" is not a data dimension the system reasons about; it's an implicit, hardcoded assumption baked into the content itself (`backend/app/data/chapters.json`/`questions.json`). See §14 for how new Topic/Question content is authored and gets here — it is no longer produced by hand-editing these JSON files directly, for any chapter that's been migrated onto the pipeline. Topic's pedagogical design (why it exists, what it carries) is written in [`LearningExperienceArchitecture.md`](LearningExperienceArchitecture.md) §3 — not repeated here; this section stays the technical record.
 
-There is likewise no "Quiz" construct — no timed or graded assessment session distinct from the linear, self-paced chapter → question flow described in §5. None has been requested. If one is ever needed, it should be designed against a real requirement, not spec'd speculatively here.
+Authored question content also already carries `commonWrongAnswer`/`why`/`remediationHint`/`commonWrongOptionId` misconception fields in `docs/content-source/` for options judged worth explaining — see `Product-Vision.md`'s "Existing authored remediation" and `LearningExperienceArchitecture.md` §6 item 6. **The runtime schema/service/API/UI side is built** (Self-Serve Learning Loop V1, Slice 5, "Runtime Remediation," 2026-09-08: `QuestionRemediation`, `answer_service._build_remediation`, and the frontend `RemediationPanel` surface `why`/`remediationHint`/`commonWrongOptionId` once present, gated on the coaching ladder reaching `SHOW_HINT`/`SHOW_SOLUTION`). §14's export pipeline still does not carry these fields through to `backend/app/data/questions.json` (whitelist transform) — confirmed absent from the current runtime data file — so the mechanism has no real content to surface yet for any question. Extending the pipeline's whitelist is the one remaining step; `commonWrongAnswer` is deliberately excluded from that whitelist even once it's built (an authoring/matching aid, not learner-facing content).
+
+**Correction (2026-09-02): the statement that no "Quiz" construct exists is stale and wrong as written** — it predates Milestone C2. A timed/graded assessment session (Test mode) exists today; see §18 and `Roadmap.md`'s "Quiz architecture" entry. Kept here, corrected rather than deleted, so a future reader hitting this paragraph doesn't inherit the same stale assumption.
 
 ## Future extensibility (not decided — do not build against this)
 
 A **Board → Class → Subject → Chapter → Topic → Question** hierarchy was raised as a candidate during the 2026-07-23 Product Foundation Sprint, as a way this could generalize beyond Class 8 CBSE Math. It is explicitly **not a commitment**: nothing today requires it, and building it now would be exactly the kind of speculative architecture `Product-Vision.md`'s "Extend on evidence, not speculation" principle warns against.
 
 If a second class, subject, or board ever becomes an approved product requirement, that decision should get its own ADR before implementation — see `Roadmap.md`'s "Open architecture question" for the current state of this thinking, kept there so a future session doesn't have to rediscover it from scratch.
+
+Two more extensibility directions are preserved the same way — not committed, not blocked, tracked in `Roadmap.md`'s "Open architecture question" rather than designed here:
+
+- **Competitive-exam content.** The Chapter/Topic/Question model above has no hard-coded assumption that content is school-syllabus-only; a competitive-exam content set would slot in as more chapters, not a new entity type, *unless* it needs a difficulty/scope dimension school content doesn't (undecided). `Product-Vision.md`'s "Future Extensibility to Preserve" names this as a direction to not foreclose, not a scoped feature.
+- **Custom/teacher-authored questions.** §14's pipeline assumes every question enters through `docs/content-source/` authoring and passes Pydantic validation before reaching `backend/app/data/questions.json`. A future teacher/parent-submitted question (`Product-Vision.md`'s Upload → Understand → Classify → Determine answer/marking → Validate → Approve → Use flow) would need to satisfy the same schema and validation gate §14 already enforces — the pipeline's validation phase is a plausible reuse point, not a rebuild — but no ingestion entry point, review UI, or per-teacher/per-assessment question scoping exists today.
 
 ---
 
@@ -331,7 +361,9 @@ GET /api/v1/history
 
 # 10. MVP Scope
 
-Included
+**This section is a historical record of the original frontend-MVP scope cut (pre-Milestone A) — kept for that reason, not as a statement of current scope.** Several "Not Included" items below have since shipped (Login, Topic selection, Question history) or been superseded by the North Star capability model (`Roadmap.md`'s North Star Capability Model table is the current authoritative current-vs-target list; `Product-Vision.md`'s "Current State vs. Target State" table is its product-level counterpart). Do not read the list below as current non-goals.
+
+Included (original MVP cut)
 
 - Chapter selection
 - Chapter detail and navigation
@@ -341,30 +373,30 @@ Included
 - Solution reveal after hints
 - Question progress indicator
 
-Not Included
+Not included in the original MVP cut (status as of 2026-09-02 noted inline)
 
-- Topic selection
-- Question history
-- Login
-- Parent dashboard
-- Teacher dashboard
-- OCR
-- Voice
-- Gamification
-- Analytics
+- Topic selection — **shipped** (Feature 018, §7)
+- Question history — **shipped server-side for class-joined students** (§16); still not built for anonymous learners
+- Login — **shipped** (Milestone A, §15) for teacher/class-joined-student; no login/account exists for the anonymous, self-serve track by design — see `Product-Vision.md`'s Common Product Model on why "anonymous" and "no account" are not the same commitment as "no server engine"
+- Parent dashboard — not built; explicit deferred non-goal, `Product-Vision.md` §"Explicit Non-Goals"
+- Teacher dashboard — partially built (class/session creation, §15/§17/§18); a large dashboard surface is an explicit deferred non-goal
+- OCR — not built, not scheduled
+- Voice — not built, not scheduled
+- Gamification — not built, not scheduled
+- Analytics — not built beyond `GET /performance/me` (§16)
 
 ---
 
 # 11. Future Roadmap
 
-Everything built to date (frontend MVP through the Feature 014 AI evaluation spike) is retroactively **Phase 1 — Core Coaching Loop**, now complete. Phases 2–5 below are unchanged in name and content from the original version of this document; see [`Roadmap.md`](Roadmap.md) for the authoritative, actively-maintained version — with dependencies, sequencing rationale, and near/medium-term items — so this table doesn't drift out of sync with it.
+Everything built to date through the Feature 014 AI evaluation spike was retroactively **Phase 1 — Core Coaching Loop**. The phase table below is the *original* post-MVP roadmap sketch and is superseded as a planning document — it predates Milestone A–C2, the Scalable Assessment System, and the 2026-09-02 Product Strategy Reset, so its phase numbers and groupings no longer reflect current sequencing. Kept for historical continuity only. **For current planning, use [`Roadmap.md`](Roadmap.md)'s North Star Capability Model** (12-capability current/target table, near-term items, and the item explicitly flagged "blocked on a product-owner decision") — that is the authoritative, actively-maintained roadmap; nothing below should be treated as a live sequencing commitment.
 
-| Phase | Theme |
-|---|---|
-| 2 | Input Modalities — OCR Question Scanner, Voice Input/Explanation, Formula Revision |
-| 3 | Oversight Surfaces — Parent Dashboard, Teacher Dashboard, Analytics |
-| 4 | Adaptivity — Adaptive Learning, Personalized Practice, Weak Topic Detection |
-| 5 | Distribution — Offline Mode, Multi-language, Play Store Release, Subscription Model |
+| Phase | Theme | 2026-09-02 status note |
+|---|---|---|
+| 2 | Input Modalities — OCR Question Scanner, Voice Input/Explanation, Formula Revision | Unbuilt; not in North Star near-term list |
+| 3 | Oversight Surfaces — Parent Dashboard, Teacher Dashboard, Analytics | Partially built (§10); large dashboard/portal builds remain explicit non-goals |
+| 4 | Adaptivity — Adaptive Learning, Personalized Practice, Weak Topic Detection | Superseded framing — see `Product-Vision.md`'s Mastery/Fluency/Transfer/Readiness section; sophisticated adaptivity is explicitly deferred, not scheduled |
+| 5 | Distribution — Offline Mode, Multi-language, Play Store Release, Subscription Model | Unbuilt; not in North Star near-term list |
 
 ---
 
