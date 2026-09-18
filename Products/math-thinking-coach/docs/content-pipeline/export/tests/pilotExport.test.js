@@ -64,9 +64,9 @@ test('pilot export: legacy explanation/workedExampleContent/learningObjectives a
   assert.equal(transformedTopic.learningObjectives.length, 11);
 });
 
-test('pilot export: produces exactly 52 questions, and every question from the original A1 pilot migration still carries exactly one objectiveId with no legacy "objective" field', () => {
+test('pilot export: produces exactly 60 questions, and every question from the original A1 pilot migration still carries exactly one objectiveId with no legacy "objective" field', () => {
   const { transformedQuestions } = runPilotPipeline();
-  assert.equal(transformedQuestions.length, 52);
+  assert.equal(transformedQuestions.length, 60);
 
   for (const q of transformedQuestions) {
     assert.equal('objective' in q, false, `question "${q.id}" still carries the legacy "objective" field`);
