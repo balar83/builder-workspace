@@ -84,3 +84,28 @@ describe('SessionModeSelector', () => {
     expect(screen.queryByText(/questions available/)).not.toBeInTheDocument();
   });
 });
+
+describe('SessionModeSelector - mode descriptions (S3)', () => {
+  it('shows the exact copy for each mode, with labels and values unchanged', () => {
+    const { container } = render(<SessionModeSelector value={baseConfig} onChange={vi.fn()} />);
+
+    const radios = screen.getAllByRole('radio');
+    expect(radios.map((radio) => (radio as HTMLInputElement).value)).toEqual(['practice', 'revision', 'test']);
+    expect(screen.getByRole('radio', { name: /Practice/ })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: /Revision/ })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: /Test/ })).toBeInTheDocument();
+
+    const labels = Array.from(container.querySelectorAll('.session-mode-option')).map((el) => el.textContent);
+    expect(labels).toEqual([
+      'Practice — Build understanding and confidence, with no score.',
+      'Revision — Revisit areas where your practice so far has been weaker. If none stand out yet, it works like regular practice.',
+      'Test — Check yourself with a timed session that ends with a diagnostic score.',
+    ]);
+  });
+
+  it('makes no readiness claims', () => {
+    const { container } = render(<SessionModeSelector value={baseConfig} onChange={vi.fn()} />);
+
+    expect(container.textContent).not.toMatch(/readiness|ready|exam/i);
+  });
+});

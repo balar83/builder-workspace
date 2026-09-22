@@ -21,9 +21,14 @@ export interface SessionModeSelectorProps {
 }
 
 const MODES: { value: SessionMode; label: string; description: string }[] = [
-  { value: 'practice', label: 'Practice', description: 'Unlimited time, no score shown.' },
-  { value: 'revision', label: 'Revision', description: 'Focuses on your weaker topics.' },
-  { value: 'test', label: 'Test', description: 'Timed, with a self-feedback score at the end.' },
+  { value: 'practice', label: 'Practice', description: 'Build understanding and confidence, with no score.' },
+  {
+    value: 'revision',
+    label: 'Revision',
+    description:
+      'Revisit areas where your practice so far has been weaker. If none stand out yet, it works like regular practice.',
+  },
+  { value: 'test', label: 'Test', description: 'Check yourself with a timed session that ends with a diagnostic score.' },
 ];
 
 // Exactly the four values RequestedDifficulty accepts - no free text, and

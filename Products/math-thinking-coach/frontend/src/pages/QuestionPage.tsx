@@ -38,6 +38,12 @@ export default function QuestionPage() {
   // this ref is only ever populated from inside ensureLearnerIdentity,
   // which handleAnswerSubmit is the sole caller of.
   const identityEnsuredRef = useRef(false);
+  // True only if this page's own ensureLearnerIdentity called startLearner.
+  // The saving note is armed at most once, on the first successful
+  // evaluation after that, and is never re-armed.
+  const createdIdentityRef = useRef(false);
+  const savingNoteArmedRef = useRef(false);
+  const [showSavingNote, setShowSavingNote] = useState(false);
 
   const currentQuestion = chapterQuestions[currentQuestionIndex];
 
@@ -57,6 +63,7 @@ export default function QuestionPage() {
     const user = await authService.getCurrentUser();
     if (!user) {
       await authService.startLearner();
+      createdIdentityRef.current = true;
     }
 
     identityEnsuredRef.current = true;
@@ -183,6 +190,7 @@ export default function QuestionPage() {
     setSubmitted(false);
     setAttemptNumber(1);
     setEvaluation(null);
+    setShowSavingNote(false);
 
     if (chapterId) {
       progressService.updateCurrentQuestion(chapterId, nextIndex);
@@ -208,6 +216,11 @@ export default function QuestionPage() {
       .then((result) => {
         setEvaluation(result);
         setAttemptNumber((previous) => previous + 1);
+
+        if (createdIdentityRef.current && !savingNoteArmedRef.current) {
+          savingNoteArmedRef.current = true;
+          setShowSavingNote(true);
+        }
 
         if (chapterId) {
           progressService.recordQuestionAttempt(chapterId, currentQuestion.id);
@@ -258,6 +271,12 @@ export default function QuestionPage() {
         {submitError && (
           <p className="form-error question-submit-error" aria-live="polite">
             {submitError}
+          </p>
+        )}
+
+        {showSavingNote && (
+          <p className="question-saving-note" aria-live="polite">
+            We&apos;re now saving your practice in this browser.
           </p>
         )}
 

@@ -122,3 +122,81 @@ describe('SessionQuestionPage - hint/mastery correctness fix', () => {
     );
   });
 });
+
+describe('SessionQuestionPage - terminal screen next steps (S1)', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const forbidden = /mistake|revise|readiness|\btest\b/i;
+
+  function mockTerminal(status: 'completed' | 'expired' | 'abandoned', mode: 'practice' | 'revision' | 'test') {
+    vi.mocked(sessionService.getCurrentQuestion).mockResolvedValue({
+      type: 'terminal',
+      terminal: { sessionId: 'session-1', status, position: 1, totalCount: 1, correctCount: 1 },
+    });
+    vi.mocked(sessionService.getSessionSummary).mockResolvedValue({
+      type: 'ok',
+      summary: { ...summary, mode, status },
+    });
+  }
+
+  const cases: Array<['completed' | 'expired' | 'abandoned', 'practice' | 'revision' | 'test']> = [
+    ['completed', 'practice'],
+    ['completed', 'revision'],
+    ['completed', 'test'],
+    ['expired', 'test'],
+    ['abandoned', 'practice'],
+  ];
+
+  it.each(cases)('offers both next steps for %s / %s', async (status, mode) => {
+    mockTerminal(status, mode);
+    render(<SessionQuestionPage />);
+
+    const primary = await screen.findByRole('button', { name: 'View your progress' });
+    const secondary = screen.getByRole('button', { name: 'Choose another chapter' });
+
+    expect(secondary).toHaveClass('btn-secondary');
+    expect(screen.queryByRole('button', { name: 'Back to Dashboard' })).not.toBeInTheDocument();
+    expect(primary.textContent).not.toMatch(forbidden);
+    expect(secondary.textContent).not.toMatch(forbidden);
+    expect(document.body.textContent).not.toMatch(/mistake|readiness/i);
+
+    fireEvent.click(primary);
+    expect(mockNavigate).toHaveBeenLastCalledWith('/dashboard');
+    fireEvent.click(secondary);
+    expect(mockNavigate).toHaveBeenLastCalledWith('/chapters');
+  });
+
+  it('offers both next steps when the summary fails to load', async () => {
+    vi.mocked(sessionService.getCurrentQuestion).mockResolvedValue({
+      type: 'terminal',
+      terminal: { sessionId: 'session-1', status: 'completed', position: 1, totalCount: 1, correctCount: 1 },
+    });
+    vi.mocked(sessionService.getSessionSummary).mockRejectedValue(new Error('boom'));
+
+    render(<SessionQuestionPage />);
+
+    await screen.findByText("You've completed this session.");
+    fireEvent.click(screen.getByRole('button', { name: 'View your progress' }));
+    expect(mockNavigate).toHaveBeenLastCalledWith('/dashboard');
+    fireEvent.click(screen.getByRole('button', { name: 'Choose another chapter' }));
+    expect(mockNavigate).toHaveBeenLastCalledWith('/chapters');
+    expect(document.body.textContent).not.toMatch(/mistake|readiness/i);
+  });
+
+  it('leaves the load-error and not-found screens unchanged', async () => {
+    vi.mocked(sessionService.getCurrentQuestion).mockResolvedValueOnce({ type: 'not-found' });
+    const { unmount } = render(<SessionQuestionPage />);
+    await screen.findByText("This session isn't available.");
+    expect(screen.getByRole('button', { name: 'Back to Dashboard' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Choose another chapter' })).not.toBeInTheDocument();
+    unmount();
+
+    vi.mocked(sessionService.getCurrentQuestion).mockRejectedValueOnce(new Error('boom'));
+    render(<SessionQuestionPage />);
+    await screen.findByText('Something went wrong loading this session.');
+    expect(screen.getByRole('button', { name: 'Back to Dashboard' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Choose another chapter' })).not.toBeInTheDocument();
+  });
+});

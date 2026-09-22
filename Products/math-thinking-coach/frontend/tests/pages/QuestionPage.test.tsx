@@ -209,3 +209,138 @@ describe('QuestionPage - lazy self-serve learner identity (Option D(i) integrati
     expect(authService.startLearner).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('QuestionPage - saving note for a newly created identity (S4a)', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  const NOTE = "We're now saving your practice in this browser.";
+  const question2 = { ...question, id: 'le-q02', question: 'Solve for x: 3x = 9', text: 'Solve for x: 3x = 9' };
+
+  function setup(questions = [question]) {
+    vi.mocked(questionService.getChapter).mockResolvedValue(chapter);
+    vi.mocked(questionService.getQuestions).mockResolvedValue(questions);
+  }
+
+  function submit() {
+    fireEvent.change(screen.getByPlaceholderText('Type your answer'), { target: { value: '18' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+  }
+
+  it('is not shown before an evaluation exists', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(undefined);
+    vi.mocked(authService.startLearner).mockResolvedValue(newLearner);
+    vi.mocked(questionService.submitAnswer).mockReturnValue(new Promise(() => {}));
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+
+    submit();
+    await waitFor(() => expect(questionService.submitAnswer).toHaveBeenCalled());
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+  });
+
+  it('is shown once after the first successful evaluation of a new learner, as a polite live region with no link', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(undefined);
+    vi.mocked(authService.startLearner).mockResolvedValue(newLearner);
+    vi.mocked(questionService.submitAnswer).mockResolvedValue(evaluationResponse);
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+
+    const note = await screen.findByText(NOTE);
+    expect(screen.getAllByText(NOTE)).toHaveLength(1);
+    expect(note).toHaveAttribute('aria-live', 'polite');
+    expect(note.closest('a')).toBeNull();
+    expect(note.querySelector('a')).toBeNull();
+    expect(Object.keys(localStorage)).toEqual(['mtc.progress.v1']);
+  });
+
+  it('is not shown for an existing student', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(existingUser);
+    vi.mocked(questionService.submitAnswer).mockResolvedValue(evaluationResponse);
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+
+    await screen.findByText(evaluationResponse.coach.message);
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+  });
+
+  it('is not shown for a teacher', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue({ role: 'teacher', id: 't1', name: 'T' } as never);
+    vi.mocked(questionService.submitAnswer).mockResolvedValue(evaluationResponse);
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+
+    await screen.findByText(evaluationResponse.coach.message);
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+  });
+
+  it('is not shown when startLearner fails', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(undefined);
+    vi.mocked(authService.startLearner).mockRejectedValue(new Error('down'));
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+
+    await screen.findByText(/couldn't check your answer/i);
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+    expect(questionService.submitAnswer).not.toHaveBeenCalled();
+  });
+
+  it('is not shown when the evaluation fails, but shows on the first later success', async () => {
+    setup();
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(undefined);
+    vi.mocked(authService.startLearner).mockResolvedValue(newLearner);
+    vi.mocked(questionService.submitAnswer)
+      .mockRejectedValueOnce(new Error('down'))
+      .mockResolvedValueOnce(evaluationResponse);
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+
+    await screen.findByText(/couldn't check your answer/i);
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+
+    submit();
+    await screen.findByText(NOTE);
+    expect(screen.getAllByText(NOTE)).toHaveLength(1);
+    expect(authService.startLearner).toHaveBeenCalledTimes(1);
+  });
+
+  it('is cleared on Next Question and never re-armed', async () => {
+    setup([question, question2]);
+    vi.mocked(authService.getCurrentUser).mockResolvedValue(undefined);
+    vi.mocked(authService.startLearner).mockResolvedValue(newLearner);
+    vi.mocked(questionService.submitAnswer).mockResolvedValue(evaluationResponse);
+
+    render(<QuestionPage />);
+    await screen.findByText('Solve for x: 2x = 36');
+    submit();
+    await screen.findByText(NOTE);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next Question' }));
+    await screen.findByText('Solve for x: 3x = 9');
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+
+    submit();
+    await screen.findByText(evaluationResponse.coach.message);
+    expect(questionService.submitAnswer).toHaveBeenCalledTimes(2);
+    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+  });
+});

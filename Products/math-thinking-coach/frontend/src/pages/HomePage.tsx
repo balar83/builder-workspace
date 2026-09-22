@@ -1,16 +1,58 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ensureLearnerSession } from "../services/ensureLearnerSession";
+import { authService } from "../services/authService";
 import { progressService } from "../services/progressService";
+import { sessionPointerService } from "../services/sessionPointerService";
+import { sessionService } from "../services/sessionService";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [progressLoading, setProgressLoading] = useState(false);
   const [progressError, setProgressError] = useState('');
 
-  const handleContinueLearning = () => {
-    const lastActiveChapterId = progressService.getLastActiveChapter();
-    navigate(lastActiveChapterId ? `/chapter/${lastActiveChapterId}` : "/chapters");
+  const [continuePending, setContinuePending] = useState(false);
+
+  // Click-time only: never runs on render, and never creates an identity
+  // (no startLearner / ensureLearnerSession). A signed-in student goes to
+  // their live session if one exists, otherwise Dashboard; anyone else (or
+  // a getCurrentUser failure) keeps the original localStorage behavior.
+  const handleContinueLearning = async () => {
+    setContinuePending(true);
+    try {
+      let user;
+      try {
+        user = await authService.getCurrentUser();
+      } catch {
+        user = undefined;
+      }
+
+      if (user && user.role === 'student') {
+        const pointer = sessionPointerService.getActiveSessionFor(user.id);
+        if (pointer) {
+          try {
+            const result = await sessionService.getSessionSummary(pointer.sessionId);
+            if (
+              result.type === 'ok' &&
+              (result.summary.status === 'not_started' || result.summary.status === 'in_progress')
+            ) {
+              navigate(`/session/${pointer.sessionId}`);
+              return;
+            }
+            sessionPointerService.clearActiveSession();
+          } catch {
+            // Keep the pointer: a failed lookup says nothing about the session.
+          }
+        }
+        navigate('/dashboard');
+        return;
+      }
+
+      const lastActiveChapterId = progressService.getLastActiveChapter();
+      navigate(lastActiveChapterId ? `/chapter/${lastActiveChapterId}` : "/chapters");
+    } finally {
+      setContinuePending(false);
+    }
   };
 
   // Smallest discoverable entry point into Dashboard for a self-serve
@@ -39,7 +81,7 @@ export default function HomePage() {
       </p>
 
       <div className="button-group">
-        <button onClick={handleContinueLearning}>Continue Learning</button>
+        <button onClick={handleContinueLearning} disabled={continuePending}>Continue Learning</button>
 
         <button className="btn-secondary" onClick={() => navigate("/chapters")}>
           Select Chapter

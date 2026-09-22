@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../components/ChapterCard.css';
 import './ChapterPerformanceCard.css';
+import type { ChapterActivity } from '../types/activity';
 import type { Chapter } from '../types/chapter';
 import type { ConceptPerformance, TopicPerformance } from '../types/performance';
 import type { Concept } from '../types/topic';
@@ -31,6 +32,24 @@ export interface ChapterPerformanceCardProps {
   // (DashboardPage) computes this from data it already fetches. Undefined/
   // false renders no CTA at all - never a placeholder for "not weak yet."
   hasWeakEvidence?: boolean;
+  // S5 (Derived Chapter Progress): this chapter's GET /performance/me/activity entry,
+  // matched by chapterId. Its counts are DISTINCT questions, unlike
+  // performance's row counts, so performance contributes only its existing
+  // mastered flag here. Absent renders no status line at all - never an
+  // unverified "Not started".
+  activity?: ChapterActivity;
+}
+
+// S5: attempted === 0 wins even over an (inconsistent) mastered flag, so
+// "Mastered" can never appear with zero counts. A chapter with no Topic
+// (Practical Geometry) has no performance, so it can never read Mastered.
+function chapterProgressLabel(activity: ChapterActivity, performance?: TopicPerformance): string {
+  const { questionsAttempted, questionsCorrect } = activity;
+  if (questionsAttempted === 0) {
+    return 'Not started';
+  }
+  const state = performance?.mastered === true ? 'Mastered' : 'In progress';
+  return `${state} · ${questionsAttempted} tried · ${questionsCorrect} solved`;
 }
 
 export default function ChapterPerformanceCard({
@@ -40,6 +59,7 @@ export default function ChapterPerformanceCard({
   concepts,
   conceptPerformance,
   hasWeakEvidence,
+  activity,
 }: ChapterPerformanceCardProps) {
   const navigate = useNavigate();
 
@@ -60,12 +80,7 @@ export default function ChapterPerformanceCard({
               welcome, so h3 skipped a level. */}
           <h2>{chapter.title}</h2>
           <p className="chapter-desc">{chapter.description}</p>
-          {performance && (
-            <p className="chapter-progress-badge">
-              {performance.questionsAttempted} attempted · {Math.round(performance.accuracy * 100)}% accuracy
-              {performance.mastered ? ' · Mastered' : ''}
-            </p>
-          )}
+          {activity && <p className="chapter-progress-badge">{chapterProgressLabel(activity, performance)}</p>}
 
           {topicId && concepts && concepts.length > 0 && (
             <ul className="concept-performance-list">

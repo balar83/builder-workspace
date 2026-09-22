@@ -106,6 +106,12 @@
   color: var(--color-text-strong);
 }
 
+.question-saving-note {
+  margin: var(--space-3, 0.75rem) 0 0;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text-muted, inherit);
+}
+
 @media (max-width: 640px) {
   .question-card {
     padding: var(--space-4);

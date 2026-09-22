@@ -389,6 +389,149 @@ describe('DashboardPage', () => {
     });
   });
 
+  // S5 - Derived Chapter Progress. Cards read DISTINCT counts from the
+  // already-fetched chapterActivity (matched by chapterId) and only the
+  // mastered flag from topic performance - no new request is made.
+  describe('derived chapter progress on chapter cards', () => {
+    const practicalGeometry = { id: 'practical-geometry', title: 'Practical Geometry', description: 'D' };
+
+    function activityEntry(chapterId: string, chapterTitle: string, attempted: number, correct: number) {
+      return {
+        chapterId,
+        chapterTitle,
+        questionsAttempted: attempted,
+        questionsCorrect: correct,
+        accuracy: attempted ? correct / attempted : 0,
+        lastActivityAt: attempted ? new Date().toISOString() : null,
+      };
+    }
+
+    async function cardStatus(title: string) {
+      const heading = await screen.findByRole('heading', { name: title, level: 2 });
+      const card = heading.closest('.chapter-performance-card') as HTMLElement;
+      return card.querySelector('.chapter-progress-badge');
+    }
+
+    function setUpTwoChapterMocks() {
+      setUpDefaultMocks();
+      vi.mocked(questionService.getChapters).mockResolvedValue([chapter, practicalGeometry]);
+      vi.mocked(questionService.getTopics).mockImplementation(async (chapterId) =>
+        chapterId === 'rational-numbers'
+          ? [{ id: 'topic-rn', chapterId: 'rational-numbers', title: 'RN', concepts: [] } as never]
+          : [],
+      );
+      // Row counts deliberately differ from the distinct activity counts.
+      vi.mocked(performanceService.getMyPerformance).mockResolvedValue([
+        {
+          topicId: 'topic-rn',
+          questionsAttempted: 12,
+          questionsCorrect: 10,
+          accuracy: 0.8333,
+          currentStreak: 3,
+          mastered: true,
+        },
+      ]);
+      // Reverse order proves matching is by chapterId, not by position.
+      vi.mocked(activityService.getMyActivity).mockResolvedValue({
+        recentAttempts: [],
+        chapterActivity: [
+          activityEntry('practical-geometry', 'Practical Geometry', 3, 2),
+          activityEntry('rational-numbers', 'Rational Numbers', 5, 4),
+        ],
+      });
+    }
+
+    it('matches activity counts by chapterId and mastery from topic performance', async () => {
+      setUpTwoChapterMocks();
+
+      render(<DashboardPage />);
+
+      expect(await cardStatus('Rational Numbers')).toHaveTextContent(/^Mastered · 5 tried · 4 solved$/);
+      expect(screen.queryByText(/12 attempted|% accuracy/)).not.toBeInTheDocument();
+    });
+
+    it('renders Practical Geometry as In progress with its distinct counts, never Mastered', async () => {
+      setUpTwoChapterMocks();
+
+      render(<DashboardPage />);
+
+      expect(await cardStatus('Practical Geometry')).toHaveTextContent(/^In progress · 3 tried · 2 solved$/);
+    });
+
+    it('shows "Not started" for a chapter whose activity entry has zero attempts', async () => {
+      setUpDefaultMocks();
+      vi.mocked(activityService.getMyActivity).mockResolvedValue({
+        recentAttempts: [],
+        chapterActivity: [activityEntry('rational-numbers', 'Rational Numbers', 0, 0)],
+      });
+
+      render(<DashboardPage />);
+
+      expect(await cardStatus('Rational Numbers')).toHaveTextContent(/^Not started$/);
+    });
+
+    it('renders no status line for a chapter with no matching activity entry', async () => {
+      setUpDefaultMocks();
+
+      render(<DashboardPage />);
+
+      expect(await cardStatus('Rational Numbers')).toBeNull();
+    });
+
+    it('derives identical states for a class learner and a self-serve learner', async () => {
+      const statusesFor = async (user: { role: 'student'; id: string; name: string | null }) => {
+        setUpTwoChapterMocks();
+        vi.mocked(authService.getCurrentUser).mockResolvedValue(user);
+        const { unmount } = render(<DashboardPage />);
+        const statuses = [
+          (await cardStatus('Rational Numbers'))?.textContent,
+          (await cardStatus('Practical Geometry'))?.textContent,
+        ];
+        unmount();
+        return statuses;
+      };
+
+      const selfServe = await statusesFor({ role: 'student', id: 'learner_1', name: null });
+      const classLearner = await statusesFor({ role: 'student', id: '4c1848ed058b48e8be53de22690ed3ee', name: 'Asha' });
+
+      expect(selfServe).toEqual(['Mastered · 5 tried · 4 solved', 'In progress · 3 tried · 2 solved']);
+      expect(classLearner).toEqual(selfServe);
+    });
+  });
+
+  // Existing loading/error/Retry behavior, pinned unchanged by S5: one
+  // Promise.all, so any failed read shows the whole-page error - no partial
+  // render and no S5-specific fallback.
+  describe('existing loading and error behavior', () => {
+    it('shows the existing Loading… state before the dashboard resolves', async () => {
+      setUpDefaultMocks();
+      vi.mocked(activityService.getMyActivity).mockReturnValue(new Promise(() => {}));
+
+      render(<DashboardPage />);
+
+      expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+      expect(screen.getByText('Loading…')).toBeInTheDocument();
+    });
+
+    it.each([
+      ['activity', () => vi.mocked(activityService.getMyActivity).mockRejectedValueOnce(new Error('down'))],
+      ['performance', () => vi.mocked(performanceService.getMyPerformance).mockRejectedValueOnce(new Error('down'))],
+    ])('shows the existing error and Retry when the %s read fails, and Retry reloads', async (_name, failOnce) => {
+      setUpDefaultMocks();
+      failOnce();
+
+      render(<DashboardPage />);
+
+      expect(await screen.findByText('Something went wrong loading your dashboard.')).toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: 'Rational Numbers', level: 2 })).toBeNull();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+      expect(await screen.findByRole('heading', { name: 'Rational Numbers', level: 2 })).toBeInTheDocument();
+      expect(screen.queryByText('Something went wrong loading your dashboard.')).toBeNull();
+    });
+  });
+
   // Boundary 1 (P2). A self-serve learner has no credential to sign back in
   // with - there is no learner login route, identity comes from the session
   // cookie alone - so clearing that session is irreversible for them in a way

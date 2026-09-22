@@ -301,7 +301,12 @@ export default function SessionQuestionPage() {
         ) : (
           <p>Loading your summary…</p>
         )}
-        <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
+        <div className="button-group">
+          <button onClick={() => navigate('/dashboard')}>View your progress</button>
+          <button className="btn-secondary" onClick={() => navigate('/chapters')}>
+            Choose another chapter
+          </button>
+        </div>
       </main>
     );
   }

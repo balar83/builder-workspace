@@ -51,6 +51,9 @@ interface ChapterWithPerformance {
   // Self-Serve Learning Loop V1, Slice 1: same weak-topic definition the
   // Revision engine itself uses - see isWeakTopic above.
   hasWeakEvidence: boolean;
+  // S5: this chapter's chapterActivity entry, matched by chapterId from the
+  // same GET /performance/me/activity response already fetched below - no new request.
+  activity?: ChapterActivity;
 }
 
 interface DashboardData {
@@ -103,6 +106,7 @@ async function loadDashboard(): Promise<DashboardData> {
   );
 
   const performanceByTopicId = new Map(performanceList.map((entry) => [entry.topicId, entry]));
+  const activityByChapterId = new Map(activity.chapterActivity.map((entry) => [entry.chapterId, entry]));
 
   const chaptersWithPerformance = chapters.map((chapter, index) => {
     const topics = topicsPerChapter[index];
@@ -118,6 +122,7 @@ async function loadDashboard(): Promise<DashboardData> {
       concepts: topic?.concepts,
       conceptPerformance,
       hasWeakEvidence: isWeakTopic(performance),
+      activity: activityByChapterId.get(chapter.id),
     };
   });
 
@@ -271,7 +276,7 @@ export default function DashboardPage() {
       )}
 
       <div className="chapter-grid">
-        {data.chapters.map(({ chapter, performance, topicId, concepts, conceptPerformance, hasWeakEvidence }) => (
+        {data.chapters.map(({ chapter, performance, topicId, concepts, conceptPerformance, hasWeakEvidence, activity }) => (
           <ChapterPerformanceCard
             key={chapter.id}
             chapter={chapter}
@@ -280,6 +285,7 @@ export default function DashboardPage() {
             concepts={concepts}
             conceptPerformance={conceptPerformance}
             hasWeakEvidence={hasWeakEvidence}
+            activity={activity}
           />
         ))}
       </div>
