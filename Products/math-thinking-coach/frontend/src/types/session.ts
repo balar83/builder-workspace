@@ -70,6 +70,15 @@ export interface SubmitSessionAnswerRequest {
   hintsUsed: number;
 }
 
+// M1: the explicit "I revealed the solution" action - a distinct request
+// shape from SubmitSessionAnswerRequest (no answer text at all) even though
+// both post to the same /answer endpoint server-side. Kept as its own type
+// so a reveal call site can never accidentally carry a stray `answer`.
+export interface RevealSolutionRequest {
+  position: number;
+  hintsUsed: number;
+}
+
 export interface SubmitSessionAnswerResponse {
   evaluation: AnswerEvaluation;
   coach: AnswerCoach;

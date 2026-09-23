@@ -60,6 +60,7 @@ export default function SessionQuestionPage() {
   const [phase, setPhase] = useState<Phase>({ kind: 'loading' });
   const [answer, setAnswer] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [revealing, setRevealing] = useState(false);
   const [feedback, setFeedback] = useState<SubmitSessionAnswerResponse | null>(null);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
@@ -237,8 +238,65 @@ export default function SessionQuestionPage() {
     setCurrentHintIndex((previous) => Math.min(totalHints, previous + 1));
   };
 
-  const handleRevealSolution = () => {
-    setShowSolution(true);
+  // M1: the authoritative reveal-solution action. Previously this only set
+  // local showSolution=true, which rendered the solution and a "Next
+  // Question" button while the server's own session position never moved -
+  // clicking Next Question re-fetched the exact same question (the
+  // production dead end). Now the server is told explicitly via
+  // sessionService.revealSolution, which advances currentPosition itself
+  // (same mechanism session-runtime already uses for a correct answer);
+  // local showSolution is only ever set from that server response, never
+  // assumed on its own.
+  const handleRevealSolution = async () => {
+    if (phase.kind !== 'question' || !sessionId) {
+      return;
+    }
+    if (revealing || submitting) {
+      return;
+    }
+
+    // M1 regression fix: feedback.ui.canTryAgain === false is also true for
+    // the pre-existing, unrelated coaching ladder's own SHOW_SOLUTION (after
+    // a 3rd genuine wrong answer, submit_answer/decide() reach it without
+    // ever calling this handler) - that state is just as terminal/locked as
+    // a real reveal, but treating "locked" as "Reveal Solution is disabled"
+    // blocked the learner from ever acknowledging it, with no request of
+    // any kind able to move the session forward (the ladder had already
+    // advanced currentPosition server-side; only the client didn't know to
+    // show the solution/Next Question). The precise signal for "the server
+    // already returned SHOW_SOLUTION, from a real submission or an earlier
+    // reveal, so currentPosition is already advanced and this click is a
+    // local acknowledgment, not a new reveal" is the response's own
+    // coach.nextAction - not the reusable-for-many-states canTryAgain flag.
+    if (feedback?.coach.nextAction === 'SHOW_SOLUTION') {
+      setShowSolution(true);
+      return;
+    }
+
+    setSyncNotice('');
+    setSubmitError('');
+    setRevealing(true);
+
+    try {
+      const result = await sessionService.revealSolution(sessionId, {
+        position: phase.question.position,
+        hintsUsed: currentHintIndex,
+      });
+
+      if (result.type === 'ok') {
+        setFeedback(result.response);
+        setShowSolution(true);
+      } else if (result.type === 'stale') {
+        setSyncNotice('Synced to your latest progress.');
+        loadCurrentQuestion();
+      } else {
+        setPhase({ kind: 'not-found' });
+      }
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setRevealing(false);
+    }
   };
 
   const handleNext = () => {
@@ -370,13 +428,19 @@ export default function SessionQuestionPage() {
           value={answer}
           onChange={setAnswer}
           onSubmit={handleSubmit}
-          disabled={submitting || isAnswerLocked}
+          disabled={submitting || revealing || isAnswerLocked}
         />
 
-        {(submitting || feedback) && (
+        {(submitting || revealing || feedback) && (
           <AnswerFeedback
-            state={submitting ? 'checking' : isCorrectAnswer ? 'correct' : 'retry'}
-            message={submitting ? 'Checking your answer…' : (feedback?.coach.message ?? '')}
+            state={submitting || revealing ? 'checking' : isCorrectAnswer ? 'correct' : 'retry'}
+            message={
+              submitting
+                ? 'Checking your answer…'
+                : revealing
+                  ? 'Revealing the solution…'
+                  : (feedback?.coach.message ?? '')
+            }
           />
         )}
         {submitError && (
@@ -396,17 +460,24 @@ export default function SessionQuestionPage() {
                 {hintButtonLabel}
               </button>
             )}
-            {/* Revealing the solution is a purely client-side action — content.solution
-                already shipped to the browser with the question, same as the anonymous
-                flow's identical button. Gating it on canRevealSolution alone (a server
-                flag driven only by wrong-attempt count, independent of hints) left
-                students who exhausted all hints without yet racking up 3 wrong attempts
-                with neither button visible: a dead end, found in production. Showing it
-                once local hints are exhausted restores parity with QuestionPage.tsx,
-                which never had this bug. */}
+            {/* Gating on canRevealSolution alone (a server flag driven only by
+                wrong-attempt count, independent of hints) left students who
+                exhausted all hints without yet racking up 3 wrong attempts with
+                no button visible at all: a dead end, found in production.
+                Showing it once local hints are exhausted restores parity with
+                QuestionPage.tsx. M1: clicking it is no longer a purely local
+                action - see handleRevealSolution, which calls the server's own
+                explicit reveal action so currentPosition actually advances
+                (the second half of the original dead end: the button used to
+                appear correctly but Next Question never left the question). */}
             {(isAllHintsRevealed || canRevealSolution) && (
-              <button className="hint-button" type="button" onClick={handleRevealSolution}>
-                Reveal Solution
+              <button
+                className="hint-button"
+                type="button"
+                onClick={handleRevealSolution}
+                disabled={revealing || submitting}
+              >
+                {revealing ? 'Revealing…' : 'Reveal Solution'}
               </button>
             )}
 

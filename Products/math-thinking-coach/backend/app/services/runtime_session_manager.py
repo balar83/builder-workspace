@@ -2,10 +2,10 @@ import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
-from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, NextAction
+from app.schemas.answer import AnswerEvaluationResponse, AnswerSubmission, EvaluationResult, NextAction
 from app.schemas.question import Question
 from app.schemas.session import LearningSession
-from app.services import answer_service, attempt_service, content_repository, session_store
+from app.services import answer_service, attempt_service, coaching_service, content_repository, session_store
 
 logger = logging.getLogger(__name__)
 
@@ -86,16 +86,7 @@ def submit_answer(
     derive it from instead, so - unlike attemptNumber - it's accepted from
     the caller, the same trust tier `answer` itself already has.
     """
-    session = _load_live_session(session_id, student_id)
-
-    if session.state.status not in _LIVE_STATUSES:
-        raise SessionNotSubmittableError(f"Session {session_id} is {session.state.status}, not submittable")
-
-    if position != session.state.currentPosition:
-        raise SessionNotSubmittableError(
-            f"Position {position} does not match the session's current position "
-            f"{session.state.currentPosition}"
-        )
+    session = _load_submittable_session(session_id, student_id, position)
 
     selected = session.selectedQuestions[position]
     submission = AnswerSubmission(
@@ -111,6 +102,118 @@ def submit_answer(
 
     updated_session = _advance_state(session, selected, evaluation)
     return SubmitAnswerResult(session=updated_session, evaluation=evaluation)
+
+
+def reveal_solution(session_id: str, student_id: str, position: int, hints_used: int = 0) -> SubmitAnswerResult:
+    """
+    M1: the explicit "I revealed the solution" action - distinct from
+    submit_answer above. No answer text is evaluated and no coaching-ladder
+    attempt-count gating applies (coaching_service.reveal_solution() is
+    unconditional, unlike decide()'s own attempt-gated SHOW_SOLUTION
+    branch) - see that function's docstring for why: a learner can
+    legitimately exhaust every hint (free, unlimited) well before
+    submitting 3 real wrong answers, and forcing them to keep submitting
+    just to reach the ladder's SHOW_SOLUTION step would mean recording
+    attempts that don't reflect what they actually typed.
+
+    Reuses the identical liveness/position validation submit_answer uses
+    (_load_submittable_session), so a stale or duplicate reveal request at
+    an already-advanced position is rejected exactly like a stale/duplicate
+    answer submission is - the session's currentPosition is never advanced
+    twice from the same client-visible position, with no separate
+    idempotency mechanism needed.
+
+    isCorrect is always False (EvaluationResult contract - see M1 design
+    decision below): correctCount is never incremented (_advance_state
+    only increments it when evaluation.evaluation.isCorrect is True) and
+    the mastery streak (attempt_service.get_performance's 3-consecutive-
+    correct-no-hints rule) is broken by this row exactly like any other
+    wrong attempt would break it - no separate mastery-suppression logic
+    was needed.
+
+    SHOW_SOLUTION is already one of _ADVANCING_ACTIONS, so _advance_state
+    (unchanged) advances currentPosition exactly once, the same "no
+    separate acknowledge step" behavior already documented on that
+    function for the ladder-driven SHOW_SOLUTION case.
+    """
+    session = _load_submittable_session(session_id, student_id, position)
+    selected = session.selectedQuestions[position]
+
+    coach, ui = coaching_service.reveal_solution()
+    content = content_repository.get_question_content(selected.questionId)
+    evaluation = AnswerEvaluationResponse(
+        evaluation=EvaluationResult(
+            isCorrect=False,
+            score=0.0,
+            maxScore=content.maxScore if content else 1.0,
+            # M1 design decision: a new evaluatorId, not one of the real
+            # evaluators' ids - this outcome was never produced by
+            # evaluating a submission at all, and must read as such to
+            # anyone inspecting evidence/analytics later.
+            evaluatorId="revealed_solution_v1",
+            evidence="learner explicitly revealed the solution",
+        ),
+        coach=coach,
+        ui=ui,
+    )
+
+    _record_reveal(session, selected, hints_used)
+
+    updated_session = _advance_state(session, selected, evaluation)
+    return SubmitAnswerResult(session=updated_session, evaluation=evaluation)
+
+
+def _load_submittable_session(session_id: str, student_id: str, position: int) -> LearningSession:
+    """
+    The liveness/position validation shared by submit_answer and (M1)
+    reveal_solution - factored out unchanged from submit_answer's own body
+    so both write paths reject a terminal session or a stale/already-
+    advanced position identically, with no duplicated logic to drift.
+    """
+    session = _load_live_session(session_id, student_id)
+
+    if session.state.status not in _LIVE_STATUSES:
+        raise SessionNotSubmittableError(f"Session {session_id} is {session.state.status}, not submittable")
+
+    if position != session.state.currentPosition:
+        raise SessionNotSubmittableError(
+            f"Position {position} does not match the session's current position "
+            f"{session.state.currentPosition}"
+        )
+
+    return session
+
+
+def _record_reveal(session: LearningSession, selected, hints_used: int) -> None:
+    """
+    M1's own attempt-recording, parallel to _record_attempt but never
+    reading a submission's `answer`/`attemptNumber` (there isn't one) -
+    submitted_option_id is always None here (unlike _record_attempt's
+    single_choice case), since no option was actually selected.
+    """
+    try:
+        content = content_repository.get_question_content(selected.questionId)
+        attempt_service.record_attempt(
+            student_id=session.studentId,
+            question_id=selected.questionId,
+            chapter_id=session.chapterId,
+            topic_id=content.topicId if content else None,
+            difficulty=selected.difficulty,
+            is_correct=False,
+            attempt_number=session.state.attemptsOnCurrentQuestion + 1,
+            question_type=selected.type,
+            session_id=session.sessionId,
+            session_mode=session.plan.mode,
+            hints_used=hints_used,
+            submitted_option_id=None,
+            provenance="session",
+            revealed_solution=True,
+        )
+    except Exception:
+        logger.warning(
+            "Reveal-solution attempt recording failed unexpectedly for session_id=%s question_id=%s",
+            session.sessionId, selected.questionId, exc_info=True,
+        )
 
 
 def _record_attempt(session, selected, submission, evaluation) -> None:

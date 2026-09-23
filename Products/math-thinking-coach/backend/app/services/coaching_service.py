@@ -15,6 +15,24 @@ _COACH_MESSAGES: dict[NextAction, str] = {
 }
 
 
+def reveal_solution() -> tuple[Coach, UiState]:
+    """
+    M1: the explicit "I revealed the solution" outcome - independent of
+    attempt_number, unlike decide()'s own SHOW_SOLUTION branch above (which
+    only reaches it after 3 attempts). A learner can legitimately exhaust
+    every hint well before then (hints are free, submissions aren't), so the
+    session-runtime layer calls this directly once the learner explicitly
+    asks to reveal, rather than fabricating attempts to walk the ladder
+    there. Returns the exact same Coach/UiState shape decide() would for
+    SHOW_SOLUTION, since the outcome is identical either way - only how it
+    was reached differs.
+    """
+    return (
+        Coach(message=_COACH_MESSAGES[NextAction.SHOW_SOLUTION], nextAction=NextAction.SHOW_SOLUTION),
+        _UI_STATE_BY_ACTION[NextAction.SHOW_SOLUTION],
+    )
+
+
 def decide(is_correct: bool, attempt_number: int) -> tuple[Coach, UiState]:
     if is_correct:
         next_action = NextAction.NEXT_QUESTION

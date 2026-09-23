@@ -3,6 +3,7 @@ import type {
   CreateSessionRequest,
   CreateSessionResponse,
   CurrentQuestionResult,
+  RevealSolutionRequest,
   SessionSummaryResult,
   SessionTerminalResponse,
   SubmitAnswerResult,
@@ -78,6 +79,33 @@ async function submitSessionAnswer(
   return { type: 'ok', response: await response.json() };
 }
 
+// M1: the authoritative reveal-solution action - posts to the same /answer
+// endpoint as submitSessionAnswer with revealSolution: true and no answer
+// text, so the server (not local UI state alone) is what actually advances
+// the session's position. Returns the identical SubmitAnswerResult shape
+// submitSessionAnswer does, so the caller handles 'ok'/'stale'/'not-found'
+// exactly the same way for both.
+async function revealSolution(sessionId: string, request: RevealSolutionRequest): Promise<SubmitAnswerResult> {
+  const response = await fetch(`${API_BASE_URL}/sessions/${sessionId}/answer`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ position: request.position, hintsUsed: request.hintsUsed, revealSolution: true }),
+  });
+
+  if (response.status === 409) {
+    return { type: 'stale' };
+  }
+  if (response.status === 404) {
+    return { type: 'not-found' };
+  }
+  if (!response.ok) {
+    throw new Error('Failed to reveal the solution');
+  }
+
+  return { type: 'ok', response: await response.json() };
+}
+
 async function getSessionSummary(sessionId: string): Promise<SessionSummaryResult> {
   const response = await fetch(`${API_BASE_URL}/sessions/${sessionId}`, {
     credentials: 'include',
@@ -99,5 +127,6 @@ export const sessionService = {
   createSession,
   getCurrentQuestion,
   submitSessionAnswer,
+  revealSolution,
   getSessionSummary,
 };

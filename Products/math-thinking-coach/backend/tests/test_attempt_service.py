@@ -626,7 +626,7 @@ _ALL_CURRENT_COLUMNS = {
     "id", "student_id", "question_id", "chapter_id", "topic_id", "difficulty",
     "question_type", "session_id", "session_mode", "is_correct", "attempt_number",
     "hints_used", "submitted_option_id", "time_taken_seconds", "misconception_tag",
-    "provenance", "created_at",
+    "provenance", "revealed_solution", "created_at",
 }
 
 

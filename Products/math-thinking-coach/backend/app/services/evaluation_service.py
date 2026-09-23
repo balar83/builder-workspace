@@ -1,4 +1,6 @@
 import json
+import re
+import unicodedata
 from fractions import Fraction
 from pathlib import Path
 
@@ -22,27 +24,61 @@ def get_expected_answer(question_id: str) -> str:
     return _answer_keys[question_id]
 
 
-def _compare_short_text_values(expected: str, submitted: str) -> bool:
+
+# M3: a conservative safelist - only ordinary sentence punctuation a student
+# might incidentally type ("Yes." / "Y," / 'the answer is "no"'). Deliberately
+# excludes any character that carries mathematical meaning in an expression
+# (-, +, =, /, *, ^, parentheses) so algebra-expression short_text answers
+# (e.g. multi_part's "9 - 2x") are never affected - stripping "-" there would
+# collide "9 - 2x" and "9 + 2x" onto the same normalized string, a real
+# grading-correctness regression, not a convenience.
+_STRIPPABLE_PUNCTUATION_RE = re.compile(r"""[.,!?;:'"]""")
+_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def _normalize_short_text(value: str) -> str:
     """
-    The exact-match-after-stripping comparison itself, factored out (M3) so
-    _evaluate_multi_part can reuse the identical semantics for a
-    short_text-typed part without going through the whole-question
-    get_expected_answer(question.id) lookup, which resolves the WHOLE
-    multi-part answer key, not one part's slice of it. No behavior change
-    for _evaluate_short_text below - same two lines, just named.
+    M3: Unicode NFKC normalization, casefold, strip the punctuation safelist
+    above, then collapse/trim whitespace. Applied to the canonical answer,
+    every authored alias, and the submission alike, so e.g. "YES" (canonical)
+    and " yes " (submission) already matched before M3 and still do -
+    casefold only ever makes two previously-different strings equal, never
+    the reverse.
     """
-    return submitted.strip() == expected.strip()
+    text = unicodedata.normalize("NFKC", value)
+    text = text.casefold()
+    text = _STRIPPABLE_PUNCTUATION_RE.sub("", text)
+    text = _WHITESPACE_RE.sub(" ", text).strip()
+    return text
+
+
+def _compare_short_text_values(expected: str, submitted: str, aliases: list[str] | None = None) -> bool:
+    """
+    M3: matches the submission against the normalized canonical answer OR
+    any normalized authored alias. `aliases` defaults to None/empty for
+    every question with none authored - the canonical answer alone remains
+    authoritative, and no synonym is ever accepted beyond what was
+    explicitly authored for that question. Reused by _evaluate_multi_part
+    for a short_text-typed part, passing that part's own aliases (if any)
+    rather than the whole question's.
+    """
+    normalized_submitted = _normalize_short_text(submitted)
+    candidates = [expected, *(aliases or [])]
+    return any(normalized_submitted == _normalize_short_text(candidate) for candidate in candidates)
 
 
 def _evaluate_short_text(question: Question, submission: AnswerSubmission) -> EvaluationResult:
     """
-    Behavior-preserving extraction of the evaluator this project has always
-    had: exact match after stripping whitespace. This is the default
-    evaluator (Question.questionType == "short_text" unless set otherwise),
-    so this function's behavior for all 241 existing questions is unchanged.
+    The default evaluator (Question.questionType == "short_text" unless set
+    otherwise). M3: normalized match (see _normalize_short_text) against the
+    canonical answer or any of the question's authored
+    responseSpecification.aliases - both default to today's plain
+    strip-and-compare behavior for the ~349 existing questions with neither
+    unusual casing/punctuation in their answers nor any aliases authored.
     """
     expected_answer = get_expected_answer(question.id)
-    is_correct = _compare_short_text_values(expected_answer, submission.answer)
+    aliases = question.responseSpecification.aliases if question.responseSpecification else None
+    is_correct = _compare_short_text_values(expected_answer, submission.answer, aliases)
     return EvaluationResult(
         isCorrect=is_correct,
         score=question.maxScore if is_correct else 0.0,
@@ -51,17 +87,51 @@ def _evaluate_short_text(question: Question, submission: AnswerSubmission) -> Ev
     )
 
 
+
+# M2: an optional leading sign, an integer whole part, whitespace, then a
+# simple a/b fraction - e.g. "1 1/2" or "-1 1/2". Fraction() has no native
+# mixed-number syntax, so this is parsed by hand and reassembled as
+# whole + numerator/denominator before falling back to Fraction() for
+# every other shape (plain integers, decimals, simple "a/b" fractions).
+_MIXED_NUMBER_RE = re.compile(r"^(-)?(\d+)\s+(\d+)/(\d+)$")
+
+
 def _parse_number(raw: str) -> Fraction | None:
     """
     Exact rational parsing (not float) - "1/2" and "0.5" parse to the same
     Fraction, so they compare equal even with zero tolerance. Returns None,
     never raises, for anything that isn't a clean number (e.g. "18 m") - the
     caller decides what that means rather than this crashing the request.
+
+    M2 additions, both still exact (no float involved at any step):
+    - a trailing "%" divides the parsed value by 100 (Fraction(100), not
+      0.01, so "50%" stays exactly Fraction(1, 2), not a near-miss float).
+    - a mixed number ("1 1/2", "-1 1/2") is parsed via _MIXED_NUMBER_RE and
+      reassembled as whole + numerator/denominator (sign applied to the
+      combined value, matching ordinary mixed-number notation - "-1 1/2"
+      means -(1 + 1/2), not (-1) + 1/2).
     """
-    try:
-        return Fraction(raw.strip())
-    except (ValueError, ZeroDivisionError):
-        return None
+    text = raw.strip()
+    is_percent = text.endswith("%")
+    if is_percent:
+        text = text[:-1].strip()
+
+    mixed_match = _MIXED_NUMBER_RE.fullmatch(text)
+    if mixed_match:
+        sign, whole, numerator, denominator = mixed_match.groups()
+        try:
+            value = Fraction(int(whole)) + Fraction(int(numerator), int(denominator))
+        except ZeroDivisionError:
+            return None
+        if sign == "-":
+            value = -value
+    else:
+        try:
+            value = Fraction(text)
+        except (ValueError, ZeroDivisionError):
+            return None
+
+    return value / 100 if is_percent else value
 
 
 def _compare_numeric_values(expected: str, submitted: str, tolerance: float) -> bool:
@@ -307,7 +377,8 @@ def _evaluate_multi_part(question: Question, submission: AnswerSubmission) -> Ev
     part_results: list[PartEvaluationResult] = []
     for part, expected_token, submitted_token in zip(parts, expected_tokens, submitted_tokens):
         if part.questionType == "short_text":
-            is_part_correct = _compare_short_text_values(expected_token, submitted_token)
+            part_aliases = part.responseSpecification.aliases if part.responseSpecification else None
+            is_part_correct = _compare_short_text_values(expected_token, submitted_token, part_aliases)
             part_evaluator_id = "short_text_v1"
         elif part.questionType == "numeric":
             tolerance = part.responseSpecification.numericTolerance if part.responseSpecification else 0.0

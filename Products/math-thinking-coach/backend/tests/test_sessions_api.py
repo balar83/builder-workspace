@@ -348,6 +348,87 @@ def test_three_correct_session_answers_without_hints_still_produce_mastery() -> 
     assert performance[0]["mastered"] is True
 
 
+# --- reveal solution (M1) ---------------------------------------------------
+
+
+def test_reveal_solution_advances_and_returns_show_solution() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 2}
+    ).json()["sessionId"]
+
+    response = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["evaluation"]["isCorrect"] is False
+    assert body["coach"]["nextAction"] == "SHOW_SOLUTION"
+    assert body["position"] == 1
+
+
+def test_reveal_solution_then_current_question_returns_the_next_question() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 2}
+    ).json()["sessionId"]
+    first_question_id = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]["id"]
+
+    student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+    next_question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+
+    assert next_question["id"] != first_question_id
+
+
+def test_reveal_solution_does_not_increment_session_correct_count() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 1}
+    ).json()["sessionId"]
+
+    student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+
+    summary = student.get(f"/api/v1/sessions/{session_id}")
+    assert summary.json()["correctCount"] == 0
+    assert summary.json()["status"] == "completed"
+
+
+def test_repeated_reveal_solution_requests_return_409_not_a_second_advance() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 3}
+    ).json()["sessionId"]
+
+    first = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+    assert first.status_code == 200
+
+    second = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+    assert second.status_code == 409
+
+    summary = student.get(f"/api/v1/sessions/{session_id}")
+    assert summary.json()["position"] == 1
+
+
+def test_reveal_solution_on_a_completed_session_is_rejected() -> None:
+    student = _student_client()
+    session_id = student.post(
+        "/api/v1/sessions", json={"chapterId": "rational-numbers", "mode": "practice", "questionCount": 1}
+    ).json()["sessionId"]
+    question = student.get(f"/api/v1/sessions/{session_id}/current-question").json()["question"]
+    student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "answer": ANSWERS[question["id"]]})
+
+    response = student.post(f"/api/v1/sessions/{session_id}/answer", json={"position": 0, "revealSolution": True})
+
+    assert response.status_code == 409
+
+
+def test_reveal_solution_requires_a_student_session() -> None:
+    response = client.post(
+        "/api/v1/sessions/no-such-session/answer", json={"position": 0, "revealSolution": True}
+    )
+
+    assert response.status_code == 401
+
+
 def test_session_summary_reports_time_limit_for_test_mode() -> None:
     student = _student_client()
     session_id = student.post(

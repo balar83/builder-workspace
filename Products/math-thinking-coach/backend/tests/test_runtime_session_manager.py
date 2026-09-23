@@ -480,6 +480,211 @@ def _read_provenance(question_id: str) -> list[str | None]:
     return [row["provenance"] for row in rows]
 
 
+# --- reveal_solution (M1) ----------------------------------------------------
+
+
+def _read_revealed_solution(question_id: str) -> list[int | None]:
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT revealed_solution FROM attempts WHERE question_id = ? ORDER BY id", (question_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+    return [row["revealed_solution"] for row in rows]
+
+
+def test_reveal_solution_on_a_fresh_question_advances_position_by_exactly_one() -> None:
+    session = _create()
+
+    result = rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    assert result.session.state.currentPosition == 1
+
+
+def test_reveal_solution_does_not_increment_correct_count() -> None:
+    session = _create()
+
+    result = rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    assert result.session.state.correctCount == 0
+
+
+def test_reveal_solution_is_not_treated_as_a_correct_answer() -> None:
+    session = _create()
+
+    result = rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    assert result.evaluation.evaluation.isCorrect is False
+    assert result.evaluation.coach.nextAction == "SHOW_SOLUTION"
+
+
+def test_reveal_solution_does_not_create_mastery_evidence() -> None:
+    """
+    Reveal on question 1, then answer questions 2 and 3 correctly without
+    hints - still only a 2-long correct streak (the reveal broke it), never
+    the 3 consecutive correct-no-hints answers attempt_service.get_performance
+    requires for `mastered`.
+    """
+    session = _create(question_count=3)
+
+    rsm.reveal_solution(session.sessionId, "student-1", 0)
+    for position in (1, 2):
+        selected = session.selectedQuestions[position]
+        rsm.submit_answer(session.sessionId, "student-1", position, ANSWERS[selected.questionId])
+
+    performance = attempt_service.get_performance("student-1")
+    assert performance[0]["currentStreak"] == 2
+    assert performance[0]["mastered"] is False
+
+
+def test_reveal_solution_attempted_but_not_correct_in_chapter_activity() -> None:
+    """
+    Reveal-solution semantics inspected directly against attempt_service's
+    existing chapterActivity aggregate (get_chapter_activity_raw): the
+    question counts toward questions_attempted (a row exists for it, the
+    same definition every other attempt already uses) but never toward
+    questions_correct (is_correct is always False for a reveal) - no new
+    aggregate concept was introduced for this.
+    """
+    session = _create(question_count=1)
+
+    rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    activity = attempt_service.get_chapter_activity_raw("student-1")
+    assert len(activity) == 1
+    assert activity[0]["chapter_id"] == session.chapterId
+    assert activity[0]["questions_attempted"] == 1
+    assert activity[0]["questions_correct"] == 0
+
+
+def test_reveal_solution_is_distinguishable_from_a_genuine_wrong_answer_in_the_attempt_record() -> None:
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    result = rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    assert _read_revealed_solution(selected.questionId) == [1]
+    assert result.evaluation.evaluation.evaluatorId == "revealed_solution_v1"
+
+
+def test_genuine_wrong_answer_is_not_marked_as_a_revealed_solution() -> None:
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    rsm.submit_answer(session.sessionId, "student-1", 0, "definitely wrong")
+
+    assert _read_revealed_solution(selected.questionId) == [0]
+
+
+def test_repeated_reveal_requests_at_the_same_position_do_not_advance_twice() -> None:
+    session = _create()
+
+    rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    with pytest.raises(rsm.SessionNotSubmittableError):
+        rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+
+def test_get_current_question_after_reveal_returns_the_next_question() -> None:
+    session = _create()
+    first_question_id = session.selectedQuestions[0].questionId
+
+    rsm.reveal_solution(session.sessionId, "student-1", 0)
+    result = rsm.get_current_question(session.sessionId, "student-1")
+
+    assert result.question is not None
+    assert result.question.id == session.selectedQuestions[1].questionId
+    assert result.question.id != first_question_id
+    assert result.session.state.currentPosition == 1
+
+
+def test_reveal_solution_on_the_final_question_completes_the_session() -> None:
+    session = _create(question_count=1)
+
+    result = rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+    assert result.session.state.status == "completed"
+    assert result.session.state.completedAt is not None
+
+
+def test_reveal_solution_rejects_a_stale_position() -> None:
+    session = _create()
+    selected = session.selectedQuestions[0]
+    rsm.submit_answer(session.sessionId, "student-1", 0, ANSWERS[selected.questionId])
+
+    with pytest.raises(rsm.SessionNotSubmittableError):
+        rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+
+def test_reveal_solution_rejects_a_completed_session() -> None:
+    session = _create(question_count=1)
+    selected = session.selectedQuestions[0]
+    rsm.submit_answer(session.sessionId, "student-1", 0, ANSWERS[selected.questionId])
+
+    with pytest.raises(rsm.SessionNotSubmittableError):
+        rsm.reveal_solution(session.sessionId, "student-1", 0)
+
+
+def test_reveal_solution_rejects_a_different_student() -> None:
+    session = _create()
+
+    with pytest.raises(rsm.SessionNotFoundError):
+        rsm.reveal_solution(session.sessionId, "student-2", 0)
+
+
+def test_reveal_solution_rejects_an_unknown_session() -> None:
+    with pytest.raises(rsm.SessionNotFoundError):
+        rsm.reveal_solution("no-such-session", "student-1", 0)
+
+
+def test_reveal_solution_persists_hints_used() -> None:
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    rsm.reveal_solution(session.sessionId, "student-1", 0, hints_used=2)
+
+    conn = sqlite3.connect(attempt_service.DB_PATH)
+    try:
+        conn.row_factory = sqlite3.Row
+        row = conn.execute(
+            "SELECT hints_used FROM attempts WHERE question_id = ?", (selected.questionId,)
+        ).fetchone()
+    finally:
+        conn.close()
+    assert row["hints_used"] == 2
+
+
+def test_normal_correct_answer_advancement_is_unaffected_by_reveal_solution_existing() -> None:
+    # Regression guard: adding reveal_solution must not change submit_answer's
+    # own existing correct-answer path at all.
+    session = _create()
+    selected = session.selectedQuestions[0]
+
+    result = rsm.submit_answer(session.sessionId, "student-1", 0, ANSWERS[selected.questionId])
+
+    assert result.evaluation.evaluation.isCorrect is True
+    assert result.session.state.currentPosition == 1
+    assert result.session.state.correctCount == 1
+
+
+def test_wrong_answer_hint_ladder_is_unaffected_by_reveal_solution_existing() -> None:
+    # Regression guard: the existing attempt-count-driven ladder (TRY_AGAIN ->
+    # SHOW_HINT -> SHOW_SOLUTION) must reach the same outcomes as before M1.
+    session = _create()
+
+    first = rsm.submit_answer(session.sessionId, "student-1", 0, "wrong")
+    second = rsm.submit_answer(session.sessionId, "student-1", 0, "wrong")
+    third = rsm.submit_answer(session.sessionId, "student-1", 0, "wrong")
+
+    assert first.evaluation.coach.nextAction == "TRY_AGAIN"
+    assert second.evaluation.coach.nextAction == "SHOW_HINT"
+    assert third.evaluation.coach.nextAction == "SHOW_SOLUTION"
+    assert third.session.state.currentPosition == 1
+    assert third.session.state.correctCount == 0
+
+
 def test_session_flow_persists_provenance_as_session() -> None:
     """
     Every session-originated attempt (this module's only write path,

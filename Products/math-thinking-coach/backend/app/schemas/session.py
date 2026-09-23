@@ -215,7 +215,12 @@ class SessionTerminalResponse(BaseModel):
 
 class SubmitSessionAnswerRequest(BaseModel):
     position: int
-    answer: str
+    # Optional/defaulted (M1): a revealSolution=true request carries no
+    # answer text at all - see below. Left as a plain str (not str | None)
+    # so a genuine submission's existing required-field behavior is
+    # unchanged; only the effective default changed, harmlessly, for the
+    # one caller (the new reveal action) that doesn't have an answer to send.
+    answer: str = ""
     # Additive, defaults to 0. Unlike attemptNumber (deliberately NOT
     # accepted from the client - ADR-007's invariant is the server always
     # derives it), hints revealed is a client-observed fact with no
@@ -223,6 +228,13 @@ class SubmitSessionAnswerRequest(BaseModel):
     # here the same way `answer` itself already is. Feeds
     # attempts.hints_used via runtime_session_manager._record_attempt.
     hintsUsed: int = 0
+    # M1: the explicit "I revealed the solution" action, distinct from a
+    # submitted (possibly wrong) answer - see runtime_session_manager.
+    # reveal_solution's own docstring for why this is never modeled as a
+    # fabricated answer submission. Extends the existing /answer endpoint
+    # (one endpoint, one piece of session-position-advancement machinery)
+    # rather than adding a second route.
+    revealSolution: bool = False
 
 
 class SubmitSessionAnswerResponse(BaseModel):

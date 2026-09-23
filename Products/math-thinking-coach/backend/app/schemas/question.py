@@ -81,6 +81,14 @@ class ResponseSpecification(BaseModel):
     # Question decomposes into - see QuestionPart's own docstring. None for
     # every other questionType.
     parts: list[QuestionPart] | None = None
+    # M3 (short-answer aliases): author-provided accepted variants for a
+    # short_text question/part (e.g. "Y" authored alongside canonical "Yes"),
+    # matched after the same normalization as the canonical answer itself
+    # (see evaluation_service._normalize_short_text). None/absent for every
+    # existing question - the default, backward-compatible case. Deliberately
+    # narrow: no generic synonym or fuzzy matching is derived from this list
+    # or from anywhere else.
+    aliases: list[str] | None = None
 
 
 QuestionPart.model_rebuild()

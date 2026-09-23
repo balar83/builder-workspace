@@ -266,6 +266,88 @@ def test_short_text_result_carries_the_new_additive_evaluationresult_fields() ->
     assert result.confidence is None
 
 
+# --- Short-answer aliases (M3) ----------------------------------------------
+
+
+def test_short_text_casefold_normalization_accepts_a_different_case() -> None:
+    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="yes", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
+def test_short_text_casefold_normalization_accepts_surrounding_whitespace_and_case() -> None:
+    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer=" YES ", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
+def test_short_text_trailing_punctuation_is_normalized_away() -> None:
+    result = evaluation_service.evaluate(QUESTION, AnswerSubmission(answer="Yes.", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
+def test_short_text_authored_alias_accepts_its_exact_form() -> None:
+    aliased_question = QUESTION.model_copy(
+        update={"id": "test-short-text-with-alias", "responseSpecification": ResponseSpecification(aliases=["Y"])}
+    )
+
+    result = evaluation_service._compare_short_text_values("Yes", "Y", aliases=["Y"])
+
+    assert result is True
+    assert aliased_question.responseSpecification.aliases == ["Y"]
+
+
+def test_short_text_authored_alias_accepts_a_normalized_variant_of_the_alias() -> None:
+    # authored alias "Y" also accepts "y" - the alias itself is normalized
+    # the same way the canonical answer and the submission are.
+    result = evaluation_service._compare_short_text_values("Yes", "y", aliases=["Y"])
+
+    assert result is True
+
+
+def test_short_text_unlisted_synonym_is_rejected() -> None:
+    result = evaluation_service._compare_short_text_values("Yes", "yeah", aliases=["Y"])
+
+    assert result is False
+
+
+def test_short_text_with_no_aliases_grants_no_arbitrary_synonym_acceptance() -> None:
+    result = evaluation_service._compare_short_text_values("Yes", "Y", aliases=None)
+
+    assert result is False
+
+
+def test_short_text_algebra_expression_normalization_does_not_collide_minus_and_plus() -> None:
+    """
+    Regression guard: the punctuation safelist must never strip mathematical
+    operators - "9 - 2x" and "9 + 2x" are different expressions and must
+    never normalize to the same string (Decision 3 / multi_part's own
+    exact-match-only algebra semantics, unaffected by M3).
+    """
+    assert evaluation_service._normalize_short_text("9 - 2x") != evaluation_service._normalize_short_text("9 + 2x")
+
+
+def test_short_text_evaluator_still_rejects_wrong_answer_with_aliases_authored() -> None:
+    aliased_question = QUESTION.model_copy(
+        update={"responseSpecification": ResponseSpecification(aliases=["Y", "yep"])}
+    )
+
+    result = evaluation_service.evaluate(aliased_question, AnswerSubmission(answer="no", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+def test_short_text_evaluator_accepts_an_authored_alias_end_to_end() -> None:
+    aliased_question = QUESTION.model_copy(
+        update={"responseSpecification": ResponseSpecification(aliases=["Y"])}
+    )
+
+    result = evaluation_service.evaluate(aliased_question, AnswerSubmission(answer="y", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
 # --- Numeric evaluator ------------------------------------------------------
 
 
@@ -339,6 +421,56 @@ def test_numeric_tolerance_outside_bound_is_incorrect() -> None:
 def test_numeric_zero_tolerance_default_requires_exact_numeric_equality() -> None:
     assert NUMERIC_QUESTION.responseSpecification is None
     result = evaluation_service.evaluate(NUMERIC_QUESTION, AnswerSubmission(answer="0.51", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+# --- Numeric parser gaps (M2): percentages and mixed numbers ---------------
+
+
+def test_numeric_percent_form_is_equivalent_to_its_fraction() -> None:
+    result = evaluation_service.evaluate(NUMERIC_QUESTION, AnswerSubmission(answer="50%", attemptNumber=1))
+
+    assert result.isCorrect is True
+
+
+def test_numeric_percent_form_rejects_a_non_equivalent_percentage() -> None:
+    result = evaluation_service.evaluate(NUMERIC_QUESTION, AnswerSubmission(answer="49%", attemptNumber=1))
+
+    assert result.isCorrect is False
+
+
+def test_numeric_mixed_number_form_is_equivalent_to_its_improper_fraction() -> None:
+    assert evaluation_service._compare_numeric_values("3/2", "1 1/2", tolerance=0.0) is True
+    assert evaluation_service._compare_numeric_values("3/2", "1 1/3", tolerance=0.0) is False
+
+
+def test_numeric_negative_mixed_number_negates_the_whole_combined_value() -> None:
+    # -1 1/2 means -(1 + 1/2) = -3/2, not (-1) + 1/2.
+    assert evaluation_service._compare_numeric_values("-3/2", "-1 1/2", tolerance=0.0) is True
+    assert evaluation_service._compare_numeric_values("-1/2", "-1 1/2", tolerance=0.0) is False
+
+
+def test_numeric_decimal_with_extra_trailing_zeros_is_equivalent() -> None:
+    assert evaluation_service._compare_numeric_values("3/2", "1.500", tolerance=0.0) is True
+
+
+def test_numeric_invalid_input_fails_safely_not_a_crash() -> None:
+    assert evaluation_service._parse_number("not a number") is None
+    assert evaluation_service._parse_number("") is None
+
+
+def test_numeric_zero_denominator_fails_safely_not_a_crash() -> None:
+    assert evaluation_service._parse_number("1/0") is None
+    assert evaluation_service._parse_number("1 1/0") is None
+
+
+def test_numeric_unit_bearing_canonical_answer_still_does_not_accept_the_bare_number() -> None:
+    # Regression guard (M2 scope): "18 m" vs "18" must remain non-equivalent -
+    # the percent/mixed-number additions must not loosen this existing case.
+    result = evaluation_service.evaluate(
+        NUMERIC_NON_NUMERIC_CANONICAL_QUESTION, AnswerSubmission(answer="18", attemptNumber=1)
+    )
 
     assert result.isCorrect is False
 

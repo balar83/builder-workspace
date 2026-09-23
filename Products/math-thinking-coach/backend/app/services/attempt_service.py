@@ -88,6 +88,13 @@ CREATE INDEX IF NOT EXISTS idx_attempts_student_topic ON attempts(student_id, to
 _ADDITIVE_COLUMNS: list[tuple[str, str]] = [
     ("submitted_option_id", "TEXT"),
     ("provenance", "TEXT"),
+    # M1: 0/1, distinguishes a session's explicit "I revealed the solution"
+    # action (runtime_session_manager.reveal_solution) from a genuine
+    # submitted-and-wrong answer - both are is_correct=0, but only one was
+    # ever actually typed and evaluated. NULL on every historical row
+    # (predates this column) and read back as falsy, same convention as
+    # every other column in this list - never backfilled.
+    ("revealed_solution", "INTEGER"),
 ]
 
 
@@ -145,6 +152,7 @@ def record_attempt(
     time_taken_seconds: float | None = None,
     misconception_tag: str | None = None,
     provenance: str | None = None,
+    revealed_solution: bool = False,
 ) -> None:
     with _lock:
         conn = _get_connection()
@@ -154,8 +162,9 @@ def record_attempt(
                 INSERT INTO attempts (
                     student_id, question_id, chapter_id, topic_id, difficulty, question_type,
                     session_id, session_mode, is_correct, attempt_number, hints_used,
-                    submitted_option_id, time_taken_seconds, misconception_tag, provenance, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    submitted_option_id, time_taken_seconds, misconception_tag, provenance,
+                    revealed_solution, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     student_id,
@@ -173,6 +182,7 @@ def record_attempt(
                     time_taken_seconds,
                     misconception_tag,
                     provenance,
+                    int(revealed_solution),
                     datetime.now(UTC).isoformat(),
                 ),
             )
