@@ -1,4 +1,5 @@
 import json
+import os
 import secrets
 import string
 import threading
@@ -10,7 +11,16 @@ import bcrypt
 
 from app.schemas.user import ClassGroup, SelfServeLearner, Student, Teacher
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# DATA_DIR is overridable for exactly the same reason attempt_service's and
+# session_store's are: these four stores are mutable runtime state, not
+# repository content, so a deployment with a mounted persistent disk must be
+# able to put them on it. Without this, they landed next to the code -
+# ephemeral storage on Render - and every deploy or restart silently deleted
+# every teacher, class, student and self-serve learner while runtime.db's
+# attempts survived on the disk, orphaning them. The content stores
+# (question_service, topic_service, evaluation_service) are deliberately NOT
+# overridable: those are read-only files shipped with the code.
+DATA_DIR = Path(os.getenv("DATA_DIR", str(Path(__file__).resolve().parent.parent / "data")))
 TEACHERS_PATH = DATA_DIR / "teachers.json"
 CLASSES_PATH = DATA_DIR / "classes.json"
 STUDENTS_PATH = DATA_DIR / "students.json"
